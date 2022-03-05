@@ -1,3 +1,4 @@
+#I am going to blast multifasta kmer and multifasta genomes files
 #each flank needs to be at least 30bp long for the kmer to be processed
 
 #creating the genome path file, IF the file is present, dont run it again!!
