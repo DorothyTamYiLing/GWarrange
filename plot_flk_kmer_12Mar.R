@@ -1,7 +1,7 @@
 #input of the plotting script must be a file containing all the behaviour_summary.txt of all kmers
 
 ####################################################
-setwd("/Users/dorothytam/Documents/Bath_postdoc/genomic_analyses/170_USAgenomes_analysis/")
+setwd("/Users/dorothytam/Desktop/")
 myflk_behave_pheno<-read.table("myflk_behave_pheno.txt",header=T)
 colnames(myflk_behave_pheno)[1]<-"genome"
 colnames(myflk_behave_pheno)[2]<-"case_control"
@@ -107,13 +107,21 @@ write.table(myall_out,file="myall_out.txt",quote=F,row.names = F,col.names = T,s
 ################# below run in MAC #####################
 
 #export  myflk_behave_pheno.txt and myall_out.txt to MAC for plotting
+case_num<-19
+control_num<-30
 
-myall_out<-read.table("myall_out.txt",header=T)
+setwd("/Users/dorothytam/Desktop/")
+
+myall_out<-read.delim("myall_out.txt",header=T,sep="\t")
 
 #renaming the table
 myall_out_all<-myall_out
 #getting the list of kmers with event_sum!=intact_k and subsetting the corresponding rows in myflk_behave_pheno for plot
-myk4plot<-myall_out[which(myall_out$event_sum!="intact_k" & myall_out$event_sum!=0),"kmer"]
+myk4plot<-myall_out[which(myall_out$event_sum!="intact_k" & myall_out$event_sum!=0 & (myall_out$case_assos=="Right_mv&flp" | myall_out$case_assos=="Left_mv&flp")),"kmer"]
+#OR
+#getting the list of kmers with event_sum!=intact_k and subsetting the corresponding rows in myflk_behave_pheno for plot
+myk4plot<-myall_out[which(myall_out$event_sum=="intact_k" & myall_out$event_sum!=0),"kmer"]
+
 myall_out<-myall_out[which(myall_out$kmer%in%myk4plot),]
 
 
@@ -122,17 +130,17 @@ colnames(myflk_behave_pheno)[1]<-"genome"
 colnames(myflk_behave_pheno)[2]<-"case_control"
 
 
-#finding out how many kmers need to be plotting on the "case" and "control" panel
-case_num<-length(which(myall_out$case_control=="1"))
-ctrl_num<-length(which(myall_out$case_control=="0"))
-
-
 #List of kmers for plotting
 myk4plot<-unique(myall_out$kmer)
 
+#case panel y axis
+control_y<--(length(myk4plot)*control_num+length(myk4plot)*300)
+case_y<-length(myk4plot)*case_num+length(myk4plot)*300
+
+
 #plotting the kmers
-plot(1, type="n", xlim=c(1,5000), ylim=c((-ctrl_num-(length(myk4plot)*400)),(case_num+(length(myk4plot)*400))), xlab="genome position (thousands)",ylab="genome_index")
-plot(1, type="n", xlim=c(1,5000), ylim=c(-10000,10000), xlab="genome position (thousands)",ylab="genome_index")
+#plot(1, type="n", xlim=c(1,5000), ylim=c(control_y,case_y), xlab="genome position (thousands)",ylab="genome_index")
+plot(1, type="n", xlim=c(1,5000), ylim=c(-50000,50000), xlab="genome position (thousands)",ylab="genome_index")
 
 abline(h=0) #to separate the case from control kmers
 text(5000,(length(myk4plot)*10),"case",cex=0.7)
@@ -146,23 +154,23 @@ text(5000,-(length(myk4plot)*10),"control",cex=0.7)
 
 
 #set the colour spectrum according to the number of kmers
-plotcolors <- colorRampPalette(c("green","blue","red"))(length(myk4plot))
-plotcolors <- colorRampPalette(c("green","blue","red"))(50)
+#plotcolors <- colorRampPalette(c("green","blue","red"))(length(myk4plot))
+plotcolors <- colorRampPalette(c("green","blue","red"))(30)
 
-case_count<-50
-ctrl_count<--50
+case_count<-100
+ctrl_count<--100
 
-for (j in 1:length(myk4plot)){ #open bracket for looping through each kmer
-  #for (j in 1:20){  #open bracket for looping through each kmer
-    
+#for (j in 1:length(myk4plot)){ #open bracket for looping through each kmer
+  for (j in 1:30){  #open bracket for looping through each kmer
+  
   #extract the case and control associated kmer "notes" information from myall_out
-    mycase_assos<-myall_out[which(myall_out$kmer==myk4plot[j]),"case_assos"]
-    myctrl_assos<-myall_out[which(myall_out$kmer==myk4plot[j]),"ctrl_assos"]
-    
-    mycase_assos_prop<-myall_out[which(myall_out$kmer==myk4plot[j]),"case_assos_prop"]
-    myctrl_assos_prop<-myall_out[which(myall_out$kmer==myk4plot[j]),"ctrl_assos_prop"]
-    
-    
+  mycase_assos<-myall_out[which(myall_out$kmer==myk4plot[j]),"case_assos"]
+  myctrl_assos<-myall_out[which(myall_out$kmer==myk4plot[j]),"ctrl_assos"]
+  
+  mycase_assos_prop<-myall_out[which(myall_out$kmer==myk4plot[j]),"case_assos_prop"]
+  myctrl_assos_prop<-myall_out[which(myall_out$kmer==myk4plot[j]),"ctrl_assos_prop"]
+  
+  
   #select the rows referring to the kmer
   mytable<-myflk_behave_pheno[which(myflk_behave_pheno$kmer==myk4plot[j]),]
   
@@ -191,8 +199,8 @@ for (j in 1:length(myk4plot)){ #open bracket for looping through each kmer
         EndR<-EndR+25
       }
     }
-
-#when the flanks are together, i.e. intact k, and k is mapped forward
+    
+    #when the flanks are together, i.e. intact k, and k is mapped forward
     if(mytable[i,"flk_behaviour"]=="intact_k"){ 
       if(EndR>StartL){
         StartL=StartL-50
@@ -203,61 +211,61 @@ for (j in 1:length(myk4plot)){ #open bracket for looping through each kmer
         EndR<-EndR-50
       }
     }
-
-#decide if its case or control
     
-#if it is case
-if(mytable[i,"case_control"]=="1"){ 
-  #if the kmer behaviour correspond to the case associated event
-  if(mytable[i,"notes"]==mycase_assos){
-    arrows(x0=StartL,x1=EndL, y0=case_count, y1=case_count, length =0.05, lwd=1, angle = 20,arr.width=0.1, code = 2,col=plotcolors[j], add=T)  #plotting the left flank
-    arrows(x0=StartR,x1=EndR, y0=case_count, y1=case_count, length =0.05, lwd=1, angle = 20,arr.width=0.1, code = 2,col=plotcolors[j], add=T)  #plotting the right flank
-  }
-  #if the kmer behaviour correspond to the control associated event
-  if(mytable[i,"notes"]==myctrl_assos){
-  arrows(x0=StartL,x1=EndL, y0=case_count, y1=case_count, length =0.05, lwd=1, angle = 20,arr.width=0.1, code = 2,col="grey", add=T)  #plotting the left flank
-  arrows(x0=StartR,x1=EndR, y0=case_count, y1=case_count, length =0.05, lwd=1, angle = 20,arr.width=0.1, code = 2,col="grey", add=T)  #plotting the right flank
-  }
-  if(StartL>EndL){ #indicate the reverse kmer
-  points(pch=19,cex=0.5,EndL,case_count)
-  }
-  if(StartR>EndR){ #indicate the reverse kmer
-    points(pch=19,cex=0.5,EndR,case_count)
-  }
-  case_count<-case_count+1
-}
-   
-#if it is control
-if(mytable[i,"case_control"]=="0"){ 
-  #if the kmer behaviour correspond to the control associated event
-  if(mytable[i,"notes"]==myctrl_assos ){
-    arrows(x0=StartL,x1=EndL, y0=ctrl_count, y1=ctrl_count, length =0.05, lwd=1, angle = 20,arr.width=0.1, code = 2,col=plotcolors[j], add=T)  #plotting the left flank
-    arrows(x0=StartR,x1=EndR, y0=ctrl_count, y1=ctrl_count, length =0.05, lwd=1, angle = 20,arr.width=0.1, code = 2,col=plotcolors[j], add=T)  #plotting the right flank
-  }
-  #if the kmer behaviour correspond to the case associated event
-  if(mytable[i,"notes"]==mycase_assos){
-    arrows(x0=StartL,x1=EndL, y0=ctrl_count, y1=ctrl_count, length =0.05, lwd=1, angle = 20,arr.width=0.1, code = 2,col="grey", add=T)  #plotting the left flank
-    arrows(x0=StartR,x1=EndR, y0=ctrl_count, y1=ctrl_count, length =0.05, lwd=1, angle = 20,arr.width=0.1, code = 2,col="grey", add=T)  #plotting the right flank
-  }
-  if(StartL>EndL){ #indicate the reverse kmer
-    points(pch=19,cex=0.5,EndL,ctrl_count)
-  }
-  if(StartR>EndR){ #indicate the reverse kmer
-    points(pch=19,cex=0.5,EndR,ctrl_count)
-  }
-  ctrl_count<-ctrl_count-1
-}
-
+    #decide if its case or control
+    
+    #if it is case
+    if(mytable[i,"case_control"]=="1"){ 
+      #if the kmer behaviour correspond to the case associated event
+      if(mytable[i,"notes"]==mycase_assos){
+        arrows(x0=StartL,x1=EndL, y0=case_count, y1=case_count, length =0.05, lwd=1, angle = 20,arr.width=0.1, code = 2,col=plotcolors[j], add=T)  #plotting the left flank
+        arrows(x0=StartR,x1=EndR, y0=case_count, y1=case_count, length =0.05, lwd=1, angle = 20,arr.width=0.1, code = 2,col=plotcolors[j], add=T)  #plotting the right flank
+      }
+      #if the kmer behaviour correspond to the control associated event
+      if(mytable[i,"notes"]==myctrl_assos){
+        arrows(x0=StartL,x1=EndL, y0=case_count, y1=case_count, length =0.05, lwd=1, angle = 20,arr.width=0.1, code = 2,col="grey", add=T)  #plotting the left flank
+        arrows(x0=StartR,x1=EndR, y0=case_count, y1=case_count, length =0.05, lwd=1, angle = 20,arr.width=0.1, code = 2,col="grey", add=T)  #plotting the right flank
+      }
+      if(StartL>EndL){ #indicate the reverse kmer
+        #points(pch=19,cex=0.5,EndL,case_count)
+      }
+      if(StartR>EndR){ #indicate the reverse kmer
+        #points(pch=19,cex=0.5,EndR,case_count)
+      }
+      case_count<-case_count+1
+    }
+    
+    #if it is control
+    if(mytable[i,"case_control"]=="0"){ 
+      #if the kmer behaviour correspond to the control associated event
+      if(mytable[i,"notes"]==myctrl_assos ){
+        arrows(x0=StartL,x1=EndL, y0=ctrl_count, y1=ctrl_count, length =0.05, lwd=1, angle = 20,arr.width=0.1, code = 2,col=plotcolors[j], add=T)  #plotting the left flank
+        arrows(x0=StartR,x1=EndR, y0=ctrl_count, y1=ctrl_count, length =0.05, lwd=1, angle = 20,arr.width=0.1, code = 2,col=plotcolors[j], add=T)  #plotting the right flank
+      }
+      #if the kmer behaviour correspond to the case associated event
+      if(mytable[i,"notes"]==mycase_assos){
+        arrows(x0=StartL,x1=EndL, y0=ctrl_count, y1=ctrl_count, length =0.05, lwd=1, angle = 20,arr.width=0.1, code = 2,col="grey", add=T)  #plotting the left flank
+        arrows(x0=StartR,x1=EndR, y0=ctrl_count, y1=ctrl_count, length =0.05, lwd=1, angle = 20,arr.width=0.1, code = 2,col="grey", add=T)  #plotting the right flank
+      }
+      if(StartL>EndL){ #indicate the reverse kmer
+        #points(pch=19,cex=0.5,EndL,ctrl_count)
+      }
+      if(StartR>EndR){ #indicate the reverse kmer
+        #points(pch=19,cex=0.5,EndR,ctrl_count)
+      }
+      ctrl_count<-ctrl_count-1
+    }
+    
     if(i==(round(nrow(mytable)/2))){
-      text(10,ctrl_count,paste(myk4plot[j]," (",myctrl_assos_prop,")",sep=""),cex=0.5)
-      text(10,case_count,paste(myk4plot[j]," (",mycase_assos_prop,")",sep=""),cex=0.5)
+      text(10,ctrl_count,paste(myk4plot[j]," (",myctrl_assos_prop,")",sep=""),cex=0.3)
+      text(10,case_count,paste(myk4plot[j]," (",mycase_assos_prop,")",sep=""),cex=0.3)
     }
     
   } #close bracket for looping through each row in the table
   
   #make the space between each kmer
-  case_count=case_count+300
-  ctrl_count=ctrl_count-300
+  case_count=case_count+1500
+  ctrl_count=ctrl_count-1500
   
 } #close bracket for looping through each kmer
 
