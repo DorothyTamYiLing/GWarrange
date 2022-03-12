@@ -1,11 +1,15 @@
-#I am going to blast multifasta kmer and multifasta genomes files
-#each flank needs to be at least 30bp long for the kmer to be processed
+###main inputs for the pipeline###
+#total number of genomes (input of the script)
+gen_num<-107
 
-#creating the genome path file, IF the file is present, dont run it again!!
-while read samples   #reading in each genome  
-do 
-echo /home/ubuntu/Dorothy/B.pertussis_573genomes_NCBI/Weigand_USA_genome/${samples}.fna >> /home/ubuntu/Dorothy/USAgenomes_GWAS/107_typeGWAS/all_path.txt
-done < /home/ubuntu/Dorothy/USAgenomes_GWAS/107_typeGWAS/107usa_samplelist.txt
+#kmers'length  (input of the script)
+k_len=200
+
+####################################################
+
+#each flank needs to be at least 30bp long for the kmer to be processed
+#make phenotype file for pipeline
+sed '1d' phenotypes.tsv > case_control.txt
 
 #input should be a kmer multifasta file
 
@@ -15,10 +19,10 @@ awk '{ if ($4 <= 3.42E-04) { print } }' 107USA_typeGWAS_ISrepl_maf0.05_fix_nobad
 
 #extract the sig kmer sequences
 
-awk 'NR!=1{print $1}' allsigkmer_withN.txt > sig_kmer_list.txt
+awk 'NR!=1{print $1}' /home/ubuntu/Dorothy/USAgenomes_GWAS/107_typeGWAS/mix/allsigkmer_withN.txt > sig_kmer_list.txt
 
 #making the headerfile
-number=$(cat allsigkmer_withN.txt | wc -l)
+number=$(cat /home/ubuntu/Dorothy/USAgenomes_GWAS/107_typeGWAS/mix/allsigkmer_withN.txt | wc -l)
 
 START=1
 let "END=$number-1"  #not including the header line
@@ -36,133 +40,165 @@ paste -d \\n header.txt sig_kmer_list.txt > allsig_kmer.fasta
 #set output directory
 out_path=/home/ubuntu/Dorothy/USAgenomes_GWAS/chromstruc_clus1clus2_GWAS/nopopctrl/maf0.2/gen_rearr_pipeline  #set the output directory of the blast output
 
-#extract each kmer sequence for processing by looping through the header file
+#get the flank start and end coordinates of the sig kmers, output file name: flank_coor.txt
+python3 /home/ubuntu/Dorothy/USAgenomes_GWAS/chromstruc_clus1clus2_GWAS/nopopctrl/maf0.2/gen_rearr_pipeline_example/extract_flank_coor.py --input ../allsig_kmer_withN.fasta
+
+#remove kmers with short flanks and extract kmers for blasting, by looping through the header file
 while read mykmer
 do
-#mykmer=$(echo ${mykmer} | sed 's/>//')
-#echo ${mykmer}
-mykmer="kmer2" # specify which kmer being process
-#done  < /home/ubuntu/Dorothy/USAgenomes_GWAS/chromstruc_clus1clus2_GWAS/nopopctrl/maf0.2/header.txt #closing for looping through sig kmers]
+mykmer=$(echo ${mykmer} | sed 's/>//')  #remove ">" from the header line
+#mykmer="kmer1" # specify which kmer being process
+echo ${mykmer}
 
-python3 /home/ubuntu/Dorothy/USAgenomes_GWAS/chromstruc_clus1clus2_GWAS/nopopctrl/maf0.2/scripts_pipeline/extract_kmer.py --allk /home/ubuntu/Dorothy/USAgenomes_GWAS/chromstruc_clus1clus2_GWAS/nopopctrl/maf0.2/allsig_kmer.fasta --kmer ${mykmer}
+#filter the kmers that contain each flanks of 30bp
+leftflankend=$(grep ${mykmer}_ flank_coor.txt | cut -d "_" -f2)
+rightflankstart=$(grep ${mykmer}_ flank_coor.txt | cut -d "_" -f3)
+kmerlen=$(grep ${mykmer}_ flank_coor.txt | cut -d "_" -f4)
+rightlen="$((${kmerlen}-${rightflankstart}+1))"       
 
-#creating the flank sequence files
-python3 /home/ubuntu/Dorothy/USAgenomes_GWAS/chromstruc_clus1clus2_GWAS/nopopctrl/maf0.2/scripts_pipeline/slice_left_right_flk.py --input ${mykmer}.fasta
+if [ ${leftflankend} -lt 60 ] || [ ${rightlen} -lt 60 ]; then   #filter out the kmer with at least one flank of <30bp
+grep ${mykmer}_ flank_coor.txt >> $out_path/kmer_flanktooshort_flkcoor.txt  #store the flank coordinates of kmer with too short flank
+echo ${mykmer} >> $out_path/kmer_flanktooshort_4rm.txt   #storing the kmer with flank being too short for remove
+fi
 
-#looping from left flank to right flank [main loop starts here]
-echo "mykmer genome genome_len flank flank_len genome_start genome_end flkstart flkend leftS/rightS leftE/rightE orientation identity evalue align_cov num_nt_aligned gaps num_SNP flk_presence" >> $out_path/${mykmer}_blastcoor.txt   
+done  < /home/ubuntu/Dorothy/USAgenomes_GWAS/chromstruc_clus1clus2_GWAS/nopopctrl/maf0.2/gen_rearr_pipeline/header.txt #closing for looping through sig kmers header lines]
 
-for x in {1..2}
+
+awk 'BEGIN{while((getline<"kmer_flanktooshort_4rm.txt")>0)l[">"$1]=1}/^>/{f=!l[$1]}f' allsig_kmer_withN.fasta > kmer_forblast.fasta #remove the kmer with flanks being too short from the muktifasta file for blasting
+
+#make a multifasta file of the genomes for blasting
+#moving the relevant genomes into one directory
+mkdir /home/ubuntu/Dorothy/B.pertussis_573genomes_NCBI/Weigand_USA_genome/107usa_samplelist
+while read line
 do
-if [ $x -eq 1 ] ; then
-	myflankfile=${mykmer}_leftflank.fasta
-	myflank="leftflank"
-	echo processing left flank
-fi
-if [ $x -eq 2 ] ; then
-	myflankfile=${mykmer}_rightflank.fasta
-	myflank="rightflank"
-	echo processing right flank
-fi
+mv /home/ubuntu/Dorothy/B.pertussis_573genomes_NCBI/Weigand_USA_genome/${line}.fna.gz /home/ubuntu/Dorothy/B.pertussis_573genomes_NCBI/Weigand_USA_genome/107usa_samplelist
+done < /home/ubuntu/Dorothy/USAgenomes_GWAS/107_typeGWAS/107usa_samplelist.txt
 
-#done
+#renaming the genome seqID as the isolate name
+#(python)
+import argparse
+from Bio import SeqIO
 
-echo $myflankfile
-echo $myflank
+filepath="/home/ubuntu/Dorothy/USAgenomes_GWAS/107_typeGWAS/107usa_samplelist.txt"
+with open(filepath) as fp: 
+      count=0
+      sample = open(filepath,'r').read().split('\n') 
+      del sample[-1]
+      print(sample)
+
+for i in range(0,len(sample)):
+	print(str(sample[i]))
+	fasta_sequences = SeqIO.parse(str(sample[i])+".fna",'fasta') #this input is the output of the above script
+	for record in fasta_sequences:
+		record.description=str(record.id)+" "+str(record.description)
+		record.id=str(sample[i])
+		SeqIO.write(record, str(sample[i])+"_rename.fna", "fasta")
 
 
-while read line   #reading in each genome  
-do 
-#echo $line    #line is the path including the genome file name
+#blasting, subjects are genomes in multifasta file, genome names should be in the headers 
+blastn -query kmer_forblast.fasta -subject /home/ubuntu/Dorothy/B.pertussis_573genomes_NCBI/Weigand_USA_genome/49_clusterGWAS_genlist.fasta -outfmt 6 -out myout.txt
+  
+  
+####################################################
 
-#line=/home/ubuntu/Dorothy/B.pertussis_573genomes_NCBI/Weigand_USA_genome/H698.fna.gz   #set the genome to be blasted
-    gen_file=$(basename "${line}")  #get the genome fasta file name only
-    #echo ${gen_file}
-    gen_nm=${gen_file/.fna}  #get the genome name
-    echo ${gen_nm}
-    
-    #unzip the genome left and right flank blast
-    #gunzip ${line}  #unzip the genome fasta file
-    
-    #blast left flank
-    out_file=${gen_nm}_${mykmer/.fasta}_${myflank}_output.txt  #set the output file name
-    echo $out_file
-    blastn -query ${line} -subject ${myflankfile} -out $out_path/$out_file
-    
-    #gzip the genome
-    #gzip ${line/.gz}
-    
-    #detecting no hit found case
-    if grep "No hits found" $out_path/$out_file; then
-       echo flank shows no hit in the genome
-       echo ${mykmer/.fasta} ${gen_nm} genome_len ${myflank} NA NA NA NA NA NA NA NA NA NA NA NA NA NA no_hit >> $out_path/${mykmer}_blastcoor.txt
-    else
-       csplit -f file -n 1 -k $out_path/$out_file /"bits"/ {*} #split the file with the occurrences of the string "bits", the output files will be replaced in the loop  
-       file_count=$(ls file* | wc -l ) 
-       let "number_hits=$file_count - 1"  #work
-       if [ $file_count -gt 2 ]; then  #the flank should only show one blast hit, otherwise save into another file for investigation
-           echo flank shows multiple hits in the genome
-           #add lines here to output the multiple hit information (a for loop), start with for i in $(seq 1 $number_hits) 
-           echo ${mykmer/.fasta} ${myflank} >> $out_path/flank_multiple_hit.txt
-           echo ${mykmer/.fasta} ${gen_nm} genome_len ${myflank} NA NA NA NA NA NA NA NA NA NA NA NA NA NA multi_hit >> $out_path/${mykmer}_blastcoor.txt
-       else  #if flank show one hit only
-           #extract all the information from the output
-           echo one hit in genome only
-           gen_len=$(grep "Length=" file0 | head -1 | cut -d "=" -f2)  #length of the genome
-           flk_len=$(grep "Length=" file0 | head -2 | tail -1 | cut -d "=" -f2)   #length of the flank
-           identity=$(grep "Identities" file1 | head -n 1 | cut -d "(" -f2| cut -d "%" -f1)   #work
-           flkstart=$(grep "Sbjct" file1 | head -n 1 | cut -d " " -f3)   #flank start
-           flkend=$(grep "Sbjct" file1 | tail -n 1 | rev | cut -d " " -f1 | rev)  #flank end
-           genstart=$(grep "Query" file1 | head -n 1 | cut -d " " -f3)   #genome start
-           genend=$(grep "Query" file1 | tail -n 1 | rev | cut -d " " -f1 | rev)   #genome end  #work, grep the last field splitted by " "
-           evalue=$(grep "Score" file1 | cut -d "=" -f3)
-           alignment_coverage=$(grep "Identities" file1 | head -n 1 | cut -d "/" -f2 | cut -d "(" -f1) #work
-           number_of_nt_aligned=$(grep "Identities" file1 | head -n 1 | cut -d "/" -f1 | cut -d "=" -f2) #work
-           num_SNP=$(expr ${alignment_coverage}-${number_of_nt_aligned})
-           gaps=$(grep "Identities" file1 | head -n 1 | cut -d "=" -f3 | cut -d "/" -f1) #work
-           
-           #defining if the flank is present
-           if [ ${alignment_coverage} -eq ${flk_len} ] && [ ${num_SNP} -lt 1 ] && [ ${gaps} -lt 1 ]; then   #if the alignment coverage == flank length, and number of SNP or gap <1, define the flank to be present
-               echo this flank is defined as present 
-               presence="flank_present"
-           else
-               presence="flank_needs_investigation"
-           fi 
-           
-           #defining the LeftS/RightS and LeftE/RightE, and check if the flank is flipped   , make sure genstart refer to the first position in flank
-           if [ ${flkstart} -gt ${flkend} ]; then  #it means ${flkend}==1
-                myS=${genend}   #therefore ${genend} should be the start of left flank
-                myE=${genstart}
-                orientation="reverse"
-                echo ${myflank} is reversed
-           else
-                myS=${genstart}
-                myE=${genend}
-                orientation="forward"
-                echo ${myflank} is forward
-           fi 
-           echo ${mykmer} ${gen_nm} ${gen_len} ${myflank} ${flk_len} ${genstart} ${genend} ${flkstart} ${flkend} ${myS} ${myE} ${orientation} ${identity} ${evalue} ${alignment_coverage} ${number_of_nt_aligned} ${gaps} ${num_SNP} ${presence} >> $out_path/${mykmer}_blastcoor.txt 
-       fi
-    fi 
-    rm $out_path/$out_file
-    rm file*
-    
-done < /home/ubuntu/Dorothy/USAgenomes_GWAS/107_typeGWAS/all_path.txt  #the genomes in this file are gzipped *gz
+#headers from the blast output
+#query, subject, identity, alig_len, mismatches, gap, qstart, qend, sStart, sEnd, evalue, bitscore
 
-done  #closing for looping between left and right flank [main loop ends here]
+###kmer hits quality checks###
 
-#make phenotype file for pipeline
-sed '1d' phenotypes.tsv > case_control.txt
+#(R)
 
-Rscript /home/ubuntu/Dorothy/USAgenomes_GWAS/chromstruc_clus1clus2_GWAS/nopopctrl/maf0.2/scripts_pipeline/flank_behaviour.R 
+#make sure the input file kmer_blastcoor.txt is in the working directory
+mytable<-read.table("myout.txt", header=F)
+colnames(mytable)<-c("query","subject","identity","alig_len","mismatches","gap","qstart","qend","sStart","sEnd","evalue","bitscore")
 
-rm *.fasta
-rm kmer_behaviour_summary.txt
-rm kmer_blastcoor.txt 
+#load in the phenotype file 
+myphenofile<-read.delim("case_control.txt", header=F)
 
-mv *_oneline_summary.txt all_oneline
+#load in the flank start and end coordinates of the sig kmers
+myflk_coor<-read.delim("flank_coor.txt",header=F,sep="_")
+colnames(myflk_coor)<-c("kmer","leftflankend","rightflankstart","kmer_len")
 
-done  < /home/ubuntu/Dorothy/USAgenomes_GWAS/chromstruc_clus1clus2_GWAS/nopopctrl/maf0.2/mytest.txt #closing for looping through sig kmers]
+mykmer<-as.character(unique(mytable$query))  #get the list of kmers with blast output, all kmer that should show at least one blast hit
+mygen<-as.character(unique(myphenofile$V1))  #get the list of the genomes from the pheno file
+
+#set the output for the rows of kmers with deletions
+del_k<-c()
+
+#set the output for the rows with multiple blast hits in flank 
+multi_hit_k<-c()
+
+#set the output for the rows with incomplete flank alignment
+alignlen_issue_k<-c()
+
+#set the output for the rows with SNPs and gaps
+SNPgap_k<-c()
+
+#create matrix for storing the rows referring to samples with presence of both flanks
+myprocess<-matrix(0,0,ncol(mytable))
+
+#looping through kmers and genomes
+for (i in 1:length(mykmer)){
+
+count=0
+myk_row<-mytable[which(mytable$query==mykmer[i]),] #rows referring to the kmer
+myflk_coor_k<-unlist(c(1,myflk_coor[which(as.character(myflk_coor$kmer)==as.character(mykmer[i])),2:4]))   #extract the flank start and end coordinate of the kmer from "myflk_coor" file
+
+for (j in 1:length(mygen)){
+
+mysub<-mytable[which(mytable$query==as.character(mykmer[i]) & mytable$subject==as.character(mygen[j])),]
+myk_blastcoor<-c(mysub$qstart,mysub$qend)  #extract the blast hit coordinates 
+mysnpgap<-c(mysub$mismatches,mysub$gap)
+
+if (nrow(mysub)<=1){  #output the kmers with deleted flank
+del_k<-c(del_k,mykmer[i])
+count=count+1
+}
+if (nrow(mysub)>2){   #output the kmers with multi-hit flank
+multi_hit_k<-c(multi_hit_k,mykmer[i])
+count=count+1
+}
+if (any(is.element(myk_blastcoor,myflk_coor_k)!=T)){ #output the kmers with incomplete flank alignment
+ alignlen_issue_k<-c(alignlen_issue_k,mykmer[i])
+ count=count+1
+ } 
+ if (any(mysnpgap!=0)) {  #output the kmers with SNP or gaps in flanks
+ SNPgap_k<-c(SNPgap_k,mykmer[i])
+ count=count+1
+ } 
+ } #closing for loop for genomes
+ 
+ if (count==0){
+ myprocess<-rbind(myprocess,myk_row)
+ }
+ } #closing for loop for kmers
+ 
+
+#the myprocess table should refere to kmers that are present in all genomes with both flanks; the flanks are also fully aligned with no SNPs nor gaps, and the flanks show unique blast hit in each genome
+
+#output the rows of kmers with quality issues
+
+if (length(unique(del_k))>0){
+my_del_k<-mytable[which(mytable$query%in%unique(del_k)),]
+write.table(my_del_k,file="kmer_with_deletion.txt",quote=F,row.names = F,col.names = T,sep="\t")
+}
+
+if (length(unique(multi_hit_k))>0){
+my_multi_hit_k<-mytable[which(mytable$query%in%unique(multi_hit_k)),]
+write.table(my_multi_hit_k,file="kmer_with_multi_hits.txt",quote=F,row.names = F,col.names = T,sep="\t")
+}
+
+if (length(unique(alignlen_issue_k))>0){
+my_alignlen_issue_k<-mytable[which(mytable$query%in%unique(alignlen_issue_k)),]
+write.table(my_alignlen_issue_k,file="kmer_with_alignlen_issue.txt",,quote=F,row.names = F,col.names = T,sep="\t")
+}
+
+if (length(unique(SNPgap_k))>0){
+my_SNPgap_k<-mytable[which(mytable$query%in%unique(SNPgap_k)),]
+write.table(my_SNPgap_k,file="kmer_with_SNPgap.txt",quote=F,row.names = F,col.names = T,sep="\t")
+}  
+
+
 
 #sort by the samples
 #sort -k2 -h kmer2_blastcoor.txt > kmer2_blastcoor_sort.txt  
