@@ -1,6 +1,6 @@
 ###main inputs for the pipeline###
 #total number of genomes (input of the script)
-gen_num<-107
+gen_num<-49
 
 #kmers'length  (input of the script)
 k_len=200
@@ -15,14 +15,14 @@ sed '1d' phenotypes.tsv > case_control.txt
 
 #extract the sig kmer lines from the output file
 #sig. kmer without bad-chisq with N
-awk '{ if ($4 <= 3.42E-04) { print } }' 107USA_typeGWAS_ISrepl_maf0.05_fix_nobad-chisq | grep "N" > allsigkmer_withN.txt
+awk '{ if ($4 <= 4.13E-04) { print } }' chromstruc_clus1clus2_GWAS_nopopctrl | grep "N" > allsigkmer_withN.txt
 
 #extract the sig kmer sequences
 
-awk 'NR!=1{print $1}' /home/ubuntu/Dorothy/USAgenomes_GWAS/107_typeGWAS/mix/allsigkmer_withN.txt > sig_kmer_list.txt
+awk 'NR!=1{print $1}' /home/ubuntu/Dorothy/USAgenomes_GWAS/chromstruc_clus1clus2_GWAS/nopopctrl/maf0.05_replremainIS/allsigkmer_withN.txt > sig_kmer_list.txt
 
 #making the headerfile
-number=$(cat /home/ubuntu/Dorothy/USAgenomes_GWAS/107_typeGWAS/mix/allsigkmer_withN.txt | wc -l)
+number=$(cat /home/ubuntu/Dorothy/USAgenomes_GWAS/chromstruc_clus1clus2_GWAS/nopopctrl/maf0.05_replremainIS/allsigkmer_withN.txt | wc -l)
 
 START=1
 let "END=$number-1"  #not including the header line
@@ -38,10 +38,10 @@ paste -d \\n header.txt sig_kmer_list.txt > allsig_kmer.fasta
 ##start of the main loop##
 
 #set output directory
-out_path=/home/ubuntu/Dorothy/USAgenomes_GWAS/chromstruc_clus1clus2_GWAS/nopopctrl/maf0.2/gen_rearr_pipeline  #set the output directory of the blast output
+out_path=/home/ubuntu/Dorothy/USAgenomes_GWAS/chromstruc_clus1clus2_GWAS/nopopctrl/maf0.05_replremainIS  #set the output directory of the blast output
 
 #get the flank start and end coordinates of the sig kmers, output file name: flank_coor.txt
-python3 /home/ubuntu/Dorothy/USAgenomes_GWAS/chromstruc_clus1clus2_GWAS/nopopctrl/maf0.2/gen_rearr_pipeline_example/extract_flank_coor.py --input ../allsig_kmer_withN.fasta
+python3 /home/ubuntu/Dorothy/USAgenomes_GWAS/scripts_pipeline/extract_flank_coor.py --input allsig_kmer.fasta
 
 #remove kmers with short flanks and extract kmers for blasting, by looping through the header file
 while read mykmer
@@ -56,15 +56,16 @@ rightflankstart=$(grep ${mykmer}_ flank_coor.txt | cut -d "_" -f3)
 kmerlen=$(grep ${mykmer}_ flank_coor.txt | cut -d "_" -f4)
 rightlen="$((${kmerlen}-${rightflankstart}+1))"       
 
-if [ ${leftflankend} -lt 60 ] || [ ${rightlen} -lt 60 ]; then   #filter out the kmer with at least one flank of <30bp
+if [ ${leftflankend} -lt 30 ] || [ ${rightlen} -lt 30 ]; then   #filter out the kmer with at least one flank of <30bp
 grep ${mykmer}_ flank_coor.txt >> $out_path/kmer_flanktooshort_flkcoor.txt  #store the flank coordinates of kmer with too short flank
 echo ${mykmer} >> $out_path/kmer_flanktooshort_4rm.txt   #storing the kmer with flank being too short for remove
 fi
 
-done  < /home/ubuntu/Dorothy/USAgenomes_GWAS/chromstruc_clus1clus2_GWAS/nopopctrl/maf0.2/gen_rearr_pipeline/header.txt #closing for looping through sig kmers header lines]
+done  < /home/ubuntu/Dorothy/USAgenomes_GWAS/chromstruc_clus1clus2_GWAS/nopopctrl/maf0.05_replremainIS/header.txt #closing for looping through sig kmers header lines]
 
 
 awk 'BEGIN{while((getline<"kmer_flanktooshort_4rm.txt")>0)l[">"$1]=1}/^>/{f=!l[$1]}f' allsig_kmer_withN.fasta > kmer_forblast.fasta #remove the kmer with flanks being too short from the muktifasta file for blasting
+
 
 #make a multifasta file of the genomes for blasting
 #moving the relevant genomes into one directory
@@ -113,7 +114,7 @@ mytable<-read.table("myout.txt", header=F)
 colnames(mytable)<-c("query","subject","identity","alig_len","mismatches","gap","qstart","qend","sStart","sEnd","evalue","bitscore")
 
 #load in the phenotype file 
-myphenofile<-read.delim("case_control.txt", header=F)
+myphenofile<-read.delim("/home/ubuntu/Dorothy/USAgenomes_GWAS/chromstruc_clus1clus2_GWAS/case_control.txt", header=F)
 
 #load in the flank start and end coordinates of the sig kmers
 myflk_coor<-read.delim("flank_coor.txt",header=F,sep="_")
@@ -150,15 +151,15 @@ mysub<-mytable[which(mytable$query==as.character(mykmer[i]) & mytable$subject==a
 myk_blastcoor<-c(mysub$qstart,mysub$qend)  #extract the blast hit coordinates 
 mysnpgap<-c(mysub$mismatches,mysub$gap)
 
-if (nrow(mysub)<=1){  #output the kmers with deleted flank
+if (nrow(mysub)<=1 | length(unique(myk_blastcoor))<4){  #output the kmers with deleted flank
 del_k<-c(del_k,mykmer[i])
 count=count+1
 }
-if (nrow(mysub)>2){   #output the kmers with multi-hit flank
+if (nrow(mysub)>2 | (nrow(mysub)==2 & all(mysub[1,c("qstart","qend")]==mysub[2,c("qstart","qend")]))){   #output the kmers with multi-hit flank
 multi_hit_k<-c(multi_hit_k,mykmer[i])
 count=count+1
 }
-if (any(is.element(myk_blastcoor,myflk_coor_k)!=T)){ #output the kmers with incomplete flank alignment
+if (length(unique(myk_blastcoor))==4 & (any(is.element(myk_blastcoor,myflk_coor_k)!=T | any(is.element(myflk_coor_k,myk_blastcoor)!=T)))){  #output the kmers with incomplete flank alignment
  alignlen_issue_k<-c(alignlen_issue_k,mykmer[i])
  count=count+1
  } 
@@ -166,11 +167,13 @@ if (any(is.element(myk_blastcoor,myflk_coor_k)!=T)){ #output the kmers with inco
  SNPgap_k<-c(SNPgap_k,mykmer[i])
  count=count+1
  } 
+ 
  } #closing for loop for genomes
  
  if (count==0){
  myprocess<-rbind(myprocess,myk_row)
  }
+ 
  } #closing for loop for kmers
  
 
@@ -198,10 +201,9 @@ my_SNPgap_k<-mytable[which(mytable$query%in%unique(SNPgap_k)),]
 write.table(my_SNPgap_k,file="kmer_with_SNPgap.txt",quote=F,row.names = F,col.names = T,sep="\t")
 }  
 
+write.table(myprocess,file="rows_for_process.txt",quote=F,row.names = F,col.names = T,sep="\t")
+
 
 
 #sort by the samples
 #sort -k2 -h kmer2_blastcoor.txt > kmer2_blastcoor_sort.txt  
-
-
-
