@@ -74,7 +74,7 @@ myk_orien=NA  #clear the variable
 
 
 myintact_fwd<-length(which((myk_row$StartL < myk_row$EndL) & (myk_row$EndL < myk_row$StartR) & (myk_row$StartR < myk_row$EndR) & ((myk_row$StartR-myk_row$EndL) < 2200)))
-myintact_rev<-length(which((myk_row$EndR < myk_row$StartR) & (myk_row$StartR < myk_row$EndL) & (myk_row$EndL < myk_row$StartL) & ((myk_row$StartR-myk_row$EndL) < 2200)))
+myintact_rev<-length(which((myk_row$EndR < myk_row$StartR) & (myk_row$StartR < myk_row$EndL) & (myk_row$EndL < myk_row$StartL) & ((myk_row$EndL-myk_row$StartR) < 2200)))
 if(myintact_fwd>0 & myintact_rev==0){
 myk_orien<-"fwd_k"
 } else if
