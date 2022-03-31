@@ -168,161 +168,183 @@ ctrl_count<--1000 #set the starting y axis level
 #set the colour scale
 plotcolors <- colorRampPalette(c("green","blue","red"))(10)
 
+
 #for (i in 1:length(myk4plot)){
-  for (i in 1:10){
+for (i in 1:10){
   mykmer<-myk4plot[i]
-  #mykmer<-"kmer965"
-
-#keep track of the biggest size factor for this kmer
-sizefactor_case_max<-0
-sizefactor_ctrl_max<-0
+  #mykmer<-"kmer985"
   
-#extract the table of the kmer
-myktab<-myflk_behave_pheno[which(myflk_behave_pheno$kmer==mykmer),]
-
-make_arrow_coor(mykmer)
-
-#extracting if the intact kmer is forward or reverse
-mykorien<-unique(myflk_behave_pheno[which(myflk_behave_pheno$kmer==mykmer),"myk_orien"])
-
+  #keep track of the biggest size factor for this kmer
+  sizefactor_case_max<-0
+  sizefactor_ctrl_max<-0
+  
+  #extract the table of the kmer
+  myktab<-myflk_behave_pheno[which(myflk_behave_pheno$kmer==mykmer),]
+  
+  make_arrow_coor(mykmer)
+  
+  #extracting the info if the intact kmer is forward or reverse
+  mykorien<-unique(myflk_behave_pheno[which(myflk_behave_pheno$kmer==mykmer),"myk_orien"])
+  
   if(mykorien=="fwd_k"){  
     #ctrl left flank arrow
-    if(mymed_ctrl_L$endmed<mymed_ctrl_L$startmed){   #check if this flank has flipped (in the context of fwd_k)
-      plot_ctrl_L_start<-mymed_ctrl_L$startmed/1000
-      plot_ctrl_L_end<-mymed_ctrl_L$endmed/1000-50
+    for(k in 1:nrow(mymed_ctrl_L)){
+    if(mymed_ctrl_L$endmed[k]<mymed_ctrl_L$startmed[k]){   #check if this flank has flipped (in the context of fwd_k)
+      plot_ctrl_L_start<-mymed_ctrl_L$startmed[k]/1000
+      plot_ctrl_L_end<-mymed_ctrl_L$endmed[k]/1000-50
     }else{
-    plot_ctrl_L_start<-mymed_ctrl_L$startmed/1000-50
-    plot_ctrl_L_end<-mymed_ctrl_L$endmed/1000
+    plot_ctrl_L_start<-mymed_ctrl_L$startmed[k]/1000-50
+    plot_ctrl_L_end<-mymed_ctrl_L$endmed[k]/1000
     }
-    sizefactor<-mymed_ctrl_L$count
+    sizefactor<-mymed_ctrl_L$count[k]
     x <- c(plot_ctrl_L_start, plot_ctrl_L_start, plot_ctrl_L_end)  
-    y <- c(ctrl_count, ctrl_count-(sizefactor*200), ctrl_count-(sizefactor*200)/2) 
-    polygon(x, y,col = plotcolors[i],border = plotcolors[i])
-    arrow_height_ctrl<-abs(ctrl_count-(sizefactor*200))-abs(ctrl_count)
+    y <- c(ctrl_count, ctrl_count-(sizefactor*600), ctrl_count-(sizefactor*600)/2) 
+    polygon(x, y,col = "blue",border = "blue")
+    arrow_height_ctrl<-abs(ctrl_count-(sizefactor*600))-abs(ctrl_count)
     if(arrow_height_ctrl>sizefactor_ctrl_max){    #update the biggest height of arrow
       sizefactor_ctrl_max<-arrow_height_ctrl
+    }
     }
     #ctrl right flank arrow
-    if(mymed_ctrl_R$endmed<mymed_ctrl_R$startmed){    #check if this flank has flipped (in the context of fwd_k)
-      plot_ctrl_R_end<-mymed_ctrl_R$endmed/1000
-      plot_ctrl_R_start<-mymed_ctrl_R$startmed/1000+50
+    for(k in 1:nrow(mymed_ctrl_R)){
+    if(mymed_ctrl_R$endmed[k]<mymed_ctrl_R$startmed[k]){    #check if this flank has flipped (in the context of fwd_k)
+      plot_ctrl_R_end<-mymed_ctrl_R$endmed[k]/1000
+      plot_ctrl_R_start<-mymed_ctrl_R$startmed[k]/1000+50
     }else{
-      plot_ctrl_R_end<-mymed_ctrl_R$endmed/1000+50
-    plot_ctrl_R_start<-mymed_ctrl_R$startmed/1000
+      plot_ctrl_R_end<-mymed_ctrl_R$endmed[k]/1000+50
+      plot_ctrl_R_start<-mymed_ctrl_R$startmed[k]/1000
     }
-    sizefactor<-mymed_ctrl_R$count
+    sizefactor<-mymed_ctrl_R$count[k]
     x <- c(plot_ctrl_R_start, plot_ctrl_R_start, plot_ctrl_R_end)  
-    y <- c(ctrl_count, ctrl_count-(sizefactor*200), ctrl_count-(sizefactor*200)/2) 
-    polygon(x, y,col = plotcolors[i],border = plotcolors[i])
-    arrow_height_ctrl<-abs(ctrl_count-(sizefactor*200))-abs(ctrl_count)
+    y <- c(ctrl_count, ctrl_count-(sizefactor*600), ctrl_count-(sizefactor*600)/2) 
+    polygon(x, y,col = "red",border = "red")
+    arrow_height_ctrl<-abs(ctrl_count-(sizefactor*600))-abs(ctrl_count)
     if(arrow_height_ctrl>sizefactor_ctrl_max){    #update the biggest height of arrow
       sizefactor_ctrl_max<-arrow_height_ctrl
     }
-    #case left flank arrow
-    if(mymed_case_L$endmed<mymed_case_L$startmed){  #check if this flank has flipped (in the context of fwd_k)
-      plot_case_L_start<-mymed_case_L$startmed/1000
-      plot_case_L_end<-mymed_case_L$endmed/1000-50
-    }else{
-    plot_case_L_start<-mymed_case_L$startmed/1000-50
-    plot_case_L_end<-mymed_case_L$endmed/1000
     }
-    sizefactor<-mymed_case_L$count
+    #case left flank arrow
+    for(k in 1:nrow(mymed_case_L)){
+    if(mymed_case_L$endmed[k]<mymed_case_L$startmed[k]){  #check if this flank has flipped (in the context of fwd_k)
+      plot_case_L_start<-mymed_case_L$startmed[k]/1000
+      plot_case_L_end<-mymed_case_L$endmed[k]/1000-50
+    }else{
+    plot_case_L_start<-mymed_case_L$startmed[k]/1000-50
+    plot_case_L_end<-mymed_case_L$endmed[k]/1000
+    }
+    sizefactor<-mymed_case_L$count[k]
     x <- c(plot_case_L_start, plot_case_L_start, plot_case_L_end)  
-    y <- c(case_count, case_count+(sizefactor*200), case_count+(sizefactor*200)/2) 
-    polygon(x, y,col = plotcolors[i],border = plotcolors[i])
-    arrow_height_case<-abs(case_count+(sizefactor*200))-abs(case_count)
+    y <- c(case_count, case_count+(sizefactor*600), case_count+(sizefactor*600)/2) 
+    polygon(x, y,col = "blue",border = "blue")
+    arrow_height_case<-abs(case_count+(sizefactor*600))-abs(case_count)
     if(arrow_height_case>sizefactor_case_max){    #update the biggest height of arrow
       sizefactor_case_max<-arrow_height_case
+    }
     }
     #case right flank arrow
-    if(mymed_case_R$endmed<mymed_case_R$startmed){   #check if this flank has flipped (in the context of fwd_k)
-      plot_case_R_end<-mymed_case_R$endmed/1000
-      plot_case_R_start<-mymed_case_R$startmed/1000+50
+    for(k in 1:nrow(mymed_case_R)){
+    if(mymed_case_R$endmed[k]<mymed_case_R$startmed[k]){   #check if this flank has flipped (in the context of fwd_k)
+      plot_case_R_end<-mymed_case_R$endmed[k]/1000
+      plot_case_R_start<-mymed_case_R$startmed[k]/1000+50
     }else{
-    plot_case_R_end<-mymed_case_R$endmed/1000+50
-    plot_case_R_start<-mymed_case_R$startmed/1000
+    plot_case_R_end<-mymed_case_R$endmed[k]/1000+50
+    plot_case_R_start<-mymed_case_R$startmed[k]/1000
     }
-    sizefactor<-mymed_case_R$count
+    sizefactor<-mymed_case_R$count[k]
     x <- c(plot_case_R_start, plot_case_R_start, plot_case_R_end)  
-    y <- c(case_count, case_count+(sizefactor*200), case_count+(sizefactor*200)/2) 
-    polygon(x, y,col = plotcolors[i],border = plotcolors[i])
-    arrow_height_case<-abs(case_count+(sizefactor*200))-abs(case_count)
+    y <- c(case_count, case_count+(sizefactor*600), case_count+(sizefactor*600)/2) 
+    polygon(x, y,col = "red",border = "red")
+    arrow_height_case<-abs(case_count+(sizefactor*600))-abs(case_count)
     if(arrow_height_case>sizefactor_case_max){    #update the biggest height of arrow
       sizefactor_case_max<-arrow_height_case
     }
-  }
-
-if(mykorien=="rev_k"){
-    #ctrl left flank arrow
-    if(mymed_ctrl_L$startmed<mymed_ctrl_L$endmed){  #check if this flank has flipped (in the context of rev_k)
-      plot_ctrl_L_start<-mymed_ctrl_L$startmed/1000
-      plot_ctrl_L_end<-mymed_ctrl_L$endmed/1000+50
-    }else{  
-      plot_ctrl_L_start<-mymed_ctrl_L$startmed/1000+50
-      plot_ctrl_L_end<-mymed_ctrl_L$endmed/1000
-  }
-  sizefactor<-mymed_ctrl_L$count
-  x <- c(plot_ctrl_L_start, plot_ctrl_L_start, plot_ctrl_L_end)  
-  y <- c(ctrl_count, ctrl_count-(sizefactor*200), ctrl_count-(sizefactor*200)/2) 
-  polygon(x, y,col = plotcolors[i],border = plotcolors[i]) 
-  arrow_height_ctrl<-abs(ctrl_count-(sizefactor*200))-abs(ctrl_count)
-  if(arrow_height_ctrl>sizefactor_ctrl_max){    #update the biggest height of arrow
-    sizefactor_ctrl_max<-arrow_height_ctrl
-  }
-  #ctrl right flank arrow
-  if(mymed_ctrl_R$startmed<mymed_ctrl_R$endmed){ #check if this flank has flipped (in the context of rev_k)
-    plot_ctrl_R_end<-mymed_ctrl_R$endmed/1000
-    plot_ctrl_R_start<-mymed_ctrl_R$startmed/1000-50
-  }else{
-    plot_ctrl_R_end<-mymed_ctrl_R$endmed/1000-50
-    plot_ctrl_R_start<-mymed_ctrl_R$startmed/1000
-  }
-  sizefactor<-mymed_ctrl_R$count
-  x <- c(plot_ctrl_R_start, plot_ctrl_R_start, plot_ctrl_R_end)  
-  y <- c(ctrl_count, ctrl_count-(sizefactor*200), ctrl_count-(sizefactor*200)/2) 
-  polygon(x, y,col = plotcolors[i],border = plotcolors[i]) 
-  arrow_height_ctrl<-abs(ctrl_count-(sizefactor*200))-abs(ctrl_count)
-  if(arrow_height_ctrl>sizefactor_ctrl_max){    #update the biggest height of arrow
-    sizefactor_ctrl_max<-arrow_height_ctrl
-  }
-  #case left flank arrow
-  if(mymed_case_L$startmed<mymed_case_L$endmed){  #check if this flank has flipped (in the context of rev_k)
-    plot_case_L_start<-mymed_case_L$startmed/1000
-    plot_case_L_end<-mymed_case_L$endmed/1000+50
-  }else{
-  plot_case_L_start<-mymed_case_L$startmed/1000+50
-  plot_case_L_end<-mymed_case_L$endmed/1000
-  }
-  sizefactor<-mymed_case_L$count
-  x <- c(plot_case_L_start, plot_case_L_start, plot_case_L_end)  
-  y <- c(case_count, case_count+(sizefactor*200), case_count+(sizefactor*200)/2) 
-  polygon(x, y,col = plotcolors[i],border = plotcolors[i])
-  arrow_height_case<-abs(case_count+(sizefactor*200))-abs(case_count)
-  if(arrow_height_case>sizefactor_case_max){    #update the biggest height of arrow
-    sizefactor_case_max<-arrow_height_case
-  }
-  #case right flank arrow
-  if(mymed_case_R$startmed<mymed_case_R$endmed){ #check if this flank has flipped (in the context of rev_k)
-    plot_case_R_end<-mymed_case_R$endmed/1000
-    plot_case_R_start<-mymed_case_R$startmed/1000-50
-  }else{
-  plot_case_R_end<-mymed_case_R$endmed/1000-50
-  plot_case_R_start<-mymed_case_R$startmed/1000
-  }
-  sizefactor<-mymed_case_R$count
-  x <- c(plot_case_R_start, plot_case_R_start, plot_case_R_end)  
-  y <- c(case_count, case_count+(sizefactor*200), case_count+(sizefactor*200)/2) 
-  polygon(x, y,col = plotcolors[i],border = plotcolors[i])  
-  arrow_height_case<-abs(case_count+(sizefactor*200))-abs(case_count)
-  if(arrow_height_case>sizefactor_case_max){    #update the biggest height of arrow
-    sizefactor_case_max<-arrow_height_case
-  }
+    }
 }
+  
+  if(mykorien=="rev_k"){
+    #ctrl left flank arrow
+    for(k in 1:nrow(mymed_ctrl_L)){
+    if(mymed_ctrl_L$startmed[k]<mymed_ctrl_L$endmed[k]){  #check if this flank has flipped (in the context of rev_k)
+      plot_ctrl_L_start<-mymed_ctrl_L$startmed[k]/1000
+      plot_ctrl_L_end<-mymed_ctrl_L$endmed[k]/1000+50
+    }else{  
+      plot_ctrl_L_start<-mymed_ctrl_L$startmed[k]/1000+50
+      plot_ctrl_L_end<-mymed_ctrl_L$endmed[k]/1000
+  }
+  sizefactor<-mymed_ctrl_L$count[k]
+  x <- c(plot_ctrl_L_start, plot_ctrl_L_start, plot_ctrl_L_end)  
+  y <- c(ctrl_count, ctrl_count-(sizefactor*600), ctrl_count-(sizefactor*600)/2) 
+  polygon(x, y,col = "blue",border = "blue") 
+  arrow_height_ctrl<-abs(ctrl_count-(sizefactor*600))-abs(ctrl_count)
+  if(arrow_height_ctrl>sizefactor_ctrl_max){    #update the biggest height of arrow
+    sizefactor_ctrl_max<-arrow_height_ctrl
+  }
+    }
+  #ctrl right flank arrow
+    for(k in 1:nrow(mymed_ctrl_R)){
+  if(mymed_ctrl_R$startmed[k]<mymed_ctrl_R$endmed[k]){ #check if this flank has flipped (in the context of rev_k)
+    plot_ctrl_R_end<-mymed_ctrl_R$endmed[k]/1000
+    plot_ctrl_R_start<-mymed_ctrl_R$startmed[k]/1000-50
+  }else{
+    plot_ctrl_R_end<-mymed_ctrl_R$endmed[k]/1000-50
+    plot_ctrl_R_start<-mymed_ctrl_R$startmed[k]/1000
+  }
+  sizefactor<-mymed_ctrl_R$count[k]
+  x <- c(plot_ctrl_R_start, plot_ctrl_R_start, plot_ctrl_R_end)  
+  y <- c(ctrl_count, ctrl_count-(sizefactor*600), ctrl_count-(sizefactor*600)/2) 
+  polygon(x, y,col = "red",border = "red") 
+  arrow_height_ctrl<-abs(ctrl_count-(sizefactor*600))-abs(ctrl_count)
+  if(arrow_height_ctrl>sizefactor_ctrl_max){    #update the biggest height of arrow
+    sizefactor_ctrl_max<-arrow_height_ctrl
+  }
+    }
+  #case left flank arrow
+    for(k in 1:nrow(mymed_case_L)){
+  if(mymed_case_L$startmed[k]<mymed_case_L$endmed[k]){  #check if this flank has flipped (in the context of rev_k)
+    plot_case_L_start<-mymed_case_L$startmed[k]/1000
+    plot_case_L_end<-mymed_case_L$endmed[k]/1000+50
+  }else{
+  plot_case_L_start<-mymed_case_L$startmed[k]/1000+50
+  plot_case_L_end<-mymed_case_L$endmed[k]/1000
+  }
+  sizefactor<-mymed_case_L$count[k]
+  x <- c(plot_case_L_start, plot_case_L_start, plot_case_L_end)  
+  y <- c(case_count, case_count+(sizefactor*600), case_count+(sizefactor*600)/2) 
+  polygon(x, y,col = "blue",border = "blue")
+  arrow_height_case<-abs(case_count+(sizefactor*600))-abs(case_count)
+  if(arrow_height_case>sizefactor_case_max){    #update the biggest height of arrow
+    sizefactor_case_max<-arrow_height_case
+  }
+    }
+  #case right flank arrow
+    for(k in 1:nrow(mymed_case_R)){
+  if(mymed_case_R$startmed[k]<mymed_case_R$endmed[k]){ #check if this flank has flipped (in the context of rev_k)
+    plot_case_R_end<-mymed_case_R$endmed[k]/1000
+    plot_case_R_start<-mymed_case_R$startmed[k]/1000-50
+  }else{
+  plot_case_R_end<-mymed_case_R$endmed[k]/1000-50
+  plot_case_R_start<-mymed_case_R$startmed[k]/1000
+  }
+  sizefactor<-mymed_case_R$count[k]
+  x <- c(plot_case_R_start, plot_case_R_start, plot_case_R_end)  
+  y <- c(case_count, case_count+(sizefactor*600), case_count+(sizefactor*600)/2) 
+  polygon(x, y,col = "red",border = "red")  
+  arrow_height_case<-abs(case_count+(sizefactor*600))-abs(case_count)
+  if(arrow_height_case>sizefactor_case_max){    #update the biggest height of arrow
+    sizefactor_case_max<-arrow_height_case
+  }
+    }
+  }
+  
+abline(h=case_count+sizefactor_case_max+1000,col="grey")
+abline(h=ctrl_count-sizefactor_ctrl_max-1000,col="grey")
+
+text(0,(case_count+sizefactor_case_max/2),mykmer,cex=0.7)
+text(0,(ctrl_count-sizefactor_ctrl_max/2),mykmer,cex=0.7)
 
 case_count<-case_count+sizefactor_case_max+2000 #set the starting y axis level
 ctrl_count<-ctrl_count-sizefactor_ctrl_max-2000 #set the starting y axis level
-  }
-
+}
 
 
 #defining functions
@@ -499,18 +521,6 @@ make_arrow_coor<-function(mykmer){
   #return(myreturn)
 }
 
-
-
-
-#arrow pointing to left
-x <- c(2000, 2000, 1000)  #arrow starting at 2000 and ending at 1000
-y <- c(0, 5000, 2000) #arrow from 0 to 5000, arrow tip at 2000
-polygon(x, y,col = 'green',border = 'green')
-
-#arrow pointing to right
-x <- c(1000, 1000, 2000)  #arrow starting at 1000 and ending at 2000
-y <- c(0, 5000, 2000) #arrow from 0 to 5000, arrow tip at 2000
-polygon(x, y,col = 'green',border = 'green')
 
 
 
