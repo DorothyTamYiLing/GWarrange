@@ -148,39 +148,184 @@ write.table(myall_out,file="myall_out.txt",quote=F,row.names = F,col.names = T,s
 
 ####plotting#####
 
-myk4plot<-unique(myflk_behave_pheno[which(myflk_behave_pheno$flk_behaviour!="intact_k"),"kmer"])
+#extracting the kmer that show rearrangement in at least one case genome 
+myk4plot<-unique(myflk_behave_pheno[which(myflk_behave_pheno$flk_behaviour=="mv&flp" & myflk_behave_pheno$case_control=="1"),"kmer"])
+#OR
+#extracting the kmer that show rearrangement in at least one control genome 
+myk4plot<-unique(myflk_behave_pheno[which(myflk_behave_pheno$flk_behaviour=="mv&flp" & myflk_behave_pheno$case_control=="0"),"kmer"])
 
-mykmer<-"kmer10"
 
+#set the plot
+plot(1, type="n", xlim=c(1,5000), ylim=c(-100000,100000), xlab="genome position (thousands)",ylab="genome_index")
+
+abline(h=0) #to separate the case from control kmers
+text(5000,1500,"case",cex=0.7)
+text(5000,-1500,"control",cex=0.7)
+
+case_count<-1000 #set the starting y axis level
+ctrl_count<--1000 #set the starting y axis level
+
+#set the colour scale
+plotcolors <- colorRampPalette(c("green","blue","red"))(10)
+
+#for (i in 1:length(myk4plot)){
+  for (i in 1:10){
+  mykmer<-myk4plot[i]
+  #mykmer<-"kmer965"
+
+#keep track of the biggest size factor for this kmer
+sizefactor_case_max<-0
+sizefactor_ctrl_max<-0
+  
 #extract the table of the kmer
 myktab<-myflk_behave_pheno[which(myflk_behave_pheno$kmer==mykmer),]
 
-abline(h=0) #to separate the case from control kmers
-text(5000,(length(myk4plot)*10),"case",cex=0.7)
-text(5000,-(length(myk4plot)*10),"control",cex=0.7)
+make_arrow_coor(mykmer)
 
-case_count<-100 #set the starting y axis level
-ctrl_count<--100 #set the starting y axis level
-
-make_arrow_coor("kmer10")
-
+#extracting if the intact kmer is forward or reverse
 mykorien<-unique(myflk_behave_pheno[which(myflk_behave_pheno$kmer==mykmer),"myk_orien"])
-if(mykorien=="fwd_k"){
-  mymed_ctrl_L$startmed<-mymed_ctrl_L$startmed/1000-50
-  mymed_ctrl_R$endmed<-mymed_ctrl_R$endmed/1000+50
-  mymed_case_L$startmed<-mymed_case_L$startmed/1000-50
-  mymed_case_R$endmed<-mymed_case_R$endmed/1000+50
-}
+
+  if(mykorien=="fwd_k"){  
+    #ctrl left flank arrow
+    if(mymed_ctrl_L$endmed<mymed_ctrl_L$startmed){   #check if this flank has flipped (in the context of fwd_k)
+      plot_ctrl_L_start<-mymed_ctrl_L$startmed/1000
+      plot_ctrl_L_end<-mymed_ctrl_L$endmed/1000-50
+    }else{
+    plot_ctrl_L_start<-mymed_ctrl_L$startmed/1000-50
+    plot_ctrl_L_end<-mymed_ctrl_L$endmed/1000
+    }
+    sizefactor<-mymed_ctrl_L$count
+    x <- c(plot_ctrl_L_start, plot_ctrl_L_start, plot_ctrl_L_end)  
+    y <- c(ctrl_count, ctrl_count-(sizefactor*200), ctrl_count-(sizefactor*200)/2) 
+    polygon(x, y,col = plotcolors[i],border = plotcolors[i])
+    arrow_height_ctrl<-abs(ctrl_count-(sizefactor*200))-abs(ctrl_count)
+    if(arrow_height_ctrl>sizefactor_ctrl_max){    #update the biggest height of arrow
+      sizefactor_ctrl_max<-arrow_height_ctrl
+    }
+    #ctrl right flank arrow
+    if(mymed_ctrl_R$endmed<mymed_ctrl_R$startmed){    #check if this flank has flipped (in the context of fwd_k)
+      plot_ctrl_R_end<-mymed_ctrl_R$endmed/1000
+      plot_ctrl_R_start<-mymed_ctrl_R$startmed/1000+50
+    }else{
+      plot_ctrl_R_end<-mymed_ctrl_R$endmed/1000+50
+    plot_ctrl_R_start<-mymed_ctrl_R$startmed/1000
+    }
+    sizefactor<-mymed_ctrl_R$count
+    x <- c(plot_ctrl_R_start, plot_ctrl_R_start, plot_ctrl_R_end)  
+    y <- c(ctrl_count, ctrl_count-(sizefactor*200), ctrl_count-(sizefactor*200)/2) 
+    polygon(x, y,col = plotcolors[i],border = plotcolors[i])
+    arrow_height_ctrl<-abs(ctrl_count-(sizefactor*200))-abs(ctrl_count)
+    if(arrow_height_ctrl>sizefactor_ctrl_max){    #update the biggest height of arrow
+      sizefactor_ctrl_max<-arrow_height_ctrl
+    }
+    #case left flank arrow
+    if(mymed_case_L$endmed<mymed_case_L$startmed){  #check if this flank has flipped (in the context of fwd_k)
+      plot_case_L_start<-mymed_case_L$startmed/1000
+      plot_case_L_end<-mymed_case_L$endmed/1000-50
+    }else{
+    plot_case_L_start<-mymed_case_L$startmed/1000-50
+    plot_case_L_end<-mymed_case_L$endmed/1000
+    }
+    sizefactor<-mymed_case_L$count
+    x <- c(plot_case_L_start, plot_case_L_start, plot_case_L_end)  
+    y <- c(case_count, case_count+(sizefactor*200), case_count+(sizefactor*200)/2) 
+    polygon(x, y,col = plotcolors[i],border = plotcolors[i])
+    arrow_height_case<-abs(case_count+(sizefactor*200))-abs(case_count)
+    if(arrow_height_case>sizefactor_case_max){    #update the biggest height of arrow
+      sizefactor_case_max<-arrow_height_case
+    }
+    #case right flank arrow
+    if(mymed_case_R$endmed<mymed_case_R$startmed){   #check if this flank has flipped (in the context of fwd_k)
+      plot_case_R_end<-mymed_case_R$endmed/1000
+      plot_case_R_start<-mymed_case_R$startmed/1000+50
+    }else{
+    plot_case_R_end<-mymed_case_R$endmed/1000+50
+    plot_case_R_start<-mymed_case_R$startmed/1000
+    }
+    sizefactor<-mymed_case_R$count
+    x <- c(plot_case_R_start, plot_case_R_start, plot_case_R_end)  
+    y <- c(case_count, case_count+(sizefactor*200), case_count+(sizefactor*200)/2) 
+    polygon(x, y,col = plotcolors[i],border = plotcolors[i])
+    arrow_height_case<-abs(case_count+(sizefactor*200))-abs(case_count)
+    if(arrow_height_case>sizefactor_case_max){    #update the biggest height of arrow
+      sizefactor_case_max<-arrow_height_case
+    }
+  }
 
 if(mykorien=="rev_k"){
-  mymed_ctrl_L$startmed<-mymed_ctrl_L$startmed/1000+50
-  mymed_ctrl_R$endmed<-mymed_ctrl_R$endmed/1000-50
-  mymed_case_L$startmed<-mymed_case_L$startmed/1000+50
-  mymed_case_R$endmed<-mymed_case_R$endmed/1000-50
+    #ctrl left flank arrow
+    if(mymed_ctrl_L$startmed<mymed_ctrl_L$endmed){  #check if this flank has flipped (in the context of rev_k)
+      plot_ctrl_L_start<-mymed_ctrl_L$startmed/1000
+      plot_ctrl_L_end<-mymed_ctrl_L$endmed/1000+50
+    }else{  
+      plot_ctrl_L_start<-mymed_ctrl_L$startmed/1000+50
+      plot_ctrl_L_end<-mymed_ctrl_L$endmed/1000
+  }
+  sizefactor<-mymed_ctrl_L$count
+  x <- c(plot_ctrl_L_start, plot_ctrl_L_start, plot_ctrl_L_end)  
+  y <- c(ctrl_count, ctrl_count-(sizefactor*200), ctrl_count-(sizefactor*200)/2) 
+  polygon(x, y,col = plotcolors[i],border = plotcolors[i]) 
+  arrow_height_ctrl<-abs(ctrl_count-(sizefactor*200))-abs(ctrl_count)
+  if(arrow_height_ctrl>sizefactor_ctrl_max){    #update the biggest height of arrow
+    sizefactor_ctrl_max<-arrow_height_ctrl
+  }
+  #ctrl right flank arrow
+  if(mymed_ctrl_R$startmed<mymed_ctrl_R$endmed){ #check if this flank has flipped (in the context of rev_k)
+    plot_ctrl_R_end<-mymed_ctrl_R$endmed/1000
+    plot_ctrl_R_start<-mymed_ctrl_R$startmed/1000-50
+  }else{
+    plot_ctrl_R_end<-mymed_ctrl_R$endmed/1000-50
+    plot_ctrl_R_start<-mymed_ctrl_R$startmed/1000
+  }
+  sizefactor<-mymed_ctrl_R$count
+  x <- c(plot_ctrl_R_start, plot_ctrl_R_start, plot_ctrl_R_end)  
+  y <- c(ctrl_count, ctrl_count-(sizefactor*200), ctrl_count-(sizefactor*200)/2) 
+  polygon(x, y,col = plotcolors[i],border = plotcolors[i]) 
+  arrow_height_ctrl<-abs(ctrl_count-(sizefactor*200))-abs(ctrl_count)
+  if(arrow_height_ctrl>sizefactor_ctrl_max){    #update the biggest height of arrow
+    sizefactor_ctrl_max<-arrow_height_ctrl
+  }
+  #case left flank arrow
+  if(mymed_case_L$startmed<mymed_case_L$endmed){  #check if this flank has flipped (in the context of rev_k)
+    plot_case_L_start<-mymed_case_L$startmed/1000
+    plot_case_L_end<-mymed_case_L$endmed/1000+50
+  }else{
+  plot_case_L_start<-mymed_case_L$startmed/1000+50
+  plot_case_L_end<-mymed_case_L$endmed/1000
+  }
+  sizefactor<-mymed_case_L$count
+  x <- c(plot_case_L_start, plot_case_L_start, plot_case_L_end)  
+  y <- c(case_count, case_count+(sizefactor*200), case_count+(sizefactor*200)/2) 
+  polygon(x, y,col = plotcolors[i],border = plotcolors[i])
+  arrow_height_case<-abs(case_count+(sizefactor*200))-abs(case_count)
+  if(arrow_height_case>sizefactor_case_max){    #update the biggest height of arrow
+    sizefactor_case_max<-arrow_height_case
+  }
+  #case right flank arrow
+  if(mymed_case_R$startmed<mymed_case_R$endmed){ #check if this flank has flipped (in the context of rev_k)
+    plot_case_R_end<-mymed_case_R$endmed/1000
+    plot_case_R_start<-mymed_case_R$startmed/1000-50
+  }else{
+  plot_case_R_end<-mymed_case_R$endmed/1000-50
+  plot_case_R_start<-mymed_case_R$startmed/1000
+  }
+  sizefactor<-mymed_case_R$count
+  x <- c(plot_case_R_start, plot_case_R_start, plot_case_R_end)  
+  y <- c(case_count, case_count+(sizefactor*200), case_count+(sizefactor*200)/2) 
+  polygon(x, y,col = plotcolors[i],border = plotcolors[i])  
+  arrow_height_case<-abs(case_count+(sizefactor*200))-abs(case_count)
+  if(arrow_height_case>sizefactor_case_max){    #update the biggest height of arrow
+    sizefactor_case_max<-arrow_height_case
+  }
 }
 
-#plotting the finalised arrows
+case_count<-case_count+sizefactor_case_max+2000 #set the starting y axis level
+ctrl_count<-ctrl_count-sizefactor_ctrl_max-2000 #set the starting y axis level
+  }
 
+
+
+#defining functions
 
 arrow_coor_casectrl<-function("0","ctrl"){ #function with kmer function , making mymed_ctrl_L and mymed_ctrl_R
 }
@@ -357,165 +502,15 @@ make_arrow_coor<-function(mykmer){
 
 
 
-#### old code #####
+#arrow pointing to left
+x <- c(2000, 2000, 1000)  #arrow starting at 2000 and ending at 1000
+y <- c(0, 5000, 2000) #arrow from 0 to 5000, arrow tip at 2000
+polygon(x, y,col = 'green',border = 'green')
 
-#making a function
-'%!in%' <- function(x,y)!('%in%'(x,y))
-
-setwd("/Users/dorothytam/Desktop/")
-
-myflk_behave_pheno<-read.table("myflk_behave_pheno.txt",header=T)
-colnames(myflk_behave_pheno)[1]<-"genome"
-colnames(myflk_behave_pheno)[2]<-"case_control"
-
-#remove the rows with flank behaviour == NA
-myflk_behave_pheno<-myflk_behave_pheno[which(!is.na(myflk_behave_pheno$flk_behaviour)),]
-
-
-#select the kmers that are with at least one row of flank_behaviour!=intact_k
-myk4plot<-unique(myflk_behave_pheno[which(myflk_behave_pheno$flk_behaviour!="intact_k"),"kmer"])
-
-
-#case panel y axis
-control_y<--(length(myk4plot)*control_num+length(myk4plot)*300)
-case_y<-length(myk4plot)*case_num+length(myk4plot)*300
-
-
-#plotting the kmers
-#plot(1, type="n", xlim=c(1,5000), ylim=c(control_y,case_y), xlab="genome position (thousands)",ylab="genome_index")
-plot(1, type="n", xlim=c(1,5000), ylim=c(-50000,50000), xlab="genome position (thousands)",ylab="genome_index")
-
-abline(h=0) #to separate the case from control kmers
-text(5000,(length(myk4plot)*10),"case",cex=0.7)
-text(5000,-(length(myk4plot)*10),"control",cex=0.7)
-
-#set the colour spectrum according to the number of kmers
-#plotcolors <- colorRampPalette(c("green","blue","red"))(length(myk4plot))
-plotcolors <- colorRampPalette(c("green","blue","red"))(30)
-
-case_count<-100 #set the starting y axis level
-ctrl_count<--100 #set the starting y axis level
-
-#for (j in 1:length(myk4plot)){ #open bracket for looping through each kmer
-  for (j in 1:30){  #open bracket for looping through each kmer
-  
-  #kmer<-myk4plot[j]
-  mykmer<-"kmer10"
-  
-  #extract the table of the kmer
-  myktab<-myflk_behave_pheno[which(myflk_behave_pheno$kmer==mykmer),]
-  
-  #processing the left flanks, then right flanks
-  myktab<-myktab[order(myktab$StartL,decreasing=F),]
-  
-  
-  #extract the case and control associated kmer "notes" information from myall_out
-  mycase_assos<-myall_out[which(myall_out$kmer==myk4plot[j]),"case_assos"]
-  myctrl_assos<-myall_out[which(myall_out$kmer==myk4plot[j]),"ctrl_assos"]
-  
-  mycase_assos_prop<-myall_out[which(myall_out$kmer==myk4plot[j]),"case_assos_prop"]
-  myctrl_assos_prop<-myall_out[which(myall_out$kmer==myk4plot[j]),"ctrl_assos_prop"]
-  
-  
-  #select the rows referring to the kmer
-  mytable<-myflk_behave_pheno[which(myflk_behave_pheno$kmer==myk4plot[j]),]
-  
-  #plotting each kmer mapped on each genome
-  for (i in 1:nrow(mytable)){  #looping through each row in the table
-    print(i)
-    StartL<-as.numeric(mytable[i,"StartL"])/1000
-    EndL<-as.numeric(mytable[i,"EndL"])/1000
-    StartR<-as.numeric(mytable[i,"StartR"])/1000
-    EndR<-as.numeric(mytable[i,"EndR"])/1000
-    
-    #when the flanks are apart
-    if(mytable[i,"flk_behaviour"]!="intact_k"){ 
-      if(StartL>EndL){
-        StartL=StartL+25
-        EndL<-EndL-25
-      }else{
-        StartL=StartL-25
-        EndL<-EndL+25
-      }
-      if(StartR>EndR){
-        StartR=StartR+25
-        EndR<-EndR-25
-      }else{
-        StartR=StartR-25
-        EndR<-EndR+25
-      }
-    }
-    
-    #when the flanks are together, i.e. intact k, and k is mapped forward
-    if(mytable[i,"flk_behaviour"]=="intact_k"){ 
-      if(EndR>StartL){
-        StartL=StartL-50
-        EndR<-EndR+50
-      }
-      if(StartL>EndR){
-        StartL=StartL+50
-        EndR<-EndR-50
-      }
-    }
-    
-    #decide if its case or control
-    
-    #if it is case
-    if(mytable[i,"case_control"]=="1"){ 
-      #if the kmer behaviour correspond to the case associated event
-      if(mytable[i,"notes"]==mycase_assos){
-        arrows(x0=StartL,x1=EndL, y0=case_count, y1=case_count, length =0.05, lwd=1, angle = 20,arr.width=0.1, code = 2,col=plotcolors[j], add=T)  #plotting the left flank
-        arrows(x0=StartR,x1=EndR, y0=case_count, y1=case_count, length =0.05, lwd=1, angle = 20,arr.width=0.1, code = 2,col=plotcolors[j], add=T)  #plotting the right flank
-      }
-      #if the kmer behaviour correspond to the control associated event
-      if(mytable[i,"notes"]==myctrl_assos){
-        arrows(x0=StartL,x1=EndL, y0=case_count, y1=case_count, length =0.05, lwd=1, angle = 20,arr.width=0.1, code = 2,col="grey", add=T)  #plotting the left flank
-        arrows(x0=StartR,x1=EndR, y0=case_count, y1=case_count, length =0.05, lwd=1, angle = 20,arr.width=0.1, code = 2,col="grey", add=T)  #plotting the right flank
-      }
-      if(StartL>EndL){ #indicate the reverse kmer
-        #points(pch=19,cex=0.5,EndL,case_count)
-      }
-      if(StartR>EndR){ #indicate the reverse kmer
-        #points(pch=19,cex=0.5,EndR,case_count)
-      }
-      case_count<-case_count+1
-    }
-    
-    #if it is control
-    if(mytable[i,"case_control"]=="0"){ 
-      #if the kmer behaviour correspond to the control associated event
-      if(mytable[i,"notes"]==myctrl_assos ){
-        arrows(x0=StartL,x1=EndL, y0=ctrl_count, y1=ctrl_count, length =0.05, lwd=1, angle = 20,arr.width=0.1, code = 2,col=plotcolors[j], add=T)  #plotting the left flank
-        arrows(x0=StartR,x1=EndR, y0=ctrl_count, y1=ctrl_count, length =0.05, lwd=1, angle = 20,arr.width=0.1, code = 2,col=plotcolors[j], add=T)  #plotting the right flank
-      }
-      #if the kmer behaviour correspond to the case associated event
-      if(mytable[i,"notes"]==mycase_assos){
-        arrows(x0=StartL,x1=EndL, y0=ctrl_count, y1=ctrl_count, length =0.05, lwd=1, angle = 20,arr.width=0.1, code = 2,col="grey", add=T)  #plotting the left flank
-        arrows(x0=StartR,x1=EndR, y0=ctrl_count, y1=ctrl_count, length =0.05, lwd=1, angle = 20,arr.width=0.1, code = 2,col="grey", add=T)  #plotting the right flank
-      }
-      if(StartL>EndL){ #indicate the reverse kmer
-        #points(pch=19,cex=0.5,EndL,ctrl_count)
-      }
-      if(StartR>EndR){ #indicate the reverse kmer
-        #points(pch=19,cex=0.5,EndR,ctrl_count)
-      }
-      ctrl_count<-ctrl_count-1
-    }
-    
-    if(i==(round(nrow(mytable)/2))){
-      text(10,ctrl_count,paste(myk4plot[j]," (",myctrl_assos_prop,")",sep=""),cex=0.3)
-      text(10,case_count,paste(myk4plot[j]," (",mycase_assos_prop,")",sep=""),cex=0.3)
-    }
-    
-  } #close bracket for looping through each row in the table
-  
-  #make the space between each kmer
-  case_count=case_count+1500
-  ctrl_count=ctrl_count-1500
-  
-} #close bracket for looping through each kmer
-
-###############################################
+#arrow pointing to right
+x <- c(1000, 1000, 2000)  #arrow starting at 1000 and ending at 2000
+y <- c(0, 5000, 2000) #arrow from 0 to 5000, arrow tip at 2000
+polygon(x, y,col = 'green',border = 'green')
 
 
 
