@@ -162,24 +162,31 @@ abline(h=0) #to separate the case from control kmers
 text(5000,1500,"case",cex=0.7)
 text(5000,-1500,"control",cex=0.7)
 
-case_count<-1000 #set the starting y axis level
-ctrl_count<--1000 #set the starting y axis level
+case_count<-3000 #set the starting y axis level
+ctrl_count<--3000 #set the starting y axis level
 
 #set the colour scale
 plotcolors <- colorRampPalette(c("green","blue","red"))(10)
-
 
 #for (i in 1:length(myk4plot)){
 for (i in 1:10){
   mykmer<-myk4plot[i]
   #mykmer<-"kmer985"
-  
-  #keep track of the biggest size factor for this kmer
-  sizefactor_case_max<-0
-  sizefactor_ctrl_max<-0
-  
+  #mykmer<-"kmer998"
+  #mykmer<-"kmer999"
+
   #extract the table of the kmer
   myktab<-myflk_behave_pheno[which(myflk_behave_pheno$kmer==mykmer),]
+  
+  #height of the kmer block (based on the largest number of kmer possible for an arrow)
+  ctrl_num<-length(which(myktab$case_control=="0"))
+  case_num<-length(which(myktab$case_control=="1"))
+  if(ctrl_num>case_num | case_num==ctrl_num){
+    myheight<-ctrl_num*600
+  }
+  if(case_num>ctrl_num){
+    myheight<-case_num*600
+  }
   
   make_arrow_coor(mykmer)
   
@@ -196,14 +203,10 @@ for (i in 1:10){
     plot_ctrl_L_start<-mymed_ctrl_L$startmed[k]/1000-50
     plot_ctrl_L_end<-mymed_ctrl_L$endmed[k]/1000
     }
-    sizefactor<-mymed_ctrl_L$count[k]
+    sizefactor<-mymed_ctrl_L$count[k]*600
     x <- c(plot_ctrl_L_start, plot_ctrl_L_start, plot_ctrl_L_end)  
-    y <- c(ctrl_count, ctrl_count-(sizefactor*600), ctrl_count-(sizefactor*600)/2) 
+    y <- c(ctrl_count+(-myheight/2)+(sizefactor/2), ctrl_count+(-myheight/2)-(sizefactor/2),ctrl_count+(-(myheight/2))) 
     polygon(x, y,col = "blue",border = "blue")
-    arrow_height_ctrl<-abs(ctrl_count-(sizefactor*600))-abs(ctrl_count)
-    if(arrow_height_ctrl>sizefactor_ctrl_max){    #update the biggest height of arrow
-      sizefactor_ctrl_max<-arrow_height_ctrl
-    }
     }
     #ctrl right flank arrow
     for(k in 1:nrow(mymed_ctrl_R)){
@@ -214,14 +217,10 @@ for (i in 1:10){
       plot_ctrl_R_end<-mymed_ctrl_R$endmed[k]/1000+50
       plot_ctrl_R_start<-mymed_ctrl_R$startmed[k]/1000
     }
-    sizefactor<-mymed_ctrl_R$count[k]
+    sizefactor<-mymed_ctrl_R$count[k]*600
     x <- c(plot_ctrl_R_start, plot_ctrl_R_start, plot_ctrl_R_end)  
-    y <- c(ctrl_count, ctrl_count-(sizefactor*600), ctrl_count-(sizefactor*600)/2) 
+    y <- c(ctrl_count+(-myheight/2)+(sizefactor/2), ctrl_count+(-myheight/2)-(sizefactor/2),ctrl_count+(-(myheight/2))) 
     polygon(x, y,col = "red",border = "red")
-    arrow_height_ctrl<-abs(ctrl_count-(sizefactor*600))-abs(ctrl_count)
-    if(arrow_height_ctrl>sizefactor_ctrl_max){    #update the biggest height of arrow
-      sizefactor_ctrl_max<-arrow_height_ctrl
-    }
     }
     #case left flank arrow
     for(k in 1:nrow(mymed_case_L)){
@@ -232,14 +231,10 @@ for (i in 1:10){
     plot_case_L_start<-mymed_case_L$startmed[k]/1000-50
     plot_case_L_end<-mymed_case_L$endmed[k]/1000
     }
-    sizefactor<-mymed_case_L$count[k]
+    sizefactor<-mymed_case_L$count[k]*600
     x <- c(plot_case_L_start, plot_case_L_start, plot_case_L_end)  
-    y <- c(case_count, case_count+(sizefactor*600), case_count+(sizefactor*600)/2) 
+    y <- c(case_count+(myheight/2)-(sizefactor/2), case_count+(myheight/2)+(sizefactor/2),case_count+(myheight/2)) 
     polygon(x, y,col = "blue",border = "blue")
-    arrow_height_case<-abs(case_count+(sizefactor*600))-abs(case_count)
-    if(arrow_height_case>sizefactor_case_max){    #update the biggest height of arrow
-      sizefactor_case_max<-arrow_height_case
-    }
     }
     #case right flank arrow
     for(k in 1:nrow(mymed_case_R)){
@@ -250,14 +245,10 @@ for (i in 1:10){
     plot_case_R_end<-mymed_case_R$endmed[k]/1000+50
     plot_case_R_start<-mymed_case_R$startmed[k]/1000
     }
-    sizefactor<-mymed_case_R$count[k]
+    sizefactor<-mymed_case_R$count[k]*600
     x <- c(plot_case_R_start, plot_case_R_start, plot_case_R_end)  
-    y <- c(case_count, case_count+(sizefactor*600), case_count+(sizefactor*600)/2) 
+    y <- c(case_count+(myheight/2)-(sizefactor/2), case_count+(myheight/2)+(sizefactor/2),case_count+(myheight/2)) 
     polygon(x, y,col = "red",border = "red")
-    arrow_height_case<-abs(case_count+(sizefactor*600))-abs(case_count)
-    if(arrow_height_case>sizefactor_case_max){    #update the biggest height of arrow
-      sizefactor_case_max<-arrow_height_case
-    }
     }
 }
   
@@ -271,14 +262,10 @@ for (i in 1:10){
       plot_ctrl_L_start<-mymed_ctrl_L$startmed[k]/1000+50
       plot_ctrl_L_end<-mymed_ctrl_L$endmed[k]/1000
   }
-  sizefactor<-mymed_ctrl_L$count[k]
-  x <- c(plot_ctrl_L_start, plot_ctrl_L_start, plot_ctrl_L_end)  
-  y <- c(ctrl_count, ctrl_count-(sizefactor*600), ctrl_count-(sizefactor*600)/2) 
-  polygon(x, y,col = "blue",border = "blue") 
-  arrow_height_ctrl<-abs(ctrl_count-(sizefactor*600))-abs(ctrl_count)
-  if(arrow_height_ctrl>sizefactor_ctrl_max){    #update the biggest height of arrow
-    sizefactor_ctrl_max<-arrow_height_ctrl
-  }
+      sizefactor<-mymed_ctrl_L$count[k]*600
+      x <- c(plot_ctrl_L_start, plot_ctrl_L_start, plot_ctrl_L_end)  
+      y <- c(ctrl_count+(-myheight/2)+(sizefactor/2), ctrl_count+(-myheight/2)-(sizefactor/2),ctrl_count+(-(myheight/2))) 
+      polygon(x, y,col = "blue",border = "blue")
     }
   #ctrl right flank arrow
     for(k in 1:nrow(mymed_ctrl_R)){
@@ -289,14 +276,10 @@ for (i in 1:10){
     plot_ctrl_R_end<-mymed_ctrl_R$endmed[k]/1000-50
     plot_ctrl_R_start<-mymed_ctrl_R$startmed[k]/1000
   }
-  sizefactor<-mymed_ctrl_R$count[k]
-  x <- c(plot_ctrl_R_start, plot_ctrl_R_start, plot_ctrl_R_end)  
-  y <- c(ctrl_count, ctrl_count-(sizefactor*600), ctrl_count-(sizefactor*600)/2) 
-  polygon(x, y,col = "red",border = "red") 
-  arrow_height_ctrl<-abs(ctrl_count-(sizefactor*600))-abs(ctrl_count)
-  if(arrow_height_ctrl>sizefactor_ctrl_max){    #update the biggest height of arrow
-    sizefactor_ctrl_max<-arrow_height_ctrl
-  }
+    sizefactor<-mymed_ctrl_R$count[k]*600
+    x <- c(plot_ctrl_R_start, plot_ctrl_R_start, plot_ctrl_R_end)  
+    y <- c(ctrl_count+(-myheight/2)+(sizefactor/2), ctrl_count+(-myheight/2)-(sizefactor/2),ctrl_count+(-(myheight/2))) 
+    polygon(x, y,col = "red",border = "red")
     }
   #case left flank arrow
     for(k in 1:nrow(mymed_case_L)){
@@ -307,14 +290,10 @@ for (i in 1:10){
   plot_case_L_start<-mymed_case_L$startmed[k]/1000+50
   plot_case_L_end<-mymed_case_L$endmed[k]/1000
   }
-  sizefactor<-mymed_case_L$count[k]
-  x <- c(plot_case_L_start, plot_case_L_start, plot_case_L_end)  
-  y <- c(case_count, case_count+(sizefactor*600), case_count+(sizefactor*600)/2) 
-  polygon(x, y,col = "blue",border = "blue")
-  arrow_height_case<-abs(case_count+(sizefactor*600))-abs(case_count)
-  if(arrow_height_case>sizefactor_case_max){    #update the biggest height of arrow
-    sizefactor_case_max<-arrow_height_case
-  }
+      sizefactor<-mymed_case_L$count[k]*600
+      x <- c(plot_case_L_start, plot_case_L_start, plot_case_L_end)  
+      y <- c(case_count+(myheight/2)-(sizefactor/2), case_count+(myheight/2)+(sizefactor/2),case_count+(myheight/2)) 
+      polygon(x, y,col = "blue",border = "blue")
     }
   #case right flank arrow
     for(k in 1:nrow(mymed_case_R)){
@@ -325,25 +304,21 @@ for (i in 1:10){
   plot_case_R_end<-mymed_case_R$endmed[k]/1000-50
   plot_case_R_start<-mymed_case_R$startmed[k]/1000
   }
-  sizefactor<-mymed_case_R$count[k]
-  x <- c(plot_case_R_start, plot_case_R_start, plot_case_R_end)  
-  y <- c(case_count, case_count+(sizefactor*600), case_count+(sizefactor*600)/2) 
-  polygon(x, y,col = "red",border = "red")  
-  arrow_height_case<-abs(case_count+(sizefactor*600))-abs(case_count)
-  if(arrow_height_case>sizefactor_case_max){    #update the biggest height of arrow
-    sizefactor_case_max<-arrow_height_case
-  }
+      sizefactor<-mymed_case_R$count[k]*600
+      x <- c(plot_case_R_start, plot_case_R_start, plot_case_R_end)  
+      y <- c(case_count+(myheight/2)-(sizefactor/2), case_count+(myheight/2)+(sizefactor/2),case_count+(myheight/2)) 
+      polygon(x, y,col = "red",border = "red")
     }
   }
   
-abline(h=case_count+sizefactor_case_max+1000,col="grey")
-abline(h=ctrl_count-sizefactor_ctrl_max-1000,col="grey")
+abline(h=case_count+myheight,col="grey")
+abline(h=ctrl_count-myheight,col="grey")
 
-text(0,(case_count+sizefactor_case_max/2),mykmer,cex=0.7)
-text(0,(ctrl_count-sizefactor_ctrl_max/2),mykmer,cex=0.7)
+text(0,(case_count+myheight/2),mykmer,cex=0.7)
+text(0,(ctrl_count-myheight/2),mykmer,cex=0.7)
 
-case_count<-case_count+sizefactor_case_max+2000 #set the starting y axis level
-ctrl_count<-ctrl_count-sizefactor_ctrl_max-2000 #set the starting y axis level
+case_count<-case_count+myheight #set the starting y axis level
+ctrl_count<-ctrl_count-myheight #set the starting y axis level
 }
 
 
