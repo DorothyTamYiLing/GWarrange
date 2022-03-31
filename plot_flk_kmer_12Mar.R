@@ -6,12 +6,12 @@ myflk_behave_pheno<-read.table("myflk_behave_pheno.txt",header=T)
 colnames(myflk_behave_pheno)[1]<-"genome"
 colnames(myflk_behave_pheno)[2]<-"case_control"
 
-#making summary information for each kmer
-'%!in%' <- function(x,y)!('%in%'(x,y))
+#remove the rows with flank behaviour == NA
+myflk_behave_pheno<-myflk_behave_pheno[which(!is.na(myflk_behave_pheno$flk_behaviour)),]
 
 #make the final output
-myall_out<-matrix(0,1,8)
-colnames(myall_out)<-c("kmer","event_sum","flk_behaviour","notes","case_assos","case_assos_prop","ctrl_assos","ctrl_assos_prop")
+myall_out<-matrix(0,1,14)
+colnames(myall_out)<-c("kmer","event_sum","flk_behaviour","notes","case_assos","case_assos_prop","ctrl_assos","ctrl_assos_prop","case_assos_gp_Lflk_sumstat","case_assos_gp_Rflk_sumstat","ctrl_assos_gp_Lflk_sumstat","ctrl_assos_gp_Rflk_sumstat","case_assos_gp_flkdis_sumstat","ctrl_assos_gp_flkdis_sumstat")
 
 #extract the unique kmer
 myk4plot<-unique(myflk_behave_pheno$kmer)
@@ -26,10 +26,10 @@ for (j in 1:length(myk4plot)){ #open bracket for looping through each kmer
   mytable<-myflk_behave_pheno[which(myflk_behave_pheno$kmer==mykmer),]
   
   #making the output matrix
-  myout<-matrix(0,1,8)
-  colnames(myout)<-c("kmer","event_sum","flk_behaviour","notes","case_assos","case_assos_prop","ctrl_assos","ctrl_assos_prop")
-  myout<-as.data.frame(myout)
-  myout$kmer<-mykmer
+myout<-matrix(0,1,14)
+colnames(myout)<-c("kmer","event_sum","flk_behaviour","notes","case_assos","case_assos_prop","ctrl_assos","ctrl_assos_prop","case_assos_gp_Lflk_sumstat","case_assos_gp_Rflk_sumstat","ctrl_assos_gp_Lflk_sumstat","ctrl_assos_gp_Rflk_sumstat","case_assos_gp_flkdis_sumstat","ctrl_assos_gp_flkdis_sumstat")
+myout<-as.data.frame(myout)
+myout$kmer<-mykmer
   
   #get the total number of cases and controls
   ctrl_count<-length(which(mytable$case_control=="0"))
@@ -76,7 +76,7 @@ for (j in 1:length(myk4plot)){ #open bracket for looping through each kmer
     #count number and proportion of gp in ctrl genomes
     mygp_ctrl<-length(which(mytable$notes==mygp & mytable$case_control=="0"))
     mygp_ctrl_prop<-round(mygp_ctrl/ctrl_count,2)
-    myctrl_str<-paste(mygp_ctrl,"(",mygp_ctrl_prop,")",sep="")
+    myctrl_str<-paste(mygp_ctrl,"(",mygp_ctrl_prop,")",sep="") 
     
     #count number and proportion of gp in case genomes
     mygp_case<-length(which(mytable$notes==mygp & mytable$case_control=="1"))
@@ -86,52 +86,295 @@ for (j in 1:length(myk4plot)){ #open bracket for looping through each kmer
     mysum<-paste(mygp,mycase_str,myctrl_str,sep=":") #make a string that show deletion status:control_count:case_count
     mysum_str<-paste(mysum_str,mysum,sep=" ")
     
+    myout$notes<-mysum_str
+    
     #define the case and control associated "notes"
-    if(mygp_ctrl_prop>0.6){   
+    if(mygp_ctrl_prop>0.6){  
+      myctrl_assos_gp<-mygp
       myout$ctrl_assos<-mygp
       myout$ctrl_assos_prop<-mygp_ctrl_prop
     }
-    if(mygp_case_prop>0.6){    
+    if(mygp_case_prop>0.6){ 
+      mycase_assos_gp<-mygp   
       myout$case_assos<-mygp
       myout$case_assos_prop<-mygp_case_prop
     }
-  }
+    }
+    
+    #after determining the case and control associated "notes"....
+    
+#get the coordinate summary statistics (StartL and endR) of the myctrl_assos_gp in ctrl genomes according to note groups 
+myStartLstat<-paste(round(summary(mytable[which(mytable$notes==myctrl_assos_gp & mytable$case_control=="0"),"StartL"]),0),collapse=" ")
+myStartLSD<-round(sd(mytable[which(mytable$notes==myctrl_assos_gp & mytable$case_control=="0"),"StartL"]),0)
+myctrl_Lflk_sumstat_str<-paste(myStartLstat,myStartLSD,sep=" ")
+
+myStartRstat<-paste(round(summary(mytable[which(mytable$notes==myctrl_assos_gp & mytable$case_control=="0"),"StartR"]),0),collapse=" ")
+myStartRSD<-round(sd(mytable[which(mytable$notes==myctrl_assos_gp & mytable$case_control=="0"),"StartR"]),0)
+myctrl_Rflk_sumstat_str<-paste(myStartRstat,myStartRSD,sep=" ")
+
+myflkdiststat_str<-paste(round(summary(mytable[which(mytable$notes==myctrl_assos_gp & mytable$case_control=="0"),"flk_dist"]),0),collapse=" ")
+
+myout$ctrl_assos_gp_Lflk_sumstat<-myctrl_Lflk_sumstat_str
+myout$ctrl_assos_gp_Rflk_sumstat<-myctrl_Rflk_sumstat_str
+myout$ctrl_assos_gp_flkdis_sumstat<-myflkdiststat_str
+
+#clear the variables
+myStartLstat=myStartLSD=myStartRstat=myStartRSD=myflkdiststat=NA
+
+#get the coordinate summary statistics (StartL and endR) of the kmer in case genomes according to note groups
+myStartLstat<-paste(round(summary(mytable[which(mytable$notes==mycase_assos_gp & mytable$case_control=="1"),"StartL"]),0),collapse=" ")
+myStartLSD<-round(sd(mytable[which(mytable$notes==mycase_assos_gp & mytable$case_control=="1"),"StartL"]),0)
+mycase_Lflk_sumstat_str<-paste(myStartLstat,myStartLSD,sep=" ")
+
+myStartRstat<-paste(round(summary(mytable[which(mytable$notes==mycase_assos_gp & mytable$case_control=="1"),"StartR"]),0),collapse=" ")
+myStartRSD<-round(sd(mytable[which(mytable$notes==mycase_assos_gp & mytable$case_control=="1"),"StartR"]),0)
+mycase_Rflk_sumstat_str<-paste(myStartRstat,myStartRSD,sep=" ")
+
+myflkdiststat_str<-paste(round(summary(mytable[which(mytable$notes==mycase_assos_gp & mytable$case_control=="1"),"flk_dist"]),0),collapse=" ")
+
+myout$case_assos_gp_Lflk_sumstat<-mycase_Lflk_sumstat_str
+myout$case_assos_gp_Rflk_sumstat<-mycase_Rflk_sumstat_str
+myout$case_assos_gp_flkdis_sumstat<-myflkdiststat_str
   
-  
-  myout$notes<-mysum_str 
   myall_out<-rbind(myall_out,myout)
 }
 
 write.table(myall_out,file="myall_out.txt",quote=F,row.names = F,col.names = T,sep="\t")
 
+
 ################# below run in MAC #####################
 
-#export  myflk_behave_pheno.txt and myall_out.txt to MAC for plotting
-case_num<-19
-control_num<-30
+#plotting based on myflk_behave_pheno.txt only
+
+####plotting#####
+
+myk4plot<-unique(myflk_behave_pheno[which(myflk_behave_pheno$flk_behaviour!="intact_k"),"kmer"])
+
+mykmer<-"kmer10"
+
+#extract the table of the kmer
+myktab<-myflk_behave_pheno[which(myflk_behave_pheno$kmer==mykmer),]
+
+abline(h=0) #to separate the case from control kmers
+text(5000,(length(myk4plot)*10),"case",cex=0.7)
+text(5000,-(length(myk4plot)*10),"control",cex=0.7)
+
+case_count<-100 #set the starting y axis level
+ctrl_count<--100 #set the starting y axis level
+
+make_arrow_coor("kmer10")
+
+mykorien<-unique(myflk_behave_pheno[which(myflk_behave_pheno$kmer==mykmer),"myk_orien"])
+if(mykorien=="fwd_k"){
+  mymed_ctrl_L$startmed<-mymed_ctrl_L$startmed/1000-50
+  mymed_ctrl_R$endmed<-mymed_ctrl_R$endmed/1000+50
+  mymed_case_L$startmed<-mymed_case_L$startmed/1000-50
+  mymed_case_R$endmed<-mymed_case_R$endmed/1000+50
+}
+
+if(mykorien=="rev_k"){
+  mymed_ctrl_L$startmed<-mymed_ctrl_L$startmed/1000+50
+  mymed_ctrl_R$endmed<-mymed_ctrl_R$endmed/1000-50
+  mymed_case_L$startmed<-mymed_case_L$startmed/1000+50
+  mymed_case_R$endmed<-mymed_case_R$endmed/1000-50
+}
+
+#plotting the finalised arrows
+
+
+arrow_coor_casectrl<-function("0","ctrl"){ #function with kmer function , making mymed_ctrl_L and mymed_ctrl_R
+}
+arrow_coor_casectrl<-function("1","case"){ #function with kmer function,  making mymed_case_L and mymed_case_R
+}
+#assign("myktab_ctr",myflk_behave_pheno[which(myflk_behave_pheno$kmer==mykmer & myflk_behave_pheno$case_control=="0"),])
+  
+
+#function for making mymed_ctrl_L, mymed_ctrl_R, mymed_case_L, mymed_case_R for each kmer
+make_arrow_coor<-function(mykmer){
+  #extract the table of the kmer and ctrl
+  myktab_ctrl<-myflk_behave_pheno[which(myflk_behave_pheno$kmer==mykmer & myflk_behave_pheno$case_control=="0"),]
+  
+  
+  #processing the left flank, make a table storing the coordinate for each arrow and the size
+  myktab<-myktab_ctrl[order(myktab_ctrl$StartL,decreasing=F),]
+  breakpt<-which(diff(myktab$StartL)>10000)
+  
+  
+  if(length(breakpt)>0){ #if at least one break point found
+    mymed_ctrl_L<-matrix(0,length(breakpt)+1,3)
+    colnames(mymed_ctrl_L)<-c("startmed","endmed","count")
+    mybreak<-c(1,breakpt,nrow(myktab))
+    for(j in 1:(length(mybreak)-1)){
+      print(j)
+      if(j==1){
+        mySbreak<-1
+        myEbreak<-mybreak[j+1]
+      }else { #if the break value is not the first nor the last
+        mySbreak<-mybreak[j]+1
+        myEbreak<-mybreak[j+1]
+      }
+      mystart_med<-median(myktab$StartL[mySbreak:myEbreak])
+      myend_med<-median(myktab$EndL[mySbreak:myEbreak])
+      mymed_ctrl_L[j,"startmed"]<-mystart_med
+      mymed_ctrl_L[j,"endmed"]<-myend_med
+      mymed_ctrl_L[j,"count"]<-length(mySbreak:myEbreak)
+    }
+  }
+  
+  if(length(breakpt)==0){    #if no break point found
+    mymed_ctrl_L<-matrix(0,1,3)
+    colnames(mymed_ctrl_L)<-c("startmed","endmed","count")
+    mySbreak<-1
+    myEbreak<-nrow(myktab)
+    mystart_med<-median(myktab$StartL[mySbreak:myEbreak])
+    myend_med<-median(myktab$EndL[mySbreak:myEbreak])
+    mymed_ctrl_L[1,"startmed"]<-mystart_med
+    mymed_ctrl_L[1,"endmed"]<-myend_med
+    mymed_ctrl_L[1,"count"]<-length(mySbreak:myEbreak)
+  }
+  
+  #processing the right flank, make a table storing the coordinate for each arrow and the size
+  myktab<-myktab_ctrl[order(myktab_ctrl$StartR,decreasing=F),]
+  breakpt<-which(diff(myktab$StartR)>10000)
+  
+  if(length(breakpt)>0){ #if at least one break point found
+    mymed_ctrl_R<-matrix(0,length(breakpt)+1,3)
+    colnames(mymed_ctrl_R)<-c("startmed","endmed","count")
+    mybreak<-c(1,breakpt,nrow(myktab))
+    for(j in 1:(length(mybreak)-1)){
+      print(j)
+      if(j==1){
+        mySbreak<-1
+        myEbreak<-mybreak[j+1]
+      }else { #if the break value is not the first nor the last
+        mySbreak<-mybreak[j]+1
+        myEbreak<-mybreak[j+1]
+      }
+      mystart_med<-median(myktab$StartR[mySbreak:myEbreak])
+      myend_med<-median(myktab$EndR[mySbreak:myEbreak])
+      mymed_ctrl_R[j,"startmed"]<-mystart_med
+      mymed_ctrl_R[j,"endmed"]<-myend_med
+      mymed_ctrl_R[j,"count"]<-length(mySbreak:myEbreak)
+    }
+  }
+  
+  if(length(breakpt)==0){    #if no break point found
+    mymed_ctrl_R<-matrix(0,1,3)
+    colnames(mymed_ctrl_R)<-c("startmed","endmed","count")
+    mySbreak<-1
+    myEbreak<-nrow(myktab)
+    mystart_med<-median(myktab$StartR[mySbreak:myEbreak])
+    myend_med<-median(myktab$EndR[mySbreak:myEbreak])
+    mymed_ctrl_R[1,"startmed"]<-mystart_med
+    mymed_ctrl_R[1,"endmed"]<-myend_med
+    mymed_ctrl_R[1,"count"]<-length(mySbreak:myEbreak)
+  }
+  
+  #extract the table of the kmer and case
+  myktab_case<-myflk_behave_pheno[which(myflk_behave_pheno$kmer==mykmer & myflk_behave_pheno$case_control=="1"),]
+  
+  #processing the left flank, make a table storing the coordinate for each arrow and the size
+  myktab<-myktab_case[order(myktab_case$StartL,decreasing=F),]
+  breakpt<-which(diff(myktab$StartL)>10000)
+  
+  if(length(breakpt)>0){ #if at least one break point found
+    mymed_case_L<-matrix(0,length(breakpt)+1,3)
+    colnames(mymed_case_L)<-c("startmed","endmed","count")
+    mybreak<-c(1,breakpt,nrow(myktab))
+    for(j in 1:(length(mybreak)-1)){
+      print(j)
+      if(j==1){
+        mySbreak<-1
+        myEbreak<-mybreak[j+1]
+      }else { #if the break value is not the first nor the last
+        mySbreak<-mybreak[j]+1
+        myEbreak<-mybreak[j+1]
+      }
+      mystart_med<-median(myktab$StartL[mySbreak:myEbreak])
+      myend_med<-median(myktab$EndL[mySbreak:myEbreak])
+      mymed_case_L[j,"startmed"]<-mystart_med
+      mymed_case_L[j,"endmed"]<-myend_med
+      mymed_case_L[j,"count"]<-length(mySbreak:myEbreak)
+    }
+  }
+  
+  if(length(breakpt)==0){    #if no break point found
+    mymed_case_L<-matrix(0,1,3)
+    colnames(mymed_case_L)<-c("startmed","endmed","count")
+    mySbreak<-1
+    myEbreak<-nrow(myktab)
+    mystart_med<-median(myktab$StartL[mySbreak:myEbreak])
+    myend_med<-median(myktab$EndL[mySbreak:myEbreak])
+    mymed_case_L[1,"startmed"]<-mystart_med
+    mymed_case_L[1,"endmed"]<-myend_med
+    mymed_case_L[1,"count"]<-length(mySbreak:myEbreak)
+  }
+  
+  #processing the right flank, make a table storing the coordinate for each arrow and the size
+  myktab<-myktab_case[order(myktab_case$StartR,decreasing=F),]
+  breakpt<-which(diff(myktab$StartR)>10000)
+  
+  if(length(breakpt)>0){ #if at least one break point found
+    mymed_case_R<-matrix(0,length(breakpt)+1,3)
+    colnames(mymed_case_R)<-c("startmed","endmed","count")
+    mybreak<-c(1,breakpt,nrow(myktab))
+    for(j in 1:(length(mybreak)-1)){
+      print(j)
+      if(j==1){
+        mySbreak<-1
+        myEbreak<-mybreak[j+1]
+      }else { #if the break value is not the first nor the last
+        mySbreak<-mybreak[j]+1
+        myEbreak<-mybreak[j+1]
+      }
+      mystart_med<-median(myktab$StartR[mySbreak:myEbreak])
+      myend_med<-median(myktab$EndR[mySbreak:myEbreak])
+      mymed_case_R[j,"startmed"]<-mystart_med
+      mymed_case_R[j,"endmed"]<-myend_med
+      mymed_case_R[j,"count"]<-length(mySbreak:myEbreak)
+    }
+  }
+  
+  if(length(breakpt)==0){    #if no break point found
+    mymed_case_R<-matrix(0,1,3)
+    colnames(mymed_case_R)<-c("startmed","endmed","count")
+    mySbreak<-1
+    myEbreak<-nrow(myktab)
+    mystart_med<-median(myktab$StartR[mySbreak:myEbreak])
+    myend_med<-median(myktab$EndR[mySbreak:myEbreak])
+    mymed_case_R[1,"startmed"]<-mystart_med
+    mymed_case_R[1,"endmed"]<-myend_med
+    mymed_case_R[1,"count"]<-length(mySbreak:myEbreak)
+  }
+  mymed_ctrl_L<<-as.data.frame(mymed_ctrl_L)
+  mymed_ctrl_R<<-as.data.frame(mymed_ctrl_R)
+  mymed_case_L<<-as.data.frame(mymed_case_L)
+  mymed_case_R<<-as.data.frame(mymed_case_R)
+  #myreturn<-list(mymed_ctrl_L,mymed_ctrl_R,mymed_case_L,mymed_case_R)
+  #return(myreturn)
+}
+
+
+
+
+#### old code #####
+
+#making a function
+'%!in%' <- function(x,y)!('%in%'(x,y))
 
 setwd("/Users/dorothytam/Desktop/")
-
-myall_out<-read.delim("myall_out.txt",header=T,sep="\t")
-
-#renaming the table
-myall_out_all<-myall_out
-#getting the list of kmers with event_sum!=intact_k and subsetting the corresponding rows in myflk_behave_pheno for plot
-myk4plot<-myall_out[which(myall_out$event_sum!="intact_k" & myall_out$event_sum!=0 & (myall_out$case_assos=="Right_mv&flp" | myall_out$case_assos=="Left_mv&flp")),"kmer"]
-#OR
-#getting the list of kmers with event_sum!=intact_k and subsetting the corresponding rows in myflk_behave_pheno for plot
-myk4plot<-myall_out[which(myall_out$event_sum=="intact_k" & myall_out$event_sum!=0),"kmer"]
-
-myall_out<-myall_out[which(myall_out$kmer%in%myk4plot),]
-
 
 myflk_behave_pheno<-read.table("myflk_behave_pheno.txt",header=T)
 colnames(myflk_behave_pheno)[1]<-"genome"
 colnames(myflk_behave_pheno)[2]<-"case_control"
 
+#remove the rows with flank behaviour == NA
+myflk_behave_pheno<-myflk_behave_pheno[which(!is.na(myflk_behave_pheno$flk_behaviour)),]
 
-#List of kmers for plotting
-myk4plot<-unique(myall_out$kmer)
+
+#select the kmers that are with at least one row of flank_behaviour!=intact_k
+myk4plot<-unique(myflk_behave_pheno[which(myflk_behave_pheno$flk_behaviour!="intact_k"),"kmer"])
+
 
 #case panel y axis
 control_y<--(length(myk4plot)*control_num+length(myk4plot)*300)
@@ -146,22 +389,25 @@ abline(h=0) #to separate the case from control kmers
 text(5000,(length(myk4plot)*10),"case",cex=0.7)
 text(5000,-(length(myk4plot)*10),"control",cex=0.7)
 
-
-
-#read in the all_behaviour_summary.txt and loop through each kmer
-
-#kmer<-"kmer100"
-
-
 #set the colour spectrum according to the number of kmers
 #plotcolors <- colorRampPalette(c("green","blue","red"))(length(myk4plot))
 plotcolors <- colorRampPalette(c("green","blue","red"))(30)
 
-case_count<-100
-ctrl_count<--100
+case_count<-100 #set the starting y axis level
+ctrl_count<--100 #set the starting y axis level
 
 #for (j in 1:length(myk4plot)){ #open bracket for looping through each kmer
   for (j in 1:30){  #open bracket for looping through each kmer
+  
+  #kmer<-myk4plot[j]
+  mykmer<-"kmer10"
+  
+  #extract the table of the kmer
+  myktab<-myflk_behave_pheno[which(myflk_behave_pheno$kmer==mykmer),]
+  
+  #processing the left flanks, then right flanks
+  myktab<-myktab[order(myktab$StartL,decreasing=F),]
+  
   
   #extract the case and control associated kmer "notes" information from myall_out
   mycase_assos<-myall_out[which(myall_out$kmer==myk4plot[j]),"case_assos"]
@@ -270,5 +516,6 @@ ctrl_count<--100
 } #close bracket for looping through each kmer
 
 ###############################################
+
 
 
