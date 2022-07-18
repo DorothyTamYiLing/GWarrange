@@ -1,3 +1,6 @@
+#usage:bash filtering_kmer_and_blast.sh /home/ubuntu/Dorothy/USAgenomes_GWAS/111_yearGWAS/k200/fix_model/allsig_kmer_withN.fasta \
+#/home/ubuntu/Dorothy/B.pertussis_573genomes_NCBI/Weigand_USA_genome/111_yearGWAS_genlist.fasta.gz 30
+
 ###filtering sig. kmers for blasting by keeping only the kmers that contain flanking sequences (both side) of at least $flnk_len bp in size
 
 #$1 is k_input="/home/ubuntu/Dorothy/USAgenomes_GWAS/111_yearGWAS/k200/fix_model/allsig_kmer_withN.fasta"
