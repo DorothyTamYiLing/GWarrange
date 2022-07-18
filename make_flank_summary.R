@@ -1,3 +1,5 @@
+#usage: Rscript makeflank_summary.R --k.len 200
+
 library("optparse")
 
 option_list = list(
