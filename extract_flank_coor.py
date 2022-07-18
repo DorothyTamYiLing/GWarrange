@@ -15,7 +15,7 @@ fasta_sequences = SeqIO.parse(myinput,'fasta') #this is multifasta file of the s
 with open('flank_coor.txt', 'w') as f:
 	for record in fasta_sequences:
 		kmerID=record.id
-		print(kmerID)
+		#print(kmerID)
 		mykmer=record.seq
 		mylen=len(mykmer)
 		mystart=mykmer.index("N")  #start start coordinate of the N string
