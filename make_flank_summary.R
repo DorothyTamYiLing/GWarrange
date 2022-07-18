@@ -1,3 +1,14 @@
+library("optparse")
+
+option_list = list(
+  make_option("--k.len", type="character", default=NULL, 
+              help="kmer to plot", metavar="character")
+) 
+
+opt_parser = OptionParser(option_list=option_list);
+opt = parse_args(opt_parser); 
+
+
 #headers from the blast output
 #query, subject, identity, alig_len, mismatches, gap, qstart, qend, sStart, sEnd, evalue, bitscore
 
@@ -14,7 +25,7 @@ myflk_coor<-read.delim("flank_coor.txt",header=F,sep="_")
 colnames(myflk_coor)<-c("kmer","leftflankend","rightflankstart","kmer_len")
 
 #load in phenotype file
-myphenofile<-read.table("/home/ubuntu/Dorothy/USAgenomes_GWAS/111_yearGWAS/phenotypes.tsv",header=F)
+myphenofile<-read.table("phenotypes.tsv",header=F)
 
 mykmer<-as.character(unique(mytable$query))  #get the list of kmers with blast output
 mygen<-as.character(unique(myphenofile$V1))  #get the list of the genomes from the pheno file
@@ -80,7 +91,7 @@ write.table(myprocess,file="rows_for_process.txt",quote=F,row.names = F,col.name
 #output the rows of kmers with quality issues
 
 if (length(unique(del_k))>0){
-h<-mytable[which(mytable$query%in%unique(del_k)),]
+my_del_k<-mytable[which(mytable$query%in%unique(del_k)),]
 write.table(my_del_k,file="kmer_with_deletion.txt",quote=F,row.names = F,col.names = T,sep="\t")
 }
 
@@ -210,12 +221,12 @@ EndL<-myleftflank$sStart
 }
 
 #determining right flank, hence StartR and EndR
-myrightflank<-mysub[which(mysub$qstart==k_len | mysub$qend==k_len),]   
-if(myrightflank$qstart==k_len){ 
+myrightflank<-mysub[which(mysub$qstart==opt$k.len | mysub$qend==opt$k.len),]   
+if(myrightflank$qstart==opt$k.len){ 
 StartR<-myrightflank$sEnd
 EndR<-myrightflank$sStart
 } 
-if(myrightflank$qend==k_len){
+if(myrightflank$qend==opt$k.len){
 StartR<-myrightflank$sStart
 EndR<-myrightflank$sEnd
 }
