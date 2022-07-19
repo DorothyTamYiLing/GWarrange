@@ -1,9 +1,15 @@
-#usage: Rscript makeflank_summary.R --k.len 200
+
+
+#usage: Rscript makeflank_summary.R --k.len 200 --pheno --outdir
 
 library("optparse")
 
 option_list = list(
   make_option("--k.len", type="character", default=NULL, 
+              help="kmer to plot", metavar="character"),
+  make_option("--pheno", type="character", default=NULL,
+              help="kmer to plot", metavar="character"),
+  make_option("--outdir", type="character", default=NULL,
               help="kmer to plot", metavar="character")
 ) 
 
@@ -17,6 +23,8 @@ opt = parse_args(opt_parser);
 ###blast output quality check
 #all kmer that should show at least one blast hit
 
+setwd(opt$outdir)
+
 #(R)
 #load in the blast output file 
 mytable<-read.table("myout.txt", header=F)
@@ -27,7 +35,7 @@ myflk_coor<-read.delim("flank_coor.txt",header=F,sep="_")
 colnames(myflk_coor)<-c("kmer","leftflankend","rightflankstart","kmer_len")
 
 #load in phenotype file
-myphenofile<-read.table("phenotypes.tsv",header=F)
+myphenofile<-read.table(opt$pheno,header=F)
 
 mykmer<-as.character(unique(mytable$query))  #get the list of kmers with blast output
 mygen<-as.character(unique(myphenofile$V1))  #get the list of the genomes from the pheno file
@@ -394,13 +402,3 @@ for (j in 1:length(myk4plot)){ #open bracket for looping through each kmer
 } #close bracket for looping through each kmer
 
 write.table(myall_out,file="myall_out.txt",quote=F,row.names = F,col.names = T,sep="\t")
-
-
-
-
-
-
-
-
-
-
