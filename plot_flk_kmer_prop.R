@@ -68,7 +68,7 @@ flk_list<-c("L","R","in")
 
 for(i in 1:2){
   mypheno<-pheno_list[i]
-  print(mypheno)
+  #print(mypheno)
   if(mypheno=="ctrl"){
     x=0  #for extracting pheno row from table
     startlevel=-30 #for the plotting
@@ -79,7 +79,7 @@ for(i in 1:2){
   }
   for(j in 1:3){
     myflk<-flk_list[j]
-    print(myflk)
+    #print(myflk)
     if(myflk=="L"){
       mystart<-"StartL"
       myend<-"EndL"
@@ -103,10 +103,10 @@ for(i in 1:2){
     }
     
     #make a table storing the coordinate for each arrow and the size
-    print(myktab)    
+    #print(myktab)    
     myktab<-myktab[order(myktab[[mystart]],decreasing=F),]
     breakpt<-which(diff(myktab[[mystart]])>10000)
-    print(breakpt)
+    #print(breakpt)
     
     if(length(breakpt)>0){ #if at least one break point found
       mymed<-matrix(0,length(breakpt)+1,3)
@@ -130,7 +130,7 @@ for(i in 1:2){
     }
     
     if(length(breakpt)==0){    #if no break point found
-      print("break=0")     
+      #print("break=0")     
       mymed<-matrix(0,1,3)
       colnames(mymed)<-c("startmed","endmed","count")
       mySbreak<-1
@@ -144,7 +144,7 @@ for(i in 1:2){
     mymed<-as.data.frame(mymed)
     #convert to proportion of case or control genomes
     mymed$prop<-round((mymed$count/(length(which(mypheno_file[,2]==x)))*100))
-    print(mymed)
+    #print(mymed)
     
     #plot
     for(k in 1:nrow(mymed)){
