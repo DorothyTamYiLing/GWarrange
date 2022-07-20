@@ -27,7 +27,8 @@ plot_flk_kmer_prop.R is the script to run for plotting flanks of selected kmer
 To run plot_flk_kmer_prop.R:
 Rscript plot_flk_kmer_prop.R --kmer kmer93 --phen /home/ubuntu/Dorothy/genome_rearrangement/phenotypes.tsv \
 --coor /home/ubuntu/Dorothy/genome_rearrangement/output/myflk_behave_pheno.txt \
---genome.size 4000 --outdir /home/ubuntu/Dorothy/genome_rearrangement/output
+--genome.size 4000 --outdir /home/ubuntu/Dorothy/genome_rearrangement/output --flk.dist 2500
+
 
 Define all the variables in plot_flk_kmer_prop.R:
 $kmer=chosen kmer for plotting flanks
