@@ -1,3 +1,9 @@
+Introduction: 
+This pipeline detects and visualises phenotype-associated genome rearrangement events in bacterial genomes that are mediated by homologous recombination between repetitive elements (such as IS elements). 
+
+Pre-requisite:
+Before using this pipeline, the repetitive elements that are speculated to have mediated the rearrangement event must be replaced by a short placeholder sequence (e.g. Nx15) in the genome set. Then, a kmer-based GWAS is performed searching for kmers that are associated with the phenotype of interested. The phenotype-associated kmers that contain the short placeholder sequence are picked as one of the inputs of this pipeline to detect potential genome rearrangement events that are associated with the phenotype of interest.
+
 main.sh is the main script to run 
 
 To run main.sh:
