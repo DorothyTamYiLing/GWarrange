@@ -106,7 +106,7 @@ output files:
 -event: genome rearrangemnet event
 
 * files are not produced when there is no content
-**summary statistics format: minimum, lower quantile, mean, median, uper quantil maximum, standard deviation
+**summary statistics format: minimum, lower quantile, mean, median, upper quantile, maximum, standard deviation
 
 Step3:
 plot_flk_kmer_prop.R
