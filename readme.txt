@@ -26,7 +26,7 @@ Define all the variables in plot_flk_kmer_prop.R:
 $kmer=chosen kmer for plotting flanks
 $phen=phenotype file, no header, sample name in 1st column, binary phenotype in 2nd column, need to provide path (pheno)
 $coor=myflk_behave_pheno.txt file from the output
-$genome.size=size of the genome in Mb
+$genome.size=size of the genome in thousands
 $outdir=path of where the plot will be generated
 
 
