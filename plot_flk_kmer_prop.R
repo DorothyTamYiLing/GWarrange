@@ -1,6 +1,6 @@
 #Usage: Rscript plot_flk_kmer_prop.R --kmer kmer93 --phen /home/ubuntu/Dorothy/genome_rearrangement/phenotypes.tsv \
 #--coor /home/ubuntu/Dorothy/genome_rearrangement/output/myflk_behave_pheno.txt \
-#--genome.size 4000 --outdir /home/ubuntu/Dorothy/genome_rearrangement/output
+#--genome.size 4000 --outdir /home/ubuntu/Dorothy/genome_rearrangement/output --flk.dist 2500
 
 
 #this script plot one kmer at a time
@@ -15,7 +15,7 @@ option_list = list(
               help="kmer genome combination blast coordinates", metavar="character"),
   make_option("--genome.size", type="character", default=NULL, 
               help="size of genome in Mb", metavar="character"),
-  make_option("--flk.dist", type="character", default=10000, 
+  make_option("--flk.dist", type="character", default=NULL, 
               help="Maximum distance between flanks to define intact kmer", metavar="character"),
   make_option("--outdir", type="character", default=NULL,
               help="kmer to plot", metavar="character")
@@ -201,6 +201,3 @@ text(x=(x_length-450),y=280,"intact kmer",cex = 0.6)
 
 #export the plot
 dev.off()
-
-
-
