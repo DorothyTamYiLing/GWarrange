@@ -36,6 +36,7 @@ $phen=phenotype file, no header, sample name in 1st column, binary phenotype in 
 $coor=myflk_behave_pheno.txt file from the output
 $genome.size=size of the genome in thousands
 $outdir=path of where the plot will be generated
+$flk.dist=Maximum distance (bp) between the upstream and downstream flanks in the genome for a kmer to be defined as intact kmer (flkdist)
 
 
 Pipeline and output files description
