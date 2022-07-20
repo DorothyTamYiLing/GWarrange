@@ -1,6 +1,4 @@
-
-
-#usage: Rscript makeflank_summary.R --k.len 200 --pheno --outdir
+#usage: Rscript makeflank_summary.R --k.len 200 --pheno --outdir --flkdist
 
 library("optparse")
 
@@ -10,6 +8,8 @@ option_list = list(
   make_option("--pheno", type="character", default=NULL,
               help="kmer to plot", metavar="character"),
   make_option("--outdir", type="character", default=NULL,
+              help="kmer to plot", metavar="character"),
+  make_option("--flkdist", type="character", default=NULL,
               help="kmer to plot", metavar="character")
 ) 
 
@@ -123,32 +123,33 @@ write.table(my_SNPgap_k,file="kmer_with_SNPgap.txt",quote=F,row.names = F,col.na
 
 ###R function determining the flank behaviour 
 
-define_flk_behave<-function(StartL,EndL,StartR,EndR){
+define_flk_behave<-function(StartL,EndL,StartR,EndR,myflkdist){
 	StartL<-as.numeric(as.character(StartL))
 	EndL<-as.numeric(as.character(EndL))
 	StartR<-as.numeric(as.character(StartR))
 	EndR<-as.numeric(as.character(EndR))
+        myflkdist<-as.numeric(as.character(myflkdist))
 	
 	#test intact kmer, forward k
-     if ((StartL < EndL) & (EndL < StartR) & (StartR < EndR) & ((StartR-EndL) < 2500)){
+     if ((StartL < EndL) & (EndL < StartR) & (StartR < EndR) & ((StartR-EndL) < myflkdist)){
      mybehave<-"intact_k"
      flk_dist<-(StartR-EndL)
      } else if 
      
      #test intact kmer, reverse k
-     ((EndR < StartR) & (StartR < EndL) & (EndL < StartL) & ((EndL-StartR) < 2500)){
+     ((EndR < StartR) & (StartR < EndL) & (EndL < StartL) & ((EndL-StartR) < myflkdist)){
      mybehave<-"intact_k"
      flk_dist<-(EndL-StartR)
      } else if
      
      #test flank sequence move away from each other, forward kmer
-     ((StartL < EndL) & (EndL < StartR) & (StartR < EndR) & ((StartR-EndL) > 2500)){
+     ((StartL < EndL) & (EndL < StartR) & (StartR < EndR) & ((StartR-EndL) > myflkdist)){
      mybehave<-"mv_away"
      flk_dist<-(StartR-EndL)
      } else if
      
      #test flank sequence move away from each other, reverse kmer
-     ((StartL > EndL) & (EndL > StartR) & (StartR > EndR) & ((EndL-StartR) > 2500)){
+     ((StartL > EndL) & (EndL > StartR) & (StartR > EndR) & ((EndL-StartR) > myflkdist)){
      mybehave<-"mv_away"
      flk_dist<-(EndL-StartR)
      } else if
@@ -243,7 +244,7 @@ EndR<-myrightflank$sEnd
 
 #call the function for define flank behaviour, output are mybehave and flk_dist
 mybehave=flk_dist=NA #clear the variable
-myreturn<-define_flk_behave(StartL,EndL,StartR,EndR) 
+myreturn<-define_flk_behave(StartL,EndL,StartR,EndR,opt$flkdist) 
 mybehave<-myreturn[1]
 flk_dist<-myreturn[2]
 
@@ -259,13 +260,14 @@ mystartendLR<-as.data.frame(mystartendLR)
 
 
 #put all the rows of kmers with at least one undefined behaviour into a table for output
+myk_undefine<-mystartendLR[which(mystartendLR$mybehave=="undefined_behave"),"kmer"]
+
+if (length(unique(myk_undefine))>0){
 myundefine_out<-matrix(0,0,8)
 colnames(myundefine_out)<-colnames(mystartendLR)
-
-myk_undefine<-mystartendLR[which(mystartendLR$mybehave=="undefined_behave"),"kmer"]
 myundefine_out<-mystartendLR[which(mystartendLR$kmer%in%myk_undefine),]
-
 write.table(myundefine_out,file="myundefine_k.txt",quote=F,row.names = F,col.names = T,sep="\t")
+}
 
 #select the rows with kmers with no undefined behaviour for merging with phenotype
 '%!in%' <- function(x,y)!('%in%'(x,y)) #creating the function
@@ -290,8 +292,8 @@ myflk_behave_pheno$flk_dist<-as.numeric(as.character(myflk_behave_pheno$flk_dist
 
 
 #make the final output
-myall_out<-matrix(0,1,13)
-colnames(myall_out)<-c("kmer","event_sum","flk_behaviour","case_assos","case_assos_prop","ctrl_assos","ctrl_assos_prop","case_assos_gp_Lflk_sumstat","case_assos_gp_Rflk_sumstat","ctrl_assos_gp_Lflk_sumstat","ctrl_assos_gp_Rflk_sumstat","case_assos_gp_flkdis_sumstat","ctrl_assos_gp_flkdis_sumstat")
+myall_out<-matrix(0,1,14)
+colnames(myall_out)<-c("kmer","event_sum","flk_behaviour","case_assos","case_assos_prop","ctrl_assos","ctrl_assos_prop","case_assos_gp_Lflk_sumstat","case_assos_gp_Rflk_sumstat","ctrl_assos_gp_Lflk_sumstat","ctrl_assos_gp_Rflk_sumstat","case_assos_gp_flkdis_sumstat","ctrl_assos_gp_flkdis_sumstat","event")
 
 #extract the unique kmer
 myk4plot<-unique(myflk_behave_pheno$kmer)
@@ -305,8 +307,8 @@ for (j in 1:length(myk4plot)){ #open bracket for looping through each kmer
   mytable<-myflk_behave_pheno[which(myflk_behave_pheno$kmer==mykmer),]
   
   #making the output matrix
-  myout<-matrix(0,1,13)
-  colnames(myout)<-c("kmer","event_sum","flk_behaviour","case_assos","case_assos_prop","ctrl_assos","ctrl_assos_prop","case_assos_gp_Lflk_sumstat","case_assos_gp_Rflk_sumstat","ctrl_assos_gp_Lflk_sumstat","ctrl_assos_gp_Rflk_sumstat","case_assos_gp_flkdis_sumstat","ctrl_assos_gp_flkdis_sumstat")
+  myout<-matrix(0,1,14)
+  colnames(myout)<-c("kmer","event_sum","flk_behaviour","case_assos","case_assos_prop","ctrl_assos","ctrl_assos_prop","case_assos_gp_Lflk_sumstat","case_assos_gp_Rflk_sumstat","ctrl_assos_gp_Lflk_sumstat","ctrl_assos_gp_Rflk_sumstat","case_assos_gp_flkdis_sumstat","ctrl_assos_gp_flkdis_sumstat","event")
   myout<-as.data.frame(myout)
   myout$kmer<-mykmer
   
@@ -397,8 +399,18 @@ for (j in 1:length(myk4plot)){ #open bracket for looping through each kmer
     
     myout$flk_behaviour<-mysum_str   #fill in the table with the behaviour summary
     
+ if(myout$case_assos%in%c("mv_away","swp_flk") | myout$ctrl_assos%in%c("mv_away","swp_flk")){
+myout$event<-"translocation"}
+if(myout$case_assos=="mv&flp" | myout$ctrl_assos=="mv&flp"){
+myout$event<-"inversion"}
+
   myall_out<-rbind(myall_out,myout)
   
 } #close bracket for looping through each kmer
 
 write.table(myall_out,file="myall_out.txt",quote=F,row.names = F,col.names = T,sep="\t")
+
+
+   
+
+
