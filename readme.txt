@@ -12,7 +12,7 @@ $3=phenotypes.tsv  #phenotype file, no header, sample name in 1st column, binary
 $4=/home/ubuntu/Dorothy/genome_rearrangement/output #directory being created where the output files are generated (outdir)
 $5=200 #length (bp) of significnat kmers (k_len)
 $6=30 #Minimum length (bp) of flanking sequences (both side) for the kmer to be blasted with the genomes (flnk_len)
-$7=2500 #Maximum distance (bp) between the upstream and downstream flanks in the genome for a kmer to be defined as inact kmer (flkdist)
+$7=2500 #Maximum distance (bp) between the upstream and downstream flanks in the genome for a kmer to be defined as intact kmer (flkdist)
 
 
 plot_flk_kmer_prop.R is the script to run for plotting flanks of selected kmer
