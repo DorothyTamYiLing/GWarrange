@@ -1,4 +1,8 @@
-#Usage: Rscript plot_kmer.R --kmer kmer93 --phen phenotype.txt --coor 111yearGWAS_mystartendLR_k200.txt --genome.size 4000
+#Usage: Rscript plot_flk_kmer_prop.R --kmer kmer93 --phen /home/ubuntu/Dorothy/genome_rearrangement/phenotypes.tsv \
+#--coor /home/ubuntu/Dorothy/genome_rearrangement/output/myflk_behave_pheno.txt \
+#--genome.size 4000 --outdir /home/ubuntu/Dorothy/genome_rearrangement/output
+
+
 #this script plot one kmer at a time
 library("optparse")
 
@@ -12,7 +16,10 @@ option_list = list(
   make_option("--genome.size", type="character", default=NULL, 
               help="size of genome in Mb", metavar="character"),
   make_option("--flk.dist", type="character", default=10000, 
-              help="Maximum distance between flanks to define intact kmer", metavar="character")
+              help="Maximum distance between flanks to define intact kmer", metavar="character"),
+  make_option("--outdir", type="character", default=NULL,
+              help="kmer to plot", metavar="character")
+
 ) 
 
 opt_parser = OptionParser(option_list=option_list);
@@ -28,8 +35,9 @@ mypheno_file<-read.table(opt$phen,header=F)
 
 #mytable<-read.table("111yearGWAS_mystartendLR_k200.txt",header=T)
 mytable<-read.table(opt$coor,header=T)
-mymerge<-merge(mytable,mypheno_file,by.x="genome",by.y="V1")
-colnames(mymerge)[7]<-"case_control"
+#mymerge<-merge(mytable,mypheno_file,by.x="genome",by.y="V1")
+#colnames(mymerge)[7]<-"case_control"
+mymerge<-mytable[,c(1,3,4,5,6,7,2)]
 
 #hist(mytable$EndR)
 
@@ -38,7 +46,7 @@ mykmer=opt$kmer
 mykmer_tab<-mymerge[which(mymerge$kmer==mykmer),]
 
 #making the background plot
-pdf(file = paste0(mykmer,"_plot.pdf"),   # The directory you want to save the file in
+pdf(file = paste0(opt$outdir,"/",mykmer,"_plot.pdf"),   # The directory you want to save the file in
     width = 8, # The width of the plot in inches
     height = 4) # The height of the plot in inches
 
@@ -50,7 +58,7 @@ abline(h=0) #to separate the case from control kmers
 text(x_length-100,50,"case",cex=1)
 text(x_length-100,-50,"control",cex=1)
 
-title(main = mykmer)
+title(main = paste(mykmer,"(height of arrow is the proportion of case/control genomes)",sep="\n"))
 
 #R flank (downstream) is red, L flank (upstream) is blue
 
@@ -85,7 +93,7 @@ for(i in 1:2){
     if(myflk=="in"){
       mystart<-"StartL"
       myend<-"EndR"
-      mycol=rgb(1,0,1,0.5) #grey
+      mycol=rgb(0,1,0,0.5) #green
     }
     if(myflk%in%c("L","R")){  #extract the split kmer rows and specify the pheno to plot
       myktab<-mykmer_tab[which(abs(mykmer_tab$EndL-mykmer_tab$StartR)>as.numeric(as.character(opt$flk.dist)) & mykmer_tab$case_control==x),]
@@ -170,9 +178,26 @@ for(i in 1:2){
     if(mypheno=="case"){
       startlevel<-(startlevel)+max(mymed$prop)+50 #set again the starting y axis level
     }
-    
+if(myflk=="L"){
+myflk_name="upstreamflk"
+}
+if(myflk=="R"){
+myflk_name="downstreamflk"
+}
+if(myflk=="in"){
+myflk_name="intactk"
+}
+    write.table(mymed,file=paste(opt$outdir,"/",mypheno,"_",myflk_name,".txt",sep=""),quote=F,col.names=T,row.names=F,sep="\t")
   }
 }
+
+#add legend
+polygon(c((x_length-750),(x_length-750),(x_length-700)), c(350,330,340),border = NA,col=rgb(1, 0, 0,0.5))
+text(x=(x_length-300),y=340,"kmer dowstream flank",cex = 0.6)
+polygon(c((x_length-750),(x_length-750),(x_length-700)), c(320,300,310),border = NA,col=rgb(0, 0, 1,0.5))
+text(x=(x_length-300),y=310,"kmer upstream flank",cex = 0.6)
+polygon(c((x_length-750),(x_length-750),(x_length-700)), c(290,270,280),border = NA,col=rgb(0, 1, 0,0.5))
+text(x=(x_length-450),y=280,"intact kmer",cex = 0.6)
 
 #export the plot
 dev.off()
