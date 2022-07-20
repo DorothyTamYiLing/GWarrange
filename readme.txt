@@ -11,6 +11,7 @@ bash main.sh allsig_kmer_withN.fasta 111_yearGWAS_genlist.fasta.gz  \
 /home/ubuntu/Dorothy/genome_rearrangement/phenotypes.tsv \
 /home/ubuntu/Dorothy/genome_rearrangement/output 200 30 2500
 
+
 Define all the variables in main.sh:
 $1=allsig_kmer_withN.fasta  #multifasta fie of significant kmers (k_input)
 $2=111_yearGWAS_genlist.fasta #multifasta fie of genomes (gen_input)
