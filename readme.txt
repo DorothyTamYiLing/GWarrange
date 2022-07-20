@@ -1,5 +1,20 @@
 main.sh is the main script to run 
 
+To run:
+bash main.sh allsig_kmer_withN.fasta 111_yearGWAS_genlist.fasta.gz  \
+/home/ubuntu/Dorothy/genome_rearrangement/phenotypes.tsv \
+/home/ubuntu/Dorothy/genome_rearrangement/output 200 30 2500
+
+Define all the variables in main.sh:
+$1=allsig_kmer_withN.fasta  #multifasta fie of significant kmers, need to provide path (k_input)
+$2=111_yearGWAS_genlist.fasta #multifasta fie of genomes, need to provide path (gen_input)
+$3=phenotypes.tsv  #phenotype file, no header, sample name in 1st column, binary phenotype in 2nd column, need to provide path (pheno)
+$4=/home/ubuntu/Dorothy/genome_rearrangement/output #directory being created where the output files are generated (outdir)
+$5=200. #length (bp) of significnat kmers (k_len)
+$6=30 #Minimum length (bp) of flanking sequences (both side) for the kmer to be blasted with the genomes (flnk_len)
+$7=2500 #Maximum distance (bp) between the upstream and downstream flanks in the genome for a kmer to be defined as inact kmer (flkdist)
+
+
 Step1:
 
 filtering_kmer_and_blast.sh
