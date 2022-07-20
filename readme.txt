@@ -72,4 +72,4 @@ Step3:
 plot_flk_kmer_prop.R
 script functions: 
 For specific kmer, visualise the rearrangement event by plotting where the flanks are found in each genome
-
+output file: kmerX_plot.pdf 
