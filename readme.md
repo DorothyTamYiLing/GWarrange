@@ -76,6 +76,7 @@ output files:
 4. kmer_forblast.fasta (multifasta file of kmer that have passed the filter and for blasting with genomes)
 
 
+
 `extract_flank_coor.py` (called by filtering_kmer_and_blast.sh)
 
 script functions:
