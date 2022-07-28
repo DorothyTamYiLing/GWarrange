@@ -94,14 +94,14 @@ output files:
 script functions:
 1. filtering kmers based on blast hit information. Kmer passing the filter should have blast hits that fulfill the following criteria:
 
--both flanks should be found in all genomes (there should be 2 blast hits per kmer, one for each flank)
+Criteria 1: both flanks should be found in all genomes (there should be 2 blast hits per kmer, one for each flank)
 
--Both flanks should be fully aligned with the genomes (the flank start and end coordinates in the blast hit should be consistent 
+Criteria 2: Both flanks should be fully aligned with the genomes (the flank start and end coordinates in the blast hit should be consistent 
 with those in flank_coor.txt)
 
--there should be no SNPs nor gaps (the values in the "mismatch" and "gap" columns should be 0 for all blast hit)
+Criteria 3: there should be no SNPs nor gaps (the values in the "mismatch" and "gap" columns should be 0 for all blast hit)
 
--Each flank should only show one unique blast hit per genome
+Criteria 4: Each flank should only show one unique blast hit per genome
 
 2. for those kmers that have passed the filter, determine:
 
