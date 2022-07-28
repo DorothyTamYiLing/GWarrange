@@ -7,9 +7,9 @@ Before using this pipeline, the repetitive elements that are speculated to have 
 # Usage
 
 main.sh is the main script to run 
+To run main.sh:
 
 ```
-To run main.sh:
 bash main.sh allsig_kmer_withN.fasta 111_yearGWAS_genlist.fasta.gz  \
 /home/ubuntu/Dorothy/genome_rearrangement/phenotypes.tsv \
 /home/ubuntu/Dorothy/genome_rearrangement/output 200 30 2500
