@@ -17,6 +17,7 @@ bash main.sh allsig_kmer_withN.fasta 111_yearGWAS_genlist.fasta.gz  \
 ```
 
 Define all the variables in main.sh:
+
 var1=allsig_kmer_withN.fasta  #multifasta fie of significant kmers (k_input)
 var2=111_yearGWAS_genlist.fasta #multifasta fie of genomes (gen_input)
 var3=phenotypes.tsv  #phenotype file, no header, sample name in 1st column, binary phenotype in 2nd column, need to provide path (pheno)
