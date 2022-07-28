@@ -18,19 +18,19 @@ bash main.sh allsig_kmer_withN.fasta 111_yearGWAS_genlist.fasta.gz  \
 
 Define all the arguments in main.sh:
 
-`allsig_kmer_withN.fasta` : multifasta file of significant kmers (k_input)
+`allsig_kmer_withN.fasta` : multifasta file of significant kmers ($k_input)
 
-`111_yearGWAS_genlist.fasta` : multifasta fie of genomes (gen_input)
+`111_yearGWAS_genlist.fasta` : multifasta fie of genomes ($gen_input)
 
-`/home/ubuntu/Dorothy/genome_rearrangement/phenotypes.tsv` : phenotype file, no header, sample name in 1st column, binary phenotype in 2nd column, need to provide path (pheno)
+`/home/ubuntu/Dorothy/genome_rearrangement/phenotypes.tsv` : phenotype file, no header, sample name in 1st column, binary phenotype in 2nd column, need to provide path ($pheno)
 
-`/home/ubuntu/Dorothy/genome_rearrangement/output` : directory being created where the output files are generated (outdir)
+`/home/ubuntu/Dorothy/genome_rearrangement/output` : directory being created where the output files are generated ($outdir)
 
-`200` : length (bp) of significnat kmers (k_len)
+`200` : length (bp) of significnat kmers ($k_len)
 
-`30` : Minimum length (bp) of flanking sequences (both side) for the kmer to be blasted with the genomes (flnk_len)
+`30` : Minimum length (bp) of flanking sequences (both side) for the kmer to be blasted with the genomes ($flnk_len)
 
-`2500` : Maximum distance (bp) between the upstream and downstream flanks in the genome for a kmer to be defined as intact kmer (flkdist)
+`2500` : Maximum distance (bp) between the upstream and downstream flanks in the genome for a kmer to be defined as intact kmer ($flkdist)
 
 
 # Plotting flanks of selected kmer
@@ -64,7 +64,8 @@ Define all the variables in plot_flk_kmer_prop.R:
 
 ## Step1:
 
-filtering_kmer_and_blast.sh
+`filtering_kmer_and_blast.sh`
+
 script functions:
 1. filters sig. kmers for blasting by keeping only the kmers that contain flanking sequences (both side) of at least $flnk_len bp in size
 2. blasts the filtered kmers with the genomes
@@ -75,7 +76,7 @@ output files:
 4. kmer_forblast.fasta (multifasta file of kmer that have passed the filter and for blasting with genomes)
 
 
-extract_flank_coor.py (called by filtering_kmer_and_blast.sh)
+`extract_flank_coor.py` (called by filtering_kmer_and_blast.sh)
 script functions:
 1. gets the flank start and end coordinates of the sig. kmers
 output files: 
@@ -84,7 +85,7 @@ output files:
 
 ## Step2:
 
-make_flank_summary.R
+`make_flank_summary.R`
 script functions:
 1. filtering kmers based on blast hit information. Kmer passing the filter should have blast hits that fulfill the following criteria:
 -both flanks should be found in all genomes (there should be 2 blast hits per kmer, one for each flank)
