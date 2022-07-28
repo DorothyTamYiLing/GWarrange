@@ -69,6 +69,7 @@ Define all the variables in plot_flk_kmer_prop.R:
 script functions:
 1. filters sig. kmers for blasting by keeping only the kmers that contain flanking sequences (both side) of at least $flnk_len bp in size
 2. blasts the filtered kmers with the genomes
+
 output files: 
 1. myout.txt (blast output file)
 2. kmer_flanktooshort_4rm.txt (list of kmers that are removed due to having at least one flank being too short, i.e. <$flnk_len)
