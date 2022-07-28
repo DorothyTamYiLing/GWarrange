@@ -5,6 +5,7 @@ This pipeline detects and visualises phenotype-associated genome rearrangement e
 Before using this pipeline, the repetitive elements that are speculated to have mediated the rearrangement event must be replaced by a short placeholder sequence (e.g. Nx15) in the genome set. Then, a kmer-based GWAS is performed searching for kmers that are associated with the phenotype of interested. The phenotype-associated kmers that contain the short placeholder sequence are picked as one of the inputs of this pipeline to detect potential genome rearrangement events that are associated with the phenotype of interest.
 
 # Usage
+
 main.sh is the main script to run 
 
 ```
