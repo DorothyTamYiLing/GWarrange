@@ -16,7 +16,7 @@ bash main.sh allsig_kmer_withN.fasta 111_yearGWAS_genlist.fasta.gz  \
 /home/ubuntu/Dorothy/genome_rearrangement/output 200 30 2500
 ```
 
-## Define all the arguments in main.sh:
+Define all the arguments in main.sh:
 
 `allsig_kmer_withN.fasta` : multifasta file of significant kmers (k_input)
 
@@ -47,17 +47,22 @@ Rscript plot_flk_kmer_prop.R --kmer kmer93 --phen /home/ubuntu/Dorothy/genome_re
 
 Define all the variables in plot_flk_kmer_prop.R:
 
-$kmer=chosen kmer for plotting flanks
-$phen=phenotype file, no header, sample name in 1st column, binary phenotype in 2nd column, need to provide path (pheno)
-$coor=myflk_behave_pheno.txt file from the output
-$genome.size=size of the genome in thousands
-$outdir=path of where the plot will be generated
-$flk.dist=Maximum distance (bp) between the upstream and downstream flanks in the genome for a kmer to be defined as intact kmer (flkdist)
+`kmer`: chosen kmer for plotting flanks
+
+`phen` : phenotype file, no header, sample name in 1st column, binary phenotype in 2nd column, need to provide path (pheno)
+
+`coor` : myflk_behave_pheno.txt file from the output
+
+`genome.size`: size of the genome in thousands
+
+`outdir` : path of where the plot will be generated
+
+`flk.dist` : Maximum distance (bp) between the upstream and downstream flanks in the genome for a kmer to be defined as intact kmer (flkdist)
 
 
 # Pipeline and output files description
 
-Step1:
+## Step1:
 
 filtering_kmer_and_blast.sh
 script functions:
@@ -77,7 +82,7 @@ output files:
 1. flank_coor.txt; format: kmerX_{end coordinate of the upstream flank}_{start coordinate of the upstream flank}_kmer size
 
 
-Step2:
+## Step2:
 
 make_flank_summary.R
 script functions:
@@ -114,18 +119,19 @@ output files:
 -case_assos_prop: proportion of case genomes with this behaviour
 -ctrl_assos: behaviour associated with control genomes
 -ctrl_assos_prop: proportion of control genomes with this behaviour
--case_assos_gp_Lflk_sumstat: for the flank behaviours that is associated with case genomes, the summary statistics** of the genome positions of the upstream flanks
--case_assos_gp_Rflk_sumstat: for the flank behaviours that is associated with case genomes, the summary statistics** of the genome positions of the downstream flanks
--ctrl_assos_gp_Lflk_sumstat: for the flank behaviours that is associated with control genomes, the summary statistics** of the genome positions of the upstream flanks
--ctrl_assos_gp_Rflk_sumstat: for the flank behaviours that is associated with control genomes, the summary statistics** of the genome positions of the downstream flanks
--case_assos_gp_flkdis_sumstat: for the flank behaviours that is associated with case genomes, the summary statistics** of the distance between the upstream and downstream flanks
--ctrl_assos_gp_flkdis_sumstat: for the flank behaviours that is associated with control genomes, the summary statistics** of the distance between the upstream and downstream flanks
+-case_assos_gp_Lflk_sumstat: for the flank behaviours that is associated with case genomes, the summary statistics <sup> 2 </sup>  of the genome positions of the upstream flanks
+-case_assos_gp_Rflk_sumstat: for the flank behaviours that is associated with case genomes, the summary statistics <sup> 2 </sup>  of the genome positions of the downstream flanks
+-ctrl_assos_gp_Lflk_sumstat: for the flank behaviours that is associated with control genomes, the summary statistics <sup> 2 </sup> of the genome positions of the upstream flanks
+-ctrl_assos_gp_Rflk_sumstat: for the flank behaviours that is associated with control genomes, the summary statistics <sup> 2 </sup>  of the genome positions of the downstream flanks
+-case_assos_gp_flkdis_sumstat: for the flank behaviours that is associated with case genomes, the summary statistics <sup> 2 </sup>  of the distance between the upstream and downstream flanks
+-ctrl_assos_gp_flkdis_sumstat: for the flank behaviours that is associated with control genomes, the summary statistics <sup> 2 </sup>  of the distance between the upstream and downstream flanks
 -event: genome rearrangemnet event
 
 * files are not produced when there is no content
-**summary statistics format: minimum, lower quantile, mean, median, upper quantile, maximum, standard deviation
 
-Step3:
+<sup> 2 </sup>  summary statistics format: minimum, lower quantile, mean, median, upper quantile, maximum, standard deviation
+
+## Step3:
 plot_flk_kmer_prop.R
 script functions: 
 For specific kmer, visualise the rearrangement event by plotting where the flanks are found in each genome
