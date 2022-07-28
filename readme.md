@@ -37,7 +37,7 @@ Define all the arguments in main.sh:
 
 Plot_flk_kmer_prop.R is the script to run for plotting flanks of selected kmer.
 
-To run plot_flk_kmer_prop.R:
+To run plot_flk_kmer_prop.R (example):
 
 ```
 Rscript plot_flk_kmer_prop.R --kmer kmer93 --phen /home/ubuntu/Dorothy/genome_rearrangement/phenotypes.tsv \
