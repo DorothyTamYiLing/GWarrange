@@ -6,7 +6,7 @@ Before using this pipeline, the repetitive elements that are speculated to have 
 
 # Detecting genome rearrangements:
 
-main.sh is the main script to run. 
+main.sh is the main script to run for detecting genome rearrangement.
 
 To run main.sh (example):
 
