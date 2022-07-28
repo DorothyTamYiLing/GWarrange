@@ -157,7 +157,7 @@ output files:
 
 <sup> 1 </sup> files are not produced when there is no content
 
-<sup> 2 </sup>  summary statistics format: minimum, lower quantile, mean, median, upper quantile, maximum, standard deviation
+<sup> 2 </sup>  summary statistics format: minimum, 1st quantile, median, mean, 3rd quantile, maximum, standard deviation
 
 ## Step3:
 `plot_flk_kmer_prop.R`
