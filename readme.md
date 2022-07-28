@@ -4,7 +4,7 @@ This pipeline detects and visualises phenotype-associated genome rearrangement e
 # Pre-requisite:
 Before using this pipeline, the repetitive elements that are speculated to have mediated the rearrangement event must be replaced by a short placeholder sequence (e.g. Nx15) in the genome set. Then, a kmer-based GWAS is performed searching for kmers that are associated with the phenotype of interested. The phenotype-associated kmers that contain the short placeholder sequence are picked as one of the inputs of this pipeline to detect potential genome rearrangement events that are associated with the phenotype of interest.
 
-# Detecting genome rearrangements
+# Detecting genome rearrangements:
 
 main.sh is the main script to run. 
 
@@ -105,11 +105,11 @@ also include information of where in the genome the flank behaviour take place, 
 as indicated by each kmer.
 output files: 
 1. rows_for_process.txt (blast hit of kemrs that pass the filter)
-2. kmer_with_deletion.txt (blast hit of kmers that do not fulfill criteria 1) *
-3. kmer_with_alignlen_issue.txt (blast hit of kmers that do not fulfill criteria 2) *
-4. kmer_with_SNPgap.txt (blast hit of kmers that do not fulfill criteria 3) * 
-5. kmer_with_multi_hits.txt (blast hit of kmers that do not fulfill criteria 4) *
-6. myundefine_k.txt (blast hit of kmers with undefined behaviour in at least one genome) *
+2. kmer_with_deletion.txt (blast hit of kmers that do not fulfill criteria 1) <sup> 1 </sup>
+3. kmer_with_alignlen_issue.txt (blast hit of kmers that do not fulfill criteria 2) <sup> 1 </sup>
+4. kmer_with_SNPgap.txt (blast hit of kmers that do not fulfill criteria 3) <sup> 1 </sup> 
+5. kmer_with_multi_hits.txt (blast hit of kmers that do not fulfill criteria 4) <sup> 1 </sup>
+6. myundefine_k.txt (blast hit of kmers with undefined behaviour in at least one genome) <sup> 1 </sup>
 7. myflk_behave_pheno.txt (kmers with StartL,EndL,StartR,EndR and flank behaviour in each genome defined, and merged with phenotype information)
 8. myall_out.txt, include the following information in columns:
 -kmer: kmer ID
@@ -127,7 +127,7 @@ output files:
 -ctrl_assos_gp_flkdis_sumstat: for the flank behaviours that is associated with control genomes, the summary statistics <sup> 2 </sup>  of the distance between the upstream and downstream flanks
 -event: genome rearrangemnet event
 
-* files are not produced when there is no content
+<sup> 1 </sup> files are not produced when there is no content
 
 <sup> 2 </sup>  summary statistics format: minimum, lower quantile, mean, median, upper quantile, maximum, standard deviation
 
