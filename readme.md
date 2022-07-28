@@ -22,7 +22,7 @@ bash main.sh allsig_kmer_withN.fasta 111_yearGWAS_genlist.fasta.gz  \
 
 `111_yearGWAS_genlist.fasta` : multifasta fie of genomes (gen_input)
 
-`phenotypes.tsv` : phenotype file, no header, sample name in 1st column, binary phenotype in 2nd column, need to provide path (pheno)
+`/home/ubuntu/Dorothy/genome_rearrangement/phenotypes.tsv` : phenotype file, no header, sample name in 1st column, binary phenotype in 2nd column, need to provide path (pheno)
 
 `/home/ubuntu/Dorothy/genome_rearrangement/output` : directory being created where the output files are generated (outdir)
 
