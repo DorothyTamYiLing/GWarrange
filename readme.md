@@ -104,15 +104,24 @@ move away and flipped) or ""undefined_behave" (behaviours that are not defined a
 4. for each kmer (across all genomes), count the number (and proportion) of case/control genome that show each type of flank behaviour found, 
 also include information of where in the genome the flank behaviour take place, finally give the most possible genome rearrangement event 
 as indicated by each kmer.
+
 output files: 
 1. rows_for_process.txt (blast hit of kemrs that pass the filter)
+ 
 2. kmer_with_deletion.txt (blast hit of kmers that do not fulfill criteria 1) <sup> 1 </sup>
+
 3. kmer_with_alignlen_issue.txt (blast hit of kmers that do not fulfill criteria 2) <sup> 1 </sup>
+
 4. kmer_with_SNPgap.txt (blast hit of kmers that do not fulfill criteria 3) <sup> 1 </sup> 
+ 
 5. kmer_with_multi_hits.txt (blast hit of kmers that do not fulfill criteria 4) <sup> 1 </sup>
+
 6. myundefine_k.txt (blast hit of kmers with undefined behaviour in at least one genome) <sup> 1 </sup>
+
 7. myflk_behave_pheno.txt (kmers with StartL,EndL,StartR,EndR and flank behaviour in each genome defined, and merged with phenotype information)
+
 8. myall_out.txt, include the following information in columns:
+
 -kmer: kmer ID
 -event_sum: list of flank behaviours obserevd across genomes for this kmer, seperated by ":"
 -flk_behaviour: count and proportion of case and control genomes for each behaviour; format: count of case genomes with behaviour/total number of case genomes (proportion): count of control genomes with behaviour/total number of control genomes (proportion)
@@ -137,7 +146,7 @@ plot_flk_kmer_prop.R
 script functions: 
 For specific kmer, visualise the rearrangement event by plotting where the flanks are found in each genome
 output file: 
-1.kmerX_plot.pdf 
+1. kmerX_plot.pdf 
 2. case_upstreamflk.txt (information for plotting case upstream flank arrows in plot)
 3. case_downstreamflk.txt (information for plotting case downstream flank arrows in plot)
 4. case_intactk.txt (information for plotting case intactk arrows in plot)
