@@ -125,33 +125,33 @@ output files:
 
 8. myall_out.txt, include the following information in columns:
 
--kmer: kmer ID
+*kmer*: kmer ID
 
--event_sum: list of flank behaviours obserevd across genomes for this kmer, seperated by ":"
+*event_sum*: list of flank behaviours obserevd across genomes for this kmer, seperated by ":"
 
--flk_behaviour: count and proportion of case and control genomes for each behaviour; format: count of case genomes with behaviour/total number of case genomes (proportion): count of control genomes with behaviour/total number of control genomes (proportion)
+*flk_behaviour*: count and proportion of case and control genomes for each behaviour; format: count of case genomes with behaviour/total number of case genomes (proportion): count of control genomes with behaviour/total number of control genomes (proportion)
 
--case_assos: behaviour associated with case genomes
+*case_assos*: behaviour associated with case genomes
 
--case_assos_prop: proportion of case genomes with this behaviour
+*case_assos_prop*: proportion of case genomes with this behaviour
 
--ctrl_assos: behaviour associated with control genomes
+*ctrl_assos*: behaviour associated with control genomes
 
--ctrl_assos_prop: proportion of control genomes with this behaviour
+*ctrl_assos_prop*: proportion of control genomes with this behaviour
 
--case_assos_gp_Lflk_sumstat: for the flank behaviours that is associated with case genomes, the summary statistics <sup> 2 </sup>  of the genome positions of the upstream flanks
+*case_assos_gp_Lflk_sumstat*: for the flank behaviours that is associated with case genomes, the summary statistics <sup> 2 </sup>  of the genome positions of the upstream flanks
 
--case_assos_gp_Rflk_sumstat: for the flank behaviours that is associated with case genomes, the summary statistics <sup> 2 </sup>  of the genome positions of the downstream flanks
+*case_assos_gp_Rflk_sumstat*: for the flank behaviours that is associated with case genomes, the summary statistics <sup> 2 </sup>  of the genome positions of the downstream flanks
 
--ctrl_assos_gp_Lflk_sumstat: for the flank behaviours that is associated with control genomes, the summary statistics <sup> 2 </sup> of the genome positions of the upstream flanks
+*ctrl_assos_gp_Lflk_sumstat*: for the flank behaviours that is associated with control genomes, the summary statistics <sup> 2 </sup> of the genome positions of the upstream flanks
 
--ctrl_assos_gp_Rflk_sumstat: for the flank behaviours that is associated with control genomes, the summary statistics <sup> 2 </sup>  of the genome positions of the downstream flanks
+*ctrl_assos_gp_Rflk_sumstat*: for the flank behaviours that is associated with control genomes, the summary statistics <sup> 2 </sup>  of the genome positions of the downstream flanks
 
--case_assos_gp_flkdis_sumstat: for the flank behaviours that is associated with case genomes, the summary statistics <sup> 2 </sup>  of the distance between the upstream and downstream flanks
+*case_assos_gp_flkdis_sumstat*: for the flank behaviours that is associated with case genomes, the summary statistics <sup> 2 </sup>  of the distance between the upstream and downstream flanks
 
--ctrl_assos_gp_flkdis_sumstat: for the flank behaviours that is associated with control genomes, the summary statistics <sup> 2 </sup>  of the distance between the upstream and downstream flanks
+*ctrl_assos_gp_flkdis_sumstat*: for the flank behaviours that is associated with control genomes, the summary statistics <sup> 2 </sup>  of the distance between the upstream and downstream flanks
 
--event: genome rearrangemnet event
+*event*: genome rearrangemnet event
 
 <sup> 1 </sup> files are not produced when there is no content
 
