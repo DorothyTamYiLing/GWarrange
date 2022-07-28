@@ -64,7 +64,7 @@ Define all the variables in plot_flk_kmer_prop.R:
 
 ## Step1:
 
-`filtering_kmer_and_blast.sh`
+`filtering_kmer_and_blast.sh` (called by main.sh)
 
 script functions:
 1. filters sig. kmers for blasting by keeping only the kmers that contain flanking sequences (both side) of at least $flnk_len bp in size
@@ -89,7 +89,7 @@ output files:
 
 ## Step2:
 
-`make_flank_summary.R`
+`make_flank_summary.R` (called by main.sh)
 
 script functions:
 1. filtering kmers based on blast hit information. Kmer passing the filter should have blast hits that fulfill the following criteria:
