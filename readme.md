@@ -156,14 +156,16 @@ output files:
 
 ## Step3:
 `plot_flk_kmer_prop.R`
+
 script functions: 
 For specific kmer, visualise the rearrangement event by plotting where the flanks are found in each genome
 output file: 
 1. kmerX_plot.pdf 
-2. case_upstreamflk.txt (information for plotting case upstream flank arrows in plot)
-3. case_downstreamflk.txt (information for plotting case downstream flank arrows in plot)
-4. case_intactk.txt (information for plotting case intactk arrows in plot)
-5. ctrl_upstreamflk.txt (information for plotting control upstream flank arrows in plot)
-6. ctrl_downstreamflk.txt (information for plotting control downstream flank arrows in plot)
-7. ctrl_intactk.txt (information for plotting control intactk arrows in plot)
-*information includes median start and end coordinates, count and proportion of genomes
+2. case_upstreamflk.txt (information <sup> 3 </sup> for plotting case upstream flank arrows in plot)
+3. case_downstreamflk.txt (information <sup> 3 </sup> for plotting case downstream flank arrows in plot)
+4. case_intactk.txt (information <sup> 3 </sup> for plotting case intactk arrows in plot)
+5. ctrl_upstreamflk.txt (information <sup> 3 </sup> for plotting control upstream flank arrows in plot)
+6. ctrl_downstreamflk.txt (information <sup> 3 </sup> for plotting control downstream flank arrows in plot)
+7. ctrl_intactk.txt (information <sup> 3 </sup> for plotting control intactk arrows in plot)
+
+<sup> 3 </sup> information includes median start and end coordinates, count and proportion of genomes
