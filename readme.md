@@ -77,6 +77,7 @@ output files:
 
 
 `extract_flank_coor.py` (called by filtering_kmer_and_blast.sh)
+
 script functions:
 1. gets the flank start and end coordinates of the sig. kmers
 output files: 
@@ -86,6 +87,7 @@ output files:
 ## Step2:
 
 `make_flank_summary.R`
+
 script functions:
 1. filtering kmers based on blast hit information. Kmer passing the filter should have blast hits that fulfill the following criteria:
 -both flanks should be found in all genomes (there should be 2 blast hits per kmer, one for each flank)
