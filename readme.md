@@ -18,19 +18,19 @@ bash main.sh allsig_kmer_withN.fasta 111_yearGWAS_genlist.fasta.gz  \
 
 ## Define all the arguments in main.sh:
 
-'allsig_kmer_withN.fasta' : multifasta file of significant kmers (k_input)
+`allsig_kmer_withN.fasta` : multifasta file of significant kmers (k_input)
 
-'111_yearGWAS_genlist.fasta' : multifasta fie of genomes (gen_input)
+`111_yearGWAS_genlist.fasta` : multifasta fie of genomes (gen_input)
 
-phenotypes.tsv >> phenotype file, no header, sample name in 1st column, binary phenotype in 2nd column, need to provide path (pheno)
+`phenotypes.tsv` : phenotype file, no header, sample name in 1st column, binary phenotype in 2nd column, need to provide path (pheno)
 
-/home/ubuntu/Dorothy/genome_rearrangement/output >> directory being created where the output files are generated (outdir)
+`/home/ubuntu/Dorothy/genome_rearrangement/output` : directory being created where the output files are generated (outdir)
 
-200 >> length (bp) of significnat kmers (k_len)
+`200` : length (bp) of significnat kmers (k_len)
 
-30 >> Minimum length (bp) of flanking sequences (both side) for the kmer to be blasted with the genomes (flnk_len)
+`30` : Minimum length (bp) of flanking sequences (both side) for the kmer to be blasted with the genomes (flnk_len)
 
-2500 >> Maximum distance (bp) between the upstream and downstream flanks in the genome for a kmer to be defined as intact kmer (flkdist)
+`2500` : Maximum distance (bp) between the upstream and downstream flanks in the genome for a kmer to be defined as intact kmer (flkdist)
 
 
 
