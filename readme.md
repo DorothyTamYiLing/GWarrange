@@ -93,19 +93,30 @@ output files:
 
 script functions:
 1. filtering kmers based on blast hit information. Kmer passing the filter should have blast hits that fulfill the following criteria:
+
 -both flanks should be found in all genomes (there should be 2 blast hits per kmer, one for each flank)
+
 -Both flanks should be fully aligned with the genomes (the flank start and end coordinates in the blast hit should be consistent 
 with those in flank_coor.txt)
+
 -there should be no SNPs nor gaps (the values in the "mismatch" and "gap" columns should be 0 for all blast hit)
+
 -Each flank should only show one unique blast hit per genome
+
 2. for those kmers that have passed the filter, determine:
--StartL (genomic coordinate of the start of upstream flank);
--EndL (genomic coordinate of the end of upstream flank);
--StartR (genomic coordinate of the start of downstream flank);
+
+-StartL (genomic coordinate of the start of upstream flank)
+
+-EndL (genomic coordinate of the end of upstream flank)
+
+-StartR (genomic coordinate of the start of downstream flank)
+
 -EndR (genomic coordinate of the end of downstream flank)
+
 3. for those kmers that have passed the filter, determine their flank behaviours in each genome (behaviours could be 
 "intact_k" (intact kmer), "mv_away" (flanks move away from each other), "swp_flk" (flanks swap in position),"mv&flp" (one flank has 
 move away and flipped) or ""undefined_behave" (behaviours that are not defined according to the rules))
+
 4. for each kmer (across all genomes), count the number (and proportion) of case/control genome that show each type of flank behaviour found, 
 also include information of where in the genome the flank behaviour take place, finally give the most possible genome rearrangement event 
 as indicated by each kmer.
