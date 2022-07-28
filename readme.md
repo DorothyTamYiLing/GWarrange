@@ -12,7 +12,7 @@ To run main.sh (example):
 
 ```
 bash main.sh allsig_kmer_withN.fasta 111_yearGWAS_genlist.fasta.gz  \
-/home/ubuntu/Dorothy/genome_rearrangement/phenotypes.tsv \
+/home/ubuntu/Dorothy/genome_rearrangement/phenotypes.tsv \   #need to provide path for phenotype file
 /home/ubuntu/Dorothy/genome_rearrangement/output 200 30 2500
 ```
 
