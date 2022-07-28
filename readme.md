@@ -6,7 +6,8 @@ Before using this pipeline, the repetitive elements that are speculated to have 
 
 # Usage
 
-main.sh is the main script to run 
+main.sh is the main script to run. 
+
 To run main.sh:
 
 ```
