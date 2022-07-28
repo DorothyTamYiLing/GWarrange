@@ -4,7 +4,7 @@ This pipeline detects and visualises phenotype-associated genome rearrangement e
 # Pre-requisite:
 Before using this pipeline, the repetitive elements that are speculated to have mediated the rearrangement event must be replaced by a short placeholder sequence (e.g. Nx15) in the genome set. Then, a kmer-based GWAS is performed searching for kmers that are associated with the phenotype of interested. The phenotype-associated kmers that contain the short placeholder sequence are picked as one of the inputs of this pipeline to detect potential genome rearrangement events that are associated with the phenotype of interest.
 
-# Usage
+# Detecting genome rearrangements
 
 main.sh is the main script to run. 
 
@@ -33,10 +33,12 @@ bash main.sh allsig_kmer_withN.fasta 111_yearGWAS_genlist.fasta.gz  \
 `2500` : Maximum distance (bp) between the upstream and downstream flanks in the genome for a kmer to be defined as intact kmer (flkdist)
 
 
+# Plotting flanks of selected kmer
 
-plot_flk_kmer_prop.R is the script to run for plotting flanks of selected kmer
+Plot_flk_kmer_prop.R is the script to run for plotting flanks of selected kmer.
 
 To run plot_flk_kmer_prop.R:
+
 ```
 Rscript plot_flk_kmer_prop.R --kmer kmer93 --phen /home/ubuntu/Dorothy/genome_rearrangement/phenotypes.tsv \
 --coor /home/ubuntu/Dorothy/genome_rearrangement/output/myflk_behave_pheno.txt \
@@ -44,6 +46,7 @@ Rscript plot_flk_kmer_prop.R --kmer kmer93 --phen /home/ubuntu/Dorothy/genome_re
 ```
 
 Define all the variables in plot_flk_kmer_prop.R:
+
 $kmer=chosen kmer for plotting flanks
 $phen=phenotype file, no header, sample name in 1st column, binary phenotype in 2nd column, need to provide path (pheno)
 $coor=myflk_behave_pheno.txt file from the output
