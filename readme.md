@@ -115,7 +115,7 @@ Criteria 4: Each flank should only show one unique blast hit per genome
 
 3. for those kmers that have passed the filter, determine their flank behaviours in each genome (behaviours could be 
 "intact_k" (intact kmer), "mv_away" (flanks move away from each other), "swp_flk" (flanks swap in position),"mv&flp" (one flank has 
-move away and flipped) or ""undefined_behave" (behaviours that are not defined according to the rules))
+move away and flipped) or "undefined_behave" (behaviours that are not defined))
 
 4. for each kmer (across all genomes), count the number (and proportion) of case/control genome that show each type of flank behaviour found, 
 also include information of where in the genome the flank behaviour take place, finally give the most possible genome rearrangement event 
