@@ -8,7 +8,7 @@ Before using this pipeline, the repetitive elements that are speculated to have 
 
 main.sh is the main script to run. 
 
-To run main.sh:
+To run main.sh (example):
 
 ```
 bash main.sh allsig_kmer_withN.fasta 111_yearGWAS_genlist.fasta.gz  \
@@ -16,15 +16,15 @@ bash main.sh allsig_kmer_withN.fasta 111_yearGWAS_genlist.fasta.gz  \
 /home/ubuntu/Dorothy/genome_rearrangement/output 200 30 2500
 ```
 
-Define all the variables in main.sh:
+Define all the arguments in main.sh:
 
-var1=allsig_kmer_withN.fasta  #multifasta fie of significant kmers (k_input)
-var2=111_yearGWAS_genlist.fasta #multifasta fie of genomes (gen_input)
-var3=phenotypes.tsv  #phenotype file, no header, sample name in 1st column, binary phenotype in 2nd column, need to provide path (pheno)
-var4=/home/ubuntu/Dorothy/genome_rearrangement/output #directory being created where the output files are generated (outdir)
-var5=200 #length (bp) of significnat kmers (k_len)
-var6=30 #Minimum length (bp) of flanking sequences (both side) for the kmer to be blasted with the genomes (flnk_len)
-var7=2500 #Maximum distance (bp) between the upstream and downstream flanks in the genome for a kmer to be defined as intact kmer (flkdist)
+allsig_kmer_withN.fasta >> multifasta file of significant kmers (k_input)
+111_yearGWAS_genlist.fasta >> multifasta fie of genomes (gen_input)
+phenotypes.tsv >> phenotype file, no header, sample name in 1st column, binary phenotype in 2nd column, need to provide path (pheno)
+/home/ubuntu/Dorothy/genome_rearrangement/output >> directory being created where the output files are generated (outdir)
+200 >> length (bp) of significnat kmers (k_len)
+30 >> Minimum length (bp) of flanking sequences (both side) for the kmer to be blasted with the genomes (flnk_len)
+2500 >> Maximum distance (bp) between the upstream and downstream flanks in the genome for a kmer to be defined as intact kmer (flkdist)
 
 
 plot_flk_kmer_prop.R is the script to run for plotting flanks of selected kmer
