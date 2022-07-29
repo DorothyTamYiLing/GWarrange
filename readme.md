@@ -84,7 +84,7 @@ script functions:
 1. gets the flank start and end coordinates of the sig. kmers
 
 output files: 
-1. flank_coor.txt; format: kmerX_{end coordinate of the upstream flank}_{start coordinate of the upstream flank}_kmer size
+1. flank_coor.txt; format: `kmerX_{end coordinate of the upstream flank}_{start coordinate of the upstream flank}_kmer size`
 
 
 ## Step2:
@@ -158,9 +158,9 @@ Flank behaviours are defined as `undefined_behave` when none of the rules above 
 
 4. for each kmer (across all genomes), count the number (and proportion) of case/control genome that in which each type of flank behaviour is found, determine the flank behaviour that is associated with case genomes and control genome respectively, include information of where in the genome  the flank behaviour take place (in form of summary statistics of genome coordinates. Finally, the most possible genome rearrangement event as indicated by each kmer is determined by the following rules:
 
-- Define as "translocation" when case genomes/contrl genomes associated flank behaviour include `mv_away` or `swp_flk`.
+- Define as `translocation` when case genomes/contrl genomes associated flank behaviour include `mv_away` or `swp_flk`.
 
-- Define as "inversion" when case genomes/contrl genomes associated flank behaviour include `mv&flp`.
+- Define as `inversion` when case genomes/contrl genomes associated flank behaviour include `mv&flp`.
 
 
 output files: 
