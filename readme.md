@@ -84,7 +84,7 @@ script functions:
 1. gets the flank start and end coordinates of the sig. kmers
 
 output files: 
-1. flank_coor.txt; format: `kmerX_{end coordinate of the upstream flank}_{start coordinate of the upstream flank}_kmer size`
+1. flank_coor.txt; format: `kmerX_{end coordinate of the upstream flank}_{start coordinate of the downstream flank}_kmer size`
 
 
 ## Step2:
