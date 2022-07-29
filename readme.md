@@ -26,7 +26,7 @@ Define all the arguments in main.sh:
 
 `/home/ubuntu/Dorothy/genome_rearrangement/output` : directory being created where the output files are generated ($outdir)
 
-`200` : length (bp) of significnat kmers ($k_len)
+`200` : length (bp) of significant kmers ($k_len)
 
 `30` : Minimum length (bp) of flanking sequences (both side) for the kmer to be blasted with the genomes ($flnk_len)
 
