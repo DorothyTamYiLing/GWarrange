@@ -6,9 +6,9 @@ Before using this pipeline, the repetitive elements that are speculated to have 
 
 # Detecting genome rearrangements
 
-main.sh is the main script to run for detecting genome rearrangement.
+`main.sh` is the main script to run for detecting genome rearrangement.
 
-To run main.sh (example):
+To run `main.sh` (example):
 
 ```
 bash main.sh allsig_kmer_withN.fasta 111_yearGWAS_genlist.fasta.gz  \
@@ -16,28 +16,28 @@ bash main.sh allsig_kmer_withN.fasta 111_yearGWAS_genlist.fasta.gz  \
 /home/ubuntu/Dorothy/genome_rearrangement/output 200 30 2500
 ```
 
-Define all the arguments in main.sh:
+Define all the arguments in `main.sh`:
 
-`allsig_kmer_withN.fasta` : multifasta file of significant kmers ($k_input)
+`allsig_kmer_withN.fasta` : multifasta file of significant kmers (`$k_input`)
 
-`111_yearGWAS_genlist.fasta` : multifasta fie of genomes ($gen_input)
+`111_yearGWAS_genlist.fasta` : multifasta fie of genomes (`$gen_input`)
 
-`/home/ubuntu/Dorothy/genome_rearrangement/phenotypes.tsv` : phenotype file, no header, sample name in 1st column, binary phenotype in 2nd column, need to provide path ($pheno)
+`/home/ubuntu/Dorothy/genome_rearrangement/phenotypes.tsv` : phenotype file, no header, sample name in 1st column, binary phenotype in 2nd column, need to provide path (`$pheno`)
 
-`/home/ubuntu/Dorothy/genome_rearrangement/output` : directory being created where the output files are generated ($outdir)
+`/home/ubuntu/Dorothy/genome_rearrangement/output` : directory being created where the output files are generated (`$outdir`)
 
-`200` : length (bp) of significant kmers ($k_len)
+`200` : length (bp) of significant kmers (`$k_len`)
 
-`30` : Minimum length (bp) of flanking sequences (both side) for the kmer to be blasted with the genomes ($flnk_len)
+`30` : Minimum length (bp) of flanking sequences (both side) for the kmer to be blasted with the genomes (`$flnk_len`)
 
-`2500` : Maximum distance (bp) between the upstream and downstream flanks in the genome for a kmer to be defined as intact kmer ($flkdist)
+`2500` : Maximum distance (bp) between the upstream and downstream flanks in the genome for a kmer to be defined as intact kmer (`$flkdist`)
 
 
 # Plotting flanks of selected kmer
 
-Plot_flk_kmer_prop.R is the script to run for plotting flanks of selected kmer.
+`plot_flk_kmer_prop.R` is the script to run for plotting flanks of selected kmer.
 
-To run plot_flk_kmer_prop.R (example):
+To run `plot_flk_kmer_prop.R` (example):
 
 ```
 Rscript plot_flk_kmer_prop.R --kmer kmer93 --phen /home/ubuntu/Dorothy/genome_rearrangement/phenotypes.tsv \
@@ -45,11 +45,11 @@ Rscript plot_flk_kmer_prop.R --kmer kmer93 --phen /home/ubuntu/Dorothy/genome_re
 --genome.size 4000 --outdir /home/ubuntu/Dorothy/genome_rearrangement/output --flk.dist 2500
 ```
 
-Define all the variables in plot_flk_kmer_prop.R:
+Define all the variables in `plot_flk_kmer_prop.R`:
 
 `kmer`: chosen kmer for plotting flanks
 
-`phen` : phenotype file, no header, sample name in 1st column, binary phenotype in 2nd column, need to provide path (pheno)
+`phen` : phenotype file, no header, sample name in 1st column, binary phenotype in 2nd column, need to provide path (`$pheno`)
 
 `coor` : myflk_behave_pheno.txt file from the output
 
@@ -57,28 +57,28 @@ Define all the variables in plot_flk_kmer_prop.R:
 
 `outdir` : path of where the plot will be generated
 
-`flk.dist` : Maximum distance (bp) between the upstream and downstream flanks in the genome for a kmer to be defined as intact kmer (flkdist)
+`flk.dist` : Maximum distance (bp) between the upstream and downstream flanks in the genome for a kmer to be defined as intact kmer (same as `$flkdist`)
 
 
 # Pipeline and output files description
 
 ## Step1:
 
-`filtering_kmer_and_blast.sh` (called by main.sh)
+`filtering_kmer_and_blast.sh` (called by `main.sh`)
 
 script functions:
-1. filters sig. kmers for blasting by keeping only the kmers that contain flanking sequences (both side) of at least $flnk_len bp in size
+1. filters sig. kmers for blasting by keeping only the kmers that contain flanking sequences (both side) of at least `$flnk_len` bp in size
 2. blasts the filtered kmers with the genomes
 
 output files: 
 1. myout.txt (blast output file)
-2. kmer_flanktooshort_4rm.txt (list of kmers that are removed due to having at least one flank being too short, i.e. <$flnk_len)
+2. kmer_flanktooshort_4rm.txt (list of kmers that are removed due to having at least one flank being too short, i.e. <`$flnk_len`)
 3. kmer_flanktooshort_flkcoor.txt (flank start and end coordinates of the kmers being removed)
 4. kmer_forblast.fasta (multifasta file of kmer that have passed the filter and for blasting with genomes)
 
 
 
-`extract_flank_coor.py` (called by filtering_kmer_and_blast.sh)
+`extract_flank_coor.py` (called by `filtering_kmer_and_blast.sh`)
 
 script functions:
 1. gets the flank start and end coordinates of the sig. kmers
@@ -89,7 +89,7 @@ output files:
 
 ## Step2:
 
-`make_flank_summary.R` (called by main.sh)
+`make_flank_summary.R` (called by `main.sh`)
 
 script functions:
 1. filtering kmers based on blast hit information. Kmer passing the filter should have blast hits that fulfill the following criteria:
@@ -176,7 +176,7 @@ output files:
 
 6. myundefine_k.txt (blast hit of kmers with undefined behaviour in at least one genome) <sup> 1 </sup>
 
-7. myflk_behave_pheno.txt (kmers with StartL,EndL,StartR,EndR and flank behaviour in each genome defined, and merged with phenotype information)
+7. myflk_behave_pheno.txt (kmers with `StartL`,`EndL`,`StartR`,`EndR` and flank behaviour in each genome defined, and merged with phenotype information)
 
 8. myall_out.txt, include the following information in columns:
 
@@ -184,7 +184,7 @@ output files:
 
 **event_sum**: list of flank behaviours obserevd across genomes for this kmer, seperated by ":"
 
-**flk_behaviour**: count and proportion of case and control genomes for each behaviour; format: count of case genomes with behaviour/total number of case genomes (proportion): count of control genomes with behaviour/total number of control genomes (proportion)
+**flk_behaviour**: count and proportion of case and control genomes for each behaviour; format: `count of case genomes with behaviour/total number of case genomes (proportion): count of control genomes with behaviour/total number of control genomes (proportion)`
 
 **case_assos**: behaviour associated with case genomes
 
@@ -210,7 +210,7 @@ output files:
 
 <sup> 1 </sup> files are not produced when there is no content
 
-<sup> 2 </sup>  summary statistics format: minimum, 1st quantile, median, mean, 3rd quantile, maximum, standard deviation
+<sup> 2 </sup>  summary statistics format: `minimum, 1st quantile, median, mean, 3rd quantile, maximum, standard deviation`
 
 ## Step3:
 `plot_flk_kmer_prop.R`
