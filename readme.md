@@ -105,37 +105,44 @@ Criteria 4: Each flank should only show one unique blast hit per genome
 
 2. for those kmers that have passed the filter, determine:
 
--StartL (genomic coordinate of the start of upstream flank)
+-`StartL` (genomic coordinate of the start of upstream flank)
 
--EndL (genomic coordinate of the end of upstream flank)
+-`EndL` (genomic coordinate of the end of upstream flank)
 
--StartR (genomic coordinate of the start of downstream flank)
+-`StartR` (genomic coordinate of the start of downstream flank)
 
--EndR (genomic coordinate of the end of downstream flank)
+-`EndR` (genomic coordinate of the end of downstream flank)
 
 3. for those kmers that have passed the filter, determine their flank behaviours in each genome (behaviours could be 
-"intact_k" (intact kmer), "mv_away" (flanks move away from each other), "swp_flk" (flanks swap in position),"mv&flp" (one flank has 
+`intact_k` (intact kmer), `mv_away` (flanks move away from each other), `swp_flk` (flanks swap in position),`mv&flp` (one flank has 
 move away and flipped) according to the following rules:
 
 To be defined as "intact kmer":
 
+```
 (StartL < EndL) & (EndL < StartR) & (StartR < EndR) & ((StartR-EndL) < flkdist)
 
 (EndR < StartR) & (StartR < EndL) & (EndL < StartL) & ((EndL-StartR) < flkdist)
+```
 
 To be defined as "mv_away":
+```
 
 (StartL < EndL) & (EndL < StartR) & (StartR < EndR) & ((StartR-EndL) > flkdist)
 
 (StartL > EndL) & (EndL > StartR) & (StartR > EndR) & ((EndL-StartR) > flkdist)
+```
 
 To be defined as "swp_flk":
+```
 
 (StartR < EndR) & (EndR < StartL) & (StartL < EndL)
 
 (EndL < StartL) & (StartL < EndR) & (EndR < StartR)
+```
 
 To be defined as "mv&flp":
+```
 
 (StartL < EndL) & (EndL < EndR) & (EndR < StartR)
 
@@ -144,15 +151,16 @@ To be defined as "mv&flp":
 (StartR < EndR) & (EndR < EndL) & (EndL < StartL)
 
 (EndR < StartR) & (StartR < StartL) & (StartL < EndL)
+```
 
-Flank behaviours are defined as "undefined_behave" when none of the rules above are fulfilled for that kmer.
+Flank behaviours are defined as `undefined_behave` when none of the rules above are fulfilled for that kmer.
 
 
 4. for each kmer (across all genomes), count the number (and proportion) of case/control genome that in which each type of flank behaviour is found, determine the flank behaviour that is associated with case genomes and control genome respectively, include information of where in the genome  the flank behaviour take place (in form of summary statistics of genome coordinates. Finally, the most possible genome rearrangement event as indicated by each kmer is determined by the following rules:
 
-- Define as "translocation" when case genomes/contrl genomes associated flank behaviour include "mv_away" or "swp_flk".
+- Define as "translocation" when case genomes/contrl genomes associated flank behaviour include `mv_away` or `swp_flk`.
 
-- Define as "inversion" when case genomes/contrl genomes associated flank behaviour include "mv&flp".
+- Define as "inversion" when case genomes/contrl genomes associated flank behaviour include `mv&flp`.
 
 
 output files: 
