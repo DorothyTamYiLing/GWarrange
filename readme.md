@@ -1,6 +1,22 @@
 # Introduction
 This pipeline detects and visualises phenotype-associated genome rearrangement events in bacterial genomes that are mediated by homologous recombination between repetitive elements (such as IS elements). 
 
+# Installation
+genome_rearrangement can be installed using the `git clone` command
+```
+git clone https://github.com/DorothyTamYiLing/genome_rearrangement.git
+```
+# Usage
+
+## For detecting genome rearrangement in genomes
+```
+bash main.sh <kmers> <genomes> <phenotype> <output> <size of kmers> <flanking seqeunces minimum length> <size of IS elements>
+
+<kmers> multifasta file of significant kmers (`$k_input`)
+```
+## For plotting flanks of selected kmer (visualising genome rearrangements that are captured by kmers)
+
+
 # Pre-requisite
 Before using this pipeline, the repetitive elements that are speculated to have mediated the rearrangement events must be replaced by a short placeholder sequence (e.g. Nx15) in the genome set. Then, a kmer-based GWAS is performed searching for kmers that are associated with the phenotype of interested. The phenotype-associated kmers that contain the short placeholder sequence are picked as one of the inputs of this pipeline for detecting potential genome rearrangement events that are associated with the phenotype of interest.
 
