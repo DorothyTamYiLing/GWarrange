@@ -12,7 +12,20 @@ git clone https://github.com/DorothyTamYiLing/genome_rearrangement.git
 ```
 bash main.sh <kmers> <genomes> <phenotype> <output> <size of kmers> <flanking seqeunces minimum length> <size of IS elements>
 
-<kmers> multifasta file of significant kmers (`$k_input`)
+<kmers> : multifasta file of significant phenotype-associated kmers from the GWAS output (`$k_input`)
+
+<genomes> : multifasta fie of genomes used in the GWAS (`$gen_input`)
+
+<phenotype> : phenotype file with path (file format: sample names in 1st column, binary phenotype in 2nd column; no header) (`$pheno`)
+
+<output> : directory being created where the output files are generated (`$outdir`)
+
+<size of kmers> : length (bp) of significant kmers (all kmers have to be the output of one GWAS hence are of the same size) (`$k_len`)
+
+<flanking seqeunces minimum length> :  Minimum length (bp) of flanking sequences (both side) for the kmer to be blasted with the genomes; default: 30bp (`$flnk_len`)
+
+<size of IS elements> : size of the IS element that are replaced by shorter placeholder sequence (i.e. Maximum distance (bp) between the upstream and downstream flanks in the genome for a kmer to be defined as intact kmer)  (`$flkdist`)
+
 ```
 ## For plotting flanks of selected kmer (visualising genome rearrangements that are captured by kmers)
 
