@@ -16,7 +16,7 @@ bash main.sh <kmers> <genomes> <phenotype> <output> <size of kmers> <flanking se
 
 <genomes> : multifasta fie of genomes used in the GWAS (`$gen_input`)
 
-<phenotype> : phenotype file with path (file format: sample names in 1st column, binary phenotype in 2nd column; no header) (`$pheno`)
+<phenotype> : phenotype file with path (file format: sample names in 1st column, binary phenotype in 2nd column; no header, tab-delimited) (`$pheno`)
 
 <output> : directory being created where the output files are generated (`$outdir`)
 
@@ -28,7 +28,22 @@ bash main.sh <kmers> <genomes> <phenotype> <output> <size of kmers> <flanking se
 
 ```
 ## For plotting flanks of selected kmer (visualising genome rearrangements that are captured by kmers)
+```
+Rscript plot_flk_kmer_prop.R --kmer <kmer ID> --phen <phenotype> --coor <myflk_behave_pheno.txt> --genome.size <genome size> --outdir <output directory> --flk.dist <flanking seqeunces minimum length>
 
+<kmer ID> : ID of chosen kmer for plotting IS-flanking sequences
+
+<phenotype> : phenotype file with path (file format: sample names in 1st column, binary phenotype in 2nd column; no header, tab-delimited)
+
+<myflk_behave_pheno.txt> : myflk_behave_pheno.txt file from the output of main.sh
+
+<genome size> : size of the genome (in thousands)
+
+<output directory> : directory path where the plot will be generated (need to be created from before)
+
+<flanking seqeunces minimum length> : size of the IS element that are replaced by shorter placeholder sequence (i.e. Maximum distance (bp) between the upstream and downstream flanks in the genome for a kmer to be defined as intact kmer) (same as <size of IS elements> in main.sh)
+
+```
 
 # Pre-requisite
 Before using this pipeline, the repetitive elements that are speculated to have mediated the rearrangement events must be replaced by a short placeholder sequence (e.g. Nx15) in the genome set. Then, a kmer-based GWAS is performed searching for kmers that are associated with the phenotype of interested. The phenotype-associated kmers that contain the short placeholder sequence are picked as one of the inputs of this pipeline for detecting potential genome rearrangement events that are associated with the phenotype of interest.
