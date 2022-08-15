@@ -12,6 +12,8 @@ git clone https://github.com/DorothyTamYiLing/genome_rearrangement.git
 ```
 bash main.sh <kmers> <genomes> <phenotype> <output> <size of kmers> <flanking seqeunces minimum length> <size of IS elements>
 
+Arguments:
+
 <kmers> : multifasta file of significant phenotype-associated kmers from the GWAS output (`$k_input`)
 
 <genomes> : multifasta fie of genomes used in the GWAS (`$gen_input`)
@@ -30,6 +32,8 @@ bash main.sh <kmers> <genomes> <phenotype> <output> <size of kmers> <flanking se
 ## For plotting flanks of selected kmer (visualising genome rearrangements that are captured by selected kmer)
 ```
 Rscript plot_flk_kmer_prop.R --kmer <kmer ID> --phen <phenotype> --coor <myflk_behave_pheno.txt> --genome.size <genome size> --outdir <output directory> --flk.dist <flanking seqeunces minimum length>
+
+Arguments:
 
 <kmer ID> : ID of chosen kmer for plotting IS-flanking sequences
 
