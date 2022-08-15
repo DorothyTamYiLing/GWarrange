@@ -12,6 +12,8 @@ git clone https://github.com/DorothyTamYiLing/genome_rearrangement.git
 ```
 bash main.sh <kmers> <genomes> <phenotype> <output> <size of kmers> <flanking seqeunces minimum length> <size of IS elements>
 
+```
+
 Arguments:
 
 <kmers> : multifasta file of significant phenotype-associated kmers from the GWAS output (`$k_input`)
@@ -28,10 +30,11 @@ Arguments:
 
 <size of IS elements> : size of the IS element that are replaced by shorter placeholder sequence (i.e. Maximum distance (bp) between the upstream and downstream flanks in the genome for a kmer to be defined as intact kmer)  (`$flkdist`)
 
-```
 ## For plotting flanks of selected kmer (visualising genome rearrangements that are captured by selected kmer)
 ```
 Rscript plot_flk_kmer_prop.R --kmer <kmer ID> --phen <phenotype> --coor <myflk_behave_pheno.txt> --genome.size <genome size> --outdir <output directory> --flk.dist <flanking seqeunces minimum length>
+
+```
 
 Arguments:
 
@@ -47,8 +50,7 @@ Arguments:
 
 <flanking seqeunces minimum length> : size of the IS element that are replaced by shorter placeholder sequence (i.e. Maximum distance (bp) between the upstream and downstream flanks in the genome for a kmer to be defined as intact kmer) (same as <size of IS elements> in main.sh)
 
-```
-
+ 
 # Pre-requisite
 Before using this pipeline, the repetitive elements that are speculated to have mediated the rearrangement events must be replaced by a short placeholder sequence (e.g. Nx15) in the genome set. Then, a kmer-based GWAS is performed searching for kmers that are associated with the phenotype of interested. The phenotype-associated kmers that contain the short placeholder sequence are picked as one of the inputs of this pipeline for detecting potential genome rearrangement events that are associated with the phenotype of interest.
 
