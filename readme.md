@@ -30,6 +30,12 @@ Arguments:
 
 **size of IS elements** : size of the IS element that are replaced by shorter placeholder sequence (i.e. Maximum distance (bp) between the upstream and downstream flanks in the genome for a kmer to be defined as intact kmer)  
 
+Example:
+
+```
+bash main.sh allsig_kmer_withN.fasta 111_yearGWAS_genlist.fasta.gz  path/to/your/phenotypes.tsv path/to/your/output 200 30 2500
+```
+
 ## For plotting flanks of selected kmer (visualising genome rearrangements that are captured by selected kmer)
 ```
 Rscript plot_flk_kmer_prop.R --kmer <kmer ID> --phen <phenotype> --coor <myflk_behave_pheno.txt> --genome.size <genome size> --outdir <output directory> --flk.dist <flanking seqeunces minimum length>
@@ -50,27 +56,29 @@ Arguments:
 
 **flanking seqeunces minimum length** : size of the IS element that are replaced by shorter placeholder sequence (i.e. Maximum distance (bp) between the upstream and downstream flanks in the genome for a kmer to be defined as intact kmer) (same as <size of IS elements> in main.sh)
 
- 
-# Exmaple using example data
-
-## For detecting genome rearrangement in genomes
+Example:
 
 ```
-bash main.sh allsig_kmer_withN.fasta 111_yearGWAS_genlist.fasta.gz  \
-/home/ubuntu/Dorothy/genome_rearrangement/phenotypes.tsv \   #need to provide path for phenotype file
-/home/ubuntu/Dorothy/genome_rearrangement/output 200 30 2500
-```
-
-## For plotting flanks of selected kmer (visualising genome rearrangements that are captured by selected kmer)
- 
-```
-Rscript plot_flk_kmer_prop.R --kmer kmer93 --phen /home/ubuntu/Dorothy/genome_rearrangement/phenotypes.tsv \
---coor /home/ubuntu/Dorothy/genome_rearrangement/output/myflk_behave_pheno.txt \
---genome.size 4000 --outdir /home/ubuntu/Dorothy/genome_rearrangement/output --flk.dist 2500
+Rscript plot_flk_kmer_prop.R --kmer kmer93 --phen path/to/your/phenotypes.tsv \
+--coor path/to/your/myflk_behave_pheno.txt \
+--genome.size 4000 --outdir path/to/your/output --flk.dist 2500
 ```
  
 # Pre-requisite
 Before using this pipeline, the repetitive elements that are speculated to have mediated the rearrangement events must be replaced by a short placeholder sequence (e.g. Nx15) in the genome set. Then, a kmer-based GWAS is performed searching for kmers that are associated with the phenotype of interested. The phenotype-associated kmers that contain the short placeholder sequence are picked as one of the inputs of this pipeline for detecting potential genome rearrangement events that are associated with the phenotype of interest.
+ 
+ 
+# Tutorial using examples input files from /example
+ 
+This tutorial is based on a k-mer based GWAS using 111 American _Bordetella pertussis_ genomes as described in Weigand _et al_. 2019), with an aim of identifying genome rearrangement events that are associated with different year periods (between periods 2007-2010 and 2011-2013). 44 isolates are from year period 2007-2010 (phenotype 0) and 67 are from year period 2011-2013 (phenotype 1).
+
+First, the 111 genomes used in the GWAS will be placed within a directory, then genome rearrangement-mediated IS elements of interest in these genomes (i.e. IS481) will be replaced by shorter placeholder sequences N x 15 using the script replaceIS.py.
+
+ 
+Reference: Weigand, M.R., Williams, M.M., Peng, Y., Kania, D., Pawloski, L.C., Tondella, M.L. and CDC Pertussis Working Group, 2019. Genomic survey of Bordetella pertussis diversity, United States, 2000–2013. Emerging infectious diseases, 25(4), p.780.
+
+
+ 
 
 
 # Pipeline and output files description
