@@ -16,19 +16,19 @@ bash main.sh <kmers> <genomes> <phenotype> <output> <size of kmers> <flanking se
 
 Arguments:
 
-<kmers> : multifasta file of significant phenotype-associated kmers from the GWAS output (`$k_input`)
+kmers : multifasta file of significant phenotype-associated kmers from the GWAS output (`$k_input`)
 
-<genomes> : multifasta fie of genomes used in the GWAS (`$gen_input`)
+genomes : multifasta fie of genomes used in the GWAS 
 
-<phenotype> : phenotype file with path (file format: sample names in 1st column, binary phenotype in 2nd column; no header, tab-delimited) (`$pheno`)
+phenotype : phenotype file with path (file format: sample names in 1st column, binary phenotype in 2nd column; no header, tab-delimited) 
 
-<output> : directory being created where the output files are generated (`$outdir`)
+output : directory being created where the output files are generated 
 
-<size of kmers> : length (bp) of significant kmers (all kmers have to be the output of one GWAS hence are of the same size) (`$k_len`)
+size of kmers : length (bp) of significant kmers (all kmers have to be the output of one GWAS hence are of the same size) 
 
-<flanking seqeunces minimum length> :  Minimum length (bp) of flanking sequences (both side) for the kmer to be blasted with the genomes; default: 30bp (`$flnk_len`)
+flanking seqeunces minimum length :  Minimum length (bp) of flanking sequences (both side) for the kmer to be blasted with the genomes; default: 30bp 
 
-<size of IS elements> : size of the IS element that are replaced by shorter placeholder sequence (i.e. Maximum distance (bp) between the upstream and downstream flanks in the genome for a kmer to be defined as intact kmer)  (`$flkdist`)
+size of IS elements : size of the IS element that are replaced by shorter placeholder sequence (i.e. Maximum distance (bp) between the upstream and downstream flanks in the genome for a kmer to be defined as intact kmer)  
 
 ## For plotting flanks of selected kmer (visualising genome rearrangements that are captured by selected kmer)
 ```
@@ -38,17 +38,17 @@ Rscript plot_flk_kmer_prop.R --kmer <kmer ID> --phen <phenotype> --coor <myflk_b
 
 Arguments:
 
-<kmer ID> : ID of chosen kmer for plotting IS-flanking sequences
+kmer ID : ID of chosen kmer for plotting IS-flanking sequences
 
-<phenotype> : phenotype file with path (file format: sample names in 1st column, binary phenotype in 2nd column; no header, tab-delimited)
+phenotype : phenotype file with path (file format: sample names in 1st column, binary phenotype in 2nd column; no header, tab-delimited)
 
-<myflk_behave_pheno.txt> : myflk_behave_pheno.txt file from the output of main.sh
+myflk_behave_pheno.txt : myflk_behave_pheno.txt file from the output of main.sh
 
-<genome size> : size of the genome (in thousands)
+genome size : size of the genome (in thousands)
 
-<output directory> : directory path where the plot will be generated (need to be created from before)
+output directory : directory path where the plot will be generated (need to be created from before)
 
-<flanking seqeunces minimum length> : size of the IS element that are replaced by shorter placeholder sequence (i.e. Maximum distance (bp) between the upstream and downstream flanks in the genome for a kmer to be defined as intact kmer) (same as <size of IS elements> in main.sh)
+flanking seqeunces minimum length : size of the IS element that are replaced by shorter placeholder sequence (i.e. Maximum distance (bp) between the upstream and downstream flanks in the genome for a kmer to be defined as intact kmer) (same as <size of IS elements> in main.sh)
 
  
 # Pre-requisite
