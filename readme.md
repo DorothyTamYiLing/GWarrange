@@ -27,7 +27,7 @@ bash main.sh <kmers> <genomes> <phenotype> <output> <size of kmers> <flanking se
 <size of IS elements> : size of the IS element that are replaced by shorter placeholder sequence (i.e. Maximum distance (bp) between the upstream and downstream flanks in the genome for a kmer to be defined as intact kmer)  (`$flkdist`)
 
 ```
-## For plotting flanks of selected kmer (visualising genome rearrangements that are captured by kmers)
+## For plotting flanks of selected kmer (visualising genome rearrangements that are captured by selected kmer)
 ```
 Rscript plot_flk_kmer_prop.R --kmer <kmer ID> --phen <phenotype> --coor <myflk_behave_pheno.txt> --genome.size <genome size> --outdir <output directory> --flk.dist <flanking seqeunces minimum length>
 
