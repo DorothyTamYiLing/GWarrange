@@ -65,7 +65,25 @@ Rscript plot_flk_kmer_prop.R --kmer kmer93 --phen path/to/your/phenotypes.tsv \
 ```
  
 # Pre-requisite
-Before using this pipeline, the repetitive elements that are speculated to have mediated the rearrangement events must be replaced by a short placeholder sequence (e.g. Nx15) in the genome set. Then, a kmer-based GWAS is performed searching for kmers that are associated with the phenotype of interested. The phenotype-associated kmers that contain the short placeholder sequence are picked as one of the inputs of this pipeline for detecting potential genome rearrangement events that are associated with the phenotype of interest.
+Before using this pipeline, the repetitive elements that are speculated to have mediated the rearrangement events, such as IS element, must be replaced by a short placeholder sequence (e.g. Nx15) in the genome set. This can be done using the script "iSreplace_2col.py" provided in this repository.
+```
+python3 iSreplace_2col.py --input <genome fasta> --coor <coordinates of IS> --out <output genome fasta>
+```
+Arguments:
+
+**genome fasta** : fasta file of the genome for IS replacement
+
+**coordinates of IS** : genome coordinates of the IS element to be replaced (file format: start coordinate in 1st column, end coordinate in 2nd column; no header, tab-delimited)
+
+**output genome fasta** : name of the fasta file containing the IS replaced genome
+
+
+#Example
+```
+python3 iSreplace_2col.py --input path/to/your/J234_rename.fna.gz --coor path/to/your/J234_mergedIS.coor_2col.txt --out path/to/your/J234_ISreplaced.fasta
+```
+
+Then, a kmer-based GWAS is performed searching for kmers that are associated with the phenotype of interested. The phenotype-associated kmers that contain the short placeholder sequence are picked as one of the inputs of this pipeline for detecting potential genome rearrangement events that are associated with the phenotype of interest.
  
  
 # Tutorial using examples input files from /example
@@ -79,7 +97,6 @@ Reference: Weigand, M.R., Williams, M.M., Peng, Y., Kania, D., Pawloski, L.C., T
 
 
  
-
 
 # Pipeline and output files description
 
