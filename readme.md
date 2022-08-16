@@ -18,7 +18,7 @@ Arguments:
 
 **kmers** : multifasta file of significant phenotype-associated kmers from the GWAS output 
 
-**genomes** : multifasta fie of genomes used in the GWAS (without IS replacement)
+**genomes** : multifasta fie of genomes set (without IS replacement)
 
 **phenotype** : phenotype file with path (file format: sample names in 1st column, binary phenotype in 2nd column; no header, tab-delimited) 
 
