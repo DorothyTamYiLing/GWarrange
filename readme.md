@@ -10,7 +10,14 @@ git clone https://github.com/DorothyTamYiLing/genome_rearrangement.git
 
 ## For detecting genome rearrangement in genomes
 ```
-bash main.sh <kmers> <genomes> <phenotype> <output> <size of kmers> <flanking seqeunces minimum length> <size of IS elements>
+bash main.sh \
+<kmers> \
+<genomes> \
+<phenotype> \
+<output> \
+<size of kmers> \
+<flanking seqeunces minimum length> \
+<size of IS elements>
 
 ```
 
