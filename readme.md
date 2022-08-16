@@ -74,7 +74,7 @@ python3 iSreplace_2col.py --input <genome fasta> --coor <coordinates of IS> --ou
 ```
 Arguments:
 
-**genome fasta** : fasta file of the genome for IS replacement
+**genome fasta** : fasta file of the genome (single genome) for IS replacement
 
 **coordinates of IS** : genome coordinates of the IS element to be replaced (file format: start coordinate in 1st column, end coordinate in 2nd column; no header, tab-delimited)
 
