@@ -18,7 +18,7 @@ Arguments:
 
 **kmers** : multifasta file of significant phenotype-associated kmers from the GWAS output 
 
-**genomes** : multifasta fie of genomes used in the GWAS 
+**genomes** : multifasta fie of genomes used in the GWAS (without IS replacement)
 
 **phenotype** : phenotype file with path (file format: sample names in 1st column, binary phenotype in 2nd column; no header, tab-delimited) 
 
@@ -65,6 +65,9 @@ Rscript plot_flk_kmer_prop.R --kmer kmer93 --phen path/to/your/phenotypes.tsv \
 ```
  
 # Pre-requisite
+
+## Replacement of IS elements in genome set
+
 Before using this pipeline, the repetitive elements that are speculated to have mediated the rearrangement events, such as IS element, must be replaced by a short placeholder sequence (e.g. Nx15) in the genome set. This can be done using the script "iSreplace_2col.py" provided in this repository.
 ```
 python3 iSreplace_2col.py --input <genome fasta> --coor <coordinates of IS> --out <output genome fasta>
@@ -78,13 +81,16 @@ Arguments:
 **output genome fasta** : name of the fasta file containing the IS replaced genome
 
 
-#Example
+Example:
 ```
 python3 iSreplace_2col.py --input path/to/your/J234_rename.fna.gz --coor path/to/your/J234_mergedIS.coor_2col.txt --out path/to/your/J234_ISreplaced.fasta
 ```
+## Kmer-based GWAS
 
-Then, a kmer-based GWAS is performed searching for kmers that are associated with the phenotype of interested. The phenotype-associated kmers that contain the short placeholder sequence are picked as one of the inputs of this pipeline for detecting potential genome rearrangement events that are associated with the phenotype of interest.
- 
+Then, a kmer-based GWAS is performed on the IS-replaced genome set (created as described above) searching for kmers that are associated with the phenotype of interested. K-mer based GWAS can be performed using pyseer. See the tutorial section below for running pyseer using the input files in /example.
+
+From the output of pyseer, the kmers that are significantly associated with the phenotype and contain the short placeholder sequence are converted into a multi-fasta file, which is then used as one of the inputs of this pipeline (i.e. argument "kmers" of the main.sh script) for detecting potential genome rearrangement events that are associated with the phenotype of interest.
+
  
 # Tutorial using examples input files from /example
  
