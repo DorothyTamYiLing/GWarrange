@@ -127,7 +127,7 @@ pyseer --phenotypes /home/ubuntu/Dorothy/USAgenomes_GWAS/111_yearGWAS/phenotypes
 --output-patterns kmer_patterns.txt \
 --max-dimensions 8 --min-af 0.05 --max-af 0.95 > 111yearGWAS_ISrepl_fix
 
-#mash.tsv is the distance matrix generating using mash as described in pyseer tutorial (can be found in /)
+#mash.tsv is the distance matrix generating using mash as described in pyseer tutorial (for the purpose of this tutorial, the file is provided and can be found in /)
 ```
 
 #calculate the significance threshold 
