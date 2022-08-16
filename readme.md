@@ -70,37 +70,85 @@ Rscript plot_flk_kmer_prop.R --kmer kmer93 --phen path/to/your/phenotypes.tsv \
 
 Before using this pipeline, the repetitive elements that are speculated to have mediated the rearrangement events, such as IS element, must be replaced by a short placeholder sequence (e.g. Nx15) in the genome set. This can be done using the script "iSreplace_2col.py" provided in this repository.
 ```
-python3 iSreplace_2col.py --input <genome fasta> --coor <coordinates of IS> --out <output genome fasta>
+python3 iSreplace_2col.py --input <genome fasta> --coor <coordinates of IS> --out <path of output>
 ```
 Arguments:
 
-**genome fasta** : fasta file of the genome (single genome) for IS replacement
+**genome fasta** : fasta file of the genome (single genome) for IS replacement, gzipped
 
 **coordinates of IS** : genome coordinates of the IS element to be replaced (file format: start coordinate in 1st column, end coordinate in 2nd column; no header, tab-delimited)
 
-**output genome fasta** : name of the fasta file containing the IS replaced genome
+**path of output** : output directory of the IS replaced genome, not gzipped since fsm-lite does not accept gzipped fasta
 
 Example:
 ```
-python3 iSreplace_2col.py --input path/to/your/J234_rename.fna.gz --coor path/to/your/J234_mergedIS.coor_2col.txt --out path/to/your/J234_ISreplaced.fasta
+python3 iSreplace_2col.py --input path/to/your/J234_rename.fna.gz --coor path/to/your/J234_mergedIS.coor_2col.txt --out path/to/your/output/file
 ```
 
 ## Kmer-based GWAS
 
-Then, a kmer-based GWAS is performed on the IS-replaced genome set (created as described above) searching for kmers that are associated with the phenotype of interested. K-mer based GWAS can be performed using pyseer. 
+Then, a kmer-based GWAS is performed on the IS-replaced genome set (created as described above) searching for kmers that are associated with the phenotype of interested. K-mer based GWAS can be performed using pyseer. K-mers can be generated using fsm-lite. (See the tutorial section for detailed instructions)
 
-From the output of pyseer, the kmers that are significantly associated with the phenotype and contain the short placeholder sequence are converted into a multi-fasta file, which is then used as one of the inputs of this pipeline (i.e. argument "kmers" of the main.sh script) for detecting potential genome rearrangement events that are associated with the phenotype of interest.
-
-
-See the tutorial section below for instructions of running pyseer using the input files in /example, as well as for conversion of pyseer's significant kmers output into multifasta input file for main.sh.
+From the output of pyseer, the kmers that are significantly associated with the phenotype and contain the short placeholder sequence are converted into a multi-fasta file, which is then used as one of the inputs of this pipeline (i.e. argument "kmers" of the main.sh script) for detecting potential genome rearrangement events that are associated with the phenotype of interest. (See the tutorial section for detailed instructions)
  
 # Tutorial using examples input files from /example
  
 This tutorial is based on a k-mer based GWAS using 111 American _Bordetella pertussis_ genomes as described in Weigand _et al_. 2019), with an aim of identifying genome rearrangement events that are associated with different year periods (between periods 2007-2010 and 2011-2013). 44 isolates are from year period 2007-2010 (phenotype 0) and 67 are from year period 2011-2013 (phenotype 1).
 
-First, the 111 genomes used in the GWAS will be placed within a directory, then genome rearrangement-mediated IS elements of interest in these genomes (i.e. IS481) will be replaced by shorter placeholder sequences N x 15 using the script replaceIS.py.
+First, the gzipped multifasta file containing the 111 genomes being used in the GWAS (i.e. 111_yearGWAS_genlist.fasta.gz) is splitted into individual genome fasta.gz file, using the script "split_fastagz.py"
+```
+python3 split_fastagz.py -i 111_yearGWAS_genlist.fasta.gz
+```
 
+Then, the genome rearrangement-mediated IS elements of interest (i.e. IS481) in each of these genomes will be replaced by shorter placeholder sequences N x 15, using the script replaceIS.py. The script can be run for each genome using a loop.
+```
+for i in *.fasta.gz
+do
+myname=${i/.fasta.gz}
+python3 iSreplace_2col.py --input ${i} --coor ${myname}_mergedIS.coor_2col.txt --out <path of output>
+done
+```
  
+Generating kmers using fsm-lite
+```
+#generating input.list file
+for f in /home/ubuntu/Dorothy/B.pertussis_573genomes_NCBI/Weigand_USA_genome/*.fna; do id=$(basename "$f" .fna); echo $id $f; done > 129_chromstrucGWAS_norepl_input.list
+
+#running fsm-lite
+fsm-lite -l ${mypath}/111_yearGWAS_ISrepl_input.list -v -t tmp -s 6 -S 105 -m 200 -M 200 | gzip - > ${mypath}/k200_maf0.05_output.txt.gz 
+```
+
+#Running fixed model kmer-based GWAS in pyseer
+```
+pyseer --phenotypes /home/ubuntu/Dorothy/USAgenomes_GWAS/111_yearGWAS/phenotypes.tsv \
+--kmers /home/ubuntu/Dorothy/fsm-lite/USA_Weigand_170genomes/111_yearGWAS_ISrepl/k200_maf0.05_output.txt.gz \
+--distances /home/ubuntu/Dorothy/USAgenomes_GWAS/111_yearGWAS/mash.tsv \
+--print-samples \
+--output-patterns kmer_patterns.txt \
+--max-dimensions 8 --min-af 0.05 --max-af 0.95 > 111yearGWAS_ISrepl_fix
+
+#mash.tsv is the distance matrix generating using mash as described in pyseer tutorial (can be found in /)
+```
+
+#calculate the significance threshold 
+```
+/home/ubuntu/Dorothy/pyseer-master/scripts/count_patterns.py kmer_patterns.txt > count_pattern.txt
+```
+
+#Finding how many significant kmers based on the Bonferroni significance threshold
+```
+awk '{ if ($4 <= 3.11E-04) { print } }' chromstruc_clus1clus2_GWAS_nopopctrl > sig_k.txt
+```
+
+#removing the kmer with warning flags 
+```
+sed '/bad-chisq\|high-bse/d' sig_k.txt > sig_k_pass.txt
+```
+
+#converting the significant kmers from pyseer output into multifasta file
+
+
+
 Reference: Weigand, M.R., Williams, M.M., Peng, Y., Kania, D., Pawloski, L.C., Tondella, M.L. and CDC Pertussis Working Group, 2019. Genomic survey of Bordetella pertussis diversity, United States, 2000–2013. Emerging infectious diseases, 25(4), p.780.
 
 
