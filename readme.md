@@ -80,17 +80,19 @@ Arguments:
 
 **output genome fasta** : name of the fasta file containing the IS replaced genome
 
-
 Example:
 ```
 python3 iSreplace_2col.py --input path/to/your/J234_rename.fna.gz --coor path/to/your/J234_mergedIS.coor_2col.txt --out path/to/your/J234_ISreplaced.fasta
 ```
+
 ## Kmer-based GWAS
 
-Then, a kmer-based GWAS is performed on the IS-replaced genome set (created as described above) searching for kmers that are associated with the phenotype of interested. K-mer based GWAS can be performed using pyseer. See the tutorial section below for running pyseer using the input files in /example.
+Then, a kmer-based GWAS is performed on the IS-replaced genome set (created as described above) searching for kmers that are associated with the phenotype of interested. K-mer based GWAS can be performed using pyseer. 
 
 From the output of pyseer, the kmers that are significantly associated with the phenotype and contain the short placeholder sequence are converted into a multi-fasta file, which is then used as one of the inputs of this pipeline (i.e. argument "kmers" of the main.sh script) for detecting potential genome rearrangement events that are associated with the phenotype of interest.
 
+
+See the tutorial section below for instructions of running pyseer using the input files in /example, as well as for conversion of pyseer's significant kmers output into multifasta input file for main.sh.
  
 # Tutorial using examples input files from /example
  
