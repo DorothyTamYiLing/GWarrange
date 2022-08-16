@@ -54,7 +54,7 @@ Arguments:
 
 **output directory** : directory path where the plot will be generated (need to be created from before)
 
-**flanking seqeunces minimum length** : size of the IS element that are replaced by shorter placeholder sequence (i.e. Maximum distance (bp) between the upstream and downstream flanks in the genome for a kmer to be defined as intact kmer) (same as <size of IS elements> in main.sh)
+**flanking seqeunces minimum length** : size of the IS element that are replaced by shorter placeholder sequence (i.e. Maximum distance (bp) between the upstream and downstream flanks in the genome for a kmer to be defined as intact kmer) (same as "size of IS elements" in main.sh)
 
 Example:
 
