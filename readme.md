@@ -164,14 +164,26 @@ Then, remove *_ISreplaced.fasta files in ~/for_IS_replacement if necessary
 rm *_ISreplaced.fasta
 ```
 
-#converting the significant kmers from pyseer output into multifasta file
+Converting the significant kmers from pyseer output into multifasta file of significant kmer that contain N (output: allsig_kmer_withN.fasta)
+```
+bash mk_sigk_fasta.sh 111yearGWAS_ISrepl_fix
+```
 
+Detecting genome rearrangements in genomes
+```
+bash main.sh allsig_kmer_withN.fasta 111_yearGWAS_genlist.fasta.gz path/to/your/phenotypes.tsv path/to/your/output 200 30 2500
+```
+
+Plotting flanks of selected kmer (visualising genome rearrangements that are captured by selected kmer)
+```
+Rscript plot_flk_kmer_prop.R --kmer kmer93 --phen path/to/your/phenotypes.tsv \
+--coor path/to/your/myflk_behave_pheno.txt \
+--genome.size 4000 --outdir path/to/your/output --flk.dist 2500
+```
 
 
 Reference: Weigand, M.R., Williams, M.M., Peng, Y., Kania, D., Pawloski, L.C., Tondella, M.L. and CDC Pertussis Working Group, 2019. Genomic survey of Bordetella pertussis diversity, United States, 2000–2013. Emerging infectious diseases, 25(4), p.780.
 
-
- 
 
 # Pipeline and output files description
 
