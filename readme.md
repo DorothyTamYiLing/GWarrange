@@ -95,6 +95,8 @@ From the output of pyseer, the kmers that are significantly associated with the 
  
 This tutorial is based on a k-mer based GWAS using 111 American _Bordetella pertussis_ genomes as described in Weigand _et al_. 2019), with an aim of identifying genome rearrangement events that are associated with different year periods (between periods 2007-2010 and 2011-2013). 44 isolates are from year period 2007-2010 (phenotype 0) and 67 are from year period 2011-2013 (phenotype 1).
 
+1. IS replacement
+
 First, in /example_data, the gzipped multifasta file containing the 111 genomes being used in the GWAS (i.e. 111_yearGWAS_genlist.fasta.gz) is splitted into individual genome fasta.gz file, using the script "split_fastagz.py"
 ```
 #make a directory to put the released genomes
@@ -122,7 +124,10 @@ Then, remove *.fasta.gz files in ~/for_IS_replacement if necessary
 rm ~/for_IS_replacement/*.fasta.gz
 ```
 
-Generating kmers using fsm-lite
+2. Generating kmers 
+
+Kmers can be generated using fsm-lite
+
 ```
 #generating input.list file
 cd ~/example_data
@@ -132,7 +137,9 @@ for f in ~/for_IS_replacement/*ISreplaced.fasta; do id=$(basename "$f" _ISreplac
 fsm-lite -l 111_yearGWAS_ISrepl_input.list -v -t tmp -s 6 -S 105 -m 200 -M 200 | gzip - > k200_maf0.05_output.txt.gz 
 ```
 
-#Running fixed model kmer-based GWAS in pyseer
+3. Kmer-based GWAS
+
+Running fixed model kmer-based GWAS in pyseer
 ```
 pyseer --phenotypes phenotypes.tsv \
 --kmers k200_maf0.05_output.txt.gz \
@@ -140,21 +147,20 @@ pyseer --phenotypes phenotypes.tsv \
 --print-samples \
 --output-patterns kmer_patterns.txt \
 --max-dimensions 8 --min-af 0.05 --max-af 0.95 > 111yearGWAS_ISrepl_fix
-
-#mash.tsv is the distance matrix generating using mash as described in pyseer tutorial (for the purpose of this tutorial, the file is provided and can be found in ~/example_data/example_output)
 ```
+mash.tsv is the distance matrix generating using mash as described in pyseer tutorial (for the purpose of this tutorial, the file is provided and can be found in ~/example_data/example_output)
 
-#calculate the significance threshold 
+Calculate the significance threshold 
 ```
 pyseer_count_patterns.py kmer_patterns.txt > count_pattern.txt
 ```
 
-#Finding how many significant kmers based on the Bonferroni significance threshold
+Finding how many significant kmers based on the Bonferroni significance threshold
 ```
 awk '{ if ($4 <= 3.11E-04) { print } }' 111yearGWAS_ISrepl_fix > sig_k.txt
 ```
 
-#removing the kmer with warning flags 
+Removing the kmer with warning flags 
 ```
 sed '/bad-chisq\|high-bse/d' sig_k.txt > sig_k_pass.txt
 ```
@@ -164,12 +170,14 @@ Then, remove *_ISreplaced.fasta files in ~/for_IS_replacement if necessary
 rm *_ISreplaced.fasta
 ```
 
+4. Detecting genome rearrangements in genomes
+
 Converting the significant kmers from pyseer output into multifasta file of significant kmer that contain N (output: allsig_kmer_withN.fasta)
 ```
 bash mk_sigk_fasta.sh 111yearGWAS_ISrepl_fix
 ```
 
-Detecting genome rearrangements in genomes
+Detecting genome rearrangements
 ```
 bash main.sh allsig_kmer_withN.fasta 111_yearGWAS_genlist.fasta.gz path/to/your/phenotypes.tsv path/to/your/output 200 30 2500
 ```
