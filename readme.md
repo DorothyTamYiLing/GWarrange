@@ -169,7 +169,7 @@ rm *_ISreplaced.fasta
 
 Converting the significant kmers from pyseer output into multifasta file of significant kmer that contain N (output: allsig_kmer_withN.fasta)
 ```
-bash mk_sigk_fasta.sh 111_yearGWAS_k200_maf0.05_fix
+bash mk_sigk_fasta.sh sig_k_pass.txt
 ```
 
 Detecting genome rearrangements
