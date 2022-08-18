@@ -95,9 +95,21 @@ From the output of pyseer, the kmers that are significantly associated with the 
  
 This tutorial is based on a k-mer based GWAS using 111 American _Bordetella pertussis_ genomes as described in Weigand _et al_. 2019), with an aim of identifying genome rearrangement events that are associated with different year periods (between periods 2007-2010 and 2011-2013). 44 isolates are from year period 2007-2010 (phenotype 0) and 67 are from year period 2011-2013 (phenotype 1).
 
+1. Locating IS elements in genomes
+```
+gunzip 111_yearGWAS_genlist.fasta.gz
+blastn -query TOHAMA1_IS481_27283to28335.fasta -subject E541_E537_rename.fna  -outfmt "6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore" -out myblastout.txt
+gzip 111_yearGWAS_genlist.fasta
+```
+
 1. IS replacement
 
-First, in /example_data, the gzipped multifasta file containing the 111 genomes being used in the GWAS (i.e. 111_yearGWAS_genlist.fasta.gz) is splitted into individual genome fasta.gz file, using the script "split_fastagz.py"
+First, overlapping or consecutive IS elements are merged and they are replaced as one IS element (output: myblastout_mergedIS.txt)
+```
+Rscript merge_IS.R -i myblastout.txt
+```
+
+Then, in /example_data, the gzipped multifasta file containing the 111 genomes being used in the GWAS (i.e. 111_yearGWAS_genlist.fasta.gz) is splitted into individual genome fasta.gz file, using the script "split_fastagz.py"
 ```
 #make a directory to put the released genomes
 cd ~/example_data
