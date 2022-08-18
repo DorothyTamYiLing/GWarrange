@@ -71,6 +71,7 @@ Rscript plot_flk_kmer_prop.R --kmer kmer93 --phen path/to/your/phenotypes.tsv \
 Before using this pipeline, the repetitive elements that are speculated to have mediated the rearrangement events, such as IS element, must be replaced by a short placeholder sequence (e.g. Nx15) in the genome set. This can be done using the script "iSreplace_2col.py" provided in this repository.
 ```
 python3 iSreplace_2col.py --input <genome fasta> --coor <coordinates of IS> --out <path of output>
+
 ```
 Arguments:
 
@@ -98,7 +99,7 @@ This tutorial is based on a k-mer based GWAS using 111 American _Bordetella pert
 1. Locating IS elements in genomes
 ```
 gunzip 111_yearGWAS_genlist.fasta.gz
-blastn -query TOHAMA1_IS481_27283to28335.fasta -subject E541_E537_rename.fna  -outfmt "6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore" -out myblastout.txt
+blastn -query TOHAMA1_IS481_27283to28335.fasta -subject 111_yearGWAS_genlist.fasta  -outfmt "6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore" -out myblastout.txt
 gzip 111_yearGWAS_genlist.fasta
 ```
 
@@ -109,31 +110,13 @@ First, overlapping or consecutive IS elements are merged and they are replaced a
 Rscript merge_IS.R -i myblastout.txt
 ```
 
-Then, in /example_data, the gzipped multifasta file containing the 111 genomes being used in the GWAS (i.e. 111_yearGWAS_genlist.fasta.gz) is splitted into individual genome fasta.gz file, using the script "split_fastagz.py"
+Then, the genome rearrangement-mediated IS elements of interest (i.e. IS481) in each of these genomes will be replaced by shorter placeholder sequences N x 15, using the script iSreplace_2col.py. 
 ```
-#make a directory to put the released genomes
+#make a directory to put the IS replaced genomes
 cd ~/example_data
 mkdir for_IS_replacement
-cd for_IS_replacement
 
-python3 ../../split_fastagz.py -i ../111_yearGWAS_genlist.fasta.gz
-```
-
-Then, the genome rearrangement-mediated IS elements of interest (i.e. IS481) in each of these genomes will be replaced by shorter placeholder sequences N x 15, using the script iSreplace_2col.py. The script can be run for each genome using a loop.
-```
-cd for_IS_replacement
-for i in *.fasta.gz
-do
-sample=${i/.fasta.gz}
-python3 iSreplace_2col.py --input ${i} \
---coor ~/IS_coordinates/${sample}_mergedIS_coor_2col.txt \
---out ~/genome_rearrangement/example_data/for_IS_replacement
-done
-```
-
-Then, remove *.fasta.gz files in ~/for_IS_replacement if necessary
-```
-rm ~/for_IS_replacement/*.fasta.gz
+python3 ../iSreplace_2col.py --input 111_yearGWAS_genlist.fasta.gz  --coor myblastout_mergedIS.txt --out /home/ubuntu/Dorothy/genome_rearrangement/example_data/for_IS_replacement
 ```
 
 2. Generating kmers 
