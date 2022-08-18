@@ -141,7 +141,7 @@ pyseer --phenotypes phenotypes.tsv \
 --distances mash.tsv \
 --print-samples \
 --output-patterns kmer_patterns.txt \
---max-dimensions 8 --min-af 0.05 --max-af 0.95 > 111yearGWAS_ISrepl_fix
+--max-dimensions 8 --min-af 0.05 --max-af 0.95 > 111_yearGWAS_k200_maf0.05_fix
 ```
 mash.tsv is the distance matrix generating using mash as described in pyseer tutorial (for the purpose of this tutorial, the file is provided and can be found in ~/example_data/example_output)
 
@@ -152,7 +152,7 @@ pyseer_count_patterns.py kmer_patterns.txt > count_pattern.txt
 
 Finding how many significant kmers based on the Bonferroni significance threshold
 ```
-awk '{ if ($4 <= 3.11E-04) { print } }' 111yearGWAS_ISrepl_fix > sig_k.txt
+awk '{ if ($4 <= 3.11E-04) { print } }' 111_yearGWAS_k200_maf0.05_fix > sig_k.txt
 ```
 
 Removing the kmer with warning flags 
@@ -169,7 +169,7 @@ rm *_ISreplaced.fasta
 
 Converting the significant kmers from pyseer output into multifasta file of significant kmer that contain N (output: allsig_kmer_withN.fasta)
 ```
-bash mk_sigk_fasta.sh 111yearGWAS_ISrepl_fix
+bash mk_sigk_fasta.sh 111_yearGWAS_k200_maf0.05_fix
 ```
 
 Detecting genome rearrangements
