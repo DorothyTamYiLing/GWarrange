@@ -18,7 +18,7 @@ Arguments:
 
 **kmers** : multifasta file of significant phenotype-associated kmers from the GWAS output 
 
-**genomes** : multifasta fie of genomes set (without IS replacement)
+**genomes** : gzipped multifasta file of genomes set (without IS replacement)
 
 **phenotype** : phenotype file with path (file format: sample names in 1st column, binary phenotype in 2nd column; no header, tab-delimited) 
 
@@ -68,7 +68,7 @@ Rscript plot_flk_kmer_prop.R --kmer kmer93 --phen path/to/your/phenotypes.tsv \
 
 ## Replacement of IS elements in genome set
 
-Before using this pipeline, the repetitive elements that are speculated to have mediated the rearrangement events, such as IS element (Range of IS elements can be found in https://github.com/thanhleviet/ISfinder-sequences for multiple bacterial species), must be replaced by a short placeholder sequence (e.g. Nx15) in the genome set. This can be done using the script "iSreplace_2col.py" provided in this repository.
+Before using this pipeline, the repetitive elements that are speculated to have mediated rearrangement events, such as IS element (Range of IS elements can be found in https://github.com/thanhleviet/ISfinder-sequences for multiple bacterial species), must be replaced by a short placeholder sequence (e.g. Nx15) in the genome set. This can be done using the script "iSreplace_2col.py" provided in this repository.
 ```
 python3 iSreplace_2col.py --input <multifasta genome sequences> --coor <coordinates of IS> --out <path of output>
 
@@ -77,13 +77,13 @@ Arguments:
 
 **genome fasta** : multifasta file of the genomes for IS replacement, gzipped, headings should be the genome IDs
 
-**coordinates of IS** : genome coordinates of the IS element to be replaced (file format: sample name in 1st column (match with the genome ID in the multifasta file), start coordinate in 2nd column, end coordinate in 3rd column; headers={sseqid	mystart	myend}, tab-delimited)
+**coordinates of IS** : genome coordinates of the IS element to be replaced in each genome (file format: genome IDs in 1st column (match with the genome ID in the multifasta file), start coordinate in 2nd column, end coordinate in 3rd column; headers={sseqid	mystart	myend}, tab-delimited)
 
 **path of output** : output directory of the IS replaced genomes (one fasta per genome), not gzipped since fsm-lite does not accept gzipped fasta
 
 Example:
 ```
-python3 ../iSreplace_2col.py --input path/to/your/111_yearGWAS_genlist.fasta.gz  --coor path/to/your/myblastout_mergedIS.txt --out ~/example_data/example_output/IS_replaced_genomes
+python3 iSreplace_2col.py --input path/to/your/111_yearGWAS_genlist.fasta.gz  --coor path/to/your/myblastout_mergedIS.txt --out ~/example_data/example_output/IS_replaced_genomes
 ```
 
 ## Kmer-based GWAS
