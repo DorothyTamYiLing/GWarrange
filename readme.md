@@ -75,11 +75,11 @@ python3 iSreplace_2col.py --input <multifasta genome sequences> --coor <coordina
 ```
 Arguments:
 
-**genome fasta** : fasta file of the genome (single genome) for IS replacement, gzipped
+**genome fasta** : multifasta file of the genomes for IS replacement, gzipped, headings should be the genome IDs
 
-**coordinates of IS** : genome coordinates of the IS element to be replaced (file format: start coordinate in 1st column, end coordinate in 2nd column; no header, tab-delimited)
+**coordinates of IS** : genome coordinates of the IS element to be replaced (file format: sample name in 1st column (match with the genome ID in the multifasta file), start coordinate in 2nd column, end coordinate in 3rd column; headers={sseqid	mystart	myend}, tab-delimited)
 
-**path of output** : output directory of the IS replaced genome, not gzipped since fsm-lite does not accept gzipped fasta
+**path of output** : output directory of the IS replaced genomes (one fasta per genome), not gzipped since fsm-lite does not accept gzipped fasta
 
 Example:
 ```
@@ -92,47 +92,26 @@ Then, a kmer-based GWAS is performed on the IS-replaced genome set (created as d
 
 From the output of pyseer, the kmers that are significantly associated with the phenotype and contain the short placeholder sequence are converted into a multi-fasta file, which is then used as one of the inputs of this pipeline (i.e. argument "kmers" of the main.sh script) for detecting potential genome rearrangement events that are associated with the phenotype of interest. (See the tutorial section for detailed instructions)
  
-# Tutorial using examples input files from /example
+# Tutorial using examples input files from /example_data
  
 This tutorial is based on a k-mer based GWAS using 111 American _Bordetella pertussis_ genomes as described in Weigand _et al_. 2019), with an aim of identifying genome rearrangement events that are associated with different year periods (between periods 2007-2010 and 2011-2013). 44 isolates are from year period 2007-2010 (phenotype 0) and 67 are from year period 2011-2013 (phenotype 1).
 
-1. Locating IS elements in genomes
-```
-gunzip 111_yearGWAS_genlist.fasta.gz
-blastn -query TOHAMA1_IS481_27283to28335.fasta -subject 111_yearGWAS_genlist.fasta  -outfmt "6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore" -out myblastout.txt
-gzip 111_yearGWAS_genlist.fasta
-```
+For the purpose of this tutorial, the 111 genoems with IS element replaced are provided and can be found in ~/example_data/example_output/IS_replaced_genomes
 
-1. IS replacement
-
-First, overlapping or consecutive IS elements are merged and they are replaced as one IS element (output: myblastout_mergedIS.txt)
-```
-Rscript merge_IS.R -i myblastout.txt
-```
-
-Then, the genome rearrangement-mediated IS elements of interest (i.e. IS481) in each of these genomes will be replaced by shorter placeholder sequences N x 15, using the script iSreplace_2col.py. 
-```
-#make a directory to put the IS replaced genomes
-cd ~/example_data
-mkdir for_IS_replacement
-
-python3 ../iSreplace_2col.py --input 111_yearGWAS_genlist.fasta.gz  --coor myblastout_mergedIS.txt --out /home/ubuntu/Dorothy/genome_rearrangement/example_data/for_IS_replacement
-```
-
-2. Generating kmers 
+1. Generating kmers 
 
 Kmers can be generated using fsm-lite
 
 ```
 #generating input.list file
 cd ~/example_data
-for f in ~/for_IS_replacement/*ISreplaced.fasta; do id=$(basename "$f" _ISreplaced.fasta); echo $id $f; done > 111_yearGWAS_ISrpl_input.list
+for f in ~/IS_replaced_genomes/*ISreplaced.fasta; do id=$(basename "$f" _ISreplaced.fasta); echo $id $f; done > 111_yearGWAS_ISrpl_input.list
 
 #running fsm-lite, kmer length=200bp, minor allele frequency=0.05 
 fsm-lite -l 111_yearGWAS_ISrepl_input.list -v -t tmp -s 6 -S 105 -m 200 -M 200 | gzip - > k200_maf0.05_output.txt.gz 
 ```
 
-3. Kmer-based GWAS
+2. Kmer-based GWAS
 
 Running fixed model kmer-based GWAS in pyseer
 ```
@@ -165,7 +144,7 @@ Then, remove *_ISreplaced.fasta files in ~/for_IS_replacement if necessary
 rm *_ISreplaced.fasta
 ```
 
-4. Detecting genome rearrangements in genomes
+3. Detecting genome rearrangements in genomes
 
 Converting the significant kmers from pyseer output into multifasta file of significant kmer that contain N (output: allsig_kmer_withN.fasta)
 ```
