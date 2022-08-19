@@ -68,7 +68,7 @@ Rscript plot_flk_kmer_prop.R --kmer kmer93 --phen path/to/your/phenotypes.tsv \
 
 ## Replacement of IS elements in genome set
 
-Before using this pipeline, the repetitive elements that are speculated to have mediated rearrangement events, such as IS element (Range of IS elements can be found in https://github.com/thanhleviet/ISfinder-sequences for multiple bacterial species), must be replaced by a short placeholder sequence (e.g. Nx15) in the genome set. This can be done using the script "iSreplace_2col.py" provided in this repository.
+Before using this pipeline, the repetitive elements that are speculated to have mediated rearrangement events, such as IS element, must be replaced by a short placeholder sequence (e.g. Nx15) in the genome set. This can be done using the script "iSreplace_2col.py" provided in this repository.
 ```
 python3 iSreplace_2col.py --input <multifasta genome sequences> --coor <coordinates of IS> --out <path of output>
 
@@ -77,15 +77,17 @@ Arguments:
 
 **genome fasta** : multifasta file of the genomes for IS replacement, gzipped, headings should be the genome IDs
 
-**coordinates of IS** : genome coordinates of the IS element to be replaced in each genome (file format: genome IDs in 1st column (match with the genome ID in the multifasta file), start coordinate in 2nd column, end coordinate in 3rd column; headers={sseqid	mystart	myend}, tab-delimited; example can be found in ~/example_data/IS_coor_example.txt)
+**coordinates of IS** : genome coordinates of the IS element to be replaced in each genome (file format: one row per IS per genome; genome IDs in 1st column (match with the genome ID in the multifasta file), start coordinate in 2nd column, end coordinate in 3rd column; headers={sseqid	mystart	myend}, tab-delimited; example file can be found in ~/example_data/IS_coor_example.txt). Coordinates ranges of the ISs in the same gneome must not overlap.
 
-**path of output** : output directory for the IS replaced genomes (one fasta per genome)
+**path of output** : output directory for the IS replaced genomes (one fasta per genome, not gzipped)
 
 Example:
 ```
-python3 iSreplace_2col.py --input ISrpl_testgenomes.fasta.gz --coor IS_coor_example.txt  --out path/to/your/output
+python3 iSreplace_2col.py --input ~/example_data/ISrpl_testgenomes.fasta.gz --coor ~/example_data/IS_coor_example.txt  --out path/to/your/output
 ```
-The sequence of the IS element being replaced in this command is IS481 in _Bordetella pertussis_ genome TOHAMA1 (~/example_data/TOHAMA1_IS481_27283to28335.fasta). Its genome coordinates are stored in IS_coor_example.txt for replacement.
+The sequence of the IS element being replaced in this command is IS481 in _Bordetella pertussis_ genome TOHAMA1 (~/example_data/TOHAMA1_IS481_27283to28335.fasta). It is replaced in two genomes stored in ISrpl_testgenomes.fasta.gz according to the genome coordinates stored in IS_coor_example.txt.
+
+Range of IS elements can be found in https://github.com/thanhleviet/ISfinder-sequences for multiple bacterial species.
 
 ## Kmer-based GWAS
 
