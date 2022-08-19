@@ -70,7 +70,7 @@ Rscript plot_flk_kmer_prop.R --kmer kmer93 --phen path/to/your/phenotypes.tsv \
 
 Before using this pipeline, the repetitive elements that are speculated to have mediated the rearrangement events, such as IS element, must be replaced by a short placeholder sequence (e.g. Nx15) in the genome set. This can be done using the script "iSreplace_2col.py" provided in this repository.
 ```
-python3 iSreplace_2col.py --input <genome fasta> --coor <coordinates of IS> --out <path of output>
+python3 iSreplace_2col.py --input <multifasta genome sequences> --coor <coordinates of IS> --out <path of output>
 
 ```
 Arguments:
@@ -83,7 +83,7 @@ Arguments:
 
 Example:
 ```
-python3 iSreplace_2col.py --input path/to/your/J234_rename.fna.gz --coor path/to/your/J234_mergedIS.coor_2col.txt --out path/to/your/output/file
+python3 ../iSreplace_2col.py --input path/to/your/111_yearGWAS_genlist.fasta.gz  --coor path/to/your/myblastout_mergedIS.txt --out ~/example_data/example_output/IS_replaced_genomes
 ```
 
 ## Kmer-based GWAS
