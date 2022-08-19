@@ -175,7 +175,7 @@ Major output files (See Pipeline and output files description section for detail
 <sup> 1 </sup> files are not produced when there is no content
 
 
-Plotting flanks of selected kmer (visualising genome rearrangements that are captured by selected kmer)
+4. Plotting flanks of selected kmer (visualising genome rearrangements that are captured by selected kmer)
 ```
 Rscript plot_flk_kmer_prop.R --kmer kmer93 --phen path/to/your/phenotypes.tsv \
 --coor path/to/your/myflk_behave_pheno.txt \
