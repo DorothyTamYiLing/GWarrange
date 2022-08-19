@@ -71,6 +71,7 @@ Rscript plot_flk_kmer_prop.R --kmer kmer93 --phen path/to/your/phenotypes.tsv \
 Before using this pipeline, the repetitive elements that are speculated to have mediated the rearrangement events, such as IS element, must be replaced by a short placeholder sequence (e.g. Nx15) in the genome set. This can be done using the script "iSreplace_2col.py" provided in this repository.
 ```
 python3 iSreplace_2col.py --input <genome fasta> --coor <coordinates of IS> --out <path of output>
+
 ```
 Arguments:
 
@@ -95,64 +96,97 @@ From the output of pyseer, the kmers that are significantly associated with the 
  
 This tutorial is based on a k-mer based GWAS using 111 American _Bordetella pertussis_ genomes as described in Weigand _et al_. 2019), with an aim of identifying genome rearrangement events that are associated with different year periods (between periods 2007-2010 and 2011-2013). 44 isolates are from year period 2007-2010 (phenotype 0) and 67 are from year period 2011-2013 (phenotype 1).
 
-First, the gzipped multifasta file containing the 111 genomes being used in the GWAS (i.e. 111_yearGWAS_genlist.fasta.gz) is splitted into individual genome fasta.gz file, using the script "split_fastagz.py"
+1. Locating IS elements in genomes
 ```
-python3 split_fastagz.py -i 111_yearGWAS_genlist.fasta.gz
+gunzip 111_yearGWAS_genlist.fasta.gz
+blastn -query TOHAMA1_IS481_27283to28335.fasta -subject 111_yearGWAS_genlist.fasta  -outfmt "6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore" -out myblastout.txt
+gzip 111_yearGWAS_genlist.fasta
 ```
 
-Then, the genome rearrangement-mediated IS elements of interest (i.e. IS481) in each of these genomes will be replaced by shorter placeholder sequences N x 15, using the script replaceIS.py. The script can be run for each genome using a loop.
+1. IS replacement
+
+First, overlapping or consecutive IS elements are merged and they are replaced as one IS element (output: myblastout_mergedIS.txt)
 ```
-for i in *.fasta.gz
-do
-myname=${i/.fasta.gz}
-python3 iSreplace_2col.py --input ${i} --coor ${myname}_mergedIS.coor_2col.txt --out <path of output>
-done
+Rscript merge_IS.R -i myblastout.txt
 ```
- 
-Generating kmers using fsm-lite
+
+Then, the genome rearrangement-mediated IS elements of interest (i.e. IS481) in each of these genomes will be replaced by shorter placeholder sequences N x 15, using the script iSreplace_2col.py. 
+```
+#make a directory to put the IS replaced genomes
+cd ~/example_data
+mkdir for_IS_replacement
+
+python3 ../iSreplace_2col.py --input 111_yearGWAS_genlist.fasta.gz  --coor myblastout_mergedIS.txt --out /home/ubuntu/Dorothy/genome_rearrangement/example_data/for_IS_replacement
+```
+
+2. Generating kmers 
+
+Kmers can be generated using fsm-lite
+
 ```
 #generating input.list file
-for f in /home/ubuntu/Dorothy/B.pertussis_573genomes_NCBI/Weigand_USA_genome/*.fna; do id=$(basename "$f" .fna); echo $id $f; done > 129_chromstrucGWAS_norepl_input.list
+cd ~/example_data
+for f in ~/for_IS_replacement/*ISreplaced.fasta; do id=$(basename "$f" _ISreplaced.fasta); echo $id $f; done > 111_yearGWAS_ISrpl_input.list
 
-#running fsm-lite
-fsm-lite -l ${mypath}/111_yearGWAS_ISrepl_input.list -v -t tmp -s 6 -S 105 -m 200 -M 200 | gzip - > ${mypath}/k200_maf0.05_output.txt.gz 
+#running fsm-lite, kmer length=200bp, minor allele frequency=0.05 
+fsm-lite -l 111_yearGWAS_ISrepl_input.list -v -t tmp -s 6 -S 105 -m 200 -M 200 | gzip - > k200_maf0.05_output.txt.gz 
 ```
 
-#Running fixed model kmer-based GWAS in pyseer
+3. Kmer-based GWAS
+
+Running fixed model kmer-based GWAS in pyseer
 ```
-pyseer --phenotypes /home/ubuntu/Dorothy/USAgenomes_GWAS/111_yearGWAS/phenotypes.tsv \
---kmers /home/ubuntu/Dorothy/fsm-lite/USA_Weigand_170genomes/111_yearGWAS_ISrepl/k200_maf0.05_output.txt.gz \
---distances /home/ubuntu/Dorothy/USAgenomes_GWAS/111_yearGWAS/mash.tsv \
+pyseer --phenotypes phenotypes.tsv \
+--kmers k200_maf0.05_output.txt.gz \
+--distances mash.tsv \
 --print-samples \
 --output-patterns kmer_patterns.txt \
---max-dimensions 8 --min-af 0.05 --max-af 0.95 > 111yearGWAS_ISrepl_fix
+--max-dimensions 8 --min-af 0.05 --max-af 0.95 > 111_yearGWAS_k200_maf0.05_fix
+```
+mash.tsv is the distance matrix generating using mash as described in pyseer tutorial (for the purpose of this tutorial, the file is provided and can be found in ~/example_data/example_output)
 
-#mash.tsv is the distance matrix generating using mash as described in pyseer tutorial (for the purpose of this tutorial, the file is provided and can be found in /)
+Calculate the significance threshold 
 ```
-
-#calculate the significance threshold 
-```
-/home/ubuntu/Dorothy/pyseer-master/scripts/count_patterns.py kmer_patterns.txt > count_pattern.txt
-```
-
-#Finding how many significant kmers based on the Bonferroni significance threshold
-```
-awk '{ if ($4 <= 3.11E-04) { print } }' chromstruc_clus1clus2_GWAS_nopopctrl > sig_k.txt
+pyseer_count_patterns.py kmer_patterns.txt > count_pattern.txt
 ```
 
-#removing the kmer with warning flags 
+Finding how many significant kmers based on the Bonferroni significance threshold
+```
+awk '{ if ($4 <= 3.11E-04) { print } }' 111_yearGWAS_k200_maf0.05_fix > sig_k.txt
+```
+
+Removing the kmer with warning flags 
 ```
 sed '/bad-chisq\|high-bse/d' sig_k.txt > sig_k_pass.txt
 ```
 
-#converting the significant kmers from pyseer output into multifasta file
+Then, remove *_ISreplaced.fasta files in ~/for_IS_replacement if necessary
+```
+rm *_ISreplaced.fasta
+```
 
+4. Detecting genome rearrangements in genomes
+
+Converting the significant kmers from pyseer output into multifasta file of significant kmer that contain N (output: allsig_kmer_withN.fasta)
+```
+bash mk_sigk_fasta.sh sig_k_pass.txt
+```
+
+Detecting genome rearrangements
+```
+bash main.sh allsig_kmer_withN.fasta 111_yearGWAS_genlist.fasta.gz path/to/your/phenotypes.tsv path/to/your/output 200 30 2500
+```
+
+Plotting flanks of selected kmer (visualising genome rearrangements that are captured by selected kmer)
+```
+Rscript plot_flk_kmer_prop.R --kmer kmer93 --phen path/to/your/phenotypes.tsv \
+--coor path/to/your/myflk_behave_pheno.txt \
+--genome.size 4000 --outdir path/to/your/output --flk.dist 2500
+```
 
 
 Reference: Weigand, M.R., Williams, M.M., Peng, Y., Kania, D., Pawloski, L.C., Tondella, M.L. and CDC Pertussis Working Group, 2019. Genomic survey of Bordetella pertussis diversity, United States, 2000–2013. Emerging infectious diseases, 25(4), p.780.
 
-
- 
 
 # Pipeline and output files description
 
