@@ -94,7 +94,7 @@ From the output of pyseer, the kmers that are significantly associated with the 
  
 # Tutorial using examples input files from /example_data
  
-This tutorial is based on a k-mer based GWAS conducted with pyseer using 111 American _Bordetella pertussis_ genomes as described in Weigand _et al_. 2019), with an aim of identifying genome rearrangement events that are associated with different year periods (between periods 2007-2010 and 2011-2013). 44 isolates are from year period 2007-2010 (phenotype 0) and 67 are from year period 2011-2013 (phenotype 1). Significant kmers containing the IS-elements (replaced by N x 15)from pyseer output are placed in a multifasta file (example_data/allsig_kmer_withN.fasta).
+This tutorial is based on a k-mer based GWAS conducted with pyseer using 111 American _Bordetella pertussis_ genomes as described in Weigand _et al_. 2019), with an aim of identifying genome rearrangement events that are associated with different year periods (between periods 2007-2010 and 2011-2013). 44 isolates are from year period 2007-2010 (phenotype 0) and 67 are from year period 2011-2013 (phenotype 1). Significant kmers containing the IS-elements (replaced by N x 15) from pyseer output are extracted and placed in a multifasta file (example_data/allsig_kmer_withN.fasta).
 
 1. Detecting genome rearrangements
 
