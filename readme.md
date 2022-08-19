@@ -158,21 +158,22 @@ bash main.sh allsig_kmer_withN.fasta 111_yearGWAS_genlist.fasta.gz path/to/your/
 
 Major output files (See Pipeline and output files description section for detailed output files description):
 
-1. myall_out.txt (contains key information such as rearrangement event for each kmer, genomic location of the rearrangement event, proportion of case/control genomes showing the rearrengement etc.)
+- myall_out.txt (contains key information such as rearrangement event for each kmer, genomic location of the rearrangement event, proportion of case/control genomes showing the rearrengement etc.)
 
-2. myflk_behave_pheno.txt (contains kmers with `StartL`,`EndL`,`StartR`,`EndR` and flank behaviour in each genome defined, and merged with phenotype information)
+- myflk_behave_pheno.txt (contains kmers with `StartL`,`EndL`,`StartR`,`EndR` and flank behaviour in each genome defined, and merged with phenotype information)
 
-3. kmer_with_deletion.txt (contains blast hit of kmers that do not fulfill criteria 1) <sup> 1 </sup>
+- kmer_with_deletion.txt (contains blast hit of kmers that do not fulfill criteria 1) <sup> 1 </sup>
 
-4. kmer_with_alignlen_issue.txt (contains blast hit of kmers that do not fulfill criteria 2) <sup> 1 </sup>
+- kmer_with_alignlen_issue.txt (contains blast hit of kmers that do not fulfill criteria 2) <sup> 1 </sup>
 
-5. kmer_with_SNPgap.txt (contains blast hit of kmers that do not fulfill criteria 3) <sup> 1 </sup> 
+- kmer_with_SNPgap.txt (contains blast hit of kmers that do not fulfill criteria 3) <sup> 1 </sup> 
  
-6. kmer_with_multi_hits.txt (contains blast hit of kmers that do not fulfill criteria 4) <sup> 1 </sup>
+- kmer_with_multi_hits.txt (contains blast hit of kmers that do not fulfill criteria 4) <sup> 1 </sup>
 
-7. myundefine_k.txt (contains blast hit of kmers with undefined behaviour in at least one genome) <sup> 1 </sup>
+- myundefine_k.txt (contains blast hit of kmers with undefined behaviour in at least one genome) <sup> 1 </sup>
 
 <sup> 1 </sup> files are not produced when there is no content
+
 
 
 4. Plotting flanks of selected kmer (visualising genome rearrangements that are captured by selected kmer)
@@ -183,7 +184,8 @@ Rscript plot_flk_kmer_prop.R --kmer kmer93 --phen path/to/your/phenotypes.tsv \
 ```
 
 Major output files (See Pipeline and output files description section for detailed output files description):
-A pdf file contains visualisation of the rearrangement event.
+
+- A pdf file contains visualisation of the rearrangement event.
 
 
 Reference: Weigand, M.R., Williams, M.M., Peng, Y., Kania, D., Pawloski, L.C., Tondella, M.L. and CDC Pertussis Working Group, 2019. Genomic survey of Bordetella pertussis diversity, United States, 2000–2013. Emerging infectious diseases, 25(4), p.780.
