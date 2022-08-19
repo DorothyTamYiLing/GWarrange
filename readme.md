@@ -86,6 +86,8 @@ Example:
 python3 ../iSreplace_2col.py --input path/to/your/111_yearGWAS_genlist.fasta.gz  --coor path/to/your/myblastout_mergedIS.txt --out ~/example_data/example_output/IS_replaced_genomes
 ```
 
+Wider range of IS elements can be found [here] (https://github.com/thanhleviet/ISfinder-sequences) for multiple bacterial species.
+
 ## Kmer-based GWAS
 
 Then, a kmer-based GWAS is performed on the IS-replaced genome set (created as described above) searching for kmers that are associated with the phenotype of interested. K-mer based GWAS can be performed using pyseer. K-mers can be generated using fsm-lite. (See the tutorial section for detailed instructions)
