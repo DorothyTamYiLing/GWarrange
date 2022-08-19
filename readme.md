@@ -88,7 +88,7 @@ python3 iSreplace_2col.py --input path/to/your/111_yearGWAS_genlist.fasta.gz  --
 
 ## Kmer-based GWAS
 
-Then, a kmer-based GWAS is performed on the IS-replaced genome set (created as described above) searching for kmers that are associated with the phenotype of interested. K-mer based GWAS can be performed using pyseer. K-mers can be generated using fsm-lite. (See the tutorial section for detailed instructions)
+Then, a kmer-based GWAS is performed on the IS-replaced genome set (created as described above) searching for kmers that are associated with the phenotype of interested. K-mer based GWAS can be performed using pyseer (https://pyseer.readthedocs.io/en/master/index.html). K-mers can be generated using fsm-lite. (See the tutorial section for detailed instructions)
 
 From the output of pyseer, the kmers that are significantly associated with the phenotype and contain the short placeholder sequence are converted into a multi-fasta file, which is then used as one of the inputs of this pipeline (i.e. argument "kmers" of the main.sh script) for detecting potential genome rearrangement events that are associated with the phenotype of interest. (See the tutorial section for detailed instructions)
  
@@ -122,7 +122,7 @@ pyseer --phenotypes phenotypes.tsv \
 --output-patterns kmer_patterns.txt \
 --max-dimensions 8 --min-af 0.05 --max-af 0.95 > 111_yearGWAS_k200_maf0.05_fix
 ```
-mash.tsv is the distance matrix generating using mash as described in pyseer tutorial (for the purpose of this tutorial, the file is provided and can be found in ~/example_data/example_output)
+mash.tsv is the distance matrix generating using mash as described in pyseer tutorial (https://pyseer.readthedocs.io/en/master/usage.html#mash) (for the purpose of this tutorial, the file is provided and can be found in ~/example_data/example_output)
 
 Calculate the significance threshold 
 ```
