@@ -156,7 +156,7 @@ Detecting genome rearrangements
 bash main.sh allsig_kmer_withN.fasta 111_yearGWAS_genlist.fasta.gz path/to/your/phenotypes.tsv path/to/your/output 200 30 2500
 ```
 
-Major output files (See Pipeline and output files description section for detailed output files description):
+Major output files (See "Pipeline and output files description" section for detailed output files description):
 
 - myall_out.txt (contains key information such as rearrangement event for each kmer, genomic location of the rearrangement event, proportion of case/control genomes showing the rearrengement etc.)
 
@@ -183,7 +183,7 @@ Rscript plot_flk_kmer_prop.R --kmer kmer93 --phen path/to/your/phenotypes.tsv \
 --genome.size 4000 --outdir path/to/your/output --flk.dist 2500
 ```
 
-Major output files (See Pipeline and output files description section for detailed output files description):
+Major output files (See "Pipeline and output files description section" for detailed output files description):
 
 - A pdf file contains visualisation of the rearrangement event.
 
