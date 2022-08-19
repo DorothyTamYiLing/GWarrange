@@ -305,3 +305,18 @@ output file:
 7. ctrl_intactk.txt (information <sup> 3 </sup> for plotting control intactk arrows in plot)
 
 <sup> 3 </sup> information includes median start and end coordinates, count and proportion of genomes
+
+# Requirements:
+blastn: 2.6.0+
+R scripting front-end version 3.4.4 
+Python 3.9.12
+
+python modules:
+argparse
+SeqIO
+csv
+pandas
+gzip
+
+R modules:
+optparse
