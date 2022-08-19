@@ -68,7 +68,7 @@ Rscript plot_flk_kmer_prop.R --kmer kmer93 --phen path/to/your/phenotypes.tsv \
 
 ## Replacement of IS elements in genome set
 
-Before using this pipeline, the repetitive elements that are speculated to have mediated the rearrangement events, such as IS element, must be replaced by a short placeholder sequence (e.g. Nx15) in the genome set. This can be done using the script "iSreplace_2col.py" provided in this repository.
+Before using this pipeline, the repetitive elements that are speculated to have mediated the rearrangement events, such as IS element (Range of IS elements can be found in https://github.com/thanhleviet/ISfinder-sequences for multiple bacterial species), must be replaced by a short placeholder sequence (e.g. Nx15) in the genome set. This can be done using the script "iSreplace_2col.py" provided in this repository.
 ```
 python3 iSreplace_2col.py --input <multifasta genome sequences> --coor <coordinates of IS> --out <path of output>
 
@@ -85,8 +85,6 @@ Example:
 ```
 python3 ../iSreplace_2col.py --input path/to/your/111_yearGWAS_genlist.fasta.gz  --coor path/to/your/myblastout_mergedIS.txt --out ~/example_data/example_output/IS_replaced_genomes
 ```
-
-Wider range of IS elements can be found [here] (https://github.com/thanhleviet/ISfinder-sequences) for multiple bacterial species.
 
 ## Kmer-based GWAS
 
@@ -141,7 +139,7 @@ Removing the kmer with warning flags
 sed '/bad-chisq\|high-bse/d' sig_k.txt > sig_k_pass.txt
 ```
 
-Then, remove *_ISreplaced.fasta files in ~/for_IS_replacement if necessary
+Then, remove *_ISreplaced.fasta files in ~/IS_replaced_genomes if necessary
 ```
 rm *_ISreplaced.fasta
 ```
@@ -158,12 +156,34 @@ Detecting genome rearrangements
 bash main.sh allsig_kmer_withN.fasta 111_yearGWAS_genlist.fasta.gz path/to/your/phenotypes.tsv path/to/your/output 200 30 2500
 ```
 
+Major output files (See Pipeline and output files description section for detailed output files description):
+
+1. myall_out.txt (contains key information such as rearrangement event for each kmer, genomic location of the rearrangement event, proportion of case/control genomes showing the rearrengement etc.)
+
+2. myflk_behave_pheno.txt (contains kmers with `StartL`,`EndL`,`StartR`,`EndR` and flank behaviour in each genome defined, and merged with phenotype information)
+
+3. kmer_with_deletion.txt (contains blast hit of kmers that do not fulfill criteria 1) <sup> 1 </sup>
+
+4. kmer_with_alignlen_issue.txt (contains blast hit of kmers that do not fulfill criteria 2) <sup> 1 </sup>
+
+5. kmer_with_SNPgap.txt (contains blast hit of kmers that do not fulfill criteria 3) <sup> 1 </sup> 
+ 
+6. kmer_with_multi_hits.txt (contains blast hit of kmers that do not fulfill criteria 4) <sup> 1 </sup>
+
+7. myundefine_k.txt (contains blast hit of kmers with undefined behaviour in at least one genome) <sup> 1 </sup>
+
+<sup> 1 </sup> files are not produced when there is no content
+
+
 Plotting flanks of selected kmer (visualising genome rearrangements that are captured by selected kmer)
 ```
 Rscript plot_flk_kmer_prop.R --kmer kmer93 --phen path/to/your/phenotypes.tsv \
 --coor path/to/your/myflk_behave_pheno.txt \
 --genome.size 4000 --outdir path/to/your/output --flk.dist 2500
 ```
+
+Major output files (See Pipeline and output files description section for detailed output files description):
+A pdf file contains visualisation of the rearrangement event.
 
 
 Reference: Weigand, M.R., Williams, M.M., Peng, Y., Kania, D., Pawloski, L.C., Tondella, M.L. and CDC Pertussis Working Group, 2019. Genomic survey of Bordetella pertussis diversity, United States, 2000–2013. Emerging infectious diseases, 25(4), p.780.
