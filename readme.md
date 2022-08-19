@@ -20,7 +20,7 @@ Arguments:
 
 **genomes** : gzipped multifasta file of genomes set (without IS replacement)
 
-**phenotype** : phenotype file with path (file format: sample names in 1st column, binary phenotype in 2nd column; no header, tab-delimited) 
+**phenotype** : phenotype file with _full path_ (file format: sample names in 1st column, binary phenotype in 2nd column; no header, tab-delimited) 
 
 **output** : directory being created where the output files are generated 
 
@@ -33,7 +33,7 @@ Arguments:
 Example:
 
 ```
-bash main.sh allsig_kmer_withN.fasta 111_yearGWAS_genlist.fasta.gz  path/to/your/phenotypes.tsv path/to/your/output 200 30 2500
+bash main.sh allsig_kmer_withN.fasta 111_yearGWAS_genlist.fasta.gz  full/path/to/your/phenotypes.tsv path/to/your/output 200 30 2500
 ```
 
 ## For plotting flanks of selected kmer (visualising genome rearrangements that are captured by selected kmer)
@@ -46,7 +46,7 @@ Arguments:
 
 **kmer ID** : ID of chosen kmer for plotting IS-flanking sequences
 
-**phenotype** : phenotype file with path (file format: sample names in 1st column, binary phenotype in 2nd column; no header, tab-delimited)
+**phenotype** : phenotype file with _full path_ (file format: sample names in 1st column, binary phenotype in 2nd column; no header, tab-delimited)
 
 **myflk_behave_pheno.txt** : myflk_behave_pheno.txt file from the output of main.sh
 
@@ -94,66 +94,13 @@ From the output of pyseer, the kmers that are significantly associated with the 
  
 # Tutorial using examples input files from /example_data
  
-This tutorial is based on a k-mer based GWAS using 111 American _Bordetella pertussis_ genomes as described in Weigand _et al_. 2019), with an aim of identifying genome rearrangement events that are associated with different year periods (between periods 2007-2010 and 2011-2013). 44 isolates are from year period 2007-2010 (phenotype 0) and 67 are from year period 2011-2013 (phenotype 1).
+This tutorial is based on a k-mer based GWAS conducted with pyseer using 111 American _Bordetella pertussis_ genomes as described in Weigand _et al_. 2019), with an aim of identifying genome rearrangement events that are associated with different year periods (between periods 2007-2010 and 2011-2013). 44 isolates are from year period 2007-2010 (phenotype 0) and 67 are from year period 2011-2013 (phenotype 1). Significant kmers containing the IS-elements (replaced by N x 15)from pyseer output are placed in a multifasta file (example_data/allsig_kmer_withN.fasta).
 
-For the purpose of this tutorial, the 111 genoems with IS element replaced are provided and can be found in ~/example_data/example_output/IS_replaced_genomes
-
-1. Generating kmers 
-
-Kmers can be generated using fsm-lite
+1. Detecting genome rearrangements
 
 ```
-#generating input.list file
-cd ~/example_data
-for f in ~/IS_replaced_genomes/*ISreplaced.fasta; do id=$(basename "$f" _ISreplaced.fasta); echo $id $f; done > 111_yearGWAS_ISrpl_input.list
-
-#running fsm-lite, kmer length=200bp, minor allele frequency=0.05 
-fsm-lite -l 111_yearGWAS_ISrepl_input.list -v -t tmp -s 6 -S 105 -m 200 -M 200 | gzip - > k200_maf0.05_output.txt.gz 
-```
-
-2. Kmer-based GWAS
-
-Running fixed model kmer-based GWAS in pyseer
-```
-pyseer --phenotypes phenotypes.tsv \
---kmers k200_maf0.05_output.txt.gz \
---distances mash.tsv \
---print-samples \
---output-patterns kmer_patterns.txt \
---max-dimensions 8 --min-af 0.05 --max-af 0.95 > 111_yearGWAS_k200_maf0.05_fix
-```
-mash.tsv is the distance matrix generating using mash as described in pyseer tutorial (https://pyseer.readthedocs.io/en/master/usage.html#mash) (for the purpose of this tutorial, the file is provided and can be found in ~/example_data/example_output)
-
-Calculate the significance threshold 
-```
-pyseer_count_patterns.py kmer_patterns.txt > count_pattern.txt
-```
-
-Finding how many significant kmers based on the Bonferroni significance threshold
-```
-awk '{ if ($4 <= 3.11E-04) { print } }' 111_yearGWAS_k200_maf0.05_fix > sig_k.txt
-```
-
-Removing the kmer with warning flags 
-```
-sed '/bad-chisq\|high-bse/d' sig_k.txt > sig_k_pass.txt
-```
-
-Then, remove *_ISreplaced.fasta files in ~/IS_replaced_genomes if necessary
-```
-rm *_ISreplaced.fasta
-```
-
-3. Detecting genome rearrangements in genomes
-
-Converting the significant kmers from pyseer output into multifasta file of significant kmer that contain N (output: allsig_kmer_withN.fasta)
-```
-bash mk_sigk_fasta.sh sig_k_pass.txt
-```
-
-Detecting genome rearrangements
-```
-bash main.sh allsig_kmer_withN.fasta 111_yearGWAS_genlist.fasta.gz path/to/your/phenotypes.tsv path/to/your/output 200 30 2500
+bash main.sh ~/example_data/allsig_kmer_withN.fasta ~/example_data/111_yearGWAS_genlist.fasta.gz ~/example_data/phenotypes.tsv path/to/your/output 200 30 2500
+#note: full path must be provided for phenotypes.tsv file
 ```
 
 Major output files (See "Pipeline and output files description" section for detailed output files description):
@@ -178,7 +125,7 @@ Major output files (See "Pipeline and output files description" section for deta
 
 4. Plotting flanks of selected kmer (visualising genome rearrangements that are captured by selected kmer)
 ```
-Rscript plot_flk_kmer_prop.R --kmer kmer93 --phen path/to/your/phenotypes.tsv \
+Rscript plot_flk_kmer_prop.R --kmer kmer93 --phen ~/example_data/phenotypes.tsv \
 --coor path/to/your/myflk_behave_pheno.txt \
 --genome.size 4000 --outdir path/to/your/output --flk.dist 2500
 ```
