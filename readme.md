@@ -83,7 +83,7 @@ Arguments:
 
 Example:
 ```
-python3 iSreplace_2col.py --input path/to/your/111_yearGWAS_genlist.fasta.gz  --coor path/to/your/myblastout_mergedIS.txt --out ~/example_data/example_output/IS_replaced_genomes
+python3 iSreplace_2col.py --input ISrpl_testgenomes.fasta.gz --coor IS_coor_example.txt  --out path/to/your/output
 ```
 
 ## Kmer-based GWAS
