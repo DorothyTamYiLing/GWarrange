@@ -1,3 +1,5 @@
+#usage: python3 python_replace.py --start ${newstart} --end ${newend} --fasta ${fasta file to be replaced}  
+
 #python script replacing IS with start and end coordinates
 import argparse
 import os
