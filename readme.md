@@ -106,24 +106,9 @@ bash main.sh ~/example_data/allsig_kmer_withN.fasta ~/example_data/111_yearGWAS_
 #note: full path must be provided for phenotypes.tsv file
 ```
 
-Major output files (See "Pipeline and output files description" section for detailed output files description):
+Main output files (See "Pipeline and output files description" section for other outout files and more detailed description):
 
 - myall_out.txt (contains key information such as rearrangement event for each kmer, genomic location of the rearrangement event, proportion of case/control genomes showing the rearrengement etc.)
-
-- myflk_behave_pheno.txt (contains kmers with `StartL`,`EndL`,`StartR`,`EndR` and flank behaviour in each genome defined, and merged with phenotype information)
-
-- kmer_with_deletion.txt (contains blast hit of kmers that do not fulfill criteria 1) <sup> 1 </sup>
-
-- kmer_with_alignlen_issue.txt (contains blast hit of kmers that do not fulfill criteria 2) <sup> 1 </sup>
-
-- kmer_with_SNPgap.txt (contains blast hit of kmers that do not fulfill criteria 3) <sup> 1 </sup> 
- 
-- kmer_with_multi_hits.txt (contains blast hit of kmers that do not fulfill criteria 4) <sup> 1 </sup>
-
-- myundefine_k.txt (contains blast hit of kmers with undefined behaviour in at least one genome) <sup> 1 </sup>
-
-<sup> 1 </sup> files are not produced when there is no content
-
 
 
 4. Plotting flanks of selected kmer (visualising genome rearrangements that are captured by selected kmer)
@@ -133,7 +118,7 @@ Rscript plot_flk_kmer_prop.R --kmer kmer93 --phen ~/example_data/phenotypes.tsv 
 --genome.size 4000 --outdir path/to/your/output --flk.dist 2500
 ```
 
-Major output files (See "Pipeline and output files description section" for detailed output files description):
+Main output files (See "Pipeline and output files description" section for other outout files and more detailed description):
 
 - A pdf file contains visualisation of the rearrangement event.
 
