@@ -79,7 +79,7 @@ Arguments:
 
 **coordinates of IS** : genome coordinates of the IS element to be replaced in each genome (file format: genome IDs in 1st column (match with the genome ID in the multifasta file), start coordinate in 2nd column, end coordinate in 3rd column; headers={sseqid	mystart	myend}, tab-delimited; example can be found in ~/example_data/myblastout_mergedIS.txt)
 
-**path of output** : output directory of the IS replaced genomes (one fasta per genome), not gzipped since fsm-lite does not accept gzipped fasta
+**path of output** : output directory for the IS replaced genomes (one fasta per genome)
 
 Example:
 ```
