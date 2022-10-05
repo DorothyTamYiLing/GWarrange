@@ -111,7 +111,7 @@ Main output files (See "Pipeline and output files description" section for other
 - myall_out.txt (contains key information such as rearrangement event for each kmer, genomic location of the rearrangement event, proportion of case/control genomes showing the rearrengement etc.)
 
 
-4. Plotting flanks of selected kmer (visualising genome rearrangements that are captured by selected kmer)
+2. Plotting flanks of selected kmer (visualising genome rearrangements that are captured by selected kmer)
 ```
 Rscript plot_flk_kmer_prop.R --kmer kmer93 --phen ~/example_data/phenotypes.tsv \
 --coor path/to/your/myflk_behave_pheno.txt \
