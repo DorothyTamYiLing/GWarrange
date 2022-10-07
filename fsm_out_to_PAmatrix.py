@@ -1,3 +1,12 @@
+#Before using this script run this in terminal to create out_kabsence.txt.gz. This specify which kmer each sample is LACKING, i.e. kmers' absence information of 
+#while read line
+#do
+#echo $line
+#x=$(zgrep -n -v ${line} fsm_out_8.txt.gz | cut -d : -f 1 | tr '\n' ' ')  #this is the gzipped fsm-lite output
+#echo ${line} "," $x >> out_kabsence.txt
+#done<sample_list.txt. #list of samples
+#gzip out_kabsence.txt
+
 #usage:python3 fsm_out_to_PAmatrix.py --input out_kabsence.txt.gz --kmer_count 8
 
 import argparse
