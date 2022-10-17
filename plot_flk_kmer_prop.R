@@ -45,6 +45,9 @@ mymerge<-mytable[,c(1,3,4,5,6,7,2)]
 mykmer=opt$kmer
 mykmer_tab<-mymerge[which(mymerge$kmer==mykmer),]
 
+#specify the rows correspond to the behaviours to be plotted (optional)
+#mykmer_tab<-mykmer_tab[which(mykmer_tab$mybehave%in%c("mv&flp","intact_k")),]
+
 #making the background plot
 pdf(file = paste0(opt$outdir,"/",mykmer,"_plot.pdf"),   # The directory you want to save the file in
     width = 8, # The width of the plot in inches
