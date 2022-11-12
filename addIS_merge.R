@@ -1,5 +1,5 @@
-#Usage: Rscript addIS_merge.R --input /home/ubuntu/Dorothy/NCBI_USA_BP_genomes/ISreplacement/IS_replaced_649_genomes/667_IScoor_merge5_ext5.txt --freq 5000 --merge 3000 --gen.size /home/ubuntu/Dorothy/NCBI_USA_BP_genomes/original_USAgenomes/667_genomesize.txt
-
+#Usage: Rscript addIS_merge.R --input /home/ubuntu/Dorothy/NCBI_USA_BP_genomes/ISreplacement/IS_replaced_649_genomes/667_IScoor_merge5_ext5.txt --freq 2000 --merge 2000 --ISsize 1000 --gen.size /home/ubuntu/Dorothy/NCBI_USA_BP_genomes/original_USAgenomes/667_genomesize.txt
+#merge must be smaller than freq
 
 library("optparse")
 
@@ -10,6 +10,8 @@ option_list = list(
               help="creating artifical IS start-end coordinates (1000bp) every x bp along the genome", metavar="character"),
   make_option("--merge", type="character", default=NULL, 
               help="maximum number of bp between two adjacent IS for them to be merged into one, this number can be the length of kmer used in GWAS", metavar="character"),
+  make_option("--ISsize", type="character", default=NULL, 
+              help="size of replacement", metavar="character"),
   make_option("--gen.size", type="character", default=NULL, 
               help="size of genomes, file with no header", metavar="character")
 ) 
@@ -21,25 +23,27 @@ myfreq<-as.numeric(opt$freq)
 #myfreq=5000
 mymerge<-as.numeric(opt$merge)
 #mymerge<-3000
+myISsize<-as.numeric(opt$ISsize)
+#myISsize<-3000
 
-mysize<-read.table(opt$gen.size,header=F,sep="\t")
-#mysize<-read.table("/home/ubuntu/Dorothy/NCBI_USA_BP_genomes/original_USAgenomes/667_genomesize.txt",header=F,sep="\t")
+mygensize<-read.table(opt$gen.size,header=F,sep="\t")
+#mygensize<-read.table("/home/ubuntu/Dorothy/NCBI_USA_BP_genomes/original_USAgenomes/667_genomesize.txt",header=F,sep="\t")
 myinput<-read.delim(opt$input,header=T,sep="\t")
 #myinput<-read.delim("/home/ubuntu/Dorothy/NCBI_USA_BP_genomes/ISreplacement/IS_replaced_649_genomes/667_IScoor_merge5_ext5.txt",header=T,sep="\t")
 
-#creating artifical IS start-end coordinates (1000bp) every myfreq bp along the genome
-for(i in 1:nrow(mysize)){
-  mysample<-as.character(mysize[i,1])
+#creating artifical IS start-end coordinates every myfreq bp along the genome
+for(i in 1:nrow(mygensize)){
+  mysample<-as.character(mygensize[i,1])
   print(mysample)
-  mygenlen<-mysize[i,2]
+  mygenlen<-mygensize[i,2]
   #create the IS midpoint position
-  mymidpt<-seq(1000,mygenlen-1000,by=myfreq)
+  mymidpt<-seq(((myISsize/2)+1000),(mygenlen-(myISsize/2)-1000),by=myfreq)
   #create the start and end matrix for the sample
   mymakeIS<-matrix(0,length(mymidpt),3)
   colnames(mymakeIS)<-c("sseqid","mystart","myend")
   mymakeIS[,1]<-mysample
-  mymakeIS[,2]<-as.numeric(mymidpt-500)
-  mymakeIS[,3]<-as.numeric(mymidpt+500)
+  mymakeIS[,2]<-as.numeric(mymidpt-(myISsize/2))
+  mymakeIS[,3]<-as.numeric(mymidpt+(myISsize/2))
   myinput<-rbind(myinput,mymakeIS)  #add to the original IS coordinates
 }
 
@@ -112,4 +116,6 @@ for(k in 1:length(mylist)){
 
 mymerge_all<-mymerge_all[-1,]
 
-write.table(mymerge_all,file="all_addIS_merged.txt",quote=F,row.names = F,col.names = T,sep="\t")
+write.table(mymerge_all,file=paste("addIS_merged_size",myISsize,"_freq",myfreq,"_merge",mymerge,".txt",sep=""),quote=F,row.names = F,col.names = T,sep="\t")
+  
+  
