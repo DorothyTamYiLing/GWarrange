@@ -1,5 +1,6 @@
 #Usage: Rscript addIS_merge.R --input /home/ubuntu/Dorothy/NCBI_USA_BP_genomes/ISreplacement/IS_replaced_649_genomes/667_IScoor_merge5_ext5.txt --freq 2000 --merge 2000 --ISsize 1000 --gen.size /home/ubuntu/Dorothy/NCBI_USA_BP_genomes/original_USAgenomes/667_genomesize.txt
 #merge must be smaller than freq
+#size must be smaller than freq
 
 library("optparse")
 
