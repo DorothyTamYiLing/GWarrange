@@ -44,6 +44,6 @@ rm $3/header.txt
 
 ###blasting: querys are kmers in kmer_forblast.fasta; subjects are genomes in gen_input.fasta, 
 mygenome=$2
-#gunzip  $mygenome
+gunzip  $mygenome
 blastn -query $3/kmer_forblast.fasta -subject ${mygenome/.gz} -outfmt 6 -out $3/myout.txt
-#gzip  ${mygenome/.gz}
+gzip  ${mygenome/.gz}
