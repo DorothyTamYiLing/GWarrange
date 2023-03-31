@@ -1,5 +1,3 @@
-#usage: Rscript makeflank_summary.R --k.len 200 --pheno --outdir --flkdist
-
 library("optparse")
 
 option_list = list(
@@ -40,6 +38,9 @@ myphenofile<-read.table(opt$pheno,header=F)
 mykmer<-as.character(unique(mytable$query))  #get the list of kmers with blast output
 mygen<-as.character(unique(myphenofile$V1))  #get the list of the genomes from the pheno file
 
+#set the output for the rows of kmers with absence of >5% genomes
+abs_gen_k<-c()
+
 #set the output for the rows of kmers with deletions
 del_k<-c()
 
@@ -49,56 +50,44 @@ multi_hit_k<-c()
 #set the output for the rows with incomplete flank alignment
 alignlen_issue_k<-c()
 
-#set the output for the rows with SNPs and gaps, based on the blast output "mismatches" and "gap" columns 
-SNPgap_k<-c()
-
-#create matrix "myprocess" for storing kmers blast hits that are present in all genomes with both flanks; the flanks are also fully aligned with no SNPs nor gaps, and the flanks show unique blast hit in each genome
-myprocess<-matrix(0,0,ncol(mytable))
-colnames(myprocess)<-c("query","subject","identity","alig_len","mismatches","gap","qstart","qend","sStart","sEnd","evalue","bitscore")
-
-#looping through kmers and genomes
+#looping through kmers 
 for (i in 1:length(mykmer)){
 
-count=0
-myk_row<-mytable[which(mytable$query==mykmer[i]),] #rows referring to the kmer
+#print(mykmer[i])
 myflk_coor_k<-unlist(c(1,myflk_coor[which(as.character(myflk_coor$kmer)==as.character(mykmer[i])),2:4]))   #extract the flank start and end coordinate of the kmer from "myflk_coor" file
+mykrow<-mytable[which(mytable$query==as.character(mykmer[i])),]
+#mykrow<-mytable[which(mytable$query=="kmer51"),]
 
-for (j in 1:length(mygen)){
 
-mysub<-mytable[which(mytable$query==as.character(mykmer[i]) & mytable$subject==as.character(mygen[j])),]
-myk_blastcoor<-c(mysub$qstart,mysub$qend)  #extract the blast hit coordinates 
-mysnpgap<-c(mysub$mismatches,mysub$gap)
+#blast hit must contain >=95% of the genomes used
+if(length(unique(mykrow$subject))<(0.95*length(mygen))){
+abs_gen_k<-c(abs_gen_k,mykmer[i])
+}
 
-if (nrow(mysub)<=1 | length(unique(myk_blastcoor))<4){  #output the kmers with deleted flank
+#each genome must appear twice
+myfreqtable<-data.frame(table(mykrow$subject))
+if(any(myfreqtable$Freq<2)){
 del_k<-c(del_k,mykmer[i])
-count=count+1
 }
-if (nrow(mysub)>2 | (nrow(mysub)==2 & all(mysub[1,c("qstart","qend")]==mysub[2,c("qstart","qend")]))){   #output the kmers with multi-hit flank
+
+if(any(myfreqtable$Freq>2)){
 multi_hit_k<-c(multi_hit_k,mykmer[i])
-count=count+1
 }
-if (length(unique(myk_blastcoor))==4 & (any(is.element(myk_blastcoor,myflk_coor_k)!=T | any(is.element(myflk_coor_k,myk_blastcoor)!=T)))){  #output the kmers with incomplete flank blast match
- alignlen_issue_k<-c(alignlen_issue_k,mykmer[i])
- count=count+1
-} 
-if (any(mysnpgap!=0)) {  #output the kmers with SNP or gaps in flanks (with potential for user to pick the number of SNP and gaps allowed in a flank blast match)
- SNPgap_k<-c(SNPgap_k,mykmer[i])
- count=count+1
-} 
- 
- } #closing for loop for genomes
- 
- if (count==0){
- myprocess<-rbind(myprocess,myk_row)
- }
- 
- } #closing for loop for kmers
 
-#the myprocess table should refere to kmers that are present in all genomes with both flanks; the flanks are also fully aligned with no SNPs nor gaps, and the flanks show unique blast hit in each genome 
-write.table(myprocess,file="rows_for_process.txt",quote=F,row.names = F,col.names = T,sep="\t")
+#kmer blast match coordinates must match 
+mycoor<-unique(c(mykrow$qstart,mykrow$qend))
+if((any(mycoor%in%myflk_coor_k==F) | any(myflk_coor_k%in%mycoor==F))){
+alignlen_issue_k<-c(alignlen_issue_k,mykmer[i])
+}
 
+}#close the for loop
 
 #output the rows of kmers with quality issues
+
+if (length(unique(abs_gen_k))>0){
+my_abs_gen_k<-mytable[which(mytable$query%in%unique(abs_gen_k)),]
+write.table(my_abs_gen_k,file="kmer_with_missinggenomes.txt",quote=F,row.names = F,col.names = T,sep="\t")
+}
 
 if (length(unique(del_k))>0){
 my_del_k<-mytable[which(mytable$query%in%unique(del_k)),]
@@ -112,152 +101,177 @@ write.table(my_multi_hit_k,file="kmer_with_multi_hits.txt",quote=F,row.names = F
 
 if (length(unique(alignlen_issue_k))>0){
 my_alignlen_issue_k<-mytable[which(mytable$query%in%unique(alignlen_issue_k)),]
-write.table(my_alignlen_issue_k,file="kmer_with_alignlen_issue.txt",,quote=F,row.names = F,col.names = T,sep="\t")
+write.table(my_alignlen_issue_k,file="kmer_with_alignlen_issue.txt",quote=F,row.names = F,col.names = T,sep="\t")
 }
+ 
 
-if (length(unique(SNPgap_k))>0){
-my_SNPgap_k<-mytable[which(mytable$query%in%unique(SNPgap_k)),]
-write.table(my_SNPgap_k,file="kmer_with_SNPgap.txt",quote=F,row.names = F,col.names = T,sep="\t")
-}  
+#output the good kmers for further processing
+mybadk<-unique(c(abs_gen_k,del_k,multi_hit_k,alignlen_issue_k))
+#mybadk<-unique(c(del_k,multi_hit_k))
+mygoodk<-mykmer[which(!is.element(mykmer,mybadk))]
 
+myprocess<-mytable[which(mytable$query%in%mygoodk),]
 
-###R function determining the flank behaviour 
-
-define_flk_behave<-function(StartL,EndL,StartR,EndR,myflkdist){
-	StartL<-as.numeric(as.character(StartL))
-	EndL<-as.numeric(as.character(EndL))
-	StartR<-as.numeric(as.character(StartR))
-	EndR<-as.numeric(as.character(EndR))
-        myflkdist<-as.numeric(as.character(myflkdist))
-	
-	#test intact kmer, forward k
-     if ((StartL < EndL) & (EndL < StartR) & (StartR < EndR) & ((StartR-EndL) < myflkdist)){
-     mybehave<-"intact_k"
-     flk_dist<-(StartR-EndL)
-     } else if 
-     
-     #test intact kmer, reverse k
-     ((EndR < StartR) & (StartR < EndL) & (EndL < StartL) & ((EndL-StartR) < myflkdist)){
-     mybehave<-"intact_k"
-     flk_dist<-(EndL-StartR)
-     } else if
-     
-     #test flank sequence move away from each other, forward kmer
-     ((StartL < EndL) & (EndL < StartR) & (StartR < EndR) & ((StartR-EndL) > myflkdist)){
-     mybehave<-"mv_away"
-     flk_dist<-(StartR-EndL)
-     } else if
-     
-     #test flank sequence move away from each other, reverse kmer
-     ((StartL > EndL) & (EndL > StartR) & (StartR > EndR) & ((EndL-StartR) > myflkdist)){
-     mybehave<-"mv_away"
-     flk_dist<-(EndL-StartR)
-     } else if
-     
-     #test Left flank and right flank swap position, forward kmer
-     ((StartR < EndR) & (EndR < StartL) & (StartL < EndL)){
-     mybehave<-"swp_flk"
-     flk_dist<-(StartL-EndR)
-     } else if
-     
-     #test Left flank and right flank swap position, reverse kmer
-     ((EndL < StartL) & (StartL < EndR) & (EndR < StartR)){
-     mybehave<-"swp_flk"
-     flk_dist<-(EndR-StartL)
-     } else if
-     
-     #test for the presence of inversion
-     ((StartL < EndL) & (EndL < EndR) & (EndR < StartR)){
-     mybehave<-"mv&flp"
-     flk_dist<-(EndR-EndL)
-     } else if
-
-     ((EndL < StartL) & (StartL < StartR) & (StartR < EndR)){
-     mybehave<-"mv&flp"
-     flk_dist<-(StartR-StartL)
-     } else if
-     
-     ((StartR < EndR) & (EndR < EndL) & (EndL < StartL)){
-     mybehave<-"mv&flp"
-     flk_dist<-(EndL-EndR)
-     } else if
-     
-     ((EndR < StartR) & (StartR < StartL) & (StartL < EndL)){
-     mybehave<-"mv&flp"
-     flk_dist<-(StartL-StartR)
-     } else {
-
-     #output undefined behaviour of the flanking sequences
-     mybehave<-"undefined_behave"
-     flk_dist<-"NA"
-     }
-     
-     return(c(mybehave,flk_dist))     
-}
+#the myprocess table should refere to kmers that are present in all genomes with both flanks; the flanks are also fully aligned with no SNPs nor gaps, and the flanks show unique blast hit in each genome 
+write.table(myprocess,file="rows_for_process.txt",quote=F,row.names = F,col.names = T,sep="\t")
 
 
-###determining StartL, EndL, StartR, EndR and flank behaviour for each kmer and genome combination
+#read in myprocess table
+myprocess<-read.table("rows_for_process.txt",sep="\t",header=T)
 
-#need to define k_len as argument
-#k_len=200
+#make a label for kmer:gen combination
+myprocess$label<-paste(myprocess$query,myprocess$subject,sep="_")
 
-#creating a new table storing the StartL, EndL, StartR, EndR for each kmer and genome combination blast result
-mystartendLR<-matrix(0,0,8)
-colnames(mystartendLR)<-c("kmer","genome","StartL","EndL","StartR","EndR","mybehave","flk_dist")
+#extract odd rows
+#create a dummy indicator that shows whether a row is even or odd.
+row_odd <- seq_len(nrow(myprocess)) %% 2
 
-#get the list of kmers with both flanks present
-mykmer<-unique(myprocess$query) 
+#then use our dummy to drop all even rows from our data frame
+data_row_odd <- myprocess[row_odd == 1, ]   
+colnames(data_row_odd)<-c("query_o","subject_o","identity_o","alig_len_o","mismatches_o","gap_o","qstart_o","qend_o","sStart_o","sEnd_o","evalue_o","bitscore_o","label_o")
 
-#get the list of genomes in myprocess table
-mygen<-unique(myprocess$subject) 
+#create even rows
+data_row_even <- myprocess[row_odd == 0, ]   
+colnames(data_row_even)<-c("query_e","subject_e","identity_e","alig_len_e","mismatches_e","gap_e","qstart_e","qend_e","sStart_e","sEnd_e","evalue_e","bitscore_e","label_e")
 
-#loop through each kmer
-for (i in 1:length(mykmer)){
+#paste the odd and even rows side by side
+mymerge<-merge(data_row_odd,data_row_even,by.x="label_o",by.y="label_e")
 
-#loop through each genome, and 
-for (j in 1:length(mygen)){
+#checking rows referring to the same genomes and the same kmer, for myself only
+all(mymerge$query_o==mymerge$query_e)
+all(mymerge$subject_o==mymerge$subject_e)
 
-#extract the rows referring to the kmer and genome combination
-mysub<-myprocess[which(myprocess$query==as.character(mykmer[i]) & myprocess$subject==as.character(mygen[j])),]
+#determining StartL, EndL, StartR, EndR for each kmer and genome combination blast result
 
-#determining left flank, hence StartL and EndL
-myleftflank<-mysub[which(mysub$qstart==1 | mysub$qend==1),]  
-if(myleftflank$qstart==1){ 
-StartL<-myleftflank$sStart
-EndL<-myleftflank$sEnd
-} 
-if(myleftflank$qend==1){
-StartL<-myleftflank$sEnd
-EndL<-myleftflank$sStart
-}
 
-#determining right flank, hence StartR and EndR
-myrightflank<-mysub[which(mysub$qstart==opt$k.len | mysub$qend==opt$k.len),]   
-if(myrightflank$qstart==opt$k.len){ 
-StartR<-myrightflank$sEnd
-EndR<-myrightflank$sStart
-} 
-if(myrightflank$qend==opt$k.len){
-StartR<-myrightflank$sStart
-EndR<-myrightflank$sEnd
-}
+mymerge$StartL<-0
+mymerge$EndL<-0
+mymerge$StartR<-0
+mymerge$EndR<-0
 
-#call the function for define flank behaviour, output are mybehave and flk_dist
-mybehave=flk_dist=NA #clear the variable
-myreturn<-define_flk_behave(StartL,EndL,StartR,EndR,opt$flkdist) 
-mybehave<-myreturn[1]
-flk_dist<-myreturn[2]
+k.len=opt$k.len
+#k.len=200
 
-myoutrow<-as.matrix(c(as.character(mykmer[i]),as.character(mygen[j]),StartL,EndL,StartR,EndR,mybehave,flk_dist),1,8)
-myoutrow<-t(myoutrow)
-mystartendLR<-rbind(mystartendLR,myoutrow)
+#defining StartL and EndL
 
-} #closing loop through each genome
 
-} #closing loop through each kmer
+#for rows where qstart_o==1
+myqstart_o_1<-which(mymerge$qstart_o==1)
+mymerge[myqstart_o_1,"StartL"]<-mymerge[myqstart_o_1,"sStart_o"] 
+mymerge[myqstart_o_1,"EndL"]<-mymerge[myqstart_o_1,"sEnd_o"] 
 
-mystartendLR<-as.data.frame(mystartendLR)
+#for rows where qend_o==1
+myqend_o_1<-which(mymerge$qend_o==1)
+mymerge[myqend_o_1,"StartL"]<-mymerge[myqend_o_1,"sEnd_o"] 
+mymerge[myqend_o_1,"EndL"]<-mymerge[myqend_o_1,"sStart_o"] 
 
+#for rows where qstart_e==1
+myqstart_e_1<-which(mymerge$qstart_e==1)
+mymerge[myqstart_e_1,"StartL"]<-mymerge[myqstart_e_1,"sStart_e"] 
+mymerge[myqstart_e_1,"EndL"]<-mymerge[myqstart_e_1,"sEnd_e"] 
+
+#for rows where qend_e==1
+myqend_e_1<-which(mymerge$qend_e==1)
+mymerge[myqend_e_1,"StartL"]<-mymerge[myqend_e_1,"sEnd_e"] 
+mymerge[myqend_e_1,"EndL"]<-mymerge[myqend_e_1,"sStart_e"] 
+
+
+#defining StartR and EndR
+#for rows where qstart_o==k.len
+myqstart_o_klen<-which(mymerge$qstart_o==k.len)
+mymerge[myqstart_o_klen,"EndR"]<-mymerge[myqstart_o_klen,"sStart_o"] 
+mymerge[myqstart_o_klen,"StartR"]<-mymerge[myqstart_o_klen,"sEnd_o"] 
+
+#for rows where qend_o==k.len
+myqend_o_klen<-which(mymerge$qend_o==k.len)
+mymerge[myqend_o_klen,"EndR"]<-mymerge[myqend_o_klen,"sEnd_o"] 
+mymerge[myqend_o_klen,"StartR"]<-mymerge[myqend_o_klen,"sStart_o"] 
+
+#for rows where qstart_e==k.len
+myqstart_e_klen<-which(mymerge$qstart_e==k.len)
+mymerge[myqstart_e_klen,"EndR"]<-mymerge[myqstart_e_klen,"sStart_e"] 
+mymerge[myqstart_e_klen,"StartR"]<-mymerge[myqstart_e_klen,"sEnd_e"] 
+
+#for rows where qend_e==k.len
+myqend_e_klen<-which(mymerge$qend_e==k.len)
+mymerge[myqend_e_klen,"StartR"]<-mymerge[myqend_e_klen,"sStart_e"] 
+mymerge[myqend_e_klen,"EndR"]<-mymerge[myqend_e_klen,"sEnd_e"] 
+
+#defining the dist to define split flank, find out the maximum IS replacement block size, then add few thousands bp
+#myflkdist=70000 # merge7000_ext500, max IS replacment block size 45118bp
+#myflkdist=200000 # merge15000_ext500, max IS replacement block size 159836bp
+
+myflkdist=opt$flkdist
+
+mymerge$mybehave<-0 #creating new columns
+mymerge$flk_dist<-0 #creating new columns
+
+mymerge$StartL<-as.numeric(as.character(mymerge$StartL))
+mymerge$EndL<-as.numeric(as.character(mymerge$EndL))
+mymerge$StartR<-as.numeric(as.character(mymerge$StartR))
+mymerge$EndR<-as.numeric(as.character(mymerge$EndR))
+
+#First, set all rows as "undefined behaviour" and replacing by different condition
+mymerge$mybehave<-"undefined_behave"
+mymerge$intactk_orien<-"NA"
+mymerge$flk_dist<-"NA"
+
+#test intact kmer, forward k
+myintactk_fwd_row<-which((mymerge$StartL < mymerge$EndL) & (mymerge$EndL < mymerge$StartR) & (mymerge$StartR < mymerge$EndR) & ((mymerge$StartR-mymerge$EndL) < myflkdist))
+mymerge[myintactk_fwd_row,"mybehave"]<-"intact_k"
+mymerge[myintactk_fwd_row,"intactk_orien"]<-"intactk_fwd"
+mymerge[myintactk_fwd_row,"flk_dist"]<-mymerge[myintactk_fwd_row,"StartR"]-mymerge[myintactk_fwd_row,"EndL"]
+
+#test intact kmer, reverse k
+myintactk_rev_row<-which((mymerge$EndR < mymerge$StartR) & (mymerge$StartR < mymerge$EndL) & (mymerge$EndL < mymerge$StartL) & ((mymerge$EndL-mymerge$StartR) < myflkdist))
+mymerge[myintactk_rev_row,"mybehave"]<-"intact_k"
+mymerge[myintactk_rev_row,"intactk_orien"]<-"intactk_rev"
+mymerge[myintactk_rev_row,"flk_dist"]<-mymerge[myintactk_rev_row,"EndL"]-mymerge[myintactk_rev_row,"StartR"]
+
+#test flank sequence move away from each other, forward kmer
+mymv_away_fwd_row<-which((mymerge$StartL < mymerge$EndL) & (mymerge$EndL < mymerge$StartR) & (mymerge$StartR < mymerge$EndR) & ((mymerge$StartR-mymerge$EndL) > myflkdist))
+mymerge[mymv_away_fwd_row,"mybehave"]<-"mv_away"
+mymerge[mymv_away_fwd_row,"flk_dist"]<-mymerge[mymv_away_fwd_row,"StartR"]-mymerge[mymv_away_fwd_row,"EndL"]
+
+#test flank sequence move away from each other, reverse kmer
+mymv_away_rev_row<-which((mymerge$StartL > mymerge$EndL) & (mymerge$EndL > mymerge$StartR) & (mymerge$StartR > mymerge$EndR) & ((mymerge$EndL-mymerge$StartR) > myflkdist))
+mymerge[mymv_away_rev_row,"mybehave"]<-"mv_away"
+mymerge[mymv_away_rev_row,"flk_dist"]<-mymerge[mymv_away_rev_row,"EndL"]-mymerge[mymv_away_rev_row,"StartR"]
+
+#test Left flank and right flank swap position, forward kmer
+myswp_flk_fwd_row<-which((mymerge$StartR < mymerge$EndR) & (mymerge$EndR < mymerge$StartL) & (mymerge$StartL < mymerge$EndL))
+mymerge[myswp_flk_fwd_row,"mybehave"]<-"swp_flk"
+mymerge[myswp_flk_fwd_row,"flk_dist"]<-mymerge[myswp_flk_fwd_row,"StartL"]-mymerge[myswp_flk_fwd_row,"EndR"]
+
+#test Left flank and right flank swap position, reverse kmer
+myswp_flk_rev_row<-which((mymerge$EndL < mymerge$StartL) & (mymerge$StartL < mymerge$EndR) & (mymerge$EndR < mymerge$StartR))
+mymerge[myswp_flk_rev_row,"mybehave"]<-"swp_flk"
+mymerge[myswp_flk_rev_row,"flk_dist"]<-mymerge[myswp_flk_rev_row,"EndR"]-mymerge[myswp_flk_rev_row,"StartL"]
+
+#test for the presence of inversion
+my_mvandflp_1_row<-which((mymerge$StartL < mymerge$EndL) & (mymerge$EndL < mymerge$EndR) & (mymerge$EndR < mymerge$StartR))
+mymerge[my_mvandflp_1_row,"mybehave"]<-"mv&flp"
+mymerge[my_mvandflp_1_row,"flk_dist"]<-mymerge[my_mvandflp_1_row,"EndR"]-mymerge[my_mvandflp_1_row,"EndL"]
+    
+my_mvandflp_2_row<-which((mymerge$EndL < mymerge$StartL) & (mymerge$StartL < mymerge$StartR) & (mymerge$StartR < mymerge$EndR))
+mymerge[my_mvandflp_2_row,"mybehave"]<-"mv&flp"
+mymerge[my_mvandflp_2_row,"flk_dist"]<-mymerge[my_mvandflp_2_row,"StartR"]-mymerge[my_mvandflp_2_row,"StartL"]
+ 
+my_mvandflp_3_row<-which((mymerge$StartR < mymerge$EndR) & (mymerge$EndR < mymerge$EndL) & (mymerge$EndL < mymerge$StartL))
+mymerge[my_mvandflp_3_row,"mybehave"]<-"mv&flp"    
+mymerge[my_mvandflp_3_row,"flk_dist"]<-mymerge[my_mvandflp_3_row,"EndL"]-mymerge[my_mvandflp_3_row,"EndR"]
+
+my_mvandflp_4_row<-which((mymerge$EndR < mymerge$StartR) & (mymerge$StartR < mymerge$StartL) & (mymerge$StartL < mymerge$EndL))
+mymerge[my_mvandflp_4_row,"mybehave"]<-"mv&flp"    
+mymerge[my_mvandflp_4_row,"flk_dist"]<-mymerge[my_mvandflp_4_row,"StartL"]-mymerge[my_mvandflp_4_row,"StartR"]
+
+#selecting columns StartL, EndL, StartR, EndR for each kmer and genome combination blast result
+mymerge<-mymerge[,c("query_o","subject_o","StartL","EndL","StartR","EndR","mybehave","intactk_orien","flk_dist")]
+colnames(mymerge)<-c("kmer","genome","StartL","EndL","StartR","EndR","mybehave","intactk_orien","flk_dist")
+
+mystartendLR<-as.data.frame((mymerge))
+
+#myphenofile<-read.table(myphenofile,header=F)
 
 #put all the rows of kmers with at least one undefined behaviour into a table for output
 myk_undefine<-mystartendLR[which(mystartendLR$mybehave=="undefined_behave"),"kmer"]
@@ -281,9 +295,23 @@ colnames(myflk_behave_pheno)[2]<-"case_control"
 
 write.table(myflk_behave_pheno,file="myflk_behave_pheno.txt",quote=F,row.names = F,col.names = T,sep="\t")
 
-
 ###making flank behaviour summary table for each kmer across all genomes
+#First, make the summary only for kmers with flank behaviour other than "intact_k"
 
+#read in myflk_behave_pheno.txt
+myall_behave<-read.table("myflk_behave_pheno.txt",sep="\t",header=T)
+
+'%!in%' <- function(x,y)!('%in%'(x,y)) #creating the function
+
+#list of kmers with flank behaviour other than "intact_k"
+myk_otherbebave<-unique(myall_behave[which(myall_behave$mybehave!="intact_k"),"kmer"])
+
+if(length(myk_otherbebave)>0){
+
+#rows of kmers with flank behaviour other than "intact_k"
+myflk_behave_pheno<-myall_behave[which(myall_behave$kmer%in%myk_otherbebave),]
+
+#then run the lines for making summary for kmers with flank behaviour other than "intact_k"
 myflk_behave_pheno$StartL<-as.numeric(as.character(myflk_behave_pheno$StartL))
 myflk_behave_pheno$EndL<-as.numeric(as.character(myflk_behave_pheno$EndL))
 myflk_behave_pheno$StartR<-as.numeric(as.character(myflk_behave_pheno$StartR))
@@ -292,8 +320,8 @@ myflk_behave_pheno$flk_dist<-as.numeric(as.character(myflk_behave_pheno$flk_dist
 
 
 #make the final output
-myall_out<-matrix(0,1,14)
-colnames(myall_out)<-c("kmer","event_sum","flk_behaviour","case_assos","case_assos_prop","ctrl_assos","ctrl_assos_prop","case_assos_gp_Lflk_sumstat","case_assos_gp_Rflk_sumstat","ctrl_assos_gp_Lflk_sumstat","ctrl_assos_gp_Rflk_sumstat","case_assos_gp_flkdis_sumstat","ctrl_assos_gp_flkdis_sumstat","event")
+myall_out<-matrix(0,1,9)
+colnames(myall_out)<-c("kmer","event_sum","flk_behaviour","my0_intactk_sum","my1_intactk_sum","otherk","my0_otherk_sum","my1_otherk_sum","event")
 
 #extract the unique kmer
 myk4plot<-unique(myflk_behave_pheno$kmer)
@@ -302,13 +330,16 @@ for (j in 1:length(myk4plot)){ #open bracket for looping through each kmer
   #for (j in 1:10){ #open bracket for looping through each kmer
   
   mykmer<-myk4plot[j] 
+  #mykmer<-"kmer964" 
+  
+  print(mykmer)
   
   #select the rows referring to the kmer
   mytable<-myflk_behave_pheno[which(myflk_behave_pheno$kmer==mykmer),]
   
   #making the output matrix
-  myout<-matrix(0,1,14)
-  colnames(myout)<-c("kmer","event_sum","flk_behaviour","case_assos","case_assos_prop","ctrl_assos","ctrl_assos_prop","case_assos_gp_Lflk_sumstat","case_assos_gp_Rflk_sumstat","ctrl_assos_gp_Lflk_sumstat","ctrl_assos_gp_Rflk_sumstat","case_assos_gp_flkdis_sumstat","ctrl_assos_gp_flkdis_sumstat","event")
+  myout<-matrix(0,1,9)
+  colnames(myout)<-c("kmer","event_sum","flk_behaviour","my0_intactk_sum","my1_intactk_sum","otherk","my0_otherk_sum","my1_otherk_sum","event")
   myout<-as.data.frame(myout)
   myout$kmer<-mykmer
   
@@ -322,7 +353,7 @@ for (j in 1:length(myk4plot)){ #open bracket for looping through each kmer
   
   myout$event_sum<-paste(mycat,collapse=":") #fill in the table
   
-  mysum_str<-""  #pasting different behaviours into one string
+  mysum_str<-""  #pasting different behaviours' count and proportion into one string 
   
   for (i in 1:length(mycat)){ #looping through each behaviour
     mygp<-as.character(mycat[i])  #extract the behave group name
@@ -341,76 +372,193 @@ for (j in 1:length(myk4plot)){ #open bracket for looping through each kmer
     
     mysum_str<-paste(mysum_str,mysum,sep=" ") #pasting different behaviours into one string
     
-    #define the case and control associated flank behaviour 
-    
-    #if this behaviour is associated with ctrl 
-    if(mygp_ctrl_prop>0.6 & mygp_case_prop<0.4){   
-      myctrl_assos_gp<-mygp  #define this variable for making coordinate summary statistics
-      myout$ctrl_assos<-mygp
-      myout$ctrl_assos_prop<-mygp_ctrl_prop
-      
-    #get the coordinate summary statistics (based on StartL and StartR) of the myctrl_assos_gp in ctrl genomes, no information on the flank direction
+    #get the coordinate summary statistics (based on StartL and StartR) of 
 	
-	myStartLstat<-paste(round(summary(mytable[which(mytable$mybehave==myctrl_assos_gp & mytable$case_control=="0"),"StartL"]),0),collapse=" ")
-	myStartLSD<-round(sd(mytable[which(mytable$mybehave==myctrl_assos_gp & mytable$case_control=="0"),"StartL"]),0)
-	myctrl_Lflk_sumstat_str<-paste(myStartLstat,myStartLSD,sep=" ")
-
-	myStartRstat<-paste(round(summary(mytable[which(mytable$mybehave==myctrl_assos_gp & mytable$case_control=="0"),"StartR"]),0),collapse=" ")
-	myStartRSD<-round(sd(mytable[which(mytable$mybehave==myctrl_assos_gp & mytable$case_control=="0"),"StartR"]),0)
-	myctrl_Rflk_sumstat_str<-paste(myStartRstat,myStartRSD,sep=" ")
-
-	myctrl_flkdiststat_str<-paste(round(summary(mytable[which(mytable$mybehave==myctrl_assos_gp & mytable$case_control=="0"),"flk_dist"]),0),collapse=" ")
-
-	myout$ctrl_assos_gp_Lflk_sumstat<-myctrl_Lflk_sumstat_str  #fill in the table
-	myout$ctrl_assos_gp_Rflk_sumstat<-myctrl_Rflk_sumstat_str  #fill in the table
-	myout$ctrl_assos_gp_flkdis_sumstat<-myctrl_flkdiststat_str  #fill in the table
-
-    } 
-    
-    #if this behaviour is associated with case 
-    
-    if(mygp_case_prop>0.6 & mygp_ctrl_prop<0.4){ 
-      mycase_assos_gp<-mygp    #define this variable for making coordinate summary statistics
-      myout$case_assos<-mygp
-      myout$case_assos_prop<-mygp_case_prop
-      
-      #clear the variables
-	myStartLstat=myStartLSD=myStartRstat=myStartRSD=myflkdiststat=NA
-
-	#get the coordinate summary statistics (based on StartL and StartR) of the mycase_assos_gp in case genomes, no information on the flank direction
-
-	myStartLstat<-paste(round(summary(mytable[which(mytable$mybehave==mycase_assos_gp & mytable$case_control=="1"),"StartL"]),0),collapse=" ")
-	myStartLSD<-round(sd(mytable[which(mytable$mybehave==mycase_assos_gp & mytable$case_control=="1"),"StartL"]),0)
-	mycase_Lflk_sumstat_str<-paste(myStartLstat,myStartLSD,sep=" ")
-
-	myStartRstat<-paste(round(summary(mytable[which(mytable$mybehave==mycase_assos_gp & mytable$case_control=="1"),"StartR"]),0),collapse=" ")
-	myStartRSD<-round(sd(mytable[which(mytable$mybehave==mycase_assos_gp & mytable$case_control=="1"),"StartR"]),0)
-	mycase_Rflk_sumstat_str<-paste(myStartRstat,myStartRSD,sep=" ")
-
-	mycase_flkdiststat_str<-paste(round(summary(mytable[which(mytable$mybehave==mycase_assos_gp & mytable$case_control=="1"),"flk_dist"]),0),collapse=" ")
-
-	myout$case_assos_gp_Lflk_sumstat<-mycase_Lflk_sumstat_str  #fill in the table
-	myout$case_assos_gp_Rflk_sumstat<-mycase_Rflk_sumstat_str  #fill in the table
-	myout$case_assos_gp_flkdis_sumstat<-mycase_flkdiststat_str  #fill in the table
-  
-    } 
+	if(any(c(mygp_ctrl_prop, mygp_case_prop)>0.2) & (mygp=="intact_k")){ #check that this behaviour is not the minority ones
+	
+	my0_intactk_StartL_stat<-paste(round(summary(mytable[which(mytable$mybehave==mygp & mytable$case_control=="0"),"StartL"]),0),collapse=" ")
+	my0_intactk_StartL_SD<-round(sd(mytable[which(mytable$mybehave==mygp & mytable$case_control=="0"),"StartL"]),0)
+	
+	my0_intactk_StartR_stat<-paste(round(summary(mytable[which(mytable$mybehave==mygp & mytable$case_control=="0"),"StartR"]),0),collapse=" ")
+	my0_intactk_StartR_SD<-round(sd(mytable[which(mytable$mybehave==mygp & mytable$case_control=="0"),"StartR"]),0)
+	
+	my0_intactk_flkdist<-paste(round(summary(mytable[which(mytable$mybehave==mygp & mytable$case_control=="0"),"flk_dist"]),0),collapse=" ")
+	
+	myout$my0_intactk_sum<-paste("StartL_stat:",my0_intactk_StartL_stat," | StartL_sd:",my0_intactk_StartL_SD, " | StartR_stat:", my0_intactk_StartR_stat, " | StartR_sd:", my0_intactk_StartR_SD," | flk_dist_stat:", my0_intactk_flkdist,collapse=" ")
+	
+	my1_intactk_StartL_stat<-paste(round(summary(mytable[which(mytable$mybehave==mygp & mytable$case_control=="1"),"StartL"]),0),collapse=" ")
+	my1_intactk_StartL_SD<-round(sd(mytable[which(mytable$mybehave==mygp & mytable$case_control=="1"),"StartL"]),0)
+	
+	my1_intactk_StartR_stat<-paste(round(summary(mytable[which(mytable$mybehave==mygp & mytable$case_control=="1"),"StartR"]),0),collapse=" ")
+	my1_intactk_StartR_SD<-round(sd(mytable[which(mytable$mybehave==mygp & mytable$case_control=="1"),"StartR"]),0)
+	
+	my1_intactk_flkdist<-paste(round(summary(mytable[which(mytable$mybehave==mygp & mytable$case_control=="1"),"flk_dist"]),0),collapse=" ")
+	
+	myout$my1_intactk_sum<-paste("StartL_stat:",my1_intactk_StartL_stat," | StartL_sd:",my1_intactk_StartL_SD, " | StartR_stat:", my1_intactk_StartR_stat, " | StartR_sd:", my1_intactk_StartR_SD," | flk_dist_stat:", my1_intactk_flkdist,collapse=" ")
+	}
+	
+	if(any(c(mygp_ctrl_prop, mygp_case_prop)>0.2) & (mygp!="intact_k")){ #check that this behaviour is not the minority ones
+	
+	myout$otherk<-as.character(mygp)
+	
+	my0_otherk_StartL_stat<-paste(round(summary(mytable[which(mytable$mybehave==mygp & mytable$case_control=="0"),"StartL"]),0),collapse=" ")
+	my0_otherk_StartL_SD<-round(sd(mytable[which(mytable$mybehave==mygp & mytable$case_control=="0"),"StartL"]),0)
+	
+	my0_otherk_StartR_stat<-paste(round(summary(mytable[which(mytable$mybehave==mygp & mytable$case_control=="0"),"StartR"]),0),collapse=" ")
+	my0_otherk_StartR_SD<-round(sd(mytable[which(mytable$mybehave==mygp & mytable$case_control=="0"),"StartR"]),0)
+	
+	my0_otherk_flkdist<-paste(round(summary(mytable[which(mytable$mybehave==mygp & mytable$case_control=="0"),"flk_dist"]),0),collapse=" ")
+	
+	myout$my0_otherk_sum<-paste("StartL_stat:",my0_otherk_StartL_stat," | StartL_sd:",my0_otherk_StartL_SD, " | StartR_stat:", my0_otherk_StartR_stat, " | StartR_sd:", my0_otherk_StartR_SD," | flk_dist_stat:", my0_otherk_flkdist,collapse=" ")
+	
+	my1_otherk_StartL_stat<-paste(round(summary(mytable[which(mytable$mybehave==mygp & mytable$case_control=="1"),"StartL"]),0),collapse=" ")
+	my1_otherk_StartL_SD<-round(sd(mytable[which(mytable$mybehave==mygp & mytable$case_control=="1"),"StartL"]),0)
+	
+	my1_otherk_StartR_stat<-paste(round(summary(mytable[which(mytable$mybehave==mygp & mytable$case_control=="1"),"StartR"]),0),collapse=" ")
+	my1_otherk_StartR_SD<-round(sd(mytable[which(mytable$mybehave==mygp & mytable$case_control=="1"),"StartR"]),0)
+	
+	my1_otherk_flkdist<-paste(round(summary(mytable[which(mytable$mybehave==mygp & mytable$case_control=="1"),"flk_dist"]),0),collapse=" ")
+	
+	myout$my1_otherk_sum<-paste("StartL_stat:",my1_otherk_StartL_stat," | StartL_sd:",my1_otherk_StartL_SD, " | StartR_stat:", my1_otherk_StartR_stat, " | StartR_sd:", my1_otherk_StartR_SD," | flk_dist_stat:", my1_otherk_flkdist,collapse=" ")
+	
+	}
     
     } #close bracket for looping through each behaviour
     
     myout$flk_behaviour<-mysum_str   #fill in the table with the behaviour summary
     
- if(myout$case_assos%in%c("mv_away","swp_flk") | myout$ctrl_assos%in%c("mv_away","swp_flk")){
+ if(myout$otherk%in%c("mv_away","swp_flk")){
 myout$event<-"translocation"}
-if(myout$case_assos=="mv&flp" | myout$ctrl_assos=="mv&flp"){
+if(myout$otherk%in%c("mv&flp","swp&flp")){
 myout$event<-"inversion"}
 
   myall_out<-rbind(myall_out,myout)
   
 } #close bracket for looping through each kmer
 
-write.table(myall_out,file="myall_out.txt",quote=F,row.names = F,col.names = T,sep="\t")
+write.table(myall_out,file="mysplitk_out.txt",quote=F,row.names = F,col.names = T,sep="\t")
+}else{
+print("no split k")
+}
 
+#now process table of kmers with flank behaviour of "intact_k" only, also remove "StartL" and "EndR" column to have less to process
+#the theory is these intact kmers is flagged as significantly associated in GWAS because it is within the "inverted" genomic region
+#aim to find association between fwd_k and rev_k and "0" and "1", i.e. 
+#the proportion of "0" genomes with fwd_k
+#the proportion of "0" genomes with rev_k
+#the proportion of "1" genomes with fwd_k
+#the proportion of "1" genomes with rev_k
+#let's say fwd_k is associated with "0", then if the SD of the genomic position is 
+#very small (i.e. suggesting the same position), then plot the medium genomic 
+#position of where the fwd_k is mapped in "0" genomes
 
-   
+#specify the number of genomes
+numgen<-length(mygen)
+#numgen<-47
 
+myallk<-unique(myall_behave$kmer)
 
+#list of kmers with flank behaviour == "intact_k"
+myk_intactbebave<-myallk[which(myallk%!in%myk_otherbebave)]
+
+if(length(myk_intactbebave)>0){
+myintactk_only_tab<-myall_behave[which(myall_behave$kmer%in%myk_intactbebave),-c(4,7)]
+
+#add the new columns for storing kmer orientation information
+myintactk_only_tab$k_orien<-NA
+
+#define the forward intact k
+myfwdk_k_coor<-which(myintactk_only_tab$EndL<myintactk_only_tab$StartR)
+myintactk_only_tab[myfwdk_k_coor,"k_orien"]<-"fwd_k"
+
+myrevk_k_coor<-which(myintactk_only_tab$EndL>myintactk_only_tab$StartR)
+myintactk_only_tab[myrevk_k_coor,"k_orien"]<-"rev_k"
+
+#then check for each kmer if fwd_k is found in most "0" pheno and most rev_k is found in most "1" pheno, and vice versa
+#also check if certain location is associated with "0"/"1" pheno
+
+#first check if the rows for each kmer (one row per genome) is the same as the total number of genomes used in GWAS
+myfreq<-as.data.frame(table(myintactk_only_tab$kmer))
+table(myfreq$Freq)
+#    0    47 
+#  504 10220 
+
+#keep those kmers with blast hit in all genomes only (list of kmers)
+myk4paint<-myfreq[which(myfreq$Freq==numgen),"Var1"]   #change genome number here
+
+#making intact_k summary output table for all intact kmer
+myintactk_out<-matrix(0,1,21)
+
+colnames(myintactk_out)<-c("kmer","kmer_behaviour","flk_dist","fwdk_gen_count","revk_gen_count","fwdk_0gen_prop","revk_0gen_prop","fwdk_1gen_prop","revk_1gen_prop","fwdk_0gen_count","revk_0gen_count","fwdk_1gen_count","revk_1gen_count","fwdk_0gen_med","fwdk_0gen_sd","revk_0gen_med","revk_0gen_sd","fwdk_1gen_med","fwdk_1gen_sd","revk_1gen_med","revk_1gen_sd")
+
+for (i in 1:length(myk4paint)){
+
+mykmer<-myk4paint[i]
+#mykmer<-"kmer9997"
+
+print(as.character(mykmer))
+
+#get the number of "0" genomes and "1" genomes by looking at the first kmer
+myzero<-length(which(myintactk_only_tab$kmer==myk4paint[1] & myintactk_only_tab$case_control==0))
+myone<-length(which(myintactk_only_tab$kmer==myk4paint[1] & myintactk_only_tab$case_control==1))
+
+#get the rows of the kmer
+mysub<-myintactk_only_tab[which(myintactk_only_tab$kmer==mykmer),]
+
+#my unique behave 
+mybehave<-toString(unique(mysub$mybehave))
+
+#my unique flk dist 
+myflk_dist<-toString(unique(mysub$flk_dist))
+
+#find out the number of genome with fwd_k
+myfwd_k_count<-length((which(mysub$k_orien=="fwd_k")))
+
+#find out the number of genome with rev_k
+myrev_k_count<-length((which(mysub$k_orien=="rev_k")))
+
+#find out if fwd_k and rev_k is associated with "0" and "1" genomes
+#for this kmer, the proportion of "0" genomes with fwd_k
+my0_fwdk_prop<-round(nrow(mysub[which(mysub$case_control==0 & mysub$k_orien=="fwd_k"),])/myzero,3)
+#for this kmer, the proportion of "0" genomes with rev_k
+my0_revk_prop<-round(nrow(mysub[which(mysub$case_control==0 & mysub$k_orien=="rev_k"),])/myzero,3)
+#for this kmer, the proportion of "1" genomes with fwd_k
+my1_fwdk_prop<-round(nrow(mysub[which(mysub$case_control==1 & mysub$k_orien=="fwd_k"),])/myone,3)
+#for this kmer, the proportion of "1" genomes with rev_k
+my1_revk_prop<-round(nrow(mysub[which(mysub$case_control==1 & mysub$k_orien=="rev_k"),])/myone,3)
+
+#the number of "0" genomes with fwd_k
+my0_fwdk_count<-nrow(mysub[which(mysub$case_control==0 & mysub$k_orien=="fwd_k"),])
+#fthe number of "0" genomes with rev_k
+my0_revk_count<-nrow(mysub[which(mysub$case_control==0 & mysub$k_orien=="rev_k"),])
+#the number of "1" genomes with fwd_k
+my1_fwdk_count<-nrow(mysub[which(mysub$case_control==1 & mysub$k_orien=="fwd_k"),])
+#the number of "1" genomes with rev_k
+my1_revk_count<-nrow(mysub[which(mysub$case_control==1 & mysub$k_orien=="rev_k"),])
+
+#describe the median and SD genomic position of fwd_k + "0" genomes 
+my0_fwdk_medium<-median(mysub[which(mysub$case_control==0 & mysub$k_orien=="fwd_k"),"EndL"])
+my0_fwdk_sd<-sd(mysub[which(mysub$case_control==0 & mysub$k_orien=="fwd_k"),"EndL"])
+
+#describe the median and SD genomic position of rev_k + "0" genomes 
+my0_revk_medium<-median(mysub[which(mysub$case_control==0 & mysub$k_orien=="rev_k"),"EndL"])
+my0_revk_sd<-sd(mysub[which(mysub$case_control==0 & mysub$k_orien=="rev_k"),"EndL"])
+
+#describe the median and SD genomic position of fwd_k + "1" genomes 
+my1_fwdk_medium<-median(mysub[which(mysub$case_control==1 & mysub$k_orien=="fwd_k"),"EndL"])
+my1_fwdk_sd<-sd(mysub[which(mysub$case_control==1 & mysub$k_orien=="fwd_k"),"EndL"])
+
+#describe the median and SD genomic position of rev_k + "1" genomes 
+my1_revk_medium<-median(mysub[which(mysub$case_control==1 & mysub$k_orien=="rev_k"),"EndL"])
+my1_revk_sd<-sd(mysub[which(mysub$case_control==1 & mysub$k_orien=="rev_k"),"EndL"])
+
+myrowout<-c(as.character(mykmer),mybehave,myflk_dist,myfwd_k_count,myrev_k_count,my0_fwdk_prop,my0_revk_prop,my1_fwdk_prop,my1_revk_prop,my0_fwdk_count,my0_revk_count,my1_fwdk_count,my1_revk_count,my0_fwdk_medium,my0_fwdk_sd,my0_revk_medium,my0_revk_sd,my1_fwdk_medium,my1_fwdk_sd,my1_revk_medium,my1_revk_sd)
+
+myintactk_out<-rbind(myintactk_out,myrowout)
+
+}
+
+write.table(myintactk_out,file="myintactk_out.txt",quote=F,row.names = F,col.names = T,sep="\t")
+}else{
+print("no intact k")
+}
