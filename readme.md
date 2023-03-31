@@ -90,7 +90,9 @@ The sequence of the IS element being replaced in this command is IS481 in _Borde
 
 Range of IS elements can be found in https://github.com/thanhleviet/ISfinder-sequences for multiple bacterial species.
 
-**"Merging" IS elements**
+
+
+**"Merging" IS elements (optional)**
 
 It has been observed (for example in _Bordetella pertussis_) that genome rearrangements can be mediated by regions of homology that consist of more than one IS element (usually IS elements are found at the beginning and the end of the homology region). Therefore, in order to detect these type of rearangements, it is necessary to replace the whole region of homology. This can be done by merging coordinates of adjacent IS elements and treating htem as "one IS". A script "merge_IS.R" is provided for this purpose. 
 
