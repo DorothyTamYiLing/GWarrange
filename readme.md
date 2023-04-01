@@ -11,7 +11,7 @@ git clone https://github.com/DorothyTamYiLing/genome_rearrangement.git
 
 ## For detecting genome rearrangement in genomes
 ```
-bash main.sh <sigk_withN> <sigk_noN> <genomes> <phenotype> <output> <size of kmers> <flanking seqeunces minimum length> <replaced size>
+bash main.sh <sigk_withN> <sigk_noN> <genomes> <phenotype> <output directory> <size of kmers> <flanking seqeunces minimum length> <replaced size>
 
 ```
 
@@ -25,7 +25,7 @@ Arguments:
 
 **phenotype** : phenotype file (file format: sample names in 1st column, binary phenotype in 2nd column; no header, tab-delimited) 
 
-**output** : directory being created where the output files will be generated 
+**output directory** : directory being created where the output files will be generated 
 
 **size of kmers** : length (bp) of significant kmers (all kmers have to be the output of one GWAS hence are of the same size) 
 
@@ -36,37 +36,58 @@ Arguments:
 Example:
 
 ```
-bash main.sh \
-allsigk_withN.fasta allsigk_noN.fasta genomes.fna.gz phenotye.txt output_tdir 200 30 200000
+bash main.sh allsigk_withN.fasta allsigk_noN.fasta genomes.fna.gz phenotye.txt output_dir 200 30 200000
 
 ```
+## visualising genome rearrangements that are captured by selected significant kmers
 
-## For plotting flanks of selected kmer (visualising genome rearrangements that are captured by selected kmer)
+### For plotting selected placeholder-sequence-containing kmer that is split by rearrangement (placeholder flanking sequences are plotted)
 ```
-Rscript plot_flk_kmer_prop.R --kmer <kmer ID> --phen <phenotype> --coor <myflk_behave_pheno.txt> --genome.size <genome size> --outdir <output directory> --flk.dist <flanking seqeunces minimum length>
+Rscript plot_flk_kmer_prop.R --kmer <kmer ID> --phen <phenotype> --coor <myflk_behave_pheno.txt> --genome.size <genome size> --outdir <output directory> --flk.dist <replaced size>
 
 ```
 
 Arguments:
 
-**kmer ID** : ID of chosen kmer for plotting IS-flanking sequences
+**kmer ID** : ID of chosen split placeholder-sequence-containing kmer for visualising genome rearrangements, for kmer IDs see first column of mysplitk_out.txt
 
-**phenotype** : phenotype file with _full path_ (file format: sample names in 1st column, binary phenotype in 2nd column; no header, tab-delimited)
+**phenotype** : phenotype file (file format: sample names in 1st column, binary phenotype in 2nd column; no header, tab-delimited)
 
 **myflk_behave_pheno.txt** : myflk_behave_pheno.txt file from the output of main.sh
 
-**genome size** : size of the genome (in thousands)
+**genome size** : size of genome (in thousands)
 
-**output directory** : directory path where the plot will be generated (need to be created from before)
+**output directory** : directory path where the plot will be generated
 
-**flanking seqeunces minimum length** : size of the IS element that are replaced by shorter placeholder sequence (i.e. Maximum distance (bp) between the upstream and downstream flanks in the genome for a kmer to be defined as intact kmer) (same as "size of IS elements" in main.sh)
+**replaced size** : maximum size of repetitive sequences blocks that are replaced by shorter placed holder sequence (i.e. Maximum distance (bp) between the upstream and downstream flanks in the genome for a kmer to be defined as intact kmer) (same as "replaced size" in main.sh)
 
 Example:
 
 ```
-Rscript plot_flk_kmer_prop.R --kmer kmer93 --phen path/to/your/phenotypes.tsv \
---coor path/to/your/myflk_behave_pheno.txt \
---genome.size 4000 --outdir path/to/your/output --flk.dist 2500
+Rscript plot_flk_kmer_prop.R --kmer kmer1 --phen phenotye.txt --coor myflk_behave_pheno.txt --genome.size 4000 --outdir ~/output_directory/kmer1 --flk.dist 200000
+```
+
+### For plotting selected intact kmers (containing placeholder sequence or not)
+```
+Rscript plot_intactk.R --input <intact k> --outdir <output directory> --outname <output name> --gen_size <genome size> 
+
+```
+Arguments:
+**intact k** : selected intact kmers for visualising rearrangement. Input file containing selected rows from myintactkwithN_out.txt and/or myNoNintactk_out.txt. One line per kmer. Original header line is required.
+
+**output directory** : directory path where the plot will be generated
+
+**output name** : prefix of output file
+
+**genome size** : size of genome (in thousands)
+
+Example:
+
+```
+Rscript plot_intactk.R --input myNoNintactk_out_selected.txt --outdir ~/output_dir \
+--outname myNoNintactk_out_selected \
+--gen_size 4300
+
 ```
  
 # Pre-requisite
