@@ -11,30 +11,34 @@ git clone https://github.com/DorothyTamYiLing/genome_rearrangement.git
 
 ## For detecting genome rearrangement in genomes
 ```
-bash main.sh <kmers> <genomes> <phenotype> <output> <size of kmers> <flanking seqeunces minimum length> <size of IS elements>
+bash main.sh <sigk_withN> <sigk_noN> <genomes> <phenotype> <output> <size of kmers> <flanking seqeunces minimum length> <replaced size>
 
 ```
 
 Arguments:
 
-**kmers** : multifasta file of significant phenotype-associated kmers from the GWAS output 
+**sigk_withN** : multifasta file of significant phenotype-associated kmers that contain repetitive elements placeholder sequence (e.g. Nx15)
 
-**genomes** : gzipped multifasta file of genomes set (without IS replacement)
+**sigk_noN** : multifasta file of significant phenotype-associated kmers that DO NOT contain repetitive elements placeholder sequence (e.g. Nx15)
 
-**phenotype** : phenotype file with _full path_ (file format: sample names in 1st column, binary phenotype in 2nd column; no header, tab-delimited) 
+**genomes** : gzipped multifasta file of genomes set (original sequence without IS replacement)
 
-**output** : directory being created where the output files are generated 
+**phenotype** : phenotype file (file format: sample names in 1st column, binary phenotype in 2nd column; no header, tab-delimited) 
+
+**output** : directory being created where the output files will be generated 
 
 **size of kmers** : length (bp) of significant kmers (all kmers have to be the output of one GWAS hence are of the same size) 
 
 **flanking seqeunces minimum length** :  Minimum length (bp) of flanking sequences (both side) for the kmer to be blasted with the genomes; default: 30bp 
 
-**size of IS elements** : size of the IS element that are replaced by shorter placeholder sequence (i.e. Maximum distance (bp) between the upstream and downstream flanks in the genome for a kmer to be defined as intact kmer)  
+**replaced size** : maximum size of repetitive sequences blocks that are replaced by shorter placed holder sequence (i.e. Maximum distance (bp) between the upstream and downstream flanks in the genome for a kmer to be defined as intact kmer)  
 
 Example:
 
 ```
-bash main.sh allsig_kmer_withN.fasta 111_yearGWAS_genlist.fasta.gz  full/path/to/your/phenotypes.tsv path/to/your/output 200 30 2500
+bash main.sh \
+allsigk_withN.fasta allsigk_noN.fasta genomes.fna.gz phenotye.txt output_tdir 200 30 200000
+
 ```
 
 ## For plotting flanks of selected kmer (visualising genome rearrangements that are captured by selected kmer)
