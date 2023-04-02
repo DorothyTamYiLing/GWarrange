@@ -75,10 +75,14 @@ Rscript plot_intactk.R \
 
 ```
 
+Output file: png file contains visualisation of the rearrangement event.
+
 <img width="785" alt="Screenshot 2023-04-02 at 10 15 17 PM" src="https://user-images.githubusercontent.com/34043893/229379399-b255beac-d65f-4212-9cca-78a6447350ca.png">
 
+Plot showing 33 intact kmers that are in reverse orientation in majority of the "1" genomes, and well as forward in majority of the "0" genomes
 
 <img width="720" alt="Screenshot 2023-04-02 at 10 15 05 PM" src="https://user-images.githubusercontent.com/34043893/229379384-4383bab9-b3f7-4563-8dae-0f918dcd750e.png">
+
 
 
 Reference: Weigand, M.R., Williams, M.M., Peng, Y., Kania, D., Pawloski, L.C., Tondella, M.L. and CDC Pertussis Working Group, 2019. Genomic survey of Bordetella pertussis diversity, United States, 2000–2013. Emerging infectious diseases, 25(4), p.780.
