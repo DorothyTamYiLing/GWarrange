@@ -11,15 +11,13 @@ git clone https://github.com/DorothyTamYiLing/genome_rearrangement.git
 
 ## For detecting genome rearrangement in genomes
 ```
-bash main.sh <sigk_withN> <sigk_noN> <genomes> <phenotype> <output directory> <size of kmers> <flanking seqeunces minimum length> <replaced size>
+bash main.sh -k <sigk> -g <genomes> -p <phenotype> -o <output directory> -l <size of kmers> -f <flanking seqeunces minimum length> -d <replaced size>
 
 ```
 
 Arguments:
 
-**sigk_withN** : multifasta file of significant phenotype-associated kmers that contain repetitive elements placeholder sequence (e.g. Nx15)
-
-**sigk_noN** : multifasta file of significant phenotype-associated kmers that DO NOT contain repetitive elements placeholder sequence (e.g. Nx15)
+**sigk** : multifasta file of significant phenotype-associated kmers that may or may not contain repetitive elements placeholder sequence (e.g. Nx15)
 
 **genomes** : gzipped multifasta file of genomes set (original sequence without IS replacement)
 
@@ -36,7 +34,7 @@ Arguments:
 Example:
 
 ```
-bash main.sh allsigk_withN.fasta allsigk_noN.fasta genomes.fna.gz phenotye.txt output_dir 200 30 200000
+bash main.sh -k allsigk.fasta -g genomes.fna.gz -p phenotye.txt -o output_dir -l 200 -f 30 -d 200000
 
 ```
 ## visualising genome rearrangements that are captured by selected significant kmers
@@ -143,35 +141,7 @@ Then, a kmer-based GWAS is performed on the IS-replaced genome set (created as d
 
 From the output of pyseer, the kmers that are significantly associated with the phenotype and contain the short placeholder sequence are converted into a multi-fasta file, which is then used as one of the inputs of this pipeline (i.e. argument "kmers" of the main.sh script) for detecting potential genome rearrangement events that are associated with the phenotype of interest. (See the tutorial section for detailed instructions)
  
-# Tutorial using examples input files from /example_data
- 
-This tutorial is based on a k-mer based GWAS conducted with pyseer using 111 American _Bordetella pertussis_ genomes as described in Weigand _et al_. 2019), with an aim of identifying genome rearrangement events that are associated with different year periods (between periods 2007-2010 and 2011-2013). 44 isolates are from year period 2007-2010 (phenotype 0) and 67 are from year period 2011-2013 (phenotype 1). Significant kmers containing the IS-elements (replaced by N x 15) from pyseer output are extracted and placed in a multifasta file (example_data/allsig_kmer_withN.fasta).
 
-1. Detecting genome rearrangements
-
-```
-bash main.sh ~/example_data/allsig_kmer_withN.fasta ~/example_data/111_yearGWAS_genlist.fasta.gz ~/example_data/phenotypes.tsv path/to/your/output 200 30 2500
-#note: full path must be provided for phenotypes.tsv file
-```
-
-Main output files (See "Pipeline and output files description" section for other outout files and more detailed description):
-
-- myall_out.txt (contains key information such as rearrangement event for each kmer, genomic location of the rearrangement event, proportion of case/control genomes showing the rearrengement etc.)
-
-
-2. Plotting flanks of selected kmer (visualising genome rearrangements that are captured by selected kmer)
-```
-Rscript plot_flk_kmer_prop.R --kmer kmer93 --phen ~/example_data/phenotypes.tsv \
---coor path/to/your/myflk_behave_pheno.txt \
---genome.size 4000 --outdir path/to/your/output --flk.dist 2500
-```
-
-Main output files (See "Pipeline and output files description" section for other outout files and more detailed description):
-
-- A pdf file contains visualisation of the rearrangement event.
-
-
-Reference: Weigand, M.R., Williams, M.M., Peng, Y., Kania, D., Pawloski, L.C., Tondella, M.L. and CDC Pertussis Working Group, 2019. Genomic survey of Bordetella pertussis diversity, United States, 2000–2013. Emerging infectious diseases, 25(4), p.780.
 
 
 # Pipeline and output files description
