@@ -75,6 +75,7 @@ Fig 2. : Plot of intact kmers that show rearrangements in two genome regions tha
 (Above: 33 intact kmers that are in forward orientation in majority of structure "1" genomes, as well as reverse in majority of structure "0" genomes;
 Below: 33 intact kmers that are in reverse orientation in majority of structure "1" genomes, as well as forward in majority of structure "0" genomes)
 
+Colour indices refer to the "colour index" column in the corresponding kmer4plot.txt file (with the same prefix), hence the corresponding kmers.
 
 Reference: Weigand, M.R., Williams, M.M., Peng, Y., Kania, D., Pawloski, L.C., Tondella, M.L. and CDC Pertussis Working Group, 2019. Genomic survey of Bordetella pertussis diversity, United States, 2000–2013. Emerging infectious diseases, 25(4), p.780.
 
@@ -125,3 +126,4 @@ Rscript plot_intactk.R \
 
 <img width="822" alt="Screenshot 2023-04-02 at 11 47 02 PM" src="https://user-images.githubusercontent.com/34043893/229383210-9393c86b-138a-4aee-b4bb-0c831df907ea.png">
 
+Colour indices refer to the "colour index" column in the corresponding kmer4plot.txt file (with the same prefix), hence the corresponding kmers.
