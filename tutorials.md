@@ -28,9 +28,11 @@ Main output files (See "Pipeline and output files description" section for other
 - mysplitk_out.txt
 - myintactkwithN_out.txt
 
-Visualising genome rearrangements that are captured by selected kmer:
+1009 kmers were found to be split (_i.e._ flanking sequences mapped to different positions) when mapped to the original genomes (in mysplitk_out.txt).
 
-Plotting flanks of selected split kmers
+**Visualising genome rearrangements that are captured by kmer**
+
+Plotting flanks of **selected** split kmers:
 ```
 #plotting kmer9939
 Rscript plot_flk_kmer_prop.R --kmer kmer9939 --phen ./example_data/clus1clus2_pheno.txt \
@@ -49,6 +51,34 @@ Output file: png file contains visualisation of the rearrangement event.
 
 <img width="883" alt="Screenshot 2023-04-02 at 9 57 59 PM" src="https://user-images.githubusercontent.com/34043893/229378733-5af67fb3-cc1c-47c9-9f69-e6d4c294e628.png">
 
+Plotting intact kmers:
+
+```
+#subset the kmers that are reverse in majority of the 0 genomes, and forward and majority of the 1 genomes
+awk -F "\t" 'NR==1; NR > 1{ if ($6 < 0.5 && $7 > 0.5 && $8 > 0.5 && $9 < 0.5) { print } }' myintactkwithN_out.txt > myintactkwithN_rev0fwd1_set.txt
+
+#plot the kmer set
+Rscript plot_intactk.R \
+--input ./example_data/clus1clus2_47_merge7000GWAS_nopopctrl_testdir/myintactkwithN_rev0fwd1_set.txt \
+--outdir ./example_data/clus1clus2_47_merge7000GWAS_nopopctrl_testdir \
+--outname myintactkwithN_rev0fwd1 \
+--gen_size 4300
+
+#subset the kmers that are reverse in majority of the 1 genomes, and forward and majority of the 0 genomes
+awk -F "\t" 'NR==1; NR > 1{ if ($6 > 0.5 && $7 < 0.5 && $8 < 0.5 && $9 > 0.5) { print } }' myintactkwithN_out.txt > myintactkwithN_rev1fwd0_set.txt
+
+#plot the kmer set
+Rscript plot_intactk.R \
+--input ./example_data/clus1clus2_47_merge7000GWAS_nopopctrl_testdir/myintactkwithN_rev1fwd0_set.txt \
+--outdir ./example_data/clus1clus2_47_merge7000GWAS_nopopctrl_testdir \
+--outname myintactkwithN_rev1fwd0 \
+
+```
+
+<img width="785" alt="Screenshot 2023-04-02 at 10 15 17 PM" src="https://user-images.githubusercontent.com/34043893/229379399-b255beac-d65f-4212-9cca-78a6447350ca.png">
+
+
+<img width="720" alt="Screenshot 2023-04-02 at 10 15 05 PM" src="https://user-images.githubusercontent.com/34043893/229379384-4383bab9-b3f7-4563-8dae-0f918dcd750e.png">
 
 
 Reference: Weigand, M.R., Williams, M.M., Peng, Y., Kania, D., Pawloski, L.C., Tondella, M.L. and CDC Pertussis Working Group, 2019. Genomic survey of Bordetella pertussis diversity, United States, 2000–2013. Emerging infectious diseases, 25(4), p.780.
