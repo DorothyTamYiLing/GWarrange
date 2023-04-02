@@ -123,4 +123,5 @@ Rscript plot_intactk.R \
 --gen_size 4300
 ```
 
-<img width="841" alt="Screenshot 2023-04-02 at 11 40 09 PM" src="https://user-images.githubusercontent.com/34043893/229383119-4c5d1477-f13e-4cb3-852d-4663792a8128.png">
+<img width="822" alt="Screenshot 2023-04-02 at 11 47 02 PM" src="https://user-images.githubusercontent.com/34043893/229383210-9393c86b-138a-4aee-b4bb-0c831df907ea.png">
+
