@@ -1,6 +1,8 @@
-# Tutorial using examples input files from /example_data
+# Tutotrial 1
  
-This tutorial is based on a k-mer based GWAS conducted with pyseer using 111 American _Bordetella pertussis_ genomes as described in Weigand _et al_. 2019), with an aim of identifying genome rearrangement events that are associated with different year periods (between periods 2007-2010 and 2011-2013). 44 isolates are from year period 2007-2010 (phenotype 0) and 67 are from year period 2011-2013 (phenotype 1). Significant kmers containing the IS-elements (replaced by N x 15) from pyseer output are extracted and placed in a multifasta file (example_data/allsig_kmer_withN.fasta).
+This tutorial is based a subset of _Bordetella pertussis_ genomes as described in Weigand _et al_. 2019), in which chromosome structures were defined by exhaustive pairwise alignment. A subset of 47 genomes that display two different chromosome structures (18 genomes with structure 1 and 29 genomes with structure 2) (See Fig. 1) were selected, and a kmer-based GWAS was conducted using pyseer with an aim to identify kmers whose presence-absence patterns are associated with the chromosome structures (_i.e._ phenotype). Chromosome structure phenotype of two pairs of genomes were swapped for demonstratin purpose. 
+Since it was believed that these rearrangements in genomes are likely to be mediated by homologous recombination between bl is mediated  IS481 elements in the genomes were replaced with shorter placedholder sequences (N x 15), followed 
+2 Significant kmers containing the IS-elements (replaced by N x 15) from pyseer output are extracted and placed in a multifasta file (example_data/allsig_kmer_withN.fasta).
 
 1. Detecting genome rearrangements
 
