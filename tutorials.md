@@ -2,7 +2,7 @@
 
 This tutorial is based a subset of _Bordetella pertussis_ genomes as described in Weigand _et al_. 2019), in which chromosome structures were defined by exhaustive pairwise alignment. A subset of 47 genomes that display two different chromosome structures (18 genomes with structure 1 and 29 genomes with structure 2) (See Fig. 1) were selected, and a kmer-based GWAS was conducted using pyseer with an aim to identify kmers whose presence-absence patterns are associated with chromosome structures (_i.e._ phenotype). Structure phenotype of two pairs of genomes were swapped for demonstration purpose. 
 
-<img width="1157" alt="Screenshot 2023-04-02 at 7 37 47 PM" src="https://user-images.githubusercontent.com/34043893/229372223-8ea48ec4-2dd4-4254-b823-581393c64b88.png">
+<img width="1159" alt="Screenshot 2023-04-02 at 10 32 23 PM" src="https://user-images.githubusercontent.com/34043893/229380077-f0c15dba-7ed3-4fc3-a0d7-6d9a5f52b556.png">
 Fig 1: Two different chromosome structures were found among 47 _Bordetella pertussis_ genomes. 
 
 Genome rearrangments in _Bordetella pertussis_ are belived to be largely mediated by homologous recombination of IS481 elements, or of sequence blocks that consist of multiple IS elements, which are usually found at the start and end of the sequence block. These sequence blocks can be as large as several thousand bp in size. In order to increase the chance for detecting of genome rearrangements, IS481s that were no more than 7000bp apart in each genome were "merged" (See "Merging IS element" in the prerequisite section in READMA.md). Then, each of these "merged" IS element were replaced with shorter placedholder sequences (N x 15), prior to the GWAS.
@@ -79,10 +79,12 @@ Output file: png file contains visualisation of the rearrangement event.
 
 <img width="785" alt="Screenshot 2023-04-02 at 10 15 17 PM" src="https://user-images.githubusercontent.com/34043893/229379399-b255beac-d65f-4212-9cca-78a6447350ca.png">
 
-Plot showing 33 intact kmers that are in reverse orientation in majority of the "1" genomes, and well as forward in majority of the "0" genomes
 
 <img width="720" alt="Screenshot 2023-04-02 at 10 15 05 PM" src="https://user-images.githubusercontent.com/34043893/229379384-4383bab9-b3f7-4563-8dae-0f918dcd750e.png">
 
+Fig 2. : Plot of intact kmers that show rearrangements in two genome regions tha are significantly associated with the structural phenotype
+Above: 33 intact kmers that are in forward orientation in majority of structure "1" genomes, as well as reverse in majority of structure "0" genomes
+Below: 33 intact kmers that are in reverse orientation in majority of structure "1" genomes, as well as forward in majority of structure "0" genomes
 
 
 Reference: Weigand, M.R., Williams, M.M., Peng, Y., Kania, D., Pawloski, L.C., Tondella, M.L. and CDC Pertussis Working Group, 2019. Genomic survey of Bordetella pertussis diversity, United States, 2000–2013. Emerging infectious diseases, 25(4), p.780.
