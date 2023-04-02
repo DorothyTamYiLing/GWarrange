@@ -23,7 +23,10 @@ Main output files (See "Pipeline and output files description" section for other
 
 - sigk_withN.fasta
 - sigk_noN.fasta
-- myall_out.txt (contains key information such as rearrangement event for each kmer, genomic location of the rearrangement event, proportion of case/control genomes showing the rearrengement etc.)
+- myout.txt
+- mynoN_out.txt
+- mysplitk_out.txt (contains key information such as rearrangement event for each kmer, genomic location of the rearrangement event, proportion of case/control genomes showing the rearrengement etc.)
+- myintactkwithN_out.txt (contains key information such as rearrangement event for each kmer, genomic location of the rearrangement event, proportion of case/control genomes showing the rearrengement etc.)
 
 2. Plotting flanks of selected kmer (visualising genome rearrangements that are captured by selected kmer)
 ```
