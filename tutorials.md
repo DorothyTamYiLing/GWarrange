@@ -111,10 +111,10 @@ Rscript plot_flk_kmer_prop.R --kmer kmer89 --phen ./example_data/prn_status_phen
 
 Plotting intact kmers that DO NOT contain placeholder sequence (without N) and show significant ratio patterns:
 
+```
 #subset the kmers show show significant ratio patterns, which are reverse in majority of the 0 genomes, and forward and majority of the 1 genomes
 awk -F "\t" 'NR==1; NR > 1{ if ($6 < 0.5 && $7 > 0.5 && $8 > 0.5 && $9 < 0.5) { print } }' myNoNintactk_out.txt > myNoNintactk_out_sigratio.txt
 
-```
 #plot the kmer set
 Rscript plot_intactk.R \
 --input ./example_data/PRN468_merge15000_testdir/myNoNintactk_out_sigratio.txt \
