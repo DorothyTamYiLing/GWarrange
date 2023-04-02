@@ -9,7 +9,7 @@ Genome rearrangments in _Bordetella pertussis_ are belived to be largely mediate
 
 14,582 kmers were found to be significantly associated with the structural phenotype. The sequences of the kmers were extracted and placed in a multifasta file (example_data/clus1clus2_sigk.fasta).
 
-Then, these kmers were blasted with the original genome set for studying potential genome rearrangment that are captured by them.
+Then, these kmers were blasted with the original genome set for studying potential genome rearrangment that are captured by them, implemented by the following script:
 
 ```
 bash main.sh -k ./example_data/clus1clus2_sigk_withN.fasta \
@@ -25,19 +25,32 @@ Main output files (See "Pipeline and output files description" section for other
 - sigk_noN.fasta
 - myout.txt
 - mynoN_out.txt
-- mysplitk_out.txt (contains key information such as rearrangement event for each kmer, genomic location of the rearrangement event, proportion of case/control genomes showing the rearrengement etc.)
-- myintactkwithN_out.txt (contains key information such as rearrangement event for each kmer, genomic location of the rearrangement event, proportion of case/control genomes showing the rearrengement etc.)
+- mysplitk_out.txt
+- myintactkwithN_out.txt
 
-2. Plotting flanks of selected kmer (visualising genome rearrangements that are captured by selected kmer)
+Visualising genome rearrangements that are captured by selected kmer:
+
+Plotting flanks of selected split kmers
 ```
-Rscript plot_flk_kmer_prop.R --kmer kmer93 --phen ~/example_data/phenotypes.tsv \
---coor path/to/your/myflk_behave_pheno.txt \
---genome.size 4000 --outdir path/to/your/output --flk.dist 2500
+#plotting kmer9939
+Rscript plot_flk_kmer_prop.R --kmer kmer9939 --phen ./example_data/clus1clus2_pheno.txt \
+--coor ./example_data/clus1clus2_47_merge7000GWAS_nopopctrl_testdir/myflk_behave_pheno.txt \
+--genome.size 4000 --outdir ./example_data/clus1clus2_47_merge7000GWAS_nopopctrl_testdir/kmer9939 --flk.dist 70000
+
+#plotting kmer999
+Rscript plot_flk_kmer_prop.R --kmer kmer999 --phen ./example_data/clus1clus2_pheno.txt \
+--coor ./example_data/clus1clus2_47_merge7000GWAS_nopopctrl_testdir/myflk_behave_pheno.txt \
+--genome.size 4000 --outdir ./example_data/clus1clus2_47_merge7000GWAS_nopopctrl_testdir/kmer999 --flk.dist 70000
+
 ```
+[kmer9939_plot.pdf](https://github.com/DorothyTamYiLing/genome_rearrangement/files/11133340/kmer9939_plot.pdf)
 
-Main output files (See "Pipeline and output files description" section for other outout files and more detailed description):
+[kmer999_plot.pdf](https://github.com/DorothyTamYiLing/genome_rearrangement/files/11133338/kmer999_plot.pdf)
 
-- A pdf file contains visualisation of the rearrangement event.
+
+Main output files 
+
+- A png file contains visualisation of the rearrangement event.
 
 
 Reference: Weigand, M.R., Williams, M.M., Peng, Y., Kania, D., Pawloski, L.C., Tondella, M.L. and CDC Pertussis Working Group, 2019. Genomic survey of Bordetella pertussis diversity, United States, 2000–2013. Emerging infectious diseases, 25(4), p.780.
