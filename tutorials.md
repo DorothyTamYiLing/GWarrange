@@ -43,14 +43,12 @@ Rscript plot_flk_kmer_prop.R --kmer kmer999 --phen ./example_data/clus1clus2_phe
 --genome.size 4000 --outdir ./example_data/clus1clus2_47_merge7000GWAS_nopopctrl_testdir/kmer999 --flk.dist 70000
 
 ```
-[kmer9939_plot.pdf](https://github.com/DorothyTamYiLing/genome_rearrangement/files/11133340/kmer9939_plot.pdf)
+Output file: png file contains visualisation of the rearrangement event.
 
-[kmer999_plot.pdf](https://github.com/DorothyTamYiLing/genome_rearrangement/files/11133338/kmer999_plot.pdf)
+<img width="882" alt="Screenshot 2023-04-02 at 9 58 16 PM" src="https://user-images.githubusercontent.com/34043893/229378714-08ace0a6-d8de-4af0-be0c-5975d2fa3170.png">
 
+<img width="883" alt="Screenshot 2023-04-02 at 9 57 59 PM" src="https://user-images.githubusercontent.com/34043893/229378733-5af67fb3-cc1c-47c9-9f69-e6d4c294e628.png">
 
-Main output files 
-
-- A png file contains visualisation of the rearrangement event.
 
 
 Reference: Weigand, M.R., Williams, M.M., Peng, Y., Kania, D., Pawloski, L.C., Tondella, M.L. and CDC Pertussis Working Group, 2019. Genomic survey of Bordetella pertussis diversity, United States, 2000–2013. Emerging infectious diseases, 25(4), p.780.
