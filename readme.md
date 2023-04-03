@@ -1,4 +1,3 @@
-go to [tutorials](https://github.com/DorothyTamYiLing/genome_rearrangement/blob/master/tutorials.md)
 # Introduction
 This pipeline detects and visualises phenotype-associated genome rearrangement events in bacterial genomes that are mediated by homologous recombination between repetitive elements (such as IS elements). 
 
@@ -88,6 +87,9 @@ Rscript plot_intactk.R --input myNoNintactk_out_selected.txt --outdir ~/output_d
 
 ```
  
+For tutorials please got to [here](https://github.com/DorothyTamYiLing/genome_rearrangement/blob/master/tutorials.md) 
+For pipeline and output files description, go to [here] ()
+ 
 # Pre-requisite
 
 ## Replacement of IS elements in genome set
@@ -141,6 +143,8 @@ Then, a kmer-based GWAS is performed on the IS-replaced genome set (created as d
 
 From the output of pyseer, the kmers that are significantly associated with the phenotype and contain the short placeholder sequence are converted into a multi-fasta file, which is then used as one of the inputs of this pipeline (i.e. argument "kmers" of the main.sh script) for detecting potential genome rearrangement events that are associated with the phenotype of interest. (See the tutorial section for detailed instructions)
  
+ 
+
 
 # Requirements:
 
