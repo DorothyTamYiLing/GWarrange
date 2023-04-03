@@ -1,5 +1,7 @@
 # Pipeline and output files description
 
+
+
 ## Step1:
 
 `filtering_kmer_and_blast.sh` (called by `main.sh`)
