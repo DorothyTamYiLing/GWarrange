@@ -21,15 +21,15 @@ opt = parse_args(opt_parser);
 ###blast output quality check
 #all kmer that should show at least one blast hit
 
-setwd(opt$outdir)
+#setwd(opt$outdir)
 
 #(R)
 #load in the blast output file 
-mytable<-read.table("myout.txt", header=F)
+mytable<-read.table(paste(opt$outdir,"myout.txt",sep="/"), header=F)
 colnames(mytable)<-c("query","subject","identity","alig_len","mismatches","gap","qstart","qend","sStart","sEnd","evalue","bitscore")
 
 #load in the flank start and end coordinates of the sig kmers
-myflk_coor<-read.delim("flank_coor.txt",header=F,sep="_")
+myflk_coor<-read.delim(paste(opt$outdir,"flank_coor.txt",sep="/"),header=F,sep="_")
 colnames(myflk_coor)<-c("kmer","leftflankend","rightflankstart","kmer_len")
 
 #load in phenotype file
@@ -86,22 +86,22 @@ alignlen_issue_k<-c(alignlen_issue_k,mykmer[i])
 
 if (length(unique(abs_gen_k))>0){
 my_abs_gen_k<-mytable[which(mytable$query%in%unique(abs_gen_k)),]
-write.table(my_abs_gen_k,file="kmer_with_missinggenomes.txt",quote=F,row.names = F,col.names = T,sep="\t")
+write.table(my_abs_gen_k,file=paste(opt$outdir,"kmer_with_missinggenomes.txt",sep="/"),quote=F,row.names = F,col.names = T,sep="\t")
 }
 
 if (length(unique(del_k))>0){
 my_del_k<-mytable[which(mytable$query%in%unique(del_k)),]
-write.table(my_del_k,file="kmer_with_deletion.txt",quote=F,row.names = F,col.names = T,sep="\t")
+write.table(my_del_k,file=paste(opt$outdir,"kmer_with_deletion.txt",sep="/"),quote=F,row.names = F,col.names = T,sep="\t")
 }
 
 if (length(unique(multi_hit_k))>0){
 my_multi_hit_k<-mytable[which(mytable$query%in%unique(multi_hit_k)),]
-write.table(my_multi_hit_k,file="kmer_with_multi_hits.txt",quote=F,row.names = F,col.names = T,sep="\t")
+write.table(my_multi_hit_k,file=paste(opt$outdir,"kmer_with_multi_hits.txt",sep="/"),quote=F,row.names = F,col.names = T,sep="\t")
 }
 
 if (length(unique(alignlen_issue_k))>0){
 my_alignlen_issue_k<-mytable[which(mytable$query%in%unique(alignlen_issue_k)),]
-write.table(my_alignlen_issue_k,file="kmer_with_alignlen_issue.txt",quote=F,row.names = F,col.names = T,sep="\t")
+write.table(my_alignlen_issue_k,file=paste(opt$outdir,"kmer_with_alignlen_issue.txt",sep="/"),quote=F,row.names = F,col.names = T,sep="\t")
 }
  
 
@@ -113,11 +113,9 @@ mygoodk<-mykmer[which(!is.element(mykmer,mybadk))]
 myprocess<-mytable[which(mytable$query%in%mygoodk),]
 
 #the myprocess table should refere to kmers that are present in all genomes with both flanks; the flanks are also fully aligned with no SNPs nor gaps, and the flanks show unique blast hit in each genome 
-write.table(myprocess,file="rows_for_process.txt",quote=F,row.names = F,col.names = T,sep="\t")
+write.table(myprocess,file=paste(opt$outdir,"rows_for_process.txt",sep="/"),quote=F,row.names = F,col.names = T,sep="\t")
 
-
-#read in myprocess table
-myprocess<-read.table("rows_for_process.txt",sep="\t",header=T)
+myprocess<-read.table(paste(opt$outdir,"rows_for_process.txt",sep="/"),sep="\t",header=T)
 
 #make a label for kmer:gen combination
 myprocess$label<-paste(myprocess$query,myprocess$subject,sep="_")
@@ -201,7 +199,8 @@ mymerge[myqend_e_klen,"EndR"]<-mymerge[myqend_e_klen,"sEnd_e"]
 #myflkdist=70000 # merge7000_ext500, max IS replacment block size 45118bp
 #myflkdist=200000 # merge15000_ext500, max IS replacement block size 159836bp
 
-myflkdist=opt$flkdist
+myflkdist<-as.numeric(as.character(opt$flkdist))
+
 
 mymerge$mybehave<-0 #creating new columns
 mymerge$flk_dist<-0 #creating new columns
@@ -271,7 +270,7 @@ colnames(mymerge)<-c("kmer","genome","StartL","EndL","StartR","EndR","mybehave",
 
 mystartendLR<-as.data.frame((mymerge))
 
-#myphenofile<-read.table(myphenofile,header=F)
+#myphenofile<-read.table("../prn_status_pheno.txt",header=F)
 
 #put all the rows of kmers with at least one undefined behaviour into a table for output
 myk_undefine<-mystartendLR[which(mystartendLR$mybehave=="undefined_behave"),"kmer"]
@@ -293,13 +292,15 @@ myflk_behave_pheno<-myflk_behave_pheno[order(myflk_behave_pheno$kmer, decreasing
 colnames(myflk_behave_pheno)[1]<-"genome"
 colnames(myflk_behave_pheno)[2]<-"case_control"
 
-write.table(myflk_behave_pheno,file="myflk_behave_pheno.txt",quote=F,row.names = F,col.names = T,sep="\t")
+write.table(myflk_behave_pheno,file=paste(opt$outdir,"myflk_behave_pheno.txt",sep="/"),quote=F,row.names = F,col.names = T,sep="\t")
+
 
 ###making flank behaviour summary table for each kmer across all genomes
 #First, make the summary only for kmers with flank behaviour other than "intact_k"
 
 #read in myflk_behave_pheno.txt
-myall_behave<-read.table("myflk_behave_pheno.txt",sep="\t",header=T)
+#myall_behave<-read.table("myflk_behave_pheno.txt",sep="\t",header=T)
+myall_behave<-myflk_behave_pheno
 
 '%!in%' <- function(x,y)!('%in%'(x,y)) #creating the function
 
@@ -332,7 +333,7 @@ for (j in 1:length(myk4plot)){ #open bracket for looping through each kmer
   mykmer<-myk4plot[j] 
   #mykmer<-"kmer964" 
   
-  print(mykmer)
+  #print(mykmer)
   
   #select the rows referring to the kmer
   mytable<-myflk_behave_pheno[which(myflk_behave_pheno$kmer==mykmer),]
@@ -436,7 +437,7 @@ myout$event<-"inversion"}
   
 } #close bracket for looping through each kmer
 
-write.table(myall_out,file="mysplitk_out.txt",quote=F,row.names = F,col.names = T,sep="\t")
+write.table(myall_out,file=paste(opt$outdir,"mysplitk_out.txt",sep="/"),quote=F,row.names = F,col.names = T,sep="\t")
 }else{
 print("no split k")
 }
@@ -496,7 +497,7 @@ for (i in 1:length(myk4paint)){
 mykmer<-myk4paint[i]
 #mykmer<-"kmer9997"
 
-print(as.character(mykmer))
+#print(as.character(mykmer))
 
 #get the number of "0" genomes and "1" genomes by looking at the first kmer
 myzero<-length(which(myintactk_only_tab$kmer==myk4paint[1] & myintactk_only_tab$case_control==0))
@@ -558,7 +559,7 @@ myintactk_out<-rbind(myintactk_out,myrowout)
 
 }
 
-write.table(myintactk_out,file="myintactk_out.txt",quote=F,row.names = F,col.names = T,sep="\t")
+write.table(myintactk_out,file=paste(opt$outdir,"myintactkwithN_out.txt",sep="/"),quote=F,row.names = F,col.names = T,sep="\t")
 }else{
 print("no intact k")
 }

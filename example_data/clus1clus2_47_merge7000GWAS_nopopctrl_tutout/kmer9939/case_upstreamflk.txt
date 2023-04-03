@@ -1,0 +1,2 @@
+startmed	endmed	count	prop
+3621033.5	3621166.5	2	11

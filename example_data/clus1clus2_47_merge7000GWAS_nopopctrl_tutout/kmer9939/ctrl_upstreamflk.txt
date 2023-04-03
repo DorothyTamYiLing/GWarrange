@@ -1,0 +1,2 @@
+startmed	endmed	count	prop
+3622531	3622664	27	93

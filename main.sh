@@ -1,40 +1,59 @@
-#example of main.sh
-#Usage: bash main.sh allsig_kmer_withN.fasta allsig_kmer_NoN.fasta 111_yearGWAS_genlist.fasta.gz  \
-#/home/ubuntu/Dorothy/genome_rearrangement/phenotypes.tsv \
-#/home/ubuntu/Dorothy/genome_rearrangement/output 200 30 2500
+#set default parameters in getopts
+flk_len=30
+flk_dist=200000
 
-###define all the variables in the command###
-#$1=k_input=allsig_kmer_withN.fasta  #with path
-#$2=k_input=allsig_kmer_noN.fasta  #with path
-#$3=gen_input=111_yearGWAS_genlist.fasta #with path
-#$4=pheno=phenotypes.tsv  #with path
-#$5=outdir=/home/ubuntu/Dorothy/genome_rearrangement/output
-#$6=k_len=200
-#$7=flnk_len=30
-#$8=flkdist=2500
-#############################################
-
-ARG2=${2:-"no_NoN_intactk"}
-ARG6=${6:-200}
-ARG7=${7:-30}
-ARG8=${8:-70000}
+while getopts k:g:p:l:f:d:o: flag
+do
+    case "${flag}" in
+        k) sigk=${OPTARG};;
+        g) gen=${OPTARG};;
+        p) pheno=${OPTARG};;
+        l) k_len=${OPTARG};;
+        f) flk_len=${OPTARG};;
+        d) flk_dist=${OPTARG};;
+        o) outdir=${OPTARG};;
+    esac
+done
+echo "sigk: $sigk";
+echo "gen: $gen";
+echo "pheno: $pheno";
+echo "k_len: $k_len";
+echo "flk_len: $flk_len";
+echo "flk_dist: $flk_dist";
+echo "outdir: $outdir";
 
 #create output directory
-mkdir $5
+mkdir $outdir
+
+#python3 class_k.py --input ./example_data/clus1clus2_sigk_withN.fasta --outdir ./example_data/clus1clus2_47_merge7000GWAS_nopopctrl_testdir
+python3 class_k.py --input $sigk --outdir $outdir
+
+gunzip $gen
 
 #processing sig kmers with N, only when the input fasta file is present
-if [[ $1!="no_withN_sigk" ]]
-then
-bash filtering_kmer_and_blast.sh $1 $3 $5 $ARG7
+[ -s ${outdir}/sigk_withN.fasta ] && withN=1 || withN=0
 
-Rscript make_flank_summary.R --k.len $ARG6 --pheno $4 --outdir $5 --flkdist $ARG8
+if [[ ${withN} -eq 1 ]]
+then
+echo "there is sigk withN"
+bash filtering_kmer_and_blast.sh ${outdir}/sigk_withN.fasta ${gen/.gz} $outdir $flk_len
+echo "now run make_flank_summary.R"
+Rscript make_flank_summary.R --k.len $k_len --pheno $pheno --outdir $outdir --flkdist $flk_dist
+else
+echo "no withN sig k"
 fi
 
 #processing sig kmers without N, only when the input fasta file is present
-if [[ $ARG2!="no_NoN_intactk" ]]
-then
-#blasting intact kmers with genomes 
-blastn -query $2 -subject $3 -outfmt 6 -out $5/mynoN_out.txt
+[ -s ${outdir}/sigk_noN.fasta ] && noN=1 || noN=0
 
-Rscript process_sigkNoN.R --pheno $4 --outdir $5
+if [[ ${noN} -eq 1 ]]
+then
+echo  "there is sigk_noN.fasta"
+blastn -query ${outdir}/sigk_noN.fasta -subject ${gen/.gz} -outfmt 6 -out ${outdir}/mynoN_out.txt
+echo "no run process_sigkNoN.R"
+Rscript process_sigkNoN.R --pheno $pheno --outdir $outdir
+else
+echo "no NoN sig k"
 fi
+
+gzip ${gen/.gz}

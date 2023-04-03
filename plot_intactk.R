@@ -4,6 +4,10 @@ option_list = list(
   make_option("--input", type="character", default=NULL,
               help="kmer to plot", metavar="character"),
   make_option("--gen_size", type="character", default=NULL,
+              help="kmer to plot", metavar="character"),
+  make_option("--outdir", type="character", default=NULL,
+              help="kmer to plot", metavar="character"),
+  make_option("--outname", type="character", default=NULL,
               help="kmer to plot", metavar="character")
 ) 
 
@@ -25,7 +29,7 @@ myx<-read.delim(opt$input,header=T,sep="\t")
 #sort the kmer rows
 myx<-myx[order(myx$fwdk_0gen_med),]
 
-myx$fwdk_0gen_med_round<-round_any(myx$fwdk_0gen_med, 1000)    
+myx$fwdk_0gen_med_round<-round_any(myx$fwdk_0gen_med, 100)    
 
 #remove rows that are duplicated in myx$fwdk_0gen_med
 mykeeprow<-c()
@@ -43,12 +47,12 @@ colnames(myx_unqiue)
 #myx_unqiue<-myx_unqiue[which(myx_unqiue$kmer%in%c("kmer205","kmer3606")),]
 
 #output the kmers for plot
-write.table(myx_unqiue,file="kmer4plot.txt",quote=F,col.names=T,row.names=F,sep="\t")
+write.table(myx_unqiue,file=paste(opt$outdir,"/",opt$outname,"_kmer4plot.txt",sep=""),quote=F,col.names=T,row.names=F,sep="\t")
 
 mysize<-as.numeric(as.character(opt$gen_size))*1000
 
 
-png("intactk_plot.png")
+png(paste(opt$outdir,"/",opt$outname,".png",sep=""))
 
 p  <- ggplot(data = myx_unqiue) + 
   geom_link(aes(x = fwdk_0gen_med, y = 0, xend = fwdk_0gen_med+15, yend = 0, color=mycol_index),arrow = grid::arrow(length = grid::unit(myx_unqiue$fwdk_0gen_prop, 'cm')))+

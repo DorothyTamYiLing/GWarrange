@@ -1,0 +1,2 @@
+startmed	endmed	count	prop
+432431	430195	2	7

@@ -20,14 +20,14 @@ opt = parse_args(opt_parser);
 ###blast output quality check
 #all kmer that should show at least one blast hit
 
-setwd(opt$outdir)
+#setwd(opt$outdir)
 
 #load in phenotype file
 myphenofile<-read.table(opt$pheno,header=F)
 #myphenofile<-read.table("prn_status_pheno.txt",header=F)  #check that there should be no header in phenotype file
 
 #load in the blast output file 
-mytable<-read.table("mynoN_out.txt", header=F)
+mytable<-read.table(paste(opt$outdir,"mynoN_out.txt",sep="/"), header=F)
 colnames(mytable)<-c("query","subject","identity","alig_len","mismatches","gap","qstart","qend","sStart","sEnd","evalue","bitscore")
 
 mykmer<-as.character(unique(mytable$query))  #get the list of kmers with blast output
@@ -71,17 +71,17 @@ alignlen_k<-c(alignlen_k,mykmer[i])
 
 if (length(unique(abs_gen_k))>0){
 my_abs_gen_k<-mytable[which(mytable$query%in%unique(abs_gen_k)),]
-write.table(my_abs_gen_k,file="kmer_with_missinggenomes.txt",quote=F,row.names = F,col.names = T,sep="\t")
+write.table(my_abs_gen_k,file=paste(opt$outdir,"kmer_with_missinggenomes_NoN.txt",sep="/"),quote=F,row.names = F,col.names = T,sep="\t")
 }
 
 if (length(unique(multi_hit_k))>0){
 my_multi_hit_k<-mytable[which(mytable$query%in%unique(multi_hit_k)),]
-write.table(my_multi_hit_k,file="kmer_with_multi_hits.txt",quote=F,row.names = F,col.names = T,sep="\t")
+write.table(my_multi_hit_k,file=paste(opt$outdir,"kmer_with_multi_hits_NoN.txt",sep="/"),quote=F,row.names = F,col.names = T,sep="\t")
 }
 
 if (length(unique(alignlen_k))>0){
 my_alignlen_k<-mytable[which(mytable$query%in%unique(alignlen_k)),]
-write.table(my_alignlen_k,file="kmer_with_alignlen_issue.txt",quote=F,row.names = F,col.names = T,sep="\t")
+write.table(my_alignlen_k,file=paste(opt$outdir,"kmer_with_alignlen_issue_NoN.txt",sep="/"),quote=F,row.names = F,col.names = T,sep="\t")
 }
   
 
@@ -92,10 +92,10 @@ mygoodk<-mykmer[which(!is.element(mykmer,mybadk))]
 myprocess<-mytable[which(mytable$query%in%mygoodk),]
 
 #the myprocess table should refere to kmers that are present in all genomes with both flanks; the flanks are also fully aligned with no SNPs nor gaps, and the flanks show unique blast hit in each genome 
-write.table(myprocess,file="rows_for_process.txt",quote=F,row.names = F,col.names = T,sep="\t")
+write.table(myprocess,file=paste(opt$outdir,"rows_for_process_NoN.txt",sep="/"),quote=F,row.names = F,col.names = T,sep="\t")
 
 #read in myprocess table
-myprocess<-read.table("rows_for_process.txt",sep="\t",header=T)
+myprocess<-read.table(paste(opt$outdir,"rows_for_process_NoN.txt",sep="/"),sep="\t",header=T)
 
 #determining orientation for each blast hit
 myprocess$k_orien<-0
@@ -111,10 +111,10 @@ myflk_behave_pheno<-merge(mystartendLR_out,myphenofile,by.x="genome",by.y="V1",)
 myflk_behave_pheno<-myflk_behave_pheno[order(myflk_behave_pheno$kmer, decreasing=T),]
 colnames(myflk_behave_pheno)[6]<-"case_control"
 
-write.table(myflk_behave_pheno,file="myflk_behave_pheno.txt",quote=F,row.names = F,col.names = T,sep="\t")
+write.table(myflk_behave_pheno,file=paste(opt$outdir,"myflk_behave_pheno_NoN.txt",sep="/"),quote=F,row.names = F,col.names = T,sep="\t")
 
 #read in myflk_behave_pheno.txt
-myintactk_only_tab<-read.table("myflk_behave_pheno.txt",sep="\t",header=T)
+myintactk_only_tab<-read.table(paste(opt$outdir,"myflk_behave_pheno_NoN.txt",sep="/"),sep="\t",header=T)
 colnames(myintactk_only_tab)[5]<-"k_orien"
 
 #now process table of kmers with flank behaviour of "intact_k" only, 
@@ -217,4 +217,4 @@ myintactk_out<-rbind(myintactk_out,myrowout)
 
 myintactk_out<-myintactk_out[-1,]
 
-write.table(myintactk_out,file="myNoNintactk_out.txt",quote=F,row.names = F,col.names = T,sep="\t")
+write.table(myintactk_out,file=paste(opt$outdir,"myNoNintactk_out.txt",sep="/"),quote=F,row.names = F,col.names = T,sep="\t")

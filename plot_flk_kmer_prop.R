@@ -27,6 +27,9 @@ opt = parse_args(opt_parser);
 
 
 #setwd("/Users/dorothytam/Documents/Bath_postdoc/genomic_analyses/170_USAgenomes_analysis/111_yearGWAS//")
+
+dir.create(opt$outdir)
+
 mypheno_file<-read.table(opt$phen,header=F)
 #mypheno_file<-read.table("phenotype.txt",header=F)
 #table(mypheno_file[,2])
