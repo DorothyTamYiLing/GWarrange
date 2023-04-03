@@ -37,7 +37,7 @@ Example:
 bash main.sh -k allsigk.fasta -g genomes.fna.gz -p phenotye.txt -o output_dir -l 200 -f 30 -d 200000
 
 ```
-## visualising genome rearrangements that are captured by selected significant kmers
+## Visualising genome rearrangements that are captured by selected significant kmers
 
 ### For plotting selected placeholder-sequence-containing kmer that is split by rearrangement (placeholder flanking sequences are plotted)
 ```
