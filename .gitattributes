@@ -1,3 +1,4 @@
 allsig_kmer_withN.fasta filter=lfs diff=lfs merge=lfs -text
 111_yearGWAS_genlist.fasta.gz filter=lfs diff=lfs merge=lfs -text
 test_folder/ filter=lfs diff=lfs merge=lfs -text
+clus1clus2_47.fna.gz filter=lfs diff=lfs merge=lfs -text
