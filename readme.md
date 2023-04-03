@@ -89,7 +89,7 @@ Rscript plot_intactk.R --input myNoNintactk_out_selected.txt --outdir ~/output_d
  
 For tutorials, please go to [here](https://github.com/DorothyTamYiLing/genome_rearrangement/blob/master/tutorials.md) 
 
-For pipeline and output files description, go to [here] (https://github.com/DorothyTamYiLing/genome_rearrangement/blob/master/pipeline%20and%20output%20files%20description.md)
+For pipeline and output files description, go to [here](https://github.com/DorothyTamYiLing/genome_rearrangement/blob/master/pipeline%20and%20output%20files%20description.md)
  
 # Pre-requisite
 
