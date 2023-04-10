@@ -108,7 +108,7 @@ blastn -query <fasta file of chosen gene used for genome re-orientation> \
 Then, genome assemblies are re-orientated according to the position and orientation of the chosen gene in the genomes, using the script fix_genome.py:
 
 ```
-python3 fix_genome.py --input <multifasta genome sequences, unzipped> --mycoor <blast output file name> --outdir <output directory>
+python3 ./scripts/fix_genome.py --input <multifasta genome sequences, unzipped> --mycoor <blast output file name> --outdir <output directory>
 
 ```
 The output file name for the genomes with same orientation is "fixed_genomes.fasta".
@@ -142,7 +142,7 @@ bash merge_replace_IS.sh -g fixed_genomes.fasta -i <blast outout file fo IS loca
 ```
 Example:
 ```
-bash merge_replace_IS.sh -g fixed_genomes.fasta -i IS_coor.txt -e 3 -m 5000 -s "on"
+bash ./scripts/merge_replace_IS.sh -g fixed_genomes.fasta -i IS_coor.txt -e 3 -m 5000 -s "on"
 ```
 
 ## Kmer-based GWAS
