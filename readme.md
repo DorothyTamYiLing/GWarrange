@@ -95,15 +95,24 @@ For pipeline and output files description, go to [here](https://github.com/Dorot
 
 ## Reorientating whole genome assemblies
 
-Since most bacterial genomes are circular, genomes asemblies from which detecting genome rearrangements are detected should be re-orientated by a chosen gene. This can be achieved by the script fix_genome.py:
+Since most bacterial genomes are circular, genomes asemblies from which detecting genome rearrangements are detected should be re-orientated by a chosen gene, which will become the first gene in the re-orientated assemblies, in the same orientation.
+
+First, the location and orientation of the chosen gene in the genomens are obtained by blasting it with multifasta file of genome assemblies.
 ```
-python3 fix_genome.py --input <multifasta genome sequences> --myIS <multifasta IS sequences> --outdir <output directory>
+blastn -query <fasta file of chosen gene used for genome re-orientation> \
+-subject <multifasta file of genome sequences> \
+-outfmt 6 -out <output file name>
+
+```
+Then, genome assemblies are re-orientated according to the position and orientation of the chosen gene in the genomes, using the script fix_genome.py:
+```
+python3 fix_genome.py --input <multifasta genome sequences> --mycoor <blast output file name> --outdir <output directory>
 ```
 Arguments:
 
 **input** : multifasta file of the input genome assemblies for re-orientating, gzipped, headings should be the genome IDs
 
-**coordinates of IS** : genome coordinates of the IS element to be replaced in each genome (file format: one row per IS per genome; genome IDs in 1st column (match with the genome ID in the multifasta file), start coordinate in 2nd column, end coordinate in 3rd column; headers={sseqid	mystart	myend}, tab-delimited; example file can be found in ~/example_data/IS_coor_example.txt). Coordinates ranges of the ISs in the same gneome must not overlap. This could be the output of merge_IS.R.
+**--myIS** : multifasta file of IS elements to be located
 
 **path of output** : output directory for the IS replaced genomes (one fasta per genome, not gzipped)
 
