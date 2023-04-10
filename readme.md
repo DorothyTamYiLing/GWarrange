@@ -93,6 +93,23 @@ For pipeline and output files description, go to [here](https://github.com/Dorot
  
 # Pre-requisite
 
+## Reorientating whole genome assemblies
+
+Since most bacterial genomes are circular, genomes asemblies from which detecting genome rearrangements are detected should be re-orientated by a chosen gene. This can be achieved by the script fix_genome.py:
+```
+python3 fix_genome.py --input <multifasta genome sequences> --myIS <multifasta IS sequences> --outdir <output directory>
+```
+Arguments:
+
+**input** : multifasta file of the input genome assemblies for re-orientating, gzipped, headings should be the genome IDs
+
+**coordinates of IS** : genome coordinates of the IS element to be replaced in each genome (file format: one row per IS per genome; genome IDs in 1st column (match with the genome ID in the multifasta file), start coordinate in 2nd column, end coordinate in 3rd column; headers={sseqid	mystart	myend}, tab-delimited; example file can be found in ~/example_data/IS_coor_example.txt). Coordinates ranges of the ISs in the same gneome must not overlap. This could be the output of merge_IS.R.
+
+**path of output** : output directory for the IS replaced genomes (one fasta per genome, not gzipped)
+
+
+## Locating IS elements in the genome assemblies
+
 ## Replacement of IS elements in genome set
 
 Before using this pipeline, the repetitive elements that are speculated to have mediated rearrangement events, such as IS element, must be replaced by a short placeholder sequence (e.g. Nx15) in the genome set. This can be done using the script "iSreplace_2col.py" provided in this repository.
