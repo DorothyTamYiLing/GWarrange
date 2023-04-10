@@ -108,7 +108,7 @@ blastn -query <fasta file of chosen gene used for genome re-orientation> \
 Then, genome assemblies are re-orientated according to the position and orientation of the chosen gene in the genomes, using the script fix_genome.py:
 
 ```
-python3 ./scripts/fix_genome.py --input <multifasta genome sequences, unzipped> --mycoor <blast output file name> --outdir <output directory>
+python3 ./scripts/fix_genome.py --input <multifasta genome sequences, unzipped> --mycoor <blast output file name>
 
 ```
 The output file name for the genomes with same orientation is "fixed_genomes.fasta".
