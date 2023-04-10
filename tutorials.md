@@ -43,7 +43,7 @@ Prior to GWAS, each set of IS-replaced genomes using different IS merging and ex
 
 ```
 #generating fsm-ite input file
-for f in ./ext5_merge7000_ISreplaced_genomes/*_ISreplaced.fasta; do id=$(basename "$f" _ISreplaced.fasta); echo $id $f; done > ./ext5_merge7000_ISreplaced_genomes/clus1clus2_47_input.list
+for f in ./ext5_merge7000_ISreplaced_genomes/*_ext5_merge7000_ISreplaced.fasta; do id=$(basename "$f" _ext5_merge7000_ISreplaced.fasta); echo $id $f; done > ./ext5_merge7000_ISreplaced_genomes/clus1clus2_47_input.list
 
 #generating kmers with size of 200 bases with minor allel frequency 0.05
 fsm-lite -l ./ext5_merge7000_ISreplaced_genomes/clus1clus2_47_input.list -v -s 3 -S 44 -t tmp -m 200 -M 200 | gzip - > ./ext5_merge7000_ISreplaced_genomes/clus1clus2_47_ext5merge7000_k200_output.txt.gz
@@ -51,6 +51,18 @@ fsm-lite -l ./ext5_merge7000_ISreplaced_genomes/clus1clus2_47_input.list -v -s 3
 
 Then, a kmer-based GWAS was conducted using pyseer with an aim to identify kmers whose presence-absence patterns are associated with chromosome structures (_i.e._ phenotype). 
 
+```
+#adding header to phenotype file for pyseer input format
+echo "samples binary" | cat - ./example_data/clus1clus2_pheno.txt > ./example_data/clus1clus2_pheno_4pyseer.txt
+
+#run pyseer
+pyseer --phenotypes ./example_data/clus1clus2_pheno_4pyseer.txt \
+--kmers ./ext5_merge7000_ISreplaced_genomes/clus1clus2_47_ext5merge7000_k200_output.txt.gz \
+--no-distances \
+--min-af 0.05 --max-af 0.95 \
+--print-samples --output-patterns ./ext5_merge7000_ISreplaced_genomes/kmer_patterns.txt \
+> ./ext5_merge7000_ISreplaced_genomes/clus1clus2_47_ext5merge7000_k200_MAF0.05_nopopctrl
+```
 
 14,582 kmers were found to be significantly associated with the structural phenotype. The sequences of the kmers were extracted and placed in a multifasta file (example_data/clus1clus2_sigk.fasta).
 
