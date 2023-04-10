@@ -100,24 +100,48 @@ Since most bacterial genomes are circular, genomes asemblies from which detectin
 First, the location and orientation of the chosen gene in the genomens are obtained by blasting it with multifasta file of genome assemblies.
 ```
 blastn -query <fasta file of chosen gene used for genome re-orientation> \
--subject <multifasta file of genome sequences> \
+-subject <multifasta file of genome sequences, unzipped> \
 -outfmt 6 -out <output file name>
 
 ```
+
 Then, genome assemblies are re-orientated according to the position and orientation of the chosen gene in the genomes, using the script fix_genome.py:
+
 ```
-python3 fix_genome.py --input <multifasta genome sequences> --mycoor <blast output file name> --outdir <output directory>
+python3 fix_genome.py --input <multifasta genome sequences, unzipped> --mycoor <blast output file name> --outdir <output directory>
+
 ```
-Arguments:
-
-**input** : multifasta file of the input genome assemblies for re-orientating, gzipped, headings should be the genome IDs
-
-**--myIS** : multifasta file of IS elements to be located
-
-**path of output** : output directory for the IS replaced genomes (one fasta per genome, not gzipped)
+The output file for the genomes with same orientation is "fixed_genomes.fasta".
 
 
 ## Locating IS elements in the genome assemblies
+
+Location of IS elements in the genomes are obtained by blasting. Sequences of more than one IS elements can be put in the same multifasta file for obtaining genome locations for all at once.
+```
+blastn -query <multifasta file for IS elements to be located in the genomes> \
+-subject <multifasta file of genome sequences, unzipped> \
+-outfmt 6 -out <output file name>
+```
+
+## "Merging" IS elements (optional, recommended for gemones with high frequency of IS elements and genome rearrangements):**
+
+It has been observed (for example in _Bordetella pertussis_) that genome rearrangements can be mediated by regions of homology that consist of more than one IS element (usually IS elements are found at the beginning and the end of the homology region). Therefore, in order to detect these type of rearangements, it is necessary to replace the whole region of homology. This can be done by merging coordinates of adjacent IS elements and treating htem as "one IS". A script "merge_IS.R" is provided for this purpose. 
+
+```
+Rscript merge_IS.R --input <coordinates of IS> --merge <integer> --extend <integer>
+```
+Arguments: 
+
+**input** : genome coordinates of IS elements for merging across genomes (file format: one row per IS per genome; genome IDs in 1st column (match with the genome ID in the multifasta file), start coordinate in 2nd column, end coordinate in 3rd column; headers={sseqid	mystart	myend}, tab-delimited; example file can be found in ~/example_data/IS_coor_example.txt). Coordinates ranges of the ISs in the same gneome must not overlap.
+
+**merge** : adjacent IS elements are merged when they are less than this number of bases apart
+
+**extend** : for extending IS coordinates, number of bases to extend from each side of IS. This can ensure that the whole IS is replaced.
+
+Example:
+```
+Rscript merge_IS.R --input ~/example_data/IS_coor_example.txt --merge 7000 --extend 100 
+```
 
 ## Replacement of IS elements in genome set
 
@@ -140,29 +164,6 @@ python3 iSreplace_2col.py --input ~/example_data/ISrpl_testgenomes.fasta.gz --co
 ```
 The sequence of the IS element being replaced in this command is IS481 in _Bordetella pertussis_ genome TOHAMA1 (~/example_data/TOHAMA1_IS481_27283to28335.fasta). It is replaced in two genomes stored in ISrpl_testgenomes.fasta.gz according to the genome coordinates stored in IS_coor_example.txt.
 
-Range of IS elements can be found in https://github.com/thanhleviet/ISfinder-sequences for multiple bacterial species.
-
-
-
-**"Merging" IS elements (optional, recommended for gemones with high frequency of IS elements and genome rearrangements):**
-
-It has been observed (for example in _Bordetella pertussis_) that genome rearrangements can be mediated by regions of homology that consist of more than one IS element (usually IS elements are found at the beginning and the end of the homology region). Therefore, in order to detect these type of rearangements, it is necessary to replace the whole region of homology. This can be done by merging coordinates of adjacent IS elements and treating htem as "one IS". A script "merge_IS.R" is provided for this purpose. 
-
-```
-Rscript merge_IS.R --input <coordinates of IS> --merge <integer> --extend <integer>
-```
-Arguments: 
-
-**input** : genome coordinates of IS elements for merging across genomes (file format: one row per IS per genome; genome IDs in 1st column (match with the genome ID in the multifasta file), start coordinate in 2nd column, end coordinate in 3rd column; headers={sseqid	mystart	myend}, tab-delimited; example file can be found in ~/example_data/IS_coor_example.txt). Coordinates ranges of the ISs in the same gneome must not overlap.
-
-**merge** : adjacent IS elements are merged when they are less than this number of bases apart
-
-**extend** : for extending IS coordinates, number of bases to extend from each side of IS. This can ensure that the whole IS is replaced.
-
-Example:
-```
-Rscript merge_IS.R --input ~/example_data/IS_coor_example.txt --merge 7000 --extend 100 
-```
 
 ## Kmer-based GWAS
 
@@ -171,6 +172,9 @@ Then, a kmer-based GWAS is performed on the IS-replaced genome set (created as d
 From the output of pyseer, the kmers that are significantly associated with the phenotype and contain the short placeholder sequence are converted into a multi-fasta file, which is then used as one of the inputs of this pipeline (i.e. argument "kmers" of the main.sh script) for detecting potential genome rearrangement events that are associated with the phenotype of interest. (See the tutorial section for detailed instructions)
  
  
+## IS elements databaes 
+Range of IS elements can be found in https://github.com/thanhleviet/ISfinder-sequences for multiple bacterial species.
+
 
 
 # Requirements:
