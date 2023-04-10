@@ -1,11 +1,44 @@
 # Tutotrial 1
 
-This tutorial is based a subset of _Bordetella pertussis_ genomes as described in Weigand _et al_. 2019), in which chromosome structures were defined by exhaustive pairwise alignment. A subset of 47 genomes that display two different chromosome structures (18 genomes with structure 1 and 29 genomes with structure 2) (See Fig. 1) were selected, and a kmer-based GWAS was conducted using pyseer with an aim to identify kmers whose presence-absence patterns are associated with chromosome structures (_i.e._ phenotype). Structure phenotype of two pairs of genomes were swapped for demonstration purpose. 
+This tutorial is based a subset of _Bordetella pertussis_ genomes as described in Weigand _et al_. 2019), in which chromosome structures were defined by exhaustive pairwise alignment. A subset of 47 genomes that display two different chromosome structures (18 genomes with structure 1 and 29 genomes with structure 2) (See Fig. 1) were used. Structure phenotype of two pairs of genomes were swapped for demonstration purpose.  
 
 <img width="1159" alt="Screenshot 2023-04-02 at 10 32 23 PM" src="https://user-images.githubusercontent.com/34043893/229380077-f0c15dba-7ed3-4fc3-a0d7-6d9a5f52b556.png">
 Fig 1: Two different chromosome structures were found among 47 _Bordetella pertussis_ genomes. 
 
-Genome rearrangments in _Bordetella pertussis_ are belived to be largely mediated by homologous recombination of IS481 elements, or of sequence blocks that consist of multiple IS elements, which are usually found at the start and end of the sequence block. These sequence blocks can be as large as several thousand bp in size. In order to increase the chance for detecting of genome rearrangements, IS481s that were no more than 7000bp apart in each genome were "merged" (See "Merging IS element" in the prerequisite section in READMA.md). Then, each of these "merged" IS element were replaced with shorter placedholder sequences (N x 15), prior to the GWAS.
+First, genomes asemblies from which detecting genome rearrangements are detected are re-orientated by a chosen gene, inthe case of Boredetella pertussis is gidA since it is the first gene after origin of replication. The location and orientation of gidA in the genomens are obtained by blasting it with multifasta file of genome assemblies.
+```
+#unzip the genome file if neccesasry
+gunzip ./example_data/clus1clus2_47.fna.gz
+
+#blast gidA with genomes
+blastn -query ./example_data/gidA.fasta \
+-subject ./example_data/clus1clus2_47.fna \
+-outfmt 6 -out clus1clus2_47_gidA_out.txt
+```
+
+Then, genome assemblies are re-orientated according to the position and orientation of gidA in the genomes, using the script fix_genome.py:
+```
+python3 ./scripts/fix_genome.py --input ./example_data/clus1clus2_47.fna --mycoor clus1clus2_47_gidA_out.txt
+```
+
+The output file name for the genomes with same orientation is "fixed_genomes.fasta".
+
+Genome rearrangments in _Bordetella pertussis_ are belived to be largely mediated by homologous recombination of insertion sequence (IS) elements (such as IS481 and IS110). Location of IS elements () in the genomes are obtained by blasting. Sequences of more than one IS elements can be put in the same multifasta file for obtaining genome locations for all at once.
+```
+blastn -query ./example_data/IS_NZ_CP025371.1.fasta \
+-subject fixed_genomes.fasta \
+-outfmt 6 -out blastIS_out.txt
+```
+
+In addition, genome rearrangments in _Bordetella pertussis_ have also been observed to be mediated by homologous recombination of sequence blocks that consist of multiple IS elements, which are usually found at the start and end of the sequence block. These sequence blocks can be as large as several thousand base pair in size. In order to increase the chance for detecting of genome rearrangements, it is advised to replace the these sequence blocks comlpetely with placeholder sequence. 
+
+Here, IS elements that were no more than 7000bp apart in each genome were "merged". Then, each of these "merged" IS element were replaced with shorter placedholder sequences (N x 15). Each pair of IS cordinates (start and end genome position) were extended by 5bp (default) on each side to ensure complete mask of the IS. A separaet set of IS-replaced genomes were also produced by enabling perfroming IS replacement with merging overlapping IS only (i.e. IS that are less than 3 bp apart) through passing string argument "on" to the -s flag.
+```
+bash ./scripts/merge_replace_IS.sh -g fixed_genomes.fasta -i blastIS_out.txt -m 7000 -s "on"
+```
+
+Then, a kmer-based GWAS was conducted using pyseer with an aim to identify kmers whose presence-absence patterns are associated with chromosome structures (_i.e._ phenotype). 
+
 
 14,582 kmers were found to be significantly associated with the structural phenotype. The sequences of the kmers were extracted and placed in a multifasta file (example_data/clus1clus2_sigk.fasta).
 
