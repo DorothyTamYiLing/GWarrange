@@ -37,6 +37,18 @@ Here, IS elements that were no more than 7000bp apart in each genome were "merge
 bash ./scripts/merge_replace_IS.sh -g fixed_genomes.fasta -i blastIS_out.txt -m 7000 -s "on"
 ```
 
+Each set of IS-replaced genomes using different IS merging and extending parameters were output into new directories "ext5_merge7000_ISreplaced_genomes" and "ext5_merge3_ISreplaced_genomes" (merging overlapping IS only) respectively.
+
+Prior to GWAS, each set of IS-replaced genomes using different IS merging and extending parameters were used for generating kmers. Here, we use the kmer generation tool fsm-lite to generate kmers from genomes in directory /ext5_merge7000_ISreplaced_genomes.
+
+```
+#generating fsm-ite input file
+for f in ./ext5_merge7000_ISreplaced_genomes/*_ISreplaced.fasta; do id=$(basename "$f" _ISreplaced.fasta); echo $id $f; done > ./ext5_merge7000_ISreplaced_genomes/clus1clus2_47_input.list
+
+#generating kmers with size of 200 bases with minor allel frequency 0.05
+fsm-lite -l ./ext5_merge7000_ISreplaced_genomes/clus1clus2_47_input.list -v -s 3 -S 44 -t tmp -m 200 -M 200 | gzip - > ./ext5_merge7000_ISreplaced_genomes/clus1clus2_47_ext5merge7000_k200_output.txt.gz
+```
+
 Then, a kmer-based GWAS was conducted using pyseer with an aim to identify kmers whose presence-absence patterns are associated with chromosome structures (_i.e._ phenotype). 
 
 
