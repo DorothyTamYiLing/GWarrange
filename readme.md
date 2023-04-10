@@ -126,18 +126,24 @@ blastn -query <multifasta file for IS elements to be located in the genomes> \
 ## "Merging" IS elements Replacement of IS elements in genome set
 (optional, recommended for gemones with high frequency of IS elements and genome rearrangements)
 
-It has been observed (for example in _Bordetella pertussis_) that genome rearrangements can be mediated by regions of homology that consist of more than one IS element (usually IS elements are found at the beginning and the end of the homology region). Therefore, in order to detect these type of rearangements, it is necessary to replace the whole region of homology. This can be done by merging coordinates of adjacent IS elements and treating htem as "one IS". The merge of IS elements is optional but is recommended for gemones with high frequency of IS elements and genome rearrangements. Then, the IS/mergedIS are replaced by a short placeholder sequence (e.g. Nx15) in the genome set
+It has been observed (for example in _Bordetella pertussis_) that genome rearrangements can be mediated by regions of homology that are several thousands bp in size and consist of more than one IS element (usually IS elements are found at the beginning and the end of the homology region). Therefore, in order to detect the boundaries for these type of rearangements, it is necessary to replace the whole region of homology. This can be done by merging coordinates of adjacent IS elements (i.e. IS that are less than a certain number of bases apart) and treating them as "one IS". The merge of IS elements is optional but is recommended for gemones with high frequency of IS elements and genome rearrangements. 
+
+For the coordinate pair (i.e. start and end position) of each IS in the genome, there is also an option to extend the IS cordinates for a number of bp on each side to ensure complete mask of the IS. Default is to extend 5bp fromm each side. 
+
+Then, each IS element (or "merged IS") are replaced by a short placeholder sequence (e.g. Nx15) in the genome set. 
+
+It is advised to perform IS merging with caution, as any genome rearrangement event that sits completely within the "merged IS" region will not be detected. To overcome this potential issue, user can choose to perfrom IS replacement with merging overlapping IS only (i.e. IS that are less than 3 bp apart) at the same time when users chose to merge IS that are further apart than this distance. This will lead to a separaet set of IS-replaced genomes being produced.
 
 ```
 bash merge_replace_IS.sh -g fixed_genomes.fasta -i <blast outout file fo IS location in genomes> \
--e <number of bp to extend from each side of each IS> -m <maximum number of bp for mergeing adjacent IS> \
--s <"on" or "off" string argument for outputting genomes with no extension and merging overlapping IS only>
+-e <number of bp to extend from each side of each IS, default:5> \
+-m <maximum number of bp for mergeing adjacent IS, default:3 (i.e. merging overlapping IS)> \
+-s <"on" or "off" string argument for outputting separate set of genomes with merging overlapping IS only>
 ```
 Example:
 ```
-bash merge_replace_IS.sh -g fixed_genomes.fasta -i IS_coor.txt -e 10 -m 5000 -s "on"
+bash merge_replace_IS.sh -g fixed_genomes.fasta -i IS_coor.txt -e 3 -m 5000 -s "on"
 ```
-
 
 ## Kmer-based GWAS
 
