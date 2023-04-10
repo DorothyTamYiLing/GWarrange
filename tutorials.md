@@ -12,10 +12,10 @@ Genome rearrangments in _Bordetella pertussis_ are belived to be largely mediate
 Then, these kmers were blasted with the original genome set for studying potential genome rearrangment that are captured by them, implemented by the following script:
 
 ```
-bash main.sh -k ./example_data/clus1clus2_sigk_withN.fasta \
--g ./example_data/clus1clus2_47.fna.gz \
--p ./example_data/clus1clus2_pheno.txt -l 200 -d 70000 -f 30 \
--o ./example_data/clus1clus2_47_merge7000GWAS_nopopctrl_testdir
+bash ./scripts/main.sh -k ./example_data/clus1clus2_sigk.fasta \
+-g ./example_data/clus1clus2_47.fna \
+-p ./example_data/clus1clus2_pheno.txt -l 200 -d 20000 -f 30 \
+-o ./clus1clus2_47_tutout -s 4300
 
 ```
 
@@ -23,47 +23,13 @@ bash main.sh -k ./example_data/clus1clus2_sigk_withN.fasta \
 
 **Visualising genome rearrangements that are captured by kmer**
 
-Plotting flanks of **selected** split kmers:
-```
-#plotting kmer9939
-Rscript plot_flk_kmer_prop.R --kmer kmer9939 --phen ./example_data/clus1clus2_pheno.txt \
---coor ./example_data/clus1clus2_47_merge7000GWAS_nopopctrl_testdir/myflk_behave_pheno.txt \
---genome.size 4000 --outdir ./example_data/clus1clus2_47_merge7000GWAS_nopopctrl_testdir/kmer9939 --flk.dist 70000
 
-#plotting kmer999
-Rscript plot_flk_kmer_prop.R --kmer kmer999 --phen ./example_data/clus1clus2_pheno.txt \
---coor ./example_data/clus1clus2_47_merge7000GWAS_nopopctrl_testdir/myflk_behave_pheno.txt \
---genome.size 4000 --outdir ./example_data/clus1clus2_47_merge7000GWAS_nopopctrl_testdir/kmer999 --flk.dist 70000
-
-```
 
 <img width="882" alt="Screenshot 2023-04-02 at 9 58 16 PM" src="https://user-images.githubusercontent.com/34043893/229378714-08ace0a6-d8de-4af0-be0c-5975d2fa3170.png">
 
 <img width="883" alt="Screenshot 2023-04-02 at 9 57 59 PM" src="https://user-images.githubusercontent.com/34043893/229378733-5af67fb3-cc1c-47c9-9f69-e6d4c294e628.png">
 
 Plotting intact kmers that contain placeholder sequence (with N):
-
-```
-#subset the intact kmers that are reverse in majority of the 0 genomes, and forward and majority of the 1 genomes
-awk -F "\t" 'NR==1; NR > 1{ if ($6 < 0.5 && $7 > 0.5 && $8 > 0.5 && $9 < 0.5) { print } }' myintactkwithN_out.txt > myintactkwithN_rev0fwd1_set.txt
-
-#plot the kmer set
-Rscript plot_intactk.R \
---input ./example_data/clus1clus2_47_merge7000GWAS_nopopctrl_testdir/myintactkwithN_rev0fwd1_set.txt \
---outdir ./example_data/clus1clus2_47_merge7000GWAS_nopopctrl_testdir \
---outname myintactkwithN_rev0fwd1 \
---gen_size 4300
-
-#subset the intact kmers that are reverse in majority of the 1 genomes, and forward and majority of the 0 genomes
-awk -F "\t" 'NR==1; NR > 1{ if ($6 > 0.5 && $7 < 0.5 && $8 < 0.5 && $9 > 0.5) { print } }' myintactkwithN_out.txt > myintactkwithN_rev1fwd0_set.txt
-
-#plot the kmer set
-Rscript plot_intactk.R \
---input ./example_data/clus1clus2_47_merge7000GWAS_nopopctrl_testdir/myintactkwithN_rev1fwd0_set.txt \
---outdir ./example_data/clus1clus2_47_merge7000GWAS_nopopctrl_testdir \
---outname myintactkwithN_rev1fwd0 \
-
-```
 
 <img width="785" alt="Screenshot 2023-04-02 at 10 15 17 PM" src="https://user-images.githubusercontent.com/34043893/229379399-b255beac-d65f-4212-9cca-78a6447350ca.png">
 
