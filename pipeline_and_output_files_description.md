@@ -205,6 +205,8 @@ flk_dist_stat: summary statistics <sup> 3 </sup> for distance between flanks acr
 
 **label**: labels generate for the kmers containing the above information 
 
+10. myintactkwithN_out.txt, include the following information in columns:
+
 
 
 ## Step3:
