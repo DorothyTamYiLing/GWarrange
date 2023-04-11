@@ -250,6 +250,37 @@ flk_dist_stat: summary statistics <sup> 3 </sup> for distance between flanks acr
 **revk_1gen_sd**: standard deviation of genome position of reverse kmer in case genomes
 
 
+`process_sigkNoN.R` (called by main.sh)
+
+script function:
+
+1. blasts the intact kmers with the genomes.
+
+2. filtering kmers based on blast hit information. Kmer passing the filter should have blast hits that fulfill the following criteria:
+
+Criteria 1: the kmer should show blast match to at least 95% of the genomes
+
+Criteria 2: Each flank should only show one unique blast hit per genome
+
+Criteria 3: Both flanks should be fully aligned with the genomes (the flank start and end coordinates in the blast hit should be consistent 
+with those in flank_coor.txt)
+
+3. For intact kmers passing the fliter, make summary of their position and orientation in the genomes.
+
+output files:
+
+1. rows_for_process_NoN.txt (blast hit of kemrs that pass the filter)
+
+2. kmer_with_missinggenomes_NoN.txt (blast hit of kmers that do not fulfill criteria 1) <sup> 1 </sup>
+ 
+3. kmer_with_multi_hits_NoN.txt (blast hit of kmers that do not fulfill criteria 3) <sup> 1 </sup>
+
+4. kmer_with_alignlen_issue_NoN.txt (blast hit of kmers that do not fulfill criteria 4) <sup> 1 </sup>
+
+7. myflk_behave_pheno_NoN.txt (kmers with start and end genome position, kmer orientation in each genome defined, and merged with phenotype information)
+
+8. myNoNintactk_out.txt, same column information as in myintactkwithN_out.txt
+
 ## Step3:
 `plot_flk_kmer_prop.R`
 
