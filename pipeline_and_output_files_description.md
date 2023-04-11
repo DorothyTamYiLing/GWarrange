@@ -7,11 +7,23 @@
 
 ## Script functions and output files
 
-`fix_genome.py`
+`fix_genome.py` (containing genome assemblies in the same orientation)
 
 script functions:
+1. Re-orientating whole genome assemblies so that all the assemblies start with the same chosen gene that is also in the same orientation in every genome.
 
+output file:
+1. fixed_genomes.fasta  
 
+`merge_IS.R` (called by merge_replace_IS.sh)
+
+script functions:
+1. Merging coordinates of adjacent IS elements that are less than a certain number of bases apart (indicated by -m flag) and treating them as "one IS" during IS replacement.
+2. Extend the IS cordinates for a number of base pair (indicated by -e flag) on each side to ensure complete mask of the IS. 
+
+output files:
+1. ext{}_merge{}_mergedIS.txt
+2. ext{}_merge{}_mergedISstat.txt
 
 `filtering_kmer_and_blast.sh` (called by `main.sh`)
 
