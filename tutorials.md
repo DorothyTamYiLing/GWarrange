@@ -111,10 +111,10 @@ paste -d \\n ./ext5_merge7000_ISreplaced_genomes/header.txt ./ext5_merge7000_ISr
 Then, these kmers were blasted with the original genome set for studying potential genome rearrangment that are captured by them, implemented by the following script:
 
 ```
-bash ./scripts/main.sh -k ./ext5_merge7000_ISreplaced_genomes/sigk_seq.fasta \
+bash ./scripts/main.sh -k ./ext100_merge7000_ISreplaced_genomes/sigk_seq.fasta \
 -g ./example_data/clus1clus2_47.fna \
--p ./example_data/clus1clus2_pheno.txt -l 200 -d 70000 -f 30 \
--o ./clus1clus2_47_ext5_merge7000_tutout -s 4300
+-p ./example_data/clus1clus2_pheno.txt -l 200 -d 7000 -f 30 \
+-o ./ext100_merge7000_ISreplaced_genomes -s 4300 -x 2 -y 1000
 
 ```
 
