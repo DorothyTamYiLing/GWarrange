@@ -1,5 +1,8 @@
 # Pipeline and output files description
 
+Pipeline description:
+
+<img width="790" alt="Screenshot 2023-04-11 at 11 43 09 AM" src="https://user-images.githubusercontent.com/34043893/231137076-a0e6000d-7e72-4bb3-b940-8f92cecd6cf4.png">
 
 
 ## Step1:
