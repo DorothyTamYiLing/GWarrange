@@ -281,19 +281,54 @@ output files:
 
 8. myNoNintactk_out.txt, same column information as in myintactkwithN_out.txt
 
-## Step3:
-`plot_flk_kmer_prop.R`
+`plot_flk_kmer_prop.R` (called by main.sh)
 
 script functions: 
-For specific kmer, visualise the rearrangement event by plotting where the flanks are found in each genome
-output file: 
+
+For each split kmer in myshort_splitk_out_uniq.txt, visualise the rearrangement event by plotting where the flanks are found in case and control genomes
+
+output files: (within /splitk_plots): 
+
 1. kmerX_plot.pdf 
-2. case_upstreamflk.txt (information <sup> 3 </sup> for plotting case upstream flank arrows in plot)
-3. case_downstreamflk.txt (information <sup> 3 </sup> for plotting case downstream flank arrows in plot)
-4. case_intactk.txt (information <sup> 3 </sup> for plotting case intactk arrows in plot)
-5. ctrl_upstreamflk.txt (information <sup> 3 </sup> for plotting control upstream flank arrows in plot)
-6. ctrl_downstreamflk.txt (information <sup> 3 </sup> for plotting control downstream flank arrows in plot)
-7. ctrl_intactk.txt (information <sup> 3 </sup> for plotting control intactk arrows in plot)
+
+3. case_upstreamflk.txt (information <sup> 3 </sup> for plotting case upstream flank arrows in plot)
+
+4. case_downstreamflk.txt (information <sup> 3 </sup> for plotting case downstream flank arrows in plot)
+
+5. case_intactk.txt (information <sup> 3 </sup> for plotting case intactk arrows in plot)
+
+6. ctrl_upstreamflk.txt (information <sup> 3 </sup> for plotting control upstream flank arrows in plot)
+
+7. ctrl_downstreamflk.txt (information <sup> 3 </sup> for plotting control downstream flank arrows in plot)
+
+8. ctrl_intactk.txt (information <sup> 3 </sup> for plotting control intactk arrows in plot)
 
 <sup> 3 </sup> information includes median start and end coordinates, count and proportion of genomes
 
+`plot_intactk.R` (called by main.sh)
+
+script functions: 
+
+1. Plotting intact kmers for visualising sequence content of rearrangement : Genome position of intact kmers were round off to the nearest 1000 and only kmers with unqiue genome position information were plotted.
+
+output files:
+
+1. myintactkwithN_rev1fwd0_set.txt (output of bash command before the script)
+set of N-containing kmers that are in reverse orientation in majority of the case genomes and forward in orientation in majority of control genomes
+
+2. myintactkwithN_rev0fwd1_set.txt (output of bash command before the script)
+set of N-containing kmers that are in reverse orientation in majority of the control genomes and forward in orientation in majority of case genomes
+
+3. myNoNintactk_rev1fwd0_set.txt (output of bash command before the script)
+set of kmers without N that are in reverse orientation in majority of the case genomes and forward in orientation in majority of control genomes
+
+4. myNoNintactk_rev0fwd1_set.txt (output of bash command before the script)
+set of kmers without N that are in reverse orientation in majority of the control genomes and forward in orientation in majority of case genomes
+
+5. myintactkwithN_rev0fwd1_kmer4plot.txt / myintactkwithN_rev1fwd0_kmer4plot.txt / myNoNintactk_rev0fwd1_kmer4plot.txt / myNoNintactk_rev1fwd0_kmer4plot.txt
+Set of kmers with unqiue genome position <sup> 4 </sup> used in the final plot
+
+6. myintactkwithN_rev0fwd1.png / myintactkwithN_rev1fwd0.png / myNoNintactk_rev0fwd1.png / myNoNintactk_rev1fwd0.png
+Final plot of kmers set with unique genome position <sup> 4 </sup>
+
+<sup> 4 </sup> kmers with duplicated genome positions are defined by those showing identical values after rounding off median genome position of forward kmer in control genomes (column "fwdk_0gen_med") to the closest multiplier of selected value (e.g. 100, 1000, 10000)
