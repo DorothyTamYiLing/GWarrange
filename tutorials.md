@@ -64,14 +64,48 @@ pyseer --phenotypes ./example_data/clus1clus2_pheno_4pyseer.txt \
 > ./ext5_merge7000_ISreplaced_genomes/clus1clus2_47_ext5merge7000_k200_MAF0.05_nopopctrl
 ```
 
+Pyseer standard output:
+```
+Read 47 phenotypes
+Detected binary phenotype
+
+56454 loaded variants
+0 pre-filtered variants
+56454 tested variants
+56454 printed variants
+```
+
 14,582 kmers were found to be significantly associated with the structural phenotype. The sequences of the kmers were extracted and placed in a multifasta file (example_data/clus1clus2_sigk.fasta).
+
+/home/ubuntu/Dorothy/pyseer-master/scripts/count_patterns.py kmer_patterns.txt > count_pattern.txt
+
+awk '{ if ($4 <= 3.27E-04) { print } }' clus1clus2_47_ext5merge7000_k200_MAF0.05_nopopctrl > sigk_pyseer.txt
+
+
+#get the seqeunce only
+awk '{print $1}' sigk_pyseer.txt > sigk_seq.txt #include bad-chiqse, if do not contain header row
+
+number=$(cat sigk_seq.txt | wc -l)
+
+rm header.txt   #remove existing header file, very important!
+
+START=1
+let "END=$number" 
+ 
+for (( c=$START; c<=$END; c++ ))
+do
+	echo ">kmer""$c " >> header.txt
+done
+
+paste -d \\n header.txt sigk_seq.txt > sigk_seq.fasta
+
 
 Then, these kmers were blasted with the original genome set for studying potential genome rearrangment that are captured by them, implemented by the following script:
 
 ```
-bash ./scripts/main.sh -k ./example_data/clus1clus2_sigk.fasta \
+bash ./scripts/main.sh -k ./ext5_merge7000_ISreplaced_genomes/sigk_seq.fasta \
 -g ./example_data/clus1clus2_47.fna \
--p ./example_data/clus1clus2_pheno.txt -l 200 -d 20000 -f 30 \
+-p ./example_data/clus1clus2_pheno.txt -l 200 -d 70000 -f 30 \
 -o ./clus1clus2_47_tutout -s 4300
 
 ```
