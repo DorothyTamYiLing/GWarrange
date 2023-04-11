@@ -1,11 +1,17 @@
 # Pipeline and output files description
 
-Pipeline description:
+## Pipeline description:
 
 <img width="761" alt="Screenshot 2023-04-11 at 11 45 01 AM" src="https://user-images.githubusercontent.com/34043893/231137508-860801e4-6682-46e1-9f70-c2b9e98fa865.png">
 
 
-## Step1:
+## Script functions and output files
+
+`fix_genome.py`
+
+script functions:
+
+
 
 `filtering_kmer_and_blast.sh` (called by `main.sh`)
 
