@@ -22,10 +22,27 @@ script functions:
 2. Extend the IS cordinates for a number of base pair (indicated by -e flag) on each side to ensure complete mask of the IS. 
 
 output files:
-1. ext{}_merge{}_mergedIS.txt
-2. ext{}_merge{}_mergedISstat.txt
+1. ext{}_merge{}_mergedIS.txt (new IS start and end coordinates after extension and merging)
+2. ext{}_merge{}_mergedISstat.txt (statistics of IS coordinates after extension and merging, including distance between ISs and size of IS)
 
-`filtering_kmer_and_blast.sh` (called by `main.sh`)
+`iSreplace_2col.py` (called by merge_replace_IS.sh)
+
+script functions:
+1. replacing each of the "merged IS" by 15xN placeholder sequences.
+
+output files:
+1. IS-replaced genomes in a new directory
+
+`class_k.py` (called by `main.sh`)
+
+script functions:
+1. separate significant kmers from GWAS into those containing N and those do not, and output them into separate fasta files for further processing. 
+
+output files:
+1. sigk_withN.fasta (kmers contain N)
+2. sigk_noN.fasta (kmers do not contain N)
+
+`filtering_kmer_and_blast.sh` (called by `main.sh`, for processing kmers containing N only)
 
 script functions:
 1. filters sig. kmers for blasting by keeping only the kmers that contain flanking sequences (both side) of at least `$flnk_len` bp in size
@@ -33,13 +50,11 @@ script functions:
 
 output files: 
 1. myout.txt (blast output file)
-2. kmer_flanktooshort_4rm.txt (list of kmers that are removed due to having at least one flank being too short, i.e. <`$flnk_len`)
+2. kmer_flanktooshort_4rm.txt (list of kmers that are removed due to having at least one flank being too short, i.e. less than `$flnk_len`)
 3. kmer_flanktooshort_flkcoor.txt (flank start and end coordinates of the kmers being removed)
 4. kmer_forblast.fasta (multifasta file of kmer that have passed the filter and for blasting with genomes)
 
-
-
-`extract_flank_coor.py` (called by `filtering_kmer_and_blast.sh`)
+`extract_flank_coor.py` (called by `filtering_kmer_and_blast.sh`, for processing kmers containing N only)
 
 script functions:
 1. gets the flank start and end coordinates of the sig. kmers
@@ -47,22 +62,21 @@ script functions:
 output files: 
 1. flank_coor.txt; format: `kmerX_{end coordinate of the upstream flank}_{start coordinate of the downstream flank}_kmer size`
 
-
-## Step2:
-
-`make_flank_summary.R` (called by `main.sh`)
+`make_flank_summary.R` (called by `main.sh`, for processing kmers containing N only)
 
 script functions:
 1. filtering kmers based on blast hit information. Kmer passing the filter should have blast hits that fulfill the following criteria:
 
-Criteria 1: both flanks should be found in all genomes (there should be 2 blast hits per kmer, one for each flank)
+Criteria 1: the kmer should show blast match to at least 95% of the genomes
 
-Criteria 2: Both flanks should be fully aligned with the genomes (the flank start and end coordinates in the blast hit should be consistent 
+Criteria 2: both flanks of the kmers should be found in the genomes (there should be 2 blast hits per kmer, one for each flank)
+
+Criteria 3: Each flank should only show one unique blast hit per genome
+
+Criteria 4: Both flanks should be fully aligned with the genomes (the flank start and end coordinates in the blast hit should be consistent 
 with those in flank_coor.txt)
 
-Criteria 3: there should be no SNPs nor gaps (the values in the "mismatch" and "gap" columns should be 0 for all blast hit)
-
-Criteria 4: Each flank should only show one unique blast hit per genome
+SNPs and gaps are allowed. 
 
 2. for those kmers that have passed the filter, determine:
 
@@ -74,7 +88,7 @@ Criteria 4: Each flank should only show one unique blast hit per genome
 
 -`EndR` (genomic coordinate of the end of downstream flank)
 
-3. for those kmers that have passed the filter, determine their flank behaviours in each genome (behaviours could be 
+3. Then, determine their flank behaviours in each genome (behaviours could be 
 `intact_k` (intact kmer), `mv_away` (flanks move away from each other), `swp_flk` (flanks swap in position),`mv&flp` (one flank has 
 move away and flipped) according to the following rules:
 
@@ -126,52 +140,72 @@ Flank behaviours are defined as `undefined_behave` when none of the rules above 
 
 output files: 
 1. rows_for_process.txt (blast hit of kemrs that pass the filter)
- 
-2. kmer_with_deletion.txt (blast hit of kmers that do not fulfill criteria 1) <sup> 1 </sup>
 
-3. kmer_with_alignlen_issue.txt (blast hit of kmers that do not fulfill criteria 2) <sup> 1 </sup>
-
-4. kmer_with_SNPgap.txt (blast hit of kmers that do not fulfill criteria 3) <sup> 1 </sup> 
+2. kmer_with_missinggenomes.txt (blast hit of kmers that do not fulfill criteria 1) <sup> 1 </sup>
  
-5. kmer_with_multi_hits.txt (blast hit of kmers that do not fulfill criteria 4) <sup> 1 </sup>
+3. kmer_with_deletion.txt (blast hit of kmers that do not fulfill criteria 2) <sup> 1 </sup>
+
+4. kmer_with_multi_hits.txt (blast hit of kmers that do not fulfill criteria 3) <sup> 1 </sup>
+
+5. kmer_with_alignlen_issue.txt (blast hit of kmers that do not fulfill criteria 4) <sup> 1 </sup>
 
 6. myundefine_k.txt (blast hit of kmers with undefined behaviour in at least one genome) <sup> 1 </sup>
 
-7. myflk_behave_pheno.txt (kmers with `StartL`,`EndL`,`StartR`,`EndR` and flank behaviour in each genome defined, and merged with phenotype information)
+7. myflk_behave_pheno.txt (kmers with `StartL`,`EndL`,`StartR`,`EndR`, flank behaviour, kmer orientation (for intactk only), flank disatnce in each genome defined, and merged with phenotype information)
 
-8. myall_out.txt, include the following information in columns:
+8. mysplitk_out.txt, include the following information in columns:
 
-**kmer**: kmer ID
+**kmer**: N-contaiing kmer ID
 
 **event_sum**: list of flank behaviours obserevd across genomes for this kmer, seperated by ":"
 
 **flk_behaviour**: count and proportion of case and control genomes for each behaviour; format: `count of case genomes with behaviour/total number of case genomes (proportion): count of control genomes with behaviour/total number of control genomes (proportion)`
 
-**case_assos**: behaviour associated with case genomes
+**my0_intactk_sum**: for kmers that are intact (kmers that are not split) in control genomes, summary genome positions for the upstream and downstream flanks <sup> 2 </sup>
 
-**case_assos_prop**: proportion of case genomes with this behaviour
+**my1_intactk_sum**: for kmers that are intact (kmers that are not split) in case genomes, summary genome positions for the upstream and downstream flanks <sup> 2 </sup>
 
-**ctrl_assos**: behaviour associated with control genomes
+**otherk**: flank behaviour other than intact k
 
-**ctrl_assos_prop**: proportion of control genomes with this behaviour
+**my0_otherk_sum**: for kmers that show flank behaviour other than intactk in control genomes, summary genome positions for the upstream and downstream flanks <sup> 2 </sup>
 
-**case_assos_gp_Lflk_sumstat**: for the flank behaviours that is associated with case genomes, the summary statistics <sup> 2 </sup>  of the genome positions of the upstream flanks
-
-**case_assos_gp_Rflk_sumstat**: for the flank behaviours that is associated with case genomes, the summary statistics <sup> 2 </sup>  of the genome positions of the downstream flanks
-
-**ctrl_assos_gp_Lflk_sumstat**: for the flank behaviours that is associated with control genomes, the summary statistics <sup> 2 </sup> of the genome positions of the upstream flanks
-
-**ctrl_assos_gp_Rflk_sumstat**: for the flank behaviours that is associated with control genomes, the summary statistics <sup> 2 </sup>  of the genome positions of the downstream flanks
-
-**case_assos_gp_flkdis_sumstat**: for the flank behaviours that is associated with case genomes, the summary statistics <sup> 2 </sup>  of the distance between the upstream and downstream flanks
-
-**ctrl_assos_gp_flkdis_sumstat**: for the flank behaviours that is associated with control genomes, the summary statistics <sup> 2 </sup>  of the distance between the upstream and downstream flanks
+**my1_otherk_sum**: for kmers that show flank behaviour other than intactk in case genomes, summary genome positions for the upstream and downstream flanks <sup> 2 </sup>
 
 **event**: genome rearrangemnet event
 
 <sup> 1 </sup> files are not produced when there is no content
 
-<sup> 2 </sup>  summary statistics format: `minimum, 1st quantile, median, mean, 3rd quantile, maximum, standard deviation`
+<sup> 2 </sup> summary genome positions for flanks, format: StartL_stat | StartL_sd | StartR_stat | StartR_sd | flk_dist_stat 
+
+StartL_stat: summary statistics <sup> 3 </sup> for upstream flanks across genomes
+
+StartL_sd: stand deviation for upstream flanks across genomes
+
+StartR_stat: summary statistics <sup> 3 </sup> for downstream flanks across genomes
+
+StartR_sd: standard deviation for downstream flanks across genomes
+
+flk_dist_stat: summary statistics <sup> 3 </sup> for distance between flanks across genomes
+
+<sup> 3 </sup>  summary statistics format: `minimum, 1st quantile, median, mean, 3rd quantile, maximum`
+
+9. myshort_splitk_out_uniq.txt, contain kmers with unique proportion and genome position information for plotting. Include the following information in columns:
+
+**kmer**: N-contaiing kmer ID
+
+**intactk_mygp_ctrl_prop**: proportion of control genomes with intact kmer (round to decimal places indicated by -x flag)
+
+**intactk_mygp_case_prop**: proportion of case genomes with intact kmer (round to decimal places indicated by -x flag)
+
+**otherk_mygp_ctrl_prop**: proportion of control genomes with kmer of other behaviour (round to decimal places indicated by -x flag)
+
+**otherk_mygp_case_prop**: proportion of case genomes with kmer of other behaviour (round to decimal places indicated by -x flag)
+
+**my0_intactk_StartL_mean**: for intact kmers in control genomes, mean upstream flank start coordinate (round to decimal places indicated by -y flag)
+
+**label**: labels generate for the kmers containing the above information 
+
+
 
 ## Step3:
 `plot_flk_kmer_prop.R`
