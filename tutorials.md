@@ -75,30 +75,38 @@ Detected binary phenotype
 56454 printed variants
 ```
 
-14,582 kmers were found to be significantly associated with the structural phenotype. The sequences of the kmers were extracted and placed in a multifasta file (example_data/clus1clus2_sigk.fasta).
+Generate number of unique pattterns and p value significance threshold information:
+```
+/home/ubuntu/Dorothy/pyseer-master/scripts/count_patterns.py ./ext5_merge7000_ISreplaced_genomes/kmer_patterns.txt > \ ./ext5_merge7000_ISreplaced_genomes/count_pattern.txt
+```
+Extract kmers with p value below the the significance threshod:
+```
+awk '{ if ($4 <= 3.27E-04) { print } }' ./ext5_merge7000_ISreplaced_genomes/clus1clus2_47_ext5merge7000_k200_MAF0.05_nopopctrl \
+> ./ext5_merge7000_ISreplaced_genomes/sigk_pyseer.txt
+```
 
-/home/ubuntu/Dorothy/pyseer-master/scripts/count_patterns.py kmer_patterns.txt > count_pattern.txt
+28,247 kmers were found to be significantly associated with the structural phenotype. The sequences of the kmers were extracted and placed in a multifasta file.
 
-awk '{ if ($4 <= 3.27E-04) { print } }' clus1clus2_47_ext5merge7000_k200_MAF0.05_nopopctrl > sigk_pyseer.txt
-
-
+Extract significant kmer sequences and convert then into fasta format
+```
 #get the seqeunce only
-awk '{print $1}' sigk_pyseer.txt > sigk_seq.txt #include bad-chiqse, if do not contain header row
+awk '{print $1}' ./ext5_merge7000_ISreplaced_genomes/sigk_pyseer.txt > ./ext5_merge7000_ISreplaced_genomes/sigk_seq.txt 
 
-number=$(cat sigk_seq.txt | wc -l)
+number=$(cat ./ext5_merge7000_ISreplaced_genomes/sigk_seq.txt | wc -l)
 
-rm header.txt   #remove existing header file, very important!
+rm ./ext5_merge7000_ISreplaced_genomes/header.txt   #remove existing header file, very important!
 
 START=1
 let "END=$number" 
  
 for (( c=$START; c<=$END; c++ ))
 do
-	echo ">kmer""$c " >> header.txt
+	echo ">kmer""$c " >> ./ext5_merge7000_ISreplaced_genomes/header.txt
 done
 
-paste -d \\n header.txt sigk_seq.txt > sigk_seq.fasta
-
+paste -d \\n ./ext5_merge7000_ISreplaced_genomes/header.txt ./ext5_merge7000_ISreplaced_genomes/sigk_seq.txt \
+> ./ext5_merge7000_ISreplaced_genomes/sigk_seq.fasta
+```
 
 Then, these kmers were blasted with the original genome set for studying potential genome rearrangment that are captured by them, implemented by the following script:
 
@@ -106,28 +114,31 @@ Then, these kmers were blasted with the original genome set for studying potenti
 bash ./scripts/main.sh -k ./ext5_merge7000_ISreplaced_genomes/sigk_seq.fasta \
 -g ./example_data/clus1clus2_47.fna \
 -p ./example_data/clus1clus2_pheno.txt -l 200 -d 70000 -f 30 \
--o ./clus1clus2_47_tutout -s 4300
+-o ./clus1clus2_47_ext5_merge7000_tutout -s 4300
 
 ```
 
 1009 kmers were found to be split (_i.e._ flanking sequences mapped to different positions) when mapped to the original genomes (in mysplitk_out.txt).
 
+
 **Visualising genome rearrangements that are captured by kmer**
 
+1) Plotting split kmers for visualising rearrangement boundaries
+
+Since kmers contain highly redundant information, only kmers with unique information (genome position, case and control count and proportion) were kept. They can be found in output file "".
+
+Four rearrangement boundaries were detected, and they potentially refer to two inversion events, one nested within the other.  Here, in total, eight kmers were detected that contained full information for the boundaries of two inversion events and they are shown below. Full information of these kmers can be found in output file "".
+
+Inversion within genome region 43000 and 3600000, 43000bp boundary, kmer being intact in case genomes and split in control genomes, in forward orientation:
+
+Inversion within genome region 43000 and 3600000, 43000bp boundary, reverse orientation kmer:
 
 
-<img width="882" alt="Screenshot 2023-04-02 at 9 58 16 PM" src="https://user-images.githubusercontent.com/34043893/229378714-08ace0a6-d8de-4af0-be0c-5975d2fa3170.png">
 
-<img width="883" alt="Screenshot 2023-04-02 at 9 57 59 PM" src="https://user-images.githubusercontent.com/34043893/229378733-5af67fb3-cc1c-47c9-9f69-e6d4c294e628.png">
+2) Plotting intact kmers for visualising sequence content of rearrangement :
+Genome position of intact kmers were round off to the nearest 1000 and only kmers with unqiue genome position information were plotted. 
 
-Plotting intact kmers that contain placeholder sequence (with N):
-
-<img width="785" alt="Screenshot 2023-04-02 at 10 15 17 PM" src="https://user-images.githubusercontent.com/34043893/229379399-b255beac-d65f-4212-9cca-78a6447350ca.png">
-
-
-<img width="720" alt="Screenshot 2023-04-02 at 10 15 05 PM" src="https://user-images.githubusercontent.com/34043893/229379384-4383bab9-b3f7-4563-8dae-0f918dcd750e.png">
-
-Fig 2. : Plot of intact kmers that show rearrangements in two genome regions tha are significantly associated with the structural phenotype.
+Plot of intact kmers that show rearrangements in two genome regions tha are significantly associated with the structural phenotype.
 
 (Above: 33 intact kmers that are in forward orientation in majority of structure "1" genomes, as well as reverse in majority of structure "0" genomes;
 Below: 33 intact kmers that are in reverse orientation in majority of structure "1" genomes, as well as forward in majority of structure "0" genomes)
