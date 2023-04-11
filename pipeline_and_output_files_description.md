@@ -208,25 +208,45 @@ flk_dist_stat: summary statistics <sup> 3 </sup> for distance between flanks acr
 10. myintactkwithN_out.txt, include the following information in columns:
 
 **kmer**:	N-contaiing kmer ID
+
 **kmer_behaviour**:	"intact k"
+
 **flk_dist**: all observed values of flank distance across genomes
+
 **fwdk_gen_count**:	number of genomes with kmer in forward orientation
+
 **revk_gen_count**	: number of genomes with kmer in reverse orientation
+
 **fwdk_0gen_prop**	: proportion of control genomes with kmer in forward orientation
+
 **revk_0gen_prop**: proportion of control genomes with kmer in reverse orientation
+
 **fwdk_1gen_prop**	: proportion of case genomes with kmer in forward orientation
+
 **revk_1gen_prop**	: proportion of case genomes with kmer in reverse orientation
+
 **fwdk_0gen_count**	: count of control genomes with kmer in forward orientation
+
 **revk_0gen_count**: count of control genomes with kmer in reverse orientation
+
 **fwdk_1gen_count**	: count of case genomes with kmer in forward orientation
+
 **revk_1gen_count**	: count of case genomes with kmer in reverse orientation
+
 **fwdk_0gen_med**	: median genome position of forward kmer in control genomes
+
 **fwdk_0gen_sd**	: standard deviation of genome position of forward kmer in control genomes
+
 **revk_0gen_med**: median genome position of reverser kmer in control genomes
+
 **revk_0gen_sd**	: standard deviation of genome position of reverse kmer in control genomes
+
 **fwdk_1gen_med**	: median genome position of forward kmer in case genomes
+
 **fwdk_1gen_sd**	: standard deviation of genome position of forward kmer in case genomes
+
 **revk_1gen_med**: median genome position of reverse kmer in case genomes
+
 **revk_1gen_sd**: standard deviation of genome position of reverse kmer in case genomes
 
 
