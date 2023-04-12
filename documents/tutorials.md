@@ -1,5 +1,8 @@
 # Tutotrial 1
 
+Click into the link for downloading genome file required for tutorial:
+https://drive.google.com/drive/folders/1RQU1a7kxcVSsIQr94MwSKgRf9PC0YnZO?usp=share_link
+
 This tutorial is based a subset of _Bordetella pertussis_ genomes as described in Weigand _et al_. 2019), in which chromosome structures were defined by exhaustive pairwise alignment. A subset of 47 genomes that display two different chromosome structures (18 genomes with structure 1 and 29 genomes with structure 2) (See Fig. 1) were selected, and a kmer-based GWAS was conducted using pyseer with an aim to identify kmers whose presence-absence patterns are associated with chromosome structures (_i.e._ phenotype). Structure phenotype of two pairs of genomes were swapped for demonstration purpose. 
 
 <img width="1159" alt="Screenshot 2023-04-02 at 10 32 23 PM" src="https://user-images.githubusercontent.com/34043893/229380077-f0c15dba-7ed3-4fc3-a0d7-6d9a5f52b556.png">
