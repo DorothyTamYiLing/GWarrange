@@ -1,2 +1,0 @@
-startmed	endmed	count	prop
-2501659	2507769	2	11
