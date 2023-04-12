@@ -286,6 +286,7 @@ output files:
 
 8. myNoNintactk_out.txt, same column information as in myintactkwithN_out.txt
 
+<sup> 1 </sup> files are not produced when there is no content
 
 `plot_flk_kmer_prop.R` (called by main.sh, for plotting split kmers)
 
