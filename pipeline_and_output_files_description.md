@@ -7,7 +7,7 @@
 
 ## Script functions and output files
 
-`fix_genome.py` (containing genome assemblies in the same orientation)
+`fix_genome.py`
 
 script functions:
 1. Re-orientating whole genome assemblies so that all the assemblies start with the same chosen gene that is also in the same orientation in every genome.
@@ -18,25 +18,29 @@ output file:
 `merge_IS.R` (called by merge_replace_IS.sh)
 
 script functions:
-1. Merging coordinates of adjacent IS elements that are less than a certain number of bases apart (indicated by -m flag) and treating them as "one IS" during IS replacement.
+
+1. Merging coordinates of adjacent IS elements that are less than a certain number of bases apart (indicated by -m flag in merge_replace_IS.sh) and treating them as "one IS" during IS replacement.
+
 2. Extend the IS cordinates for a number of base pair (indicated by -e flag) on each side to ensure complete mask of the IS. 
 
 output files:
 1. ext{}_merge{}_mergedIS.txt (new IS start and end coordinates after extension and merging)
+
 2. ext{}_merge{}_mergedISstat.txt (statistics of IS coordinates after extension and merging, including distance between ISs and size of IS)
 
 `iSreplace_2col.py` (called by merge_replace_IS.sh)
 
 script functions:
-1. replacing each of the "merged IS" by 15xN placeholder sequences.
+
+1. replacing each of the "merged IS" by 15xN placeholder sequence.
 
 output files:
-1. IS-replaced genomes in a new directory
+1. IS-replaced genomes in a new directory (directory name: ext{}_merge{}_ISreplaced_genomes)
 
 `class_k.py` (called by `main.sh`)
 
 script functions:
-1. separate significant kmers from GWAS into those containing N and those do not, and output them into separate fasta files for further processing. 
+1. separate significant kmers from GWAS into those contain N and those do not, and output them into separate fasta files for further processing. 
 
 output files:
 1. sigk_withN.fasta (kmers contain N)
