@@ -316,7 +316,7 @@ output files: (within output directory /splitk_plots):
 
 script functions: 
 
-1. Plotting intact kmers for visualising sequence content of rearrangement : Genome position of intact kmers were round off to the nearest multiple of value as indicated by the y flag, and only kmers with unqiue genome position information were plotted <sup> 5 </sup>.
+1. Plotting intact kmers for visualising sequence content of rearrangement; only kmers with unqiue genome position information were plotted <sup> 5 </sup>.
 
 output files:
 
@@ -338,4 +338,4 @@ Set of kmers with unqiue genome position <sup> 5 </sup> used in the final plot
 6. myintactkwithN_rev0fwd1.png / myintactkwithN_rev1fwd0.png / myNoNintactk_rev0fwd1.png / myNoNintactk_rev1fwd0.png
 Final plot of kmers set with unique genome position <sup> 5 </sup>
 
-<sup> 5 </sup> kmers with duplicated genome positions are defined by those showing identical values after rounding off median genome position of forward kmer in control genomes (column "fwdk_0gen_med") to the closest multiplier of selected value (e.g. 100, 1000, 10000) as indicated by the y flag
+<sup> 5 </sup> kmers with duplicated genome positions are defined by those showing identical values after rounding off median genome position of forward kmer in control genomes (column "fwdk_0gen_med") to the closest multiplier of selected value (e.g. 100, 1000, 10000) as indicated by the y flag in. main.sh
