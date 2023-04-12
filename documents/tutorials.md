@@ -1,3 +1,5 @@
+Click [here] (https://drive.google.com/drive/folders/1RQU1a7kxcVSsIQr94MwSKgRf9PC0YnZO?usp=share_link) for downloading genomes files required for the tutorials. After installing genome_rearangement with git clone, place the downloaded genomes files in ~/genome_rearrangement/example_data for later use.
+
 # Tutotrial 1
 
 This tutorial is based a subset of _Bordetella pertussis_ genomes as described in Weigand _et al_. 2019), in which chromosome structures were defined by exhaustive pairwise alignment. A subset of 47 genomes that display two different chromosome structures (18 genomes with structure 1 and 29 genomes with structure 2) (See Fig. 1) were used. Structure phenotype of two pairs of genomes were swapped for demonstration purpose.  
