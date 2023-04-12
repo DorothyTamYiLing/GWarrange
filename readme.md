@@ -16,122 +16,87 @@ bash main.sh -k <sigk> -g <genomes> -p <phenotype> -o <output directory> -l <siz
 
 Arguments:
 
-**sigk** : multifasta file of significant phenotype-associated kmers that may or may not contain repetitive elements placeholder sequence (e.g. Nx15)
+**k** : multifasta file of significant phenotype-associated kmers that may or may not contain repetitive elements placeholder sequence (e.g. Nx15)
 
-**genomes** : gzipped multifasta file of genomes set (original sequence without IS replacement)
+**g** : gzipped multifasta file of genomes set (original sequence without IS replacement)
 
-**phenotype** : phenotype file (file format: sample names in 1st column, binary phenotype in 2nd column; no header, tab-delimited) 
+**p** : phenotype file (file format: sample names in 1st column, binary phenotype in 2nd column; no header, tab-delimited) 
 
-**output directory** : directory being created where the output files will be generated 
+**o** : directory being created where the output files will be generated 
 
-**size of kmers** : length (bp) of significant kmers (all kmers have to be the output of one GWAS hence are of the same size) 
+**l** : length (bp) of significant kmers (all kmers have to be the output of one GWAS hence are of the same size) 
 
-**flanking seqeunces minimum length** :  Minimum length (bp) of flanking sequences (both side) for the kmer to be blasted with the genomes; default: 30bp 
+**f** :  Minimum length (bp) of flanking sequences (both side) for the kmer to be blasted with the genomes; default: 30bp 
 
-**replaced size** : maximum size of repetitive sequences blocks that are replaced by shorter placed holder sequence (i.e. Maximum distance (bp) between the upstream and downstream flanks in the genome for a kmer to be defined as intact kmer)  
+**d** : maximum size of repetitive sequences blocks that are replaced by shorter placed holder sequence (i.e. Maximum distance (bp) between the upstream and downstream flanks in the genome for a kmer to be defined as intact kmer)  
 
-Example:
+**x** : parameter for plotting split kmers. Number of significant digits (e.g. 2,3,4; default: 2) for rounding off mean upstream flank start coordinate, for selecting split kmers with unique proportion and genome position information for plotting
 
-```
-bash main.sh -k allsigk.fasta -g genomes.fna.gz -p phenotye.txt -o output_dir -l 200 -f 30 -d 200000
-
-```
-## visualising genome rearrangements that are captured by selected significant kmers
-
-### For plotting selected placeholder-sequence-containing kmer that is split by rearrangement (placeholder flanking sequences are plotted)
-```
-Rscript plot_flk_kmer_prop.R --kmer <kmer ID> --phen <phenotype> --coor <myflk_behave_pheno.txt> --genome.size <genome size> --outdir <output directory> --flk.dist <replaced size>
-
-```
-
-Arguments:
-
-**kmer ID** : ID of chosen split placeholder-sequence-containing kmer for visualising genome rearrangements, for kmer IDs see first column of mysplitk_out.txt
-
-**phenotype** : phenotype file (file format: sample names in 1st column, binary phenotype in 2nd column; no header, tab-delimited)
-
-**myflk_behave_pheno.txt** : myflk_behave_pheno.txt file from the output of main.sh
-
-**genome size** : size of genome (in thousands)
-
-**output directory** : directory path where the plot will be generated
-
-**replaced size** : maximum size of repetitive sequences blocks that are replaced by shorter placed holder sequence (i.e. Maximum distance (bp) between the upstream and downstream flanks in the genome for a kmer to be defined as intact kmer) (same as "replaced size" in main.sh)
+**y** : parameter for plotting intact kmers. The closest multiplier of selected value (e.g. 100, 1000, 10000; default :1000) used for rounding off median genome position of intact kmer, for selecting intact kmers with unique genome position information for plotting
 
 Example:
 
 ```
-Rscript plot_flk_kmer_prop.R --kmer kmer1 --phen phenotye.txt --coor myflk_behave_pheno.txt --genome.size 4000 --outdir ~/output_directory/kmer1 --flk.dist 200000
-```
-
-### For plotting selected intact kmers (containing placeholder sequence or not)
-```
-Rscript plot_intactk.R --input <intact k> --outdir <output directory> --outname <output name> --gen_size <genome size> 
-
-```
-Arguments:
-**intact k** : selected intact kmers for visualising rearrangement. Input file containing selected rows from myintactkwithN_out.txt and/or myNoNintactk_out.txt. One line per kmer. Original header line is required.
-
-**output directory** : directory path where the plot will be generated
-
-**output name** : prefix of output file
-
-**genome size** : size of genome (in thousands)
-
-Example:
-
-```
-Rscript plot_intactk.R --input myNoNintactk_out_selected.txt --outdir ~/output_dir \
---outname myNoNintactk_out_selected \
---gen_size 4300
+bash main.sh -k allsigk.fasta -g genomes.fna.gz -p phenotye.txt -o output_dir -l 200 -f 30 -d 200000 -x 2 -y 100 
 
 ```
  
+For tutorials, please go to [here](https://github.com/DorothyTamYiLing/genome_rearrangement/blob/master/tutorials.md) 
+
+For pipeline and output files description, go to [here](https://github.com/DorothyTamYiLing/genome_rearrangement/blob/master/pipeline%20and%20output%20files%20description.md)
+ 
 # Pre-requisite
 
-## Replacement of IS elements in genome set
+## Reorientating whole genome assemblies
 
-Before using this pipeline, the repetitive elements that are speculated to have mediated rearrangement events, such as IS element, must be replaced by a short placeholder sequence (e.g. Nx15) in the genome set. This can be done using the script "iSreplace_2col.py" provided in this repository.
+Since most bacterial genomes are circular, genomes asemblies from which detecting genome rearrangements are detected should be re-orientated by a chosen gene, which will become the first gene in the re-orientated assemblies, in the same orientation.
+
+First, the location and orientation of the chosen gene in the genomens are obtained by blasting it with multifasta file of genome assemblies.
 ```
-python3 iSreplace_2col.py --input <multifasta genome sequences> --coor <coordinates of IS> --out <path of output>
+blastn -query <fasta file of chosen gene used for genome re-orientation> \
+-subject <multifasta file of genome sequences, unzipped> \
+-outfmt 6 -out <output file name>
 
 ```
-Arguments:
 
-**genome fasta** : multifasta file of the genomes for IS replacement, gzipped, headings should be the genome IDs
+Then, genome assemblies are re-orientated according to the position and orientation of the chosen gene in the genomes, using the script fix_genome.py:
 
-**coordinates of IS** : genome coordinates of the IS element to be replaced in each genome (file format: one row per IS per genome; genome IDs in 1st column (match with the genome ID in the multifasta file), start coordinate in 2nd column, end coordinate in 3rd column; headers={sseqid	mystart	myend}, tab-delimited; example file can be found in ~/example_data/IS_coor_example.txt). Coordinates ranges of the ISs in the same gneome must not overlap. This could be the output of merge_IS.R.
+```
+python3 ./scripts/fix_genome.py --input <multifasta genome sequences, unzipped> --mycoor <blast output file name>
 
-**path of output** : output directory for the IS replaced genomes (one fasta per genome, not gzipped)
+```
+The output file name for the genomes with same orientation is "fixed_genomes.fasta".
 
+
+## Locating IS elements in the genome assemblies
+
+Location of IS elements in the genomes are obtained by blasting. Sequences of more than one IS elements can be put in the same multifasta file for obtaining genome locations for all at once.
+```
+blastn -query <multifasta file for IS elements to be located in the genomes> \
+-subject fixed_genomes.fasta \
+-outfmt 6 -out <output file name>
+```
+
+## "Merging" IS elements Replacement of IS elements in genome set
+(optional, recommended for gemones with high frequency of IS elements and genome rearrangements)
+
+It has been observed (for example in _Bordetella pertussis_) that genome rearrangements can be mediated by regions of homology that are several thousands bp in size and consist of more than one IS element (usually IS elements are found at the beginning and the end of the homology region). Therefore, in order to detect the boundaries for these type of rearangements, it is necessary to replace the whole region of homology. This can be done by merging coordinates of adjacent IS elements (i.e. IS that are less than a certain number of bases apart) and treating them as "one IS". The merge of IS elements is optional but is recommended for gemones with high frequency of IS elements and genome rearrangements. 
+
+For the coordinate pair (i.e. start and end position) of each IS in the genome, there is also an option to extend the IS cordinates for a number of bp on each side to ensure complete mask of the IS. Default is to extend 5bp fromm each side. 
+
+Then, each IS element (or "merged IS") are replaced by a short placeholder sequence (e.g. Nx15) in the genome set. 
+
+It is advised to perform IS merging with caution, as any genome rearrangement event that sits completely within the "merged IS" region will not be detected. To overcome this potential issue, user can choose to perfrom IS replacement with merging overlapping IS only (i.e. IS that are less than 3 bp apart) at the same time when users chose to merge IS that are further apart than this distance. This will lead to a separaet set of IS-replaced genomes being produced.
+
+```
+bash merge_replace_IS.sh -g fixed_genomes.fasta -i <blast outout file fo IS location in genomes> \
+-e <number of bp to extend from each side of each IS, default:5> \
+-m <maximum number of bp for mergeing adjacent IS, default:3 (i.e. merging overlapping IS)> \
+-s <"on" or "off" string argument for outputting separate set of genomes with merging overlapping IS only>
+```
 Example:
 ```
-python3 iSreplace_2col.py --input ~/example_data/ISrpl_testgenomes.fasta.gz --coor ~/example_data/IS_coor_example.txt  --out path/to/your/output
-```
-The sequence of the IS element being replaced in this command is IS481 in _Bordetella pertussis_ genome TOHAMA1 (~/example_data/TOHAMA1_IS481_27283to28335.fasta). It is replaced in two genomes stored in ISrpl_testgenomes.fasta.gz according to the genome coordinates stored in IS_coor_example.txt.
-
-Range of IS elements can be found in https://github.com/thanhleviet/ISfinder-sequences for multiple bacterial species.
-
-
-
-**"Merging" IS elements (optional):**
-
-It has been observed (for example in _Bordetella pertussis_) that genome rearrangements can be mediated by regions of homology that consist of more than one IS element (usually IS elements are found at the beginning and the end of the homology region). Therefore, in order to detect these type of rearangements, it is necessary to replace the whole region of homology. This can be done by merging coordinates of adjacent IS elements and treating htem as "one IS". A script "merge_IS.R" is provided for this purpose. 
-
-```
-Rscript merge_IS.R --input <coordinates of IS> --merge <integer> --extend <integer>
-```
-Arguments: 
-
-**input** : genome coordinates of IS elements for merging across genomes (file format: one row per IS per genome; genome IDs in 1st column (match with the genome ID in the multifasta file), start coordinate in 2nd column, end coordinate in 3rd column; headers={sseqid	mystart	myend}, tab-delimited; example file can be found in ~/example_data/IS_coor_example.txt). Coordinates ranges of the ISs in the same gneome must not overlap.
-
-**merge** : adjacent IS elements are merged when they are less than this number of bases apart
-
-**extend** : for extending IS coordinates, number of bases to extend from each side of IS. This can ensure that the whole IS is replaced.
-
-Example:
-```
-Rscript merge_IS.R --input ~/example_data/IS_coor_example.txt --merge 7000 --extend 100 
+bash ./scripts/merge_replace_IS.sh -g fixed_genomes.fasta -i IS_coor.txt -e 3 -m 5000 -s "on"
 ```
 
 ## Kmer-based GWAS
@@ -140,6 +105,11 @@ Then, a kmer-based GWAS is performed on the IS-replaced genome set (created as d
 
 From the output of pyseer, the kmers that are significantly associated with the phenotype and contain the short placeholder sequence are converted into a multi-fasta file, which is then used as one of the inputs of this pipeline (i.e. argument "kmers" of the main.sh script) for detecting potential genome rearrangement events that are associated with the phenotype of interest. (See the tutorial section for detailed instructions)
  
+ 
+## IS elements databaes 
+Range of IS elements can be found in https://github.com/thanhleviet/ISfinder-sequences for multiple bacterial species.
+
+
 
 # Requirements:
 
@@ -148,3 +118,4 @@ blastn 2.6.0+, R scripting front-end version 3.4.4, Python 3.9.12
 python modules: argparse, SeqIO, csv, pandas, gzip
 
 R module: optparse
+
