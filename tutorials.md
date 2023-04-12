@@ -127,6 +127,7 @@ Inversion within genome region 43000 and 3600000, 3600000bp boundary, kmer being
 Inversion within genome region 1500000 and 2500000, 1500000bp boundary, kmer being intact in control genomes and split in case genomes, forward orientation kmer:
 [kmer9618_plot.pdf](https://github.com/DorothyTamYiLing/genome_rearrangement/files/11210590/kmer9618_plot.pdf)
 
+Height of arrows corresponds to proporiton of case/control genomes.
 
 2) Plotting intact kmers without N for visualising sequence content of rearrangement :
 
@@ -138,6 +139,8 @@ Plot of intact kmers that show rearrangements in two genome regions that are sig
 
 ![myNoNintactk_rev1fwd0](https://user-images.githubusercontent.com/34043893/231439513-45c179bf-8bc6-4d1b-98b6-fe8f896ce57e.png)
 
+Height of arrows corresponds to proporiton of case/control genomes.
+
 (Above: 10 intact kmers that are in forward orientation in majority of structure "1" genomes, as well as reverse in majority of structure "0" genomes;
 Below: 8 intact kmers that are in reverse orientation in majority of structure "1" genomes, as well as forward in majority of structure "0" genomes)
 
@@ -146,50 +149,3 @@ Colour indices refer to the "colour index" column in the corresponding *kmer4plo
 Reference: Weigand, M.R., Williams, M.M., Peng, Y., Kania, D., Pawloski, L.C., Tondella, M.L. and CDC Pertussis Working Group, 2019. Genomic survey of Bordetella pertussis diversity, United States, 2000–2013. Emerging infectious diseases, 25(4), p.780.
 
 
-# Tutotrial 2
-
-This tutorial is based on 468 _Bordetella pertussis_ genomes with pertactin (PRN) expression information. Among them, 165 genomes show the presence of pertactin expression and 303 show absence. A kmer-based GWAS was conducted using pyseer with an aim to identify kmers whose presence-absence patterns are associated with the presence of pertactiv expression. IS481s that were no more than 15000bp apart in each genome were "merged" (See "Merging IS element" in the prerequisite section in READMA.md). Then, each of these "merged" IS element were replaced with shorter placedholder sequences (N x 15), prior to the GWAS.
-
-1,683 kmers were found to be significantly associated with the PRN expression phenotype. The sequences of the kmers were extracted and placed in a multifasta file (example_data/PRN468_merge15000_sigk.fasta).
-
-Then, these kmers were blasted with the original genome set for studying potential genome rearrangment that are captured by them, implemented by the following script:
-
-```
-bash main.sh -k ./example_data/PRN468_merge15000_sigk.fasta \
--g ./example_data/PRN_468.fna.gz \
--p ./example_data/prn_status_pheno.txt -l 200 -d 200000 -f 30 \
--o ./example_data/PRN468_merge15000_testdir
-
-```
-1009 kmers were found to be split (_i.e._ flanking sequences mapped to different positions) when mapped to the original genomes (in mysplitk_out.txt).
-
-**Visualising genome rearrangements that are captured by kmer**
-
-Plotting flanks of **selected** split kmers:
-```
-#plotting kmer89
-Rscript plot_flk_kmer_prop.R --kmer kmer89 --phen ./example_data/prn_status_pheno.txt \
---coor ./example_data/PRN468_merge15000_testdir/myflk_behave_pheno.txt \
---genome.size 4000 --outdir ./example_data/PRN468_merge15000_testdir/kmer89 --flk.dist 200000
-
-```
-
-<img width="969" alt="Screenshot 2023-04-02 at 11 43 22 PM" src="https://user-images.githubusercontent.com/34043893/229383098-fb929e04-7f83-4056-8b6e-a399469277c1.png">
-
-Plotting intact kmers that DO NOT contain placeholder sequence (without N) and show significant ratio patterns:
-
-```
-#subset the kmers show show significant ratio patterns, which are reverse in majority of the 0 genomes, and forward and majority of the 1 genomes
-awk -F "\t" 'NR==1; NR > 1{ if ($6 < 0.5 && $7 > 0.5 && $8 > 0.5 && $9 < 0.5) { print } }' myNoNintactk_out.txt > myNoNintactk_out_sigratio.txt
-
-#plot the kmer set
-Rscript plot_intactk.R \
---input ./example_data/PRN468_merge15000_testdir/myNoNintactk_out_sigratio.txt \
---outdir ./example_data/PRN468_merge15000_testdir \
---outname myNoNintactk_out_sigratio \
---gen_size 4300
-```
-
-<img width="822" alt="Screenshot 2023-04-02 at 11 47 02 PM" src="https://user-images.githubusercontent.com/34043893/229383210-9393c86b-138a-4aee-b4bb-0c831df907ea.png">
-
-Colour indices refer to the "colour index" column in the corresponding kmer4plot.txt file (with the same prefix), hence the corresponding kmers.
