@@ -1,4 +1,4 @@
-Click [here] (https://drive.google.com/drive/folders/1RQU1a7kxcVSsIQr94MwSKgRf9PC0YnZO?usp=share_link) for downloading genomes files required for the tutorials. After installing genome_rearangement with git clone, place the downloaded genomes files in ~/genome_rearrangement/example_data for later use.
+Click [here](https://drive.google.com/drive/folders/1RQU1a7kxcVSsIQr94MwSKgRf9PC0YnZO?usp=share_link) for downloading genomes files required for the tutorials. After installing genome_rearangement with git clone, place the downloaded genomes files in ~/genome_rearrangement/example_data for later use.
 
 # Tutotrial 1
 
