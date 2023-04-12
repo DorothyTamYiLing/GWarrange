@@ -1,4 +1,3 @@
-go to [tutorials](https://github.com/DorothyTamYiLing/genome_rearrangement/blob/master/tutorials.md)
 # Introduction
 This pipeline detects and visualises phenotype-associated genome rearrangement events in bacterial genomes that are mediated by homologous recombination between repetitive elements (such as IS elements). 
 
