@@ -16,74 +16,28 @@ bash main.sh -k <sigk> -g <genomes> -p <phenotype> -o <output directory> -l <siz
 
 Arguments:
 
-**sigk** : multifasta file of significant phenotype-associated kmers that may or may not contain repetitive elements placeholder sequence (e.g. Nx15)
+**k** : multifasta file of significant phenotype-associated kmers that may or may not contain repetitive elements placeholder sequence (e.g. Nx15)
 
-**genomes** : gzipped multifasta file of genomes set (original sequence without IS replacement)
+**g** : gzipped multifasta file of genomes set (original sequence without IS replacement)
 
-**phenotype** : phenotype file (file format: sample names in 1st column, binary phenotype in 2nd column; no header, tab-delimited) 
+**p** : phenotype file (file format: sample names in 1st column, binary phenotype in 2nd column; no header, tab-delimited) 
 
-**output directory** : directory being created where the output files will be generated 
+**o** : directory being created where the output files will be generated 
 
-**size of kmers** : length (bp) of significant kmers (all kmers have to be the output of one GWAS hence are of the same size) 
+**l** : length (bp) of significant kmers (all kmers have to be the output of one GWAS hence are of the same size) 
 
-**flanking seqeunces minimum length** :  Minimum length (bp) of flanking sequences (both side) for the kmer to be blasted with the genomes; default: 30bp 
+**f** :  Minimum length (bp) of flanking sequences (both side) for the kmer to be blasted with the genomes; default: 30bp 
 
-**replaced size** : maximum size of repetitive sequences blocks that are replaced by shorter placed holder sequence (i.e. Maximum distance (bp) between the upstream and downstream flanks in the genome for a kmer to be defined as intact kmer)  
+**d** : maximum size of repetitive sequences blocks that are replaced by shorter placed holder sequence (i.e. Maximum distance (bp) between the upstream and downstream flanks in the genome for a kmer to be defined as intact kmer)  
 
-Example:
+**x** : parameter for plotting split kmers. Number of significant digits (e.g. 2,3,4; default: 2) for rounding off mean upstream flank start coordinate, for selecting split kmers with unique proportion and genome position information for plotting
 
-```
-bash main.sh -k allsigk.fasta -g genomes.fna.gz -p phenotye.txt -o output_dir -l 200 -f 30 -d 200000
-
-```
-## Visualising genome rearrangements that are captured by selected significant kmers
-
-### For plotting selected placeholder-sequence-containing kmer that is split by rearrangement (placeholder flanking sequences are plotted)
-```
-Rscript plot_flk_kmer_prop.R --kmer <kmer ID> --phen <phenotype> --coor <myflk_behave_pheno.txt> --genome.size <genome size> --outdir <output directory> --flk.dist <replaced size>
-
-```
-
-Arguments:
-
-**kmer ID** : ID of chosen split placeholder-sequence-containing kmer for visualising genome rearrangements, for kmer IDs see first column of mysplitk_out.txt
-
-**phenotype** : phenotype file (file format: sample names in 1st column, binary phenotype in 2nd column; no header, tab-delimited)
-
-**myflk_behave_pheno.txt** : myflk_behave_pheno.txt file from the output of main.sh
-
-**genome size** : size of genome (in thousands)
-
-**output directory** : directory path where the plot will be generated
-
-**replaced size** : maximum size of repetitive sequences blocks that are replaced by shorter placed holder sequence (i.e. Maximum distance (bp) between the upstream and downstream flanks in the genome for a kmer to be defined as intact kmer) (same as "replaced size" in main.sh)
+**y** : parameter for plotting intact kmers. The closest multiplier of selected value (e.g. 100, 1000, 10000; default :1000) used for rounding off median genome position of intact kmer, for selecting intact kmers with unique genome position information for plotting
 
 Example:
 
 ```
-Rscript plot_flk_kmer_prop.R --kmer kmer1 --phen phenotye.txt --coor myflk_behave_pheno.txt --genome.size 4000 --outdir ~/output_directory/kmer1 --flk.dist 200000
-```
-
-### For plotting selected intact kmers (containing placeholder sequence or not)
-```
-Rscript plot_intactk.R --input <intact k> --outdir <output directory> --outname <output name> --gen_size <genome size> 
-
-```
-Arguments:
-**intact k** : selected intact kmers for visualising rearrangement. Input file containing selected rows from myintactkwithN_out.txt and/or myNoNintactk_out.txt. One line per kmer. Original header line is required.
-
-**output directory** : directory path where the plot will be generated
-
-**output name** : prefix of output file
-
-**genome size** : size of genome (in thousands)
-
-Example:
-
-```
-Rscript plot_intactk.R --input myNoNintactk_out_selected.txt --outdir ~/output_dir \
---outname myNoNintactk_out_selected \
---gen_size 4300
+bash main.sh -k allsigk.fasta -g genomes.fna.gz -p phenotye.txt -o output_dir -l 200 -f 30 -d 200000 -x 2 -y 100 
 
 ```
  
