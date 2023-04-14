@@ -10,7 +10,7 @@ git clone https://github.com/DorothyTamYiLing/genome_rearrangement.git
 
 ## For detecting genome rearrangement in genomes
 ```
-bash main.sh -k <sigk> -g <genomes> -p <phenotype> -o <output directory> -l <size of kmers> -f <flanking seqeunces minimum length> -d <replaced size>
+bash ./scripts/main.sh -k <sigk> -g <genomes> -p <phenotype> -o <output directory> -l <size of kmers> -f <flanking seqeunces minimum length> -d <replaced size>
 
 ```
 
@@ -37,7 +37,7 @@ Arguments:
 Example:
 
 ```
-bash main.sh -k allsigk.fasta -g genomes.fna.gz -p phenotye.txt -o output_dir -l 200 -f 30 -d 200000 -x 2 -y 100 
+bash ./scripts/main.sh -k allsigk.fasta -g genomes.fna.gz -p phenotye.txt -o output_dir -l 200 -f 30 -d 200000 -x 2 -y 100 
 
 ```
  
