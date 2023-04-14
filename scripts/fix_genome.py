@@ -24,14 +24,14 @@ output_handle = open("fixed_genomes.fasta", "w")
 with open(str(myinput), "rt") as handle:
 	fasta_sequences = SeqIO.parse(handle,'fasta')
 	for record in fasta_sequences:
-		print(record.id)
+		#print(record.id)
 		#mystart=int(df.loc[df['sseqid'] == record.id,"sstart"])
 		mystart_1=df.loc[df['sseqid'] == record.id,"sstart"]
 		mystart=int(mystart_1.iloc[0])
 		#myend=int(df.loc[df['sseqid'] == record.id,"send"])
 		myend_1=df.loc[df['sseqid'] == record.id,"send"]
 		myend=int(myend_1.iloc[0])
-		print("sstart : {}, send : {} ".format(int(mystart), int(myend))) 
+		#print("sstart : {}, send : {} ".format(int(mystart), int(myend))) 
 		myseq=record.seq
 		if mystart < myend and mystart>1:  #first gene in forward orientation and it is not in the beginning of assembly
 			myseq=myseq[mystart-1:]+myseq[0:mystart-1]
