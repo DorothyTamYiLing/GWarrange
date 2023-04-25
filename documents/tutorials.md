@@ -34,7 +34,8 @@ blastn -query ./example_data/IS_NZ_CP025371.1.fasta \
 
 In addition, genome rearrangments in _Bordetella pertussis_ have also been observed to be mediated by homologous recombination of sequence blocks that consist of multiple IS elements, which are usually found at the start and end of the sequence block. These sequence blocks can be as large as several thousand base pair in size. In order to increase the chance for detecting of genome rearrangements, it is advised to replace the these sequence blocks comlpetely with placeholder sequence. 
 
-{new method: extend by 7000 as default, merge within 1000 bp apart}
+{new method: extend by 7000 as default, merge within 1000 bp apart
+also ext7000_merge200 has worked}
 
  {rewrite these } Here, IS elements that were no more than 1000bp apart in each genome were "merged". Then, each of these "merged" IS element were replaced with shorter placedholder sequences (N x 15). Each pair of IS cordinates (start and end genome position) were extended by 7000bp (default) on each side to ensure complete mask of the IS. A separaet set of IS-replaced genomes were also produced by enabling performing IS replacement with merging overlapping IS only (i.e. IS that are less than 3 bp apart) through passing string argument "on" to the -s flag.
 ```
