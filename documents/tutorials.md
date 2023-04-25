@@ -34,9 +34,11 @@ blastn -query ./example_data/IS_NZ_CP025371.1.fasta \
 
 In addition, genome rearrangments in _Bordetella pertussis_ have also been observed to be mediated by homologous recombination of sequence blocks that consist of multiple IS elements, which are usually found at the start and end of the sequence block. These sequence blocks can be as large as several thousand base pair in size. In order to increase the chance for detecting of genome rearrangements, it is advised to replace the these sequence blocks comlpetely with placeholder sequence. 
 
-Here, IS elements that were no more than 7000bp apart in each genome were "merged". Then, each of these "merged" IS element were replaced with shorter placedholder sequences (N x 15). Each pair of IS cordinates (start and end genome position) were extended by 100bp (default) on each side to ensure complete mask of the IS. A separaet set of IS-replaced genomes were also produced by enabling performing IS replacement with merging overlapping IS only (i.e. IS that are less than 3 bp apart) through passing string argument "on" to the -s flag.
+{new method: extend by 7000 as default, merge within 1000 bp apart}
+
+ {rewrite these } Here, IS elements that were no more than 1000bp apart in each genome were "merged". Then, each of these "merged" IS element were replaced with shorter placedholder sequences (N x 15). Each pair of IS cordinates (start and end genome position) were extended by 7000bp (default) on each side to ensure complete mask of the IS. A separaet set of IS-replaced genomes were also produced by enabling performing IS replacement with merging overlapping IS only (i.e. IS that are less than 3 bp apart) through passing string argument "on" to the -s flag.
 ```
-bash ./scripts/merge_replace_IS.sh -g fixed_genomes.fasta -i blastIS_out.txt -m 7000 -s "on"
+bash ./scripts/merge_replace_IS.sh -g fixed_genomes.fasta -i blastIS_out.txt -e 7000 -m 1000 -s "on"
 ```
 
 Each set of IS-replaced genomes using different IS merging and extending parameters were output into new directories "ext100_merge7000_ISreplaced_genomes" and "ext100_merge3_ISreplaced_genomes" (merging overlapping IS only) respectively.
