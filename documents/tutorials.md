@@ -125,7 +125,7 @@ Note that the value used for -d parameter should be larger than the "Maximum siz
 
 Since kmers contain highly redundant information, only kmers with unique information (genome position, case and control count and proportion) were kept. They can be found in output file myshort_splitk_out_uniq.txt.
 
-Four rearrangement boundaries were found, and they potentially refer to two inversion events, i.e. between 43000bp and 3600000bp, as well as between 1500000bp and 2500000bp, one inversion nested within the other. The four boundaries can be indicated by eight different significant split kmers that were mapped to each of the boundary and split in case/control genomes (plots of two split kmers were shown below as examples) were detected. Full information of these kmers can be found in output file mysplitk_out.txt.
+Four rearrangement boundaries were found, and they potentially refer to two inversion events, i.e. between 43000bp and 3600000bp, as well as between 1500000bp and 2500000bp, one inversion nested within the other. The four boundaries can be indicated by eight different significant split kmers that were mapped to each of the boundary and split in case/control genomes (plots of four split kmers were shown below as examples) were detected. Full information of these kmers can be found in output file mysplitk_out.txt.
 
 Inversion within genome region 43000 and 3600000, 43000bp boundary, kmer being intact in case genomes and split in control genomes, in forward orientation:
 
@@ -133,11 +133,11 @@ Inversion within genome region 43000 and 3600000, 43000bp boundary, kmer being i
 
 Inversion within genome region 43000 and 3600000, 3600000bp boundary, kmer being intact in control genomes and split in case genomes, in reverse orientation:
 
-![kmer9756_plot.pdf](https://github.com/DorothyTamYiLing/genome_rearrangement/files/11210574/kmer9756_plot.pdf)
+[kmer9756_plot.pdf](https://github.com/DorothyTamYiLing/genome_rearrangement/files/11210574/kmer9756_plot.pdf)
 
 Inversion within genome region 1500000 and 2500000, 1500000bp boundary, kmer being intact in control genomes and split in case genomes, forward orientation kmer:
 
-![kmer9618_plot.pdf](https://github.com/DorothyTamYiLing/genome_rearrangement/files/11210590/kmer9618_plot.pdf)
+[kmer9618_plot.pdf](https://github.com/DorothyTamYiLing/genome_rearrangement/files/11210590/kmer9618_plot.pdf)
 
 Inversion within genome region 1500000 and 2500000, 2500000bp boundary, kmer being intact in case genomes and split in control genomes, reverse orientation kmer:
 
