@@ -41,6 +41,8 @@ bash ./scripts/merge_replace_IS.sh -g fixed_genomes.fasta -i blastIS_out.txt -e 
 
 Each set of IS-replaced genomes using different IS merging and extending parameters were output into new directories "ext100_merge7000_ISreplaced_genomes" and "ext100_merge3_ISreplaced_genomes" (merging overlapping IS only) respectively.
 
+Statistics on the sizes and distance between each pair of adjacent "merged" IS are printed in file "ext7000_merge200_mergedISstat.txt".
+
 Prior to GWAS, each set of IS-replaced genomes using different IS merging and extending parameters were used for generating kmers. Here, we use the kmer generation tool fsm-lite to generate kmers from genomes in directory /ext100_merge7000_ISreplaced_genomes.
 
 ```
@@ -107,10 +109,12 @@ Then, these kmers were blasted with the original genome set for studying potenti
 
 bash ./scripts/main.sh -k ./ext100_merge7000_ISreplaced_genomes/sigk_seq.fasta \
 -g ./example_data/clus1clus2_47.fna \
--p ./example_data/clus1clus2_pheno.txt -l 200 -d 7000 -f 30 \
+-p ./example_data/clus1clus2_pheno.txt -l 200 -d 10000 -f 30 \
 -o ./clus1clus2_47_ext100_merge7000_outdir -s 4300 -x 2 -y 1000
 
 ```
+
+Note that the value used for -d parameter should be larger than the "Maximum size of merged ISs" value in "ext7000_merge200_mergedISstat.txt".
 
 756 kmers were found to be split (_i.e._ flanking sequences mapped to different positions) when mapped to the original genomes (in mysplitk_out.txt).
 
@@ -121,7 +125,11 @@ bash ./scripts/main.sh -k ./ext100_merge7000_ISreplaced_genomes/sigk_seq.fasta \
 
 Since kmers contain highly redundant information, only kmers with unique information (genome position, case and control count and proportion) were kept. They can be found in output file myshort_splitk_out_uniq.txt.
 
-Rearrangement boundaries that potentially refer to two inversion events, one nested within the other, were detected. Here, in total, seven significant split kmers contained full information for the boundaries of two inversion events (plot of two split kmers were shown below as examples). Full information of these kmers can be found in output file mysplitk_out.txt.
+Four rearrangement boundaries were found, and they potentially refer to two inversion events, i.e. between 43000bp and 3600000bp, as well as between 1500000bp and 2500000bp, one inversion nested within the other. The four boundaries can be indicated by eight different significant split kmers that were mapped to each of the boundary and split in case/control genomes (plots of two split kmers were shown below as examples) were detected. Full information of these kmers can be found in output file mysplitk_out.txt.
+
+Inversion within genome region 43000 and 3600000, 43000bp boundary, kmer being intact in case genomes and split in control genomes, in forward orientation:
+
+[kmer940_plot.pdf](https://github.com/DorothyTamYiLing/genome_rearrangement/files/11361908/kmer940_plot.pdf)
 
 Inversion within genome region 43000 and 3600000, 3600000bp boundary, kmer being intact in control genomes and split in case genomes, in reverse orientation:
 
@@ -130,6 +138,11 @@ Inversion within genome region 43000 and 3600000, 3600000bp boundary, kmer being
 Inversion within genome region 1500000 and 2500000, 1500000bp boundary, kmer being intact in control genomes and split in case genomes, forward orientation kmer:
 
 ![kmer9618_plot.pdf](https://github.com/DorothyTamYiLing/genome_rearrangement/files/11210590/kmer9618_plot.pdf)
+
+Inversion within genome region 1500000 and 2500000, 2500000bp boundary, kmer being intact in case genomes and split in control genomes, reverse orientation kmer:
+
+[kmer881_plot.pdf](https://github.com/DorothyTamYiLing/genome_rearrangement/files/11361907/kmer881_plot.pdf)
+
 
 Height of arrows corresponds to proporiton of case/control genomes.
 
