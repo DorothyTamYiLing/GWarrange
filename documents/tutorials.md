@@ -32,14 +32,11 @@ blastn -query ./example_data/IS_NZ_CP025371.1.fasta \
 -outfmt 6 -out blastIS_out.txt
 ```
 
-In addition, genome rearrangments in _Bordetella pertussis_ have also been observed to be mediated by homologous recombination of sequence blocks that consist of multiple IS elements, which are usually found at the start and end of the sequence block. These sequence blocks can be as large as several thousand base pair in size. In order to increase the chance for detecting of genome rearrangements, it is advised to replace the these sequence blocks comlpetely with placeholder sequence. 
+In addition, genome rearrangments in _Bordetella pertussis_ have also been observed to be mediated by homologous recombination of sequence blocks that consist of one or more IS elements. These duplicated sequence blocks are found throughout the genome and can be as large as several thousand base pairs in size. To ensure sensitivity in detecting genome rearrangements, it is advised to replace the these sequence blocks **completely** with placeholder sequence. Without additional informaiton of the actual size of the homologous sequence blocks, sequences extending several thousands base pairs to both direction from each IS can be replaced.
 
-{new method: extend by 7000 as default, merge within 1000 bp apart
-also ext7000_merge200 has worked}
-
- {rewrite these } Here, IS elements that were no more than 1000bp apart in each genome were "merged". Then, each of these "merged" IS element were replaced with shorter placedholder sequences (N x 15). Each pair of IS cordinates (start and end genome position) were extended by 7000bp (default) on each side to ensure complete mask of the IS. A separaet set of IS-replaced genomes were also produced by enabling performing IS replacement with merging overlapping IS only (i.e. IS that are less than 3 bp apart) through passing string argument "on" to the -s flag.
+Here, sequences extending 7000bp to both direction from each IS were replaced. IS elements that were no more than 200bp apart (after extension) in each genome were also "merged". Then, each of these "extended and merged" IS element were replaced with shorter placedholder sequences (N x 15). A seperate set of IS-replaced genomes were also produced by enabling performing IS replacement with merging overlapping IS only (i.e. IS that are less than 3 bp apart) through passing string argument "on" to the -s flag.
 ```
-bash ./scripts/merge_replace_IS.sh -g fixed_genomes.fasta -i blastIS_out.txt -e 7000 -m 1000 -s "on"
+bash ./scripts/merge_replace_IS.sh -g fixed_genomes.fasta -i blastIS_out.txt -e 7000 -m 200 -s "on"
 ```
 
 Each set of IS-replaced genomes using different IS merging and extending parameters were output into new directories "ext100_merge7000_ISreplaced_genomes" and "ext100_merge3_ISreplaced_genomes" (merging overlapping IS only) respectively.
@@ -50,10 +47,10 @@ Prior to GWAS, each set of IS-replaced genomes using different IS merging and ex
 cd ./ext100_merge7000_ISreplaced_genomes
 
 #generating fsm-ite input file
-for f in *_ext100_merge7000_ISreplaced.fasta; do id=$(basename "$f" _ext100_merge7000_ISreplaced.fasta); echo $id $f; done > clus1clus2_47_input.list
+for f in *_ext7000_merge200_ISreplaced.fasta; do id=$(basename "$f" _ext7000_merge200_ISreplaced.fasta); echo $id $f; done > clus1clus2_47_input.list
 
 #generating kmers with size of 200 bases with minor allel frequency 0.05
-fsm-lite -l clus1clus2_47_input.list -v -s 3 -S 44 -t tmp -m 200 -M 200 | gzip - > clus1clus2_47_ext100merge7000_k200_output.txt.gz
+fsm-lite -l clus1clus2_47_input.list -v -s 3 -S 44 -t tmp -m 200 -M 200 | gzip - > clus1clus2_47_ext7000merge200_k200_output.txt.gz
 ```
 
 Then, a kmer-based GWAS was conducted using pyseer with an aim to identify kmers whose presence-absence patterns are associated with chromosome structures (_i.e._ phenotype). 
@@ -64,11 +61,11 @@ echo "samples binary" | cat - ../example_data/clus1clus2_pheno.txt > ../example_
 
 #run pyseer
 pyseer --phenotypes ../example_data/clus1clus2_pheno_4pyseer.txt \
---kmers clus1clus2_47_ext100merge7000_k200_output.txt.gz \
+--kmers clus1clus2_47_ext7000merge200_k200_output.txt.gz \
 --no-distances \
 --min-af 0.05 --max-af 0.95 \
 --print-samples --output-patterns kmer_patterns.txt \
-> clus1clus2_47_ext100merge7000_k200_MAF0.05_nopopctrl
+> clus1clus2_47_ext7000merge200_k200_MAF0.05_nopopctrl
 ```
 
 Generate number of unique pattterns and p value significance threshold information:
@@ -77,7 +74,7 @@ Generate number of unique pattterns and p value significance threshold informati
 ```
 Extract kmers with p value below the the significance threshod:
 ```
-awk '{ if ($4 <= 5.21E-04) { print } }' clus1clus2_47_ext5merge7000_k200_MAF0.05_nopopctrl > sigk_pyseer.txt
+awk '{ if ($4 <= 5.21E-04) { print } }' clus1clus2_47_ext7000merge200_k200_MAF0.05_nopopctrl > sigk_pyseer.txt
 ```
 
 26,665 kmers were found to be significantly associated with the structural phenotype. The sequences of the kmers were extracted and placed in a multifasta file.
