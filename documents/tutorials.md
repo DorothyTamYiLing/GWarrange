@@ -129,7 +129,7 @@ Four rearrangement boundaries were found, and they potentially refer to two inve
 
 Inversion within genome region 43000 and 3600000, 43000bp boundary, kmer being intact in case genomes and split in control genomes, in forward orientation:
 
-[kmer940_plot.pdf](https://github.com/DorothyTamYiLing/genome_rearrangement/files/11361908/kmer940_plot.pdf)
+<img width="927" alt="Screenshot 2023-05-07 at 9 37 35 PM" src="https://user-images.githubusercontent.com/34043893/236681154-15c6b72f-9c61-40d9-9fd4-04ae35d22620.png">
 
 Inversion within genome region 43000 and 3600000, 3600000bp boundary, kmer being intact in control genomes and split in case genomes, in reverse orientation:
 
