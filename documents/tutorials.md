@@ -157,8 +157,8 @@ Plot of intact kmers that show rearrangements in two genome regions that are sig
 
 Height of arrows corresponds to proporiton of case/control genomes.
 
-(Above: 10 intact kmers that are in forward orientation in majority of structure "1" genomes, as well as reverse in majority of structure "0" genomes;
-Below: 8 intact kmers that are in reverse orientation in majority of structure "1" genomes, as well as forward in majority of structure "0" genomes)
+(Above: 15 intact kmers that are in forward orientation in majority of structure "1" genomes, as well as reverse in majority of structure "0" genomes;
+Below: 17 intact kmers that are in reverse orientation in majority of structure "1" genomes, as well as forward in majority of structure "0" genomes)
 
 Colour indices refer to the "colour index" column in the corresponding *kmer4plot.txt file (with the same prefix), hence the corresponding kmers.
 
