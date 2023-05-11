@@ -24,7 +24,7 @@ Rscript ./scripts/merge_IS.R --input $IScoor --extend $extend --merge $merge
 
 python3 ./scripts/iSreplace_2col.py --input ${gen}  --coor ext${extend}_merge${merge}_mergedIS.txt --out ext${extend}_merge${merge}_ISreplaced_genomes
 
-f [[ ($merge -gt 3 || $extend -gt 100) && $switch == "on" ]]  #if merge arguments is provided and switch for minimal ISmerg is on as default
+if [[ ($merge -gt 3 || $extend -gt 100) && $switch == "on" ]]  #if merge or extend arguments is provided and larger than default values, and switch for minimal ISmerg is on as default
 then
 echo "also perform merging overlapping IS only"
 
