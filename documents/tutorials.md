@@ -116,10 +116,9 @@ bash ./scripts/main.sh -k ./ext100_merge7000_ISreplaced_genomes/sigk_seq.fasta \
 
 Note that the value used for -d parameter should be larger than the "Maximum size of merged ISs" value in "ext7000_merge200_mergedISstat.txt".
 
-756 kmers were found to be split (_i.e._ flanking sequences mapped to different positions) when mapped to the original genomes (in mysplitk_out.txt).
-
-
 **Visualising genome rearrangements that are captured by kmer**
+
+756 kmers were found to be split (_i.e._ flanking sequences mapped to different positions) when mapped to the original genomes (in mysplitk_out.txt).
 
 1) Plotting split kmers for visualising rearrangement boundaries
 
@@ -193,6 +192,73 @@ Prior to GWAS, each set of IS-replaced genomes using different IS merging and ex
 cd ./ext7000_merge200_ISreplaced_genomes
 ```
 
+#generating fsm-ite input file
+```
+for f in *_ext100_merge3_ISreplaced.fasta; do id=$(basename "$f" _ext100_merge3_ISreplaced.fasta); echo $id $f; done > PRN_468_input.list
+```
 
+#generating kmers with size of 200 bases with minor allel frequency 0.05
+```
+fsm-lite -l PRN_468_input.list -v -s 24 -S 444 -t tmp -m 200 -M 200 | gzip - > PRN_468_ext100merge3_k200_output.txt.gz
+```
+Then, a kmer-based GWAS was conducted using pyseer with an aim to identify kmers whose presence-absence patterns are associated with PRN expression phenotype. 
 
+```
+#adding header to phenotype file for pyseer input format
+echo "samples binary" | cat - ../example_data/prn_status_pheno_4pyseer.txt > ../example_data/prn_status_pheno_4pyseer.txt
+
+#run pyseer
+pyseer --phenotypes ../example_data/prn_status_pheno_4pyseer.txt \
+--kmers PRN_468_ext7000merge200_k200_output.txt.gz \
+--no-distances \
+--min-af 0.05 --max-af 0.95 \
+--print-samples --output-patterns kmer_patterns.txt \
+> PRN_468_ext7000merge200_k200_MAF0.05_nopopctrl
+```
+
+Generate number of unique pattterns and p value significance threshold information:
+```
+/path/to/scripts/count_patterns.py kmer_patterns.txt > count_pattern.txt
+```
+Extract kmers with p value below the the significance threshod:
+```
+awk '{ if ($4 <= 1.53E-04) { print } }' PRN_468_ext7000merge200_k200_MAF0.05_nopopctrl > sigk_pyseer.txt
+```
+
+18,626 kmers were found to be significantly associated with the PRN expression. The sequences of the kmers were extracted and placed in a multifasta file.
+
+Extract significant kmer sequences and convert then into fasta format
+```
+#get the seqeunce only
+awk '{print $1}' sigk_pyseer.txt > sigk_seq.txt 
+
+#create multifasta file for significant kmer sequences
+number=$(cat sigk_seq.txt | wc -l)
+
+rm header.txt   #remove any existing header file
+
+START=1
+let "END=$number" 
+ 
+for (( c=$START; c<=$END; c++ ))
+do
+	echo ">kmer""$c " >> header.txt
+done
+
+paste -d \\n header.txt sigk_seq.txt > sigk_seq.fasta
+```
+
+Then, these kmers were blasted with the original genome set for studying potential genome rearrangment that are captured by them, implemented by the following script:
+
+```
+#run in the fist level of /genome_rearrangement directory
+
+bash ./scripts/main.sh -k ./ext7000_merge200_ISreplaced_genomes/sigk_seq.fasta \
+-g ./example_data/PRN_468.fna \
+-p ./example_data/prn_status_pheno.txt -l 200 -d 5000 -f 30 \
+-o ./PRN_468_ext7000_merge200_outdir -s 110000 -x 2 -y 1000
+
+```
+
+Note that the value used for -d parameter should be larger than the "Maximum size of merged ISs" value in "ext7000_merge200_mergedISstat.txt".
 
