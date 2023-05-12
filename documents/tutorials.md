@@ -201,16 +201,16 @@ for f in *_ext100_merge3_ISreplaced.fasta; do id=$(basename "$f" _ext100_merge3_
 ```
 fsm-lite -l PRN_468_input.list -v -s 24 -S 444 -t tmp -m 200 -M 200 | gzip - > PRN_468_ext100merge3_k200_output.txt.gz
 ```
-Then, a kmer-based GWAS was conducted using pyseer with an aim to identify kmers whose presence-absence patterns are associated with PRN expression phenotype. 
+Then, a kmer-based GWAS was conducted using pyseer with an aim to identify kmers whose presence-absence patterns are associated with PRN expression phenotype. Population structure is controlled by phylogenetic similarity matrix.
 
 ```
 #adding header to phenotype file for pyseer input format
 echo "samples binary" | cat - ../example_data/prn_status_pheno_4pyseer.txt > ../example_data/prn_status_pheno_4pyseer.txt
 
 #run pyseer
-pyseer --phenotypes ../example_data/prn_status_pheno_4pyseer.txt \
+pyseer --lmm --phenotypes ../example_data/prn_status_pheno_4pyseer.txt \
 --kmers PRN_468_ext7000merge200_k200_output.txt.gz \
---no-distances \
+--similarity ../example_data/PRN_USA_468_ClfML_tree_similarity.tsv \
 --min-af 0.05 --max-af 0.95 \
 --print-samples --output-patterns kmer_patterns.txt \
 > PRN_468_ext7000merge200_k200_MAF0.05_nopopctrl
@@ -261,4 +261,10 @@ bash ./scripts/main.sh -k ./ext7000_merge200_ISreplaced_genomes/sigk_seq.fasta \
 ```
 
 Note that the value used for -d parameter should be larger than the "Maximum size of merged ISs" value in "ext7000_merge200_mergedISstat.txt".
+
+**Visualising genome rearrangements that are captured by kmer**
+
+2,351 kmers were found to be split (_i.e._ flanking sequences mapped to different positions) when mapped to the original genomes (in mysplitk_out.txt).
+
+Six rearrangement boundaries were found, and they potentially refer to three inversion events, i.e. between 43000bp and 3600000bp, between 1200000bp and 2800000bp, as well as between 1500000bp and 2500000bp, one inversion nested within the other. The four boundaries can be indicated by eight different significant split kmers that were mapped to each of the boundary and split in case/control genomes (plots of four split kmers were shown below as examples). Full information of these kmers can be found in output file mysplitk_out.txt.
 
