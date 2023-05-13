@@ -264,7 +264,24 @@ Note that the value used for -d parameter should be larger than the "Maximum siz
 
 **Visualising genome rearrangements that are captured by kmer**
 
-2,351 kmers were found to be split (_i.e._ flanking sequences mapped to different positions) when mapped to the original genomes (in mysplitk_out.txt).
+126 kmers were found to be intact in majority of case genomes and split in half of control genomes when mapped to the original genomes. They refer to one rearrangement boundary that potentially belongs to an inversion event between 1800000bp and 2200000bp in the genomes. Full information of these kmers can be found in output file mysplitk_out.txt. One of such split kmers is shown below:
 
-Six rearrangement boundaries were found, and they potentially refer to three inversion events, i.e. between 43000bp and 3600000bp, between 1200000bp and 2800000bp, as well as between 1500000bp and 2500000bp, one inversion nested within the other. The four boundaries can be indicated by eight different significant split kmers that were mapped to each of the boundary and split in case/control genomes (plots of four split kmers were shown below as examples). Full information of these kmers can be found in output file mysplitk_out.txt.
+![kmer970_plot-1](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/f9190541-f0df-4fbf-b645-ede2c26bdbab)
+
+Height of arrows corresponds to proportion of case/control genomes.
+
+Genome position of intact kmers without N from /ext100_merge3_ISreplaced_genomes (merging overlapping IS only) were plotted. Only kmers with unqiue genome position information (by rounding off to the nearest multiple of 1000) 
+
+Plot of intact kmers that show rearrangements in two genome regions that are significantly associated with the structural phenotype.
+
+![myNoNintactk_rev0fwd1](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/d0022eff-2cec-4941-9ba4-c8fc69567924)
+
+![myNoNintactk_rev1fwd0](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/b39e83fa-a961-4d7a-8de7-fa8f04e4b32d)
+
+Height of arrows corresponds to proporiton of case/control genomes.
+
+(Above: 4 intact kmers that are in forward orientation in majority of structure "1" genomes, as well as reverse in majority of structure "0" genomes;
+Below: 3 intact kmers that are in reverse orientation in majority of structure "1" genomes, as well as forward in majority of structure "0" genomes)
+
+Colour indices refer to the "colour index" column in the corresponding *kmer4plot.txt file (with the same prefix), hence the corresponding kmers.
 
