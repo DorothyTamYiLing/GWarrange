@@ -285,6 +285,6 @@ Below: 3 intact kmers that are in reverse orientation in majority of structure "
 
 Colour indices refer to the "colour index" column in the corresponding *kmer4plot.txt file (with the same prefix), hence the corresponding kmers.
 
-One of the significant intack kmers without N contains sequence of pertactin autotransporter. This kmer was only found using ext100_merge3_ISreplaced_genomes as the gene pertactin autotransporter is located immediately next to an IS element in pertusis genomes. Replacing sequences extending 7000bp to both direction from each IS 
+One of the significant intack kmers without N contains sequence of pertactin autotransporter. This kmer was not found using ext7000_merge200_ISreplaced_genomes. This is because the gene pertactin autotransporter is located immediately next to an IS element in pertusis genomes, and any genome rearrangement that sits completely within the "replaced IS" region will not be detected. 
 
 No split kmers were found using ext100_merge3_ISreplaced_genomes. This highlights the importance of replacing the whole sequence block that mediates homologous recombination. 
