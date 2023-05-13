@@ -264,15 +264,19 @@ Note that the value used for -d parameter should be larger than the "Maximum siz
 
 **Visualising genome rearrangements that are captured by kmer**
 
+1) Plotting split kmers for visualising rearrangement boundaries
+
 126 kmers were found to be intact in majority of case genomes and split in half of control genomes when mapped to the original genomes. They refer to one rearrangement boundary that potentially belongs to an inversion event between 1800000bp and 2200000bp in the genomes. Full information of these kmers can be found in output file mysplitk_out.txt. One of such split kmers is shown below:
 
 ![kmer970_plot-1](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/f9190541-f0df-4fbf-b645-ede2c26bdbab)
 
 Height of arrows corresponds to proportion of case/control genomes.
 
+2) Plotting intact kmers without N for visualising sequence content of rearrangement :
+
 Genome position of intact kmers without N from /ext100_merge3_ISreplaced_genomes (merging overlapping IS only) were plotted. Only kmers with unqiue genome position information (by rounding off to the nearest multiple of 1000) 
 
-Plot of intact kmers that show rearrangements in two genome regions that are significantly associated with the structural phenotype.
+Plot of intact kmers that show sequence rearrangements that are significantly associated with the PRN expression phenotype.
 
 ![myNoNintactk_rev0fwd1](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/d0022eff-2cec-4941-9ba4-c8fc69567924)
 
