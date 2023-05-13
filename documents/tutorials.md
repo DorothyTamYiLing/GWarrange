@@ -293,4 +293,4 @@ Colour indices refer to the "colour index" column in the corresponding *kmer4plo
 
 One of the significant intack kmers without N contains sequence of pertactin autotransporter. This kmer was not found using ext7000_merge200_ISreplaced_genomes. This is because the gene pertactin autotransporter is located immediately next to an IS element in pertusis genomes, and any genome rearrangement that sits completely within the "replaced IS" region will not be detected. 
 
-No split kmers were found using ext100_merge3_ISreplaced_genomes. This highlights the importance of replacing the whole sequence block that mediates homologous recombination. 
+No split kmers (i.e. rearrangement boundaries) were found using ext100_merge3_ISreplaced_genomes. This highlights the importance of replacing the whole sequence block that mediates homologous recombination. 
