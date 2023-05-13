@@ -77,12 +77,14 @@ blastn -query <multifasta file for IS elements to be located in the genomes> \
 -outfmt 6 -out <output file name>
 ```
 
-## "Merging" IS elements Replacement of IS elements in genome set
+## "Extending and Merging" IS elements in genome set
 (optional, recommended for gemones with high frequency of IS elements and genome rearrangements)
 
-It has been observed (for example in _Bordetella pertussis_) that genome rearrangements can be mediated by regions of homology that are several thousands bp in size and consist of more than one IS element (usually IS elements are found at the beginning and the end of the homology region). Therefore, in order to detect the boundaries for these type of rearangements, it is necessary to replace the whole region of homology. This can be done by merging coordinates of adjacent IS elements (i.e. IS that are less than a certain number of bases apart) and treating them as "one IS". The merge of IS elements is optional but is recommended for gemones with high frequency of IS elements and genome rearrangements. 
+It has been observed (for example in _Bordetella pertussis_) that genome rearrangements can be mediated by blocks of homologous sequences that are several thousands bp in size and consist of more than one IS element. Therefore, in order to detect the boundaries for these type of rearangements, it is necessary to replace the whole homologous sequence block. This can be done by extending IS cordinates for a number of bp in both direction to ensure complete mask of the IS. Default is to extend 100bp fromm each side. 
 
-For the coordinate pair (i.e. start and end position) of each IS in the genome, there is also an option to extend the IS cordinates for a number of bp on each side to ensure complete mask of the IS. Default is to extend 5bp fromm each side. 
+There is also an option to merge coordinates of adjacent IS elements (i.e. IS that are less than a certain number of bases apart) and treating them as "one IS". Default is to merge adjacent IS elements that are 3bp apart.
+
+For the coordinate pair (i.e. start and end position) of each IS in the genome, 
 
 Then, each IS element (or "merged IS") are replaced by a short placeholder sequence (e.g. Nx15) in the genome set. 
 
