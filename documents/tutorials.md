@@ -166,7 +166,7 @@ Reference: Weigand, M.R., Williams, M.M., Peng, Y., Kania, D., Pawloski, L.C., T
 
 # Tutorial 2
 
-This tutorial is based on 468 _Bordetella pertussis_ genomes with pertactin (PRN) expression information. Among them, 165 genomes show the presence of pertactin expression and 303 show absence. 
+This tutorial is based on 468 _Bordetella pertussis_ genomes with pertactin (PRN) expression information. Among them, 165 genomes show the presence of pertactin expression and 303 show absence. Pertactin expression information is taken from the supplementary material summarised in Lefrancq _et al._ 2022.
 
 First, genomes asemblies from which detecting genome rearrangements are detected are re-orientated by a chosen gene, i.e. gidA. The location and orientation of gidA in the genomens are obtained by blasting it with multifasta file of genome assemblies.
 ```
@@ -294,3 +294,5 @@ Colour indices refer to the "colour index" column in the corresponding *kmer4plo
 One of the significant intack kmers without N contains sequence of pertactin autotransporter. This kmer was not found using ext7000_merge200_ISreplaced_genomes. This is because the gene pertactin autotransporter is located immediately next to an IS element in pertusis genomes, and any genome rearrangement that sits completely within the "replaced IS" region will not be detected. 
 
 No split kmers (i.e. rearrangement boundaries) were found using ext100_merge3_ISreplaced_genomes. This highlights the importance of replacing the whole sequence block that mediates homologous recombination. 
+
+Ref: Lefrancq, N., Bouchez, V., Fernandes, N., Barkoff, A.M., Bosch, T., Dalby, T., Åkerlund, T., Darenberg, J., Fabianova, K., Vestrheim, D.F. and Fry, N.K., 2022. Global spatial dynamics and vaccine-induced fitness changes of Bordetella pertussis. Science Translational Medicine, 14(642), p.eabn3253.
