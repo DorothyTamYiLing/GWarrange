@@ -285,3 +285,5 @@ Below: 3 intact kmers that are in reverse orientation in majority of structure "
 
 Colour indices refer to the "colour index" column in the corresponding *kmer4plot.txt file (with the same prefix), hence the corresponding kmers.
 
+One of the significant intack kmers without N contains sequence of pertactin autotransporter. 
+
