@@ -29,7 +29,7 @@ Genome rearrangments in _Bordetella pertussis_ are belived to be largely mediate
 ```
 blastn -query ./example_data/IS_NZ_CP025371.1.fasta \
 -subject fixed_genomes.fasta \
--outfmt 6 -out blastIS_out.txt
+-outfmt 6 -out clus1clus2_47_blastIS_out.txt
 ```
 
 In addition, genome rearrangments in _Bordetella pertussis_ have also been observed to be mediated by homologous recombination of sequence blocks that consist of one or more IS elements. These duplicated sequence blocks are found throughout the genome and can be as large as several thousand base pairs in size. To ensure sensitivity in detecting genome rearrangements, it is advised to replace the these sequence blocks **completely** with placeholder sequence. Without additional informaiton of the actual size of the homologous sequence blocks, sequences extending several thousands base pairs to both direction from each IS can be replaced.
