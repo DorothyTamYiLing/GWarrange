@@ -161,6 +161,10 @@ Below: 17 intact kmers that are in reverse orientation in majority of structure 
 
 Colour indices refer to the "colour index" column in the corresponding *kmer4plot.txt file (with the same prefix), hence the corresponding kmers.
 
+**Important notes:**
+
+Boundaries between genome region 1500000 and 2500000 were not detected using ext100_merge3_ISreplaced_genomes. This is because this inversion is mediated by homologous sequence blocks that are several thousands bp in size. Inversion boundary can only be detected when the whole homologous sequence blocks is completely replaced by shorter place holder sequence.
+
 Reference: Weigand, M.R., Williams, M.M., Peng, Y., Kania, D., Pawloski, L.C., Tondella, M.L. and CDC Pertussis Working Group, 2019. Genomic survey of Bordetella pertussis diversity, United States, 2000–2013. Emerging infectious diseases, 25(4), p.780.
 
 
