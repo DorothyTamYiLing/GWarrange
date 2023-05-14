@@ -2,12 +2,12 @@ Click [here](https://drive.google.com/drive/folders/1RQU1a7kxcVSsIQr94MwSKgRf9PC
 
 # Tutotrial 1
 
-This tutorial is based a subset of _Bordetella pertussis_ genomes as described in Weigand _et al_. 2019), in which chromosome structures were defined by exhaustive pairwise alignment. A subset of 47 genomes that display two different chromosome structures (18 genomes with structure 1 and 29 genomes with structure 2) (See Fig. 1) were used. Structure phenotype of two pairs of genomes were swapped for demonstration purpose.  
+This tutorial is based a subset of _Bordetella pertussis_ genomes as described in Weigand _et al_. 2019, in which chromosome structures were defined by MAUVE exhaustive pairwise alignment. A subset of 47 genomes that display two different chromosome structures (18 genomes with structure 1 and 29 genomes with structure 2) (See Fig. 1) were used. Structure phenotype of two pairs of genomes were swapped for demonstration purpose.  
 
 <img width="1159" alt="Screenshot 2023-04-02 at 10 32 23 PM" src="https://user-images.githubusercontent.com/34043893/229380077-f0c15dba-7ed3-4fc3-a0d7-6d9a5f52b556.png">
 Fig 1: Two different chromosome structures were found among 47 _Bordetella pertussis_ genomes. 
 
-First, genomes asemblies from which detecting genome rearrangements are detected are re-orientated by a chosen gene, in the case of Boredetella pertussis is gidA since it is the first gene after origin of replication. The location and orientation of gidA in the genomens are obtained by blasting it with multifasta file of genome assemblies.
+First, genomes asemblies from which genome rearrangements are detected are re-orientated by a chosen gene. In the case of Boredetella pertussis, the gene is gidA since it is the first gene after origin of replication. The location and orientation of gidA in the genomes are obtained by blasting it with multifasta file of genome assemblies.
 ```
 #unzip the genome file if neccesasry
 gunzip ./example_data/clus1clus2_47.fna.gz
@@ -25,14 +25,14 @@ python3 ./scripts/fix_genome.py --input ./example_data/clus1clus2_47.fna --mycoo
 
 The output file name for the genomes with same orientation is "fixed_genomes.fasta".
 
-Genome rearrangments in _Bordetella pertussis_ are belived to be largely mediated by homologous recombination of insertion sequence (IS) elements (such as IS481 and IS110). Location of IS elements in the genomes are obtained by blasting. Sequences of more than one IS elements can be put in the same multifasta file for obtaining genome locations for all at once.
+Genome rearrangments in _Bordetella pertussis_ are belived to be largely mediated by homologous recombination of insertion sequence (IS) elements (such as IS481 and IS110). Location of IS elements in the genomes are obtained by blasting with target IS sequences. Sequences of more than one target IS elements can be placed in the same multifasta file for obtaining their genome locations in all genomes at once.
 ```
 blastn -query ./example_data/IS_NZ_CP025371.1.fasta \
 -subject fixed_genomes.fasta \
 -outfmt 6 -out clus1clus2_47_blastIS_out.txt
 ```
 
-In addition, genome rearrangments in _Bordetella pertussis_ have also been observed to be mediated by homologous recombination of sequence blocks that consist of one or more IS elements. These duplicated sequence blocks are found throughout the genome and can be as large as several thousand base pairs in size. To ensure sensitivity in detecting genome rearrangements, it is advised to replace the these sequence blocks **completely** with placeholder sequence. Without additional informaiton of the actual size of the homologous sequence blocks, sequences extending several thousands base pairs to both direction from each IS can be replaced.
+In addition, genome rearrangments in _Bordetella pertussis_ have also been observed to be mediated by homologous recombination of sequence blocks that consist of one or more IS elements. These duplicated sequence blocks are found throughout the genome and can be as large as several thousand base pairs in size. To ensure sensitivity in genome rearrangements detection, it is advised to replace these sequence blocks **completely** with shorter placeholder sequence. Without additional information of the actual size of the homologous sequence blocks, sequences extending several thousands base pairs to both direction from each IS can be replaced.
 
 Here, sequences extending 7000bp to both direction from each IS were replaced. IS elements that were no more than 200bp apart (after extension) in each genome were also "merged". Then, each of these "extended and merged" IS element were replaced with shorter placedholder sequences (N x 15). A seperate set of IS-replaced genomes were also produced by enabling performing minimal extension (i.e. 100bp) and IS replacement with merging overlapping IS only (i.e. IS that are less than 3 bp apart) through passing string argument "on" to the -s flag.
 ```
