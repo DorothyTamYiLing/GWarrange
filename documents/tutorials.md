@@ -182,6 +182,14 @@ Then, genome assemblies are re-orientated according to the position and orientat
 ```
 python3 ./scripts/fix_genome.py --input ./example_data/PRN_468.fna --mycoor PRN_468_gidA_out.txt
 ```
+The output file name for the genomes with same orientation is "fixed_genomes.fasta".
+
+Genome rearrangments in Bordetella pertussis are belived to be largely mediated by homologous recombination of insertion sequence (IS) elements (such as IS481 and IS110). Location of IS elements in the genomes are obtained by blasting. Sequences of more than one IS elements can be put in the same multifasta file for obtaining genome locations for all at once.
+```
+blastn -query ./example_data/IS_NZ_CP025371.1.fasta \
+-subject fixed_genomes.fasta \
+-outfmt 6 -out clus1clus2_47_blastIS_out.txt
+```
 
 Here, sequences extending 7000bp to both direction from each IS were replaced. IS elements that were no more than 200bp apart (after extension) in each genome were also "merged". Then, each of these "extended and merged" IS element were replaced with shorter placedholder sequences (N x 15). A seperate set of IS-replaced genomes were also produced by enabling performing minimal IS extension (i.e. 100bp) and IS replacement with merging overlapping IS only (i.e. IS that are less than 3 bp apart) through passing string argument "on" to the -s flag.
 ```
