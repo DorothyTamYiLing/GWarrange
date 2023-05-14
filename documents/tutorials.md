@@ -222,7 +222,7 @@ echo "samples binary" | cat - ../example_data/prn_status_pheno_4pyseer.txt > ../
 #run pyseer
 pyseer --lmm --phenotypes ../example_data/prn_status_pheno_4pyseer.txt \
 --kmers PRN_468_ext7000merge200_k200_output.txt.gz \
---similarity ../example_data/PRN_USA_468_ClfML_tree_similarity.tsv \
+--similarity ../example_data/ClfML_kappa4.964_phylogeny_similarity.tsv \
 --min-af 0.05 --max-af 0.95 \
 --print-samples --output-patterns kmer_patterns.txt \
 > PRN_468_ext7000merge200_k200_MAF0.05_nopopctrl
