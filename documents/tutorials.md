@@ -206,7 +206,7 @@ cd ./ext7000_merge200_ISreplaced_genomes
 
 #generating fsm-ite input file
 ```
-for f in *_ext7000_merge200_ISreplaced.fasta; do id=$(basename "$f" _ext7000_merge20_ISreplaced.fasta); echo $id $f; done > PRN_468_input.list
+for f in *_ext7000_merge200_ISreplaced.fasta; do id=$(basename "$f" _ext7000_merge200_ISreplaced.fasta); echo $id $f; done > PRN_468_input.list
 ```
 
 #generating kmers with size of 200 bases with minor allel frequency 0.05
