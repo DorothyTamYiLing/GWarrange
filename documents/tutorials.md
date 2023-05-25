@@ -217,7 +217,7 @@ Then, a kmer-based GWAS was conducted using pyseer with an aim to identify kmers
 
 ```
 #adding header to phenotype file for pyseer input format
-echo "samples binary" | cat - ../example_data/prn_status_pheno_4pyseer.txt > ../example_data/prn_status_pheno_4pyseer.txt
+echo "samples binary" | cat - ../example_data/prn_status_pheno.txt > ../example_data/prn_status_pheno_4pyseer.txt
 
 #run pyseer
 pyseer --lmm --phenotypes ../example_data/prn_status_pheno_4pyseer.txt \
