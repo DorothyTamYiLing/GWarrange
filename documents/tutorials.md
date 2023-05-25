@@ -206,12 +206,12 @@ cd ./ext7000_merge200_ISreplaced_genomes
 
 #generating fsm-ite input file
 ```
-for f in *_ext100_merge3_ISreplaced.fasta; do id=$(basename "$f" _ext100_merge3_ISreplaced.fasta); echo $id $f; done > PRN_468_input.list
+for f in *_ext7000_merge200_ISreplaced.fasta; do id=$(basename "$f" _ext7000_merge20_ISreplaced.fasta); echo $id $f; done > PRN_468_input.list
 ```
 
 #generating kmers with size of 200 bases with minor allel frequency 0.05
 ```
-fsm-lite -l PRN_468_input.list -v -s 24 -S 444 -t tmp -m 200 -M 200 | gzip - > PRN_468_ext100merge3_k200_output.txt.gz
+fsm-lite -l PRN_468_input.list -v -s 24 -S 444 -t tmp -m 200 -M 200 | gzip - > PRN_468_ext7000merge200_k200_output.txt.gz
 ```
 Then, a kmer-based GWAS was conducted using pyseer with an aim to identify kmers whose presence-absence patterns are associated with PRN expression phenotype. Population structure is controlled by phylogenetic similarity matrix.
 
