@@ -18,7 +18,7 @@ Arguments:
 
 **k** : multifasta file of significant phenotype-associated kmers that may or may not contain repetitive elements placeholder sequence (e.g. Nx15)
 
-**g** : gzipped multifasta file of genomes set (original sequence without IS replacement)
+**g** : gzipped/gunzipped multifasta file of genomes set (original sequence without IS replacement)
 
 **p** : phenotype file (file format: sample names in 1st column, binary phenotype in 2nd column; no header, tab-delimited) 
 
