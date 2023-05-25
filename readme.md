@@ -92,7 +92,7 @@ It is advised to perform IS extension and merging with caution, as any genome re
 bash merge_replace_IS.sh -g fixed_genomes.fasta -i <blast outout file fo IS location in genomes> \
 -e <number of bp to extend from each side of each IS, default:100> \
 -m <maximum number of bp for mergeing adjacent IS, default:3 (i.e. merging overlapping IS)> \
--s <"on" or "off" string argument for outputting separate set of genomes with merging overlapping IS only>
+-s <"on" or "off" string argument for outputting separate set of genomes with minimal IS extension and merging overlapping IS only>
 ```
 Example:
 ```
