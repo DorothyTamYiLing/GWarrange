@@ -105,7 +105,7 @@ paste -d \\n header.txt sigk_seq.txt > sigk_seq.fasta
 Then, these kmers were blasted with the original genome set for studying potential genome rearrangment that are captured by them, implemented by the following script:
 
 ```
-#run in the fist level of /genome_rearrangement directory
+#run in the first level of /genome_rearrangement directory
 
 bash ./scripts/main.sh -k ./ext7000_merge200_ISreplaced_genomes/sigk_seq.fasta \
 -g ./example_data/clus1clus2_47.fna \
@@ -263,7 +263,7 @@ paste -d \\n header.txt sigk_seq.txt > sigk_seq.fasta
 Then, these kmers were blasted with the original genome set for studying potential genome rearrangment that are captured by them, implemented by the following script:
 
 ```
-#run in the fist level of /genome_rearrangement directory
+#run in the first level of /genome_rearrangement directory
 
 bash ./scripts/main.sh -k ./ext7000_merge200_ISreplaced_genomes/sigk_seq.fasta \
 -g ./example_data/PRN_468.fna \
