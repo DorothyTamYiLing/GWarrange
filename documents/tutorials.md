@@ -72,7 +72,7 @@ pyseer --phenotypes ../example_data/clus1clus2_pheno_4pyseer.txt \
 
 Generate number of unique pattterns and p value significance threshold information:
 ```
-#count_patterns.py is a script from pyseer package for calculating p-value threshold using Bonferroni correction
+#count_patterns.py is a script from pyseer package for calculating p-value threshold using Bonferroni correction. To access pyseer scripts, one needs to have cloned the pyseer github repository and go to scripts/directory.
 ./scripts/count_patterns.py kmer_patterns.txt > count_pattern.txt
 ```
 Extract kmers with p value below the the significance threshold:
@@ -231,7 +231,7 @@ pyseer --lmm --phenotypes ../example_data/prn_status_pheno_4pyseer.txt \
 
 Generate number of unique pattterns and p value significance threshold information:
 ```
-#count_patterns.py is a script from pyseer package for calculating p-value threshold using Bonferroni correction
+#count_patterns.py is a script from pyseer package for calculating p-value threshold using Bonferroni correction. To access pyseer scripts, one needs to have cloned the pyseer github repository and go to scripts/directory.
 ./scripts/count_patterns.py kmer_patterns.txt > count_pattern.txt
 ```
 Extract kmers with p value below the the significance threshod:
