@@ -53,6 +53,8 @@ write.table(myx_unqiue,file=paste(opt$outdir,"/",opt$outname,"_kmer4plot.txt",se
 
 mysize<-as.numeric(as.character(opt$gen_size))*1000
 
+#turn NA into 0, added on 20July23
+myx_unqiue[is.na(myx_unqiue)]<-0
 
 png(paste(opt$outdir,"/",opt$outname,".png",sep=""))
 
