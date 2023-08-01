@@ -304,3 +304,15 @@ Colour indices refer to the "colour index" column in the corresponding *kmer4plo
 Some of the significant intack kmers without N (e.g. kmer2189, kmer1450, kmer2126) contains sequence of pertactin autotransporter. These kmers was not found using ext7000_merge200_ISreplaced_genomes. This is because the gene pertactin autotransporter is located immediately next to an IS element in pertusis genomes, and any genome rearrangement that sits completely within the "replaced IS" region will not be detected. 
 
 Ref: Lefrancq, N., Bouchez, V., Fernandes, N., Barkoff, A.M., Bosch, T., Dalby, T., Åkerlund, T., Darenberg, J., Fabianova, K., Vestrheim, D.F. and Fry, N.K., 2022. Global spatial dynamics and vaccine-induced fitness changes of Bordetella pertussis. Science Translational Medicine, 14(642), p.eabn3253.
+
+
+
+
+
+Enterococcus faecium's genomes are known to be enriched with IS elements, which could play important role in their genome structure's diversification (Leavis et al. 2007). Genome structure of 75 Enterococcus faecium were characterised by socru (Page et al. 2020), Among which, a subset of 32 genomes display two different chromosome structures (21 genomes with structure "0" and 11 genomes with structure "1") (See Fig. ) were used. Structure phenotype of two pairs of genomes were swapped for demonstration purpose. 
+
+
+Page, A.J., Ainsworth, E.V. and Langridge, G.C., 2020. socru: typing of genome-level order and orientation around ribosomal operons in bacteria. Microbial Genomics, 6(7).
+
+Leavis, H.L., Willems, R.J.L., van Wamel, W.J.B., Schuren, F.H., Caspers, M.P.M. and Bonten, M.J.M., 2007. Insertion sequence–driven diversification creates a globally dispersed emerging multiresistant subspecies of E. faecium. PLoS pathogens, 3(1), p.e7.
+
