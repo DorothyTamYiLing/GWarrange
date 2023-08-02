@@ -432,19 +432,19 @@ Two rearrangement boundaries were found, and they potentially refer to a single 
 
 72000bp boundary, in forward orientation:
 
-![kmer98323_plot.pdf](https://github.com/DorothyTamYiLing/genome_rearrangement/files/12243912/kmer98323_plot.pdf)
+![kmer98323_plot-1](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/68c8e75f-f445-4bec-b9f2-009c30be3e19)
 
 72000bp boundary, in reverse orientation:
 
-![kmer97292_plot.pdf](https://github.com/DorothyTamYiLing/genome_rearrangement/files/12243924/kmer97292_plot.pdf)
+![kmer97292_plot-1](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/6ef7c181-0dcc-4f84-a4fe-dc611919d511)
 
-Inversion within genome region 1500000 and 2500000, 1500000bp boundary, kmer being intact in control genomes and split in case genomes, forward orientation kmer:
+2100000bp boundary, in forward orientation:
 
-<img width="906" alt="Screenshot 2023-05-07 at 9 50 43 PM" src="https://user-images.githubusercontent.com/34043893/236681673-c8ac9e6a-fa77-4314-af17-022e6b851552.png">
+![kmer99909_plot-1](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/98c528e9-3709-4429-a36f-3c5f2425416f)
 
-Inversion within genome region 1500000 and 2500000, 2500000bp boundary, kmer being intact in case genomes and split in control genomes, reverse orientation kmer:
+2100000bp boundary, in reverse orientation:
 
-<img width="904" alt="Screenshot 2023-05-07 at 9 48 39 PM" src="https://user-images.githubusercontent.com/34043893/236681684-c2a4eaf5-0460-4243-8d3c-f87988834efa.png">
+![kmer98897_plot-1](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/b7d2c49f-fa69-4a32-8b1f-5c7dcaff267d)
 
 Height of arrows corresponds to proporiton of case/control genomes.
 
@@ -454,14 +454,14 @@ Genome position of intact kmers without N from /ext100_merge3_ISreplaced_genomes
 
 Plot of intact kmers that showed rearrangements in two genome regions that were significantly associated with structural phenotype.
 
-![myNoNintactk_rev0fwd1](https://user-images.githubusercontent.com/34043893/231439466-2dce018c-89f4-4873-a4a2-486f655af203.png)
+![myNoNintactk_rev0fwd1](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/b7ea6eeb-01bd-467f-a439-81978e4aec75)
 
-![myNoNintactk_rev1fwd0](https://user-images.githubusercontent.com/34043893/231439513-45c179bf-8bc6-4d1b-98b6-fe8f896ce57e.png)
+![myNoNintactk_rev1fwd0](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/983fd53b-dfb1-4fd4-a669-ed0025d81e26)
 
 Height of arrows corresponds to proporiton of case/control genomes.
 
-(Above: 15 intact kmers that are in forward orientation in majority of structure "1" genomes, as well as in reverse orientation in majority of structure "0" genomes;
-Below: 17 intact kmers that are in reverse orientation in majority of structure "1" genomes, as well as in forward orientation in majority of structure "0" genomes)
+(Above:  intact kmers that are in forward orientation in majority of structure "1" genomes, as well as in reverse orientation in majority of structure "0" genomes;
+Below:  intact kmers that are in reverse orientation in majority of structure "1" genomes, as well as in forward orientation in majority of structure "0" genomes)
 
 Colour indices refer to the "colour index" column in the corresponding *kmer4plot.txt file (with the same prefix), hence the corresponding kmers.
 
