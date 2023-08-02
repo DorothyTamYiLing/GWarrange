@@ -422,7 +422,7 @@ Note that the value used for -d parameter should be larger than the "Maximum siz
 
 **Visualising genome rearrangements that are captured by kmer**
 
- kmers were found to be split (_i.e._ flanking sequences mapped to different positions) when mapped to the original genomes.
+219 kmers were found to be split (_i.e._ flanking sequences mapped to different positions) when mapped to the original genomes.
 
 1) Plotting split kmers for visualising rearrangement boundaries
 
@@ -460,11 +460,10 @@ Plot of intact kmers that showed rearrangements in two genome regions that were 
 
 Height of arrows corresponds to proporiton of case/control genomes.
 
-(Above:  intact kmers that are in forward orientation in majority of structure "1" genomes, as well as in reverse orientation in majority of structure "0" genomes;
-Below:  intact kmers that are in reverse orientation in majority of structure "1" genomes, as well as in forward orientation in majority of structure "0" genomes)
+(Above: 102 intact kmers that are in forward orientation in majority of structure "1" genomes, as well as in reverse orientation in majority of structure "0" genomes;
+Below: 303 intact kmers that are in reverse orientation in majority of structure "1" genomes, as well as in forward orientation in majority of structure "0" genomes)
 
 Colour indices refer to the "colour index" column in the corresponding *kmer4plot.txt file (with the same prefix), hence the corresponding kmers.
-
 
 Page, A.J., Ainsworth, E.V. and Langridge, G.C., 2020. socru: typing of genome-level order and orientation around ribosomal operons in bacteria. Microbial Genomics, 6(7).
 
