@@ -307,7 +307,10 @@ Ref: Lefrancq, N., Bouchez, V., Fernandes, N., Barkoff, A.M., Bosch, T., Dalby, 
 
 # Tutorial 3
 
-Enterococcus faecium's genomes are known to be enriched with IS elements, which could play important role in their genome structure's diversification (Leavis et al. 2007). Genome structure of 75 Enterococcus faecium were characterised by socru (Page et al. 2020), Among which, a subset of 32 genomes display two different chromosome structures (21 genomes with structure "0" and 11 genomes with structure "1") (See Fig. ) were used. Structure phenotype of two pairs of genomes were swapped for demonstration purpose. 
+_Enterococcus faecium_'s genomes are known to be enriched with IS elements, which could play important role in their genome structure's diversification (Leavis et al. 2007). Genome structure of 75 Enterococcus faecium were characterised by socru (Page et al. 2020), Among which, a subset of 32 genomes display two different chromosome structures (21 genomes with structure "0" and 11 genomes with structure "1") (See Fig. ) were used. Structure phenotype of two pairs of genomes were swapped for demonstration purpose. 
+
+![Screenshot 2023-08-01 222347](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/0f0c348f-936b-4983-be54-180cc6b8d838)
+Fig : Two different chromosome structures were found among 32 _Enterococcus faecium_ genomes. 
 
 Enterococcus faecium's genomes are known to be enriched with IS elements, which could play important role in their genome structure's diversification (Leavis et al. 2007). Genome structure of 75 Enterococcus faecium were characterised by socru (Page et al. 2020), Among which, a subset of 32 genomes that display two different chromosome structures (21 genomes with structure "0" and 11 genomes with structure "1") was used (See Fig. ). Structure phenotype of two pairs of genomes were swapped for demonstration purpose.
 
