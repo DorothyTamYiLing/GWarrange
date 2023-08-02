@@ -125,7 +125,7 @@ Note that the value used for -d parameter should be larger than the "Maximum siz
 
 Since kmers contain highly redundant information, only kmers with unique information (genome position, case and control count and proportion) were kept. They can be found in output file myshort_splitk_out_uniq.txt.
 
-Four rearrangement boundaries were found, and they potentially refer to two inversion events, i.e. between 43000bp and 3600000bp, as well as between 1500000bp and 2500000bp, one inversion nested within the other. The four boundaries can be indicated by eight different significant split kmers that were mapped to each of the boundary and split in case/control genomes (plots of four split kmers were shown below as examples). Full information of these kmers can be found in output file mysplitk_out.txt.
+Four rearrangement boundaries were found, and they potentially refer to two inversion events, i.e. between 43000bp and 3600000bp, as well as between 1500000bp and 2500000bp, one inversion nested within the other. The four boundaries can be indicated by sixteen different significant split kmers that were mapped to each of the boundary, split in case/control genomes, and in forward/reverse orientation (plots of four split kmers were shown below as examples). Full information of these kmers can be found in output file mysplitk_out.txt.
 
 Inversion within genome region 43000 and 3600000, 43000bp boundary, kmer being intact in case genomes and split in control genomes, in forward orientation:
 
@@ -312,8 +312,6 @@ _Enterococcus faecium_'s genomes are known to be enriched with IS elements, whic
 ![Screenshot 2023-08-01 222347](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/0f0c348f-936b-4983-be54-180cc6b8d838)
 Fig : Two different chromosome structures were found among 32 _Enterococcus faecium_ genomes. 
 
-Enterococcus faecium's genomes are known to be enriched with IS elements, which could play important role in their genome structure's diversification (Leavis et al. 2007). Genome structure of 75 Enterococcus faecium were characterised by socru (Page et al. 2020), Among which, a subset of 32 genomes that display two different chromosome structures (21 genomes with structure "0" and 11 genomes with structure "1") was used (See Fig. ). Structure phenotype of two pairs of genomes were swapped for demonstration purpose.
-
 First, genomes asemblies from which genome rearrangements are detected are re-orientated by a chosen gene, i.e. dnaA. The location and orientation of dnaA in the genomens are obtained by blasting it with multifasta file of genome assemblies.
 
 ```
@@ -421,6 +419,52 @@ bash ./scripts/main.sh -k ./ext100_merge3_ISreplaced_genomes/sigkwithN_noN5000.f
 -o ./Efaecium32genomes_ext100merge3_1swap_noN5000_outdir -s 3000 -x 2 -y 1000
 ```
 Note that the value used for -d parameter should be larger than the "Maximum size of merged ISs" value in "ext100_merge3_mergedISstat.txt".
+
+**Visualising genome rearrangements that are captured by kmer**
+
+ kmers were found to be split (_i.e._ flanking sequences mapped to different positions) when mapped to the original genomes.
+
+1) Plotting split kmers for visualising rearrangement boundaries
+
+Since kmers contain highly redundant information, only kmers with unique information (genome position, case and control count and proportion) were kept. They can be found in output file myshort_splitk_out_uniq.txt.
+
+Two rearrangement boundaries were found, and they potentially refer to a single inversion event between 72000bp and 2100000bp. All of the split kmers were found to be split in case geomes and intact in control genomes. This could be explained by the absence of IS elements in the rearrangement boundaries in case genomes, which has been confirmed by manual sequence check. The two boundaries can be indicated by four different significant split kmers that were mapped to each of the boundary and in forward/reverse orientation (plots of one of these kmers are shown below). Full information of these kmers can be found in output file mysplitk_out.txt.
+
+72000bp boundary, in forward orientation:
+
+![kmer98323_plot.pdf](https://github.com/DorothyTamYiLing/genome_rearrangement/files/12243912/kmer98323_plot.pdf)
+
+72000bp boundary, in reverse orientation:
+
+![kmer97292_plot.pdf](https://github.com/DorothyTamYiLing/genome_rearrangement/files/12243924/kmer97292_plot.pdf)
+
+Inversion within genome region 1500000 and 2500000, 1500000bp boundary, kmer being intact in control genomes and split in case genomes, forward orientation kmer:
+
+<img width="906" alt="Screenshot 2023-05-07 at 9 50 43 PM" src="https://user-images.githubusercontent.com/34043893/236681673-c8ac9e6a-fa77-4314-af17-022e6b851552.png">
+
+Inversion within genome region 1500000 and 2500000, 2500000bp boundary, kmer being intact in case genomes and split in control genomes, reverse orientation kmer:
+
+<img width="904" alt="Screenshot 2023-05-07 at 9 48 39 PM" src="https://user-images.githubusercontent.com/34043893/236681684-c2a4eaf5-0460-4243-8d3c-f87988834efa.png">
+
+Height of arrows corresponds to proporiton of case/control genomes.
+
+2) Plotting intact kmers without N for visualising sequence content of rearrangement :
+
+Genome position of intact kmers without N from /ext100_merge3_ISreplaced_genomes (minimal IS extension and merging overlapping IS only) were plotted. Only kmers with unqiue genome position information (by rounding off to the nearest multiple of 1000) were kept for plotting (as shown in *kmer4plot.txt files). 
+
+Plot of intact kmers that showed rearrangements in two genome regions that were significantly associated with structural phenotype.
+
+![myNoNintactk_rev0fwd1](https://user-images.githubusercontent.com/34043893/231439466-2dce018c-89f4-4873-a4a2-486f655af203.png)
+
+![myNoNintactk_rev1fwd0](https://user-images.githubusercontent.com/34043893/231439513-45c179bf-8bc6-4d1b-98b6-fe8f896ce57e.png)
+
+Height of arrows corresponds to proporiton of case/control genomes.
+
+(Above: 15 intact kmers that are in forward orientation in majority of structure "1" genomes, as well as in reverse orientation in majority of structure "0" genomes;
+Below: 17 intact kmers that are in reverse orientation in majority of structure "1" genomes, as well as in forward orientation in majority of structure "0" genomes)
+
+Colour indices refer to the "colour index" column in the corresponding *kmer4plot.txt file (with the same prefix), hence the corresponding kmers.
+
 
 Page, A.J., Ainsworth, E.V. and Langridge, G.C., 2020. socru: typing of genome-level order and orientation around ribosomal operons in bacteria. Microbial Genomics, 6(7).
 
