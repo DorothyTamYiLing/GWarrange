@@ -109,6 +109,7 @@ for(i in 1:2){
     }
     
     #make a table storing the coordinate for each arrow and the size
+    if(nrow(myktab)!=0){
     #print(myktab)    
     myktab<-myktab[order(myktab[[mystart]],decreasing=F),]
     breakpt<-which(diff(myktab[[mystart]])>10000)
@@ -195,6 +196,7 @@ myflk_name="intactk"
 }
     write.table(mymed,file=paste(opt$outdir,"/",mypheno,"_",myflk_name,".txt",sep=""),quote=F,col.names=T,row.names=F,sep="\t")
   }
+    }
 }
 
 #add legend
