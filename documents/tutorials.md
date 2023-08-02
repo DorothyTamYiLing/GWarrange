@@ -430,19 +430,19 @@ Since kmers contain highly redundant information, only kmers with unique informa
 
 Two rearrangement boundaries were found, and they potentially refer to a single inversion event between 72000bp and 2100000bp. All of the split kmers were found to be split in case geomes and intact in control genomes. This could be explained by the absence of IS elements in the rearrangement boundaries in case genomes, which has been confirmed by manual sequence check. The two boundaries can be indicated by four different significant split kmers that were mapped to each of the boundary and in forward/reverse orientation (plots of one of these kmers are shown below). Full information of these kmers can be found in output file mysplitk_out.txt.
 
-72000bp boundary, in forward orientation:
+72000bp boundary, intact kmer in forward orientation:
 
 ![kmer98323_plot-1](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/68c8e75f-f445-4bec-b9f2-009c30be3e19)
 
-72000bp boundary, in reverse orientation:
+72000bp boundary, intact kmer in reverse orientation:
 
 ![kmer97292_plot-1](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/6ef7c181-0dcc-4f84-a4fe-dc611919d511)
 
-2100000bp boundary, in forward orientation:
+2100000bp boundary, intact kmer in forward orientation:
 
 ![kmer99909_plot-1](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/98c528e9-3709-4429-a36f-3c5f2425416f)
 
-2100000bp boundary, in reverse orientation:
+2100000bp boundary, intact kmer in reverse orientation:
 
 ![kmer98897_plot-1](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/b7d2c49f-fa69-4a32-8b1f-5c7dcaff267d)
 
