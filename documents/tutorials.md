@@ -305,12 +305,118 @@ Some of the significant intack kmers without N (e.g. kmer2189, kmer1450, kmer212
 
 Ref: Lefrancq, N., Bouchez, V., Fernandes, N., Barkoff, A.M., Bosch, T., Dalby, T., Åkerlund, T., Darenberg, J., Fabianova, K., Vestrheim, D.F. and Fry, N.K., 2022. Global spatial dynamics and vaccine-induced fitness changes of Bordetella pertussis. Science Translational Medicine, 14(642), p.eabn3253.
 
-
-
-
+# Tutorial 3
 
 Enterococcus faecium's genomes are known to be enriched with IS elements, which could play important role in their genome structure's diversification (Leavis et al. 2007). Genome structure of 75 Enterococcus faecium were characterised by socru (Page et al. 2020), Among which, a subset of 32 genomes display two different chromosome structures (21 genomes with structure "0" and 11 genomes with structure "1") (See Fig. ) were used. Structure phenotype of two pairs of genomes were swapped for demonstration purpose. 
 
+Enterococcus faecium's genomes are known to be enriched with IS elements, which could play important role in their genome structure's diversification (Leavis et al. 2007). Genome structure of 75 Enterococcus faecium were characterised by socru (Page et al. 2020), Among which, a subset of 32 genomes that display two different chromosome structures (21 genomes with structure "0" and 11 genomes with structure "1") was used (See Fig. ). Structure phenotype of two pairs of genomes were swapped for demonstration purpose.
+
+First, genomes asemblies from which genome rearrangements are detected are re-orientated by a chosen gene, i.e. dnaA. The location and orientation of dnaA in the genomens are obtained by blasting it with multifasta file of genome assemblies.
+
+```
+#unzip the genome file if neccesasry
+gunzip ./example_data/32genomes.fna.gz
+
+#blast dnaA with genomes
+blastn -query ./example_data/dnaA.fasta \
+-subject ./example_data/32genomes.fna \
+-outfmt 6 -out 32genomes_gidA_out.txt
+```
+
+Then, genome assemblies are re-orientated according to the position and orientation of dnaA in the genomes, using the script fix_genome.py:
+
+```
+python3 ./scripts/fix_genome.py --input ./example_data/PRN_468.fna --mycoor PRN_468_gidA_out.txt
+```
+The output file name for the genomes with same orientation is "fixed_genomes.fasta".
+
+Location of IS elements in the genomes are obtained by blasting with target IS sequences. Sequences of more than one target IS elements can be placed in the same multifasta file for obtaining their genome locations in all genomes at once.
+
+```
+blastn -query ./example_data/IS30_IS1252_in_HOU503_657692to658645.fasta \
+-subject fixed_genomes.fasta \
+-outfmt 6 -out blastIS30_IS1252_in_HOU503_32genomes_out.txt
+```
+
+Here, sequences extending 7000bp to both direction from each IS were replaced. IS elements that were no more than 200bp apart (after extension) in each genome were also "merged". Then, each of these "extended and merged" IS element were replaced with shorter placedholder sequences (N x 15). A seperate set of IS-replaced genomes were also produced by enabling performing minimal IS extension (i.e. 100bp) and merging overlapping IS only (i.e. IS that are less than 3 bp apart) through passing string argument "on" to the -s flag.
+```
+bash ./scripts/merge_replace_IS.sh -g fixed_genomes.fasta -i blastIS30_IS1252_in_HOU503_32genomes_out.txt -e 7000 -m 200 -s "on"
+```
+Prior to GWAS, each set of IS-replaced genomes using different IS merging and extending parameters were used for generating kmers. Here, we use the kmer generation tool fsm-lite to generate kmers from genomes in directory /ext100_merge3_ISreplaced_genomes.
+```
+cd ./ext100_merge3_ISreplaced_genomes
+
+#generating fsm-ite input file
+for f in *_ext100_merge3_ISreplaced.fasta; do id=$(basename "$f" _ext100_merge3_ISreplaced.fasta); echo $id $f; done > 32genomes_input.list
+
+#generating kmers with size of 200 bases kmers present in at least 20 samples
+
+fsm-lite -l input.list -v -s 20 -S 30 -t tmp -m 200 -M 200 | gzip - > ext100merge3_k200_output.txt.gz
+```
+Then, a kmer-based GWAS was conducted using pyseer with an aim to identify kmers whose presence-absence patterns were associated with chromosome structures phenotype. Population structure is not contolled.
+```
+#adding header to phenotype file for pyseer input format
+echo "samples binary" | cat - ../example_data/Efaecium32genomes_pheno_1swap.txt > ../example_data/Efaecium32genomes_pheno_1swap_4pyseer.txt
+
+#run pyseer
+pyseer --phenotypes ../example_data/Efaecium32genomes_pheno_1swap.txt \
+--kmers ext100merge3_k200_output.txt.gz \
+--no-distances \
+--min-af 0.05 --max-af 0.95 \
+--print-samples --output-patterns kmer_patterns.txt \
+> ext100merge3_k200_min20samp_nopopctrl
+```
+Generate number of unique pattterns and p value significance threshold information:
+```
+#count_patterns.py is a script from pyseer package for calculating p-value threshold using Bonferroni correction. To access pyseer scripts, one needs to have cloned the pyseer github repository and go to scripts/directory.
+../scripts/count_patterns.py kmer_patterns.txt > count_pattern.txt
+```
+Extract kmers with p value below the the significance threshod:
+```
+awk '{ if ($4 <= 1.92E-05) { print } }' ext100merge3_k200_min20samp_nopopctrl > sigk_pyseer.txt
+430,942 kmers were found to be significantly associated with chromosome structure. The sequences of the kmers were extracted and placed in a multifasta file.
+```
+Extract significant kmer sequences and convert then into fasta format
+```
+#get the seqeunce only
+awk '{print $1}' sigk_pyseer.txt > sigk_seq.txt 
+
+#create multifasta file for significant kmer sequences
+number=$(cat sigk_seq.txt | wc -l)
+
+rm header.txt   #remove any existing header file
+
+START=1
+let "END=$number" 
+ 
+for (( c=$START; c<=$END; c++ ))
+do
+	echo ">kmer""$c " >> header.txt
+done
+
+paste -d \\n header.txt sigk_seq.txt > sigk_seq.fasta
+```
+#Due to the large number of significant kmers, only the kmers that contain "N" and the first 5000 kmers without "N" were used for structural analysis.
+```
+#classifying kmers into those containing "N" and those do not contain "N"
+python3 ../scripts/class_k.py --input sigk_seq.fasta --outdir .
+
+#extract first 5000 kmers without "N"
+head -25000 sigk_noN.fasta > sigk_noN_5000.fasta
+
+#combine the kmers with "N" and the first 5000 kmers without "N"
+cat sigk_withN.fasta sigk_noN_5000.fasta > sigkwithN_noN5000.fasta
+```
+Then, these kmers were blasted with the original genome set for studying potential genome rearrangment that are captured by them, implemented by the following script:
+
+#run in the first level of /genome_rearrangement directory
+```
+bash ./scripts/main.sh -k ./ext100_merge3_ISreplaced_genomes/sigkwithN_noN5000.fasta \
+-g ./example_data/32genomes.fna \
+-p ./example_data/Efaecium32genomes_pheno_1swap.txt -l 200 -d 3000 -f 30 \
+-o ./Efaecium32genomes_ext100merge3_1swap_noN5000_outdir -s 3000 -x 2 -y 1000
+```
+Note that the value used for -d parameter should be larger than the "Maximum size of merged ISs" value in "ext100_merge3_mergedISstat.txt".
 
 Page, A.J., Ainsworth, E.V. and Langridge, G.C., 2020. socru: typing of genome-level order and orientation around ribosomal operons in bacteria. Microbial Genomics, 6(7).
 
