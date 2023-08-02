@@ -374,8 +374,9 @@ Generate number of unique pattterns and p value significance threshold informati
 Extract kmers with p value below the the significance threshod:
 ```
 awk '{ if ($4 <= 1.92E-05) { print } }' ext100merge3_k200_min20samp_nopopctrl > sigk_pyseer.txt
-430,942 kmers were found to be significantly associated with chromosome structure. The sequences of the kmers were extracted and placed in a multifasta file.
 ```
+430,942 kmers were found to be significantly associated with chromosome structure. The sequences of the kmers were extracted and placed in a multifasta file.
+
 Extract significant kmer sequences and convert then into fasta format
 ```
 #get the seqeunce only
