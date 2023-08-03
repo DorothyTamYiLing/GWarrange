@@ -3,7 +3,7 @@ flk_len=30
 dedupk=2
 intkrd=1000
 
-while getopts k:g:p:l:f:d:o:s:d:r: flag
+while getopts k:g:p:l:f:d:o:s:d:x:y: flag
 do
     case "${flag}" in
         k) sigk=${OPTARG};;
@@ -14,8 +14,8 @@ do
         d) flk_dist=${OPTARG};;
         o) outdir=${OPTARG};;
         s) gen_size=${OPTARG};;
-        x) dedupk==${OPTARG};;
-        y) intkrd==${OPTARG};;
+        x) dedupk=${OPTARG};;
+        y) intkrd=${OPTARG};;
     esac
 done
 echo "sigk: $sigk";
