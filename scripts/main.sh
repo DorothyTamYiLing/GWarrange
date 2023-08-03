@@ -30,7 +30,7 @@ echo "genome pos sig digit for dedup split k in plot: $dedupk";
 echo "round off intact k genome position to the nearest multiple of an integar: $intkrd";
 
 #create output directory, replace old one if exists
-if [[ -d ./$outdir ]]; then echo "directory exists, replacing with the new one"; rm -r ./$outdir; mkdir $outdir;fi
+if [[ -d ./$outdir ]]; then echo "output directory exists, replacing with the new one"; rm -r ./$outdir; mkdir $outdir;fi
 
 #python3 class_k.py --input ./example_data/clus1clus2_sigk_withN.fasta --outdir ./example_data/clus1clus2_47_merge7000GWAS_nopopctrl_testdir
 python3 ./scripts/class_k.py --input $sigk --outdir $outdir
