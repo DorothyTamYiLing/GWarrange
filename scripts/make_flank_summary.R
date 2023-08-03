@@ -77,10 +77,15 @@ if(any(myfreqtable$Freq>2)){
 multi_hit_k<-c(multi_hit_k,mykmer[i])
 }
 
-#kmer blast match coordinates must match 
-mycoor<-unique(c(mykrow$qstart,mykrow$qend))
-if((any(mycoor%in%myflk_coor_k==F) | any(myflk_coor_k%in%mycoor==F))){
-alignlen_issue_k<-c(alignlen_issue_k,mykmer[i])
+#kmer blast match coordinates must match , not use this filter anymore, 27/7/2023
+#mycoor<-unique(c(mykrow$qstart,mykrow$qend))
+#if((any(mycoor%in%myflk_coor_k==F) | any(myflk_coor_k%in%mycoor==F))){
+#alignlen_issue_k<-c(alignlen_issue_k,mykmer[i])
+#}
+
+#use this filter instead, 27/7/2023
+if(any(mykrow$identity<95) | any(mykrow$evalue>0.00005)){
+  alignlen_issue_k<-c(alignlen_issue_k,mykmer[i])
 }
 
 }#close the for loop
@@ -153,53 +158,78 @@ mymerge$EndL<-0
 mymerge$StartR<-0
 mymerge$EndR<-0
 
-k.len=opt$k.len
+#################### new ways based on flexible kmers length ###############
+
+for(m in 1:nrow(mymerge)){
+myq<-c(mymerge$qstart_o[m],mymerge$qend_o[m],mymerge$qstart_e[m],mymerge$qend_e[m])
+  mys<-c(mymerge$sStart_o[m],mymerge$sEnd_o[m],mymerge$sStart_e[m],mymerge$sEnd_e[m])
+  #define startL, startR, endL, endR for subject
+  mys<-mys[order(myq)] #order subject coor by query coor
+  mymerge$StartL[m]<-mys[1]
+  mymerge$EndL[m]<-mys[2]
+  mymerge$StartR[m]<-mys[3]
+  mymerge$EndR[m]<-mys[4]
+  #define startL, startR, endL, endR for query
+  #myq<-myq[order(myq)]
+  #mymerge$startL_q[m]<-myq[1]
+  #mymerge$startR_q[m]<-myq[2]
+  #mymerge$endL_q[m]<-myq[3]
+  #mymerge$endR_q[m]<-myq[4]
+}
+
+############################################################################
+
+#################### old ways based on fixed kmers length ##################
+
+#k.len=opt$k.len
 #k.len=200
 
 #defining StartL and EndL
 
 
 #for rows where qstart_o==1
-myqstart_o_1<-which(mymerge$qstart_o==1)
-mymerge[myqstart_o_1,"StartL"]<-mymerge[myqstart_o_1,"sStart_o"] 
-mymerge[myqstart_o_1,"EndL"]<-mymerge[myqstart_o_1,"sEnd_o"] 
+#myqstart_o_1<-which(mymerge$qstart_o==1)
+#mymerge[myqstart_o_1,"StartL"]<-mymerge[myqstart_o_1,"sStart_o"] 
+#mymerge[myqstart_o_1,"EndL"]<-mymerge[myqstart_o_1,"sEnd_o"] 
 
 #for rows where qend_o==1
-myqend_o_1<-which(mymerge$qend_o==1)
-mymerge[myqend_o_1,"StartL"]<-mymerge[myqend_o_1,"sEnd_o"] 
-mymerge[myqend_o_1,"EndL"]<-mymerge[myqend_o_1,"sStart_o"] 
+#myqend_o_1<-which(mymerge$qend_o==1)
+#mymerge[myqend_o_1,"StartL"]<-mymerge[myqend_o_1,"sEnd_o"] 
+#mymerge[myqend_o_1,"EndL"]<-mymerge[myqend_o_1,"sStart_o"] 
 
 #for rows where qstart_e==1
-myqstart_e_1<-which(mymerge$qstart_e==1)
-mymerge[myqstart_e_1,"StartL"]<-mymerge[myqstart_e_1,"sStart_e"] 
-mymerge[myqstart_e_1,"EndL"]<-mymerge[myqstart_e_1,"sEnd_e"] 
+#myqstart_e_1<-which(mymerge$qstart_e==1)
+#mymerge[myqstart_e_1,"StartL"]<-mymerge[myqstart_e_1,"sStart_e"] 
+#mymerge[myqstart_e_1,"EndL"]<-mymerge[myqstart_e_1,"sEnd_e"] 
 
 #for rows where qend_e==1
-myqend_e_1<-which(mymerge$qend_e==1)
-mymerge[myqend_e_1,"StartL"]<-mymerge[myqend_e_1,"sEnd_e"] 
-mymerge[myqend_e_1,"EndL"]<-mymerge[myqend_e_1,"sStart_e"] 
+#myqend_e_1<-which(mymerge$qend_e==1)
+#mymerge[myqend_e_1,"StartL"]<-mymerge[myqend_e_1,"sEnd_e"] 
+#mymerge[myqend_e_1,"EndL"]<-mymerge[myqend_e_1,"sStart_e"] 
 
 
 #defining StartR and EndR
 #for rows where qstart_o==k.len
-myqstart_o_klen<-which(mymerge$qstart_o==k.len)
-mymerge[myqstart_o_klen,"EndR"]<-mymerge[myqstart_o_klen,"sStart_o"] 
-mymerge[myqstart_o_klen,"StartR"]<-mymerge[myqstart_o_klen,"sEnd_o"] 
+#myqstart_o_klen<-which(mymerge$qstart_o==k.len)
+#mymerge[myqstart_o_klen,"EndR"]<-mymerge[myqstart_o_klen,"sStart_o"] 
+#mymerge[myqstart_o_klen,"StartR"]<-mymerge[myqstart_o_klen,"sEnd_o"] 
 
 #for rows where qend_o==k.len
-myqend_o_klen<-which(mymerge$qend_o==k.len)
-mymerge[myqend_o_klen,"EndR"]<-mymerge[myqend_o_klen,"sEnd_o"] 
-mymerge[myqend_o_klen,"StartR"]<-mymerge[myqend_o_klen,"sStart_o"] 
+#myqend_o_klen<-which(mymerge$qend_o==k.len)
+#mymerge[myqend_o_klen,"EndR"]<-mymerge[myqend_o_klen,"sEnd_o"] 
+#mymerge[myqend_o_klen,"StartR"]<-mymerge[myqend_o_klen,"sStart_o"] 
 
 #for rows where qstart_e==k.len
-myqstart_e_klen<-which(mymerge$qstart_e==k.len)
-mymerge[myqstart_e_klen,"EndR"]<-mymerge[myqstart_e_klen,"sStart_e"] 
-mymerge[myqstart_e_klen,"StartR"]<-mymerge[myqstart_e_klen,"sEnd_e"] 
+#myqstart_e_klen<-which(mymerge$qstart_e==k.len)
+#mymerge[myqstart_e_klen,"EndR"]<-mymerge[myqstart_e_klen,"sStart_e"] 
+#mymerge[myqstart_e_klen,"StartR"]<-mymerge[myqstart_e_klen,"sEnd_e"] 
 
 #for rows where qend_e==k.len
-myqend_e_klen<-which(mymerge$qend_e==k.len)
-mymerge[myqend_e_klen,"StartR"]<-mymerge[myqend_e_klen,"sStart_e"] 
-mymerge[myqend_e_klen,"EndR"]<-mymerge[myqend_e_klen,"sEnd_e"] 
+#myqend_e_klen<-which(mymerge$qend_e==k.len)
+#mymerge[myqend_e_klen,"StartR"]<-mymerge[myqend_e_klen,"sStart_e"] 
+#mymerge[myqend_e_klen,"EndR"]<-mymerge[myqend_e_klen,"sEnd_e"] 
+
+########################################################################
 
 #defining the dist to define split flank, find out the maximum IS replacement block size, then add few thousands bp
 #myflkdist=70000 # merge7000_ext500, max IS replacment block size 45118bp
@@ -335,8 +365,8 @@ myall_out<-matrix(0,1,9)
 colnames(myall_out)<-c("kmer","event_sum","flk_behaviour","my0_intactk_sum","my1_intactk_sum","otherk","my0_otherk_sum","my1_otherk_sum","event")
 
 #make the final brief output for signifiant behaviours only
-myshort_allout<-matrix(0,1,6)
-colnames(myshort_allout)<-c("kmer","intactk_mygp_ctrl_prop","intactk_mygp_case_prop","otherk_mygp_ctrl_prop","otherk_mygp_case_prop","my0_intactk_StartL_mean")
+myshort_allout<-matrix(0,1,8)
+colnames(myshort_allout)<-c("kmer","intactk_mygp_ctrl_prop","intactk_mygp_case_prop","otherk_mygp_ctrl_prop","otherk_mygp_case_prop","my0_intactk_StartL_mean","fwd_intactk_count","rev_intactk_count")
 
 #extract the unique kmer
 myk4plot<-unique(myflk_behave_pheno$kmer)
@@ -359,11 +389,10 @@ for (j in 1:length(myk4plot)){ #open bracket for looping through each kmer
   myout$kmer<-mykmer
 
 #making the output matrix for short all out
-  myshortout<-matrix(0,1,6)
-  colnames(myshortout)<-c("kmer","intactk_mygp_ctrl_prop","intactk_mygp_case_prop","otherk_mygp_ctrl_prop","otherk_mygp_case_prop","my0_intactk_StartL_mean")
+  myshortout<-matrix(0,1,8)
+  colnames(myshortout)<-c("kmer","intactk_mygp_ctrl_prop","intactk_mygp_case_prop","otherk_mygp_ctrl_prop","otherk_mygp_case_prop","my0_intactk_StartL_mean","fwd_intactk_count","rev_intactk_count")
   myshortout<-as.data.frame(myshortout)
-  myshortout$kmer<-mykmer
-  
+  myshortout$kmer<-mykmer  
   
   #get the total number of cases and controls
   ctrl_count<-length(which(mytable$case_control=="0"))
@@ -462,13 +491,17 @@ myout$event<-"translocation"}
 if(myout$otherk%in%c("mv&flp","swp&flp")){
 myout$event<-"inversion"}
 
+#finally count the number of few_intactk and rev_intactk for this kmer
+myshortout$fwd_intactk_count<-length(which(mytable$intactk_orien=="intactk_fwd"))
+myshortout$rev_intactk_count<-length(which(mytable$intactk_orien=="intactk_rev"))
+
   myall_out<-rbind(myall_out,myout)
   myshort_allout<-rbind(myshort_allout,myshortout)
 
 } #close bracket for looping through each kmer
 
 #keeping only the unique row for myshort_allout
-myshort_allout$label<-apply( myshort_allout[,2:6] , 1 , paste , collapse = "-" )
+myshort_allout$label<-apply( myshort_allout[,2:8] , 1 , paste , collapse = "-" )
 myshort_allout_uniq<-myshort_allout[!duplicated(myshort_allout$label),]
 myshort_allout_uniq<-myshort_allout_uniq[-1,]
 
