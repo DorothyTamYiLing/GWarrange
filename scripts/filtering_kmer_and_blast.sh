@@ -7,8 +7,12 @@ python3 ./scripts/extract_flank_coor.py --input $1 --outdir $3
 
 grep ">" $1 > $3/header.txt
 
-rm $3/kmer_flanktooshort_flkcoor.txt
-rm $3/kmer_flanktooshort_4rm.txt
+if [[ -d $3/kmer_flanktooshort_flkcoor.txt ]]; then rm $3/kmer_flanktooshort_flkcoor.txt; fi
+
+if [[ -d $3/kmer_flanktooshort_4rm.txt ]]; then rm $3/kmer_flanktooshort_4rm.txt; fi
+
+#rm $3/kmer_flanktooshort_flkcoor.txt
+#rm $3/kmer_flanktooshort_4rm.txt
 
 #remove kmers with short flanks and extract kmers for blasting, by looping through the header file
 while read mykmer
