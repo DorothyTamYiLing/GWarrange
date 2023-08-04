@@ -90,28 +90,54 @@ if(any(mykrow$identity<95) | any(mykrow$evalue>0.00005)){
 
 }#close the for loop
 
+#make summary for kmer quality control
+myfilterout<-matrix(0,length(mykmer),4)
+rownames(myfilterout)<-mykmer
+colnames(myfilterout)<-c("abs_gen_k","del_k","multi_hit_k","alignlen_issue_k")
+
+myfilterout<-as.data.frame(myfilterout)
+#myfilterout
+
 #output the rows of kmers with quality issues
 
 if (length(unique(abs_gen_k))>0){
+print(paste("abs_gen_k has ",length(unique(abs_gen_k))," kmers",sep=""))
+myfilterout[abs_gen_k,"abs_gen_k"]<-"yes"
 my_abs_gen_k<-mytable[which(mytable$query%in%unique(abs_gen_k)),]
-write.table(my_abs_gen_k,file=paste(opt$outdir,"kmer_with_missinggenomes.txt",sep="/"),quote=F,row.names = F,col.names = T,sep="\t")
+write.table(my_abs_gen_k,file=paste(opt$outdir,"kmer_with_missinggenomes.txt",sep="/"),quote=F,row.names=F,col.names = T,sep="\t")
+}else{
+print("no abs_gen_k")
 }
 
 if (length(unique(del_k))>0){
+print(paste("del_k has ",length(unique(del_k))," kmers",sep=""))
+myfilterout[del_k,"del_k"]<-"yes"
 my_del_k<-mytable[which(mytable$query%in%unique(del_k)),]
-write.table(my_del_k,file=paste(opt$outdir,"kmer_with_deletion.txt",sep="/"),quote=F,row.names = F,col.names = T,sep="\t")
+write.table(my_del_k,file=paste(opt$outdir,"kmer_with_missinggenomes.txt",sep="/"),quote=F,row.names=F,col.names = T,sep="\t")
+}else{
+print("no del_k")
 }
 
 if (length(unique(multi_hit_k))>0){
+print(paste("multi_hit_k has ",length(unique(multi_hit_k))," kmers",sep=""))
+myfilterout[multi_hit_k,"multi_hit_k"]<-"yes"
 my_multi_hit_k<-mytable[which(mytable$query%in%unique(multi_hit_k)),]
-write.table(my_multi_hit_k,file=paste(opt$outdir,"kmer_with_multi_hits.txt",sep="/"),quote=F,row.names = F,col.names = T,sep="\t")
+write.table(my_multi_hit_k,file=paste(opt$outdir,"kmer_with_multi_hits.txt",sep="/"),quote=F,row.names=F,col.names = T,sep="\t")
+}else{
+print("no multi_hit_k")
 }
 
 if (length(unique(alignlen_issue_k))>0){
+print(paste("alignlen_issue_k has ",length(unique(alignlen_issue_k))," kmers",sep=""))
+myfilterout[alignlen_issue_k,"alignlen_issue_k"]<-"yes"
 my_alignlen_issue_k<-mytable[which(mytable$query%in%unique(alignlen_issue_k)),]
-write.table(my_alignlen_issue_k,file=paste(opt$outdir,"kmer_with_alignlen_issue.txt",sep="/"),quote=F,row.names = F,col.names = T,sep="\t")
+write.table(my_alignlen_issue_k,file=paste(opt$outdir,"kmer_with_alignlen_issue.txt",sep="/"),quote=F,row.names=F,col.names = T,sep="\t")
+}else{
+print("no alignlen_issue_k")
 }
- 
+
+write.table(myfilterout,file=paste(opt$outdir,"filterk_out_summary.txt",sep="/"),quote=F,row.names = T,col.names =T,sep="\t")
+
 
 #output the good kmers for further processing
 mybadk<-unique(c(abs_gen_k,del_k,multi_hit_k,alignlen_issue_k))
