@@ -118,6 +118,9 @@ mybadk<-unique(c(abs_gen_k,del_k,multi_hit_k,alignlen_issue_k))
 #mybadk<-unique(c(del_k,multi_hit_k))
 mygoodk<-mykmer[which(!is.element(mykmer,mybadk))]
 
+if(length(mygoodk)==0){
+print("no good kmers for process")
+}else{
 print("now process good kmers")
 
 myprocess<-mytable[which(mytable$query%in%mygoodk),]
@@ -634,3 +637,5 @@ write.table(myintactk_out,file=paste(opt$outdir,"myintactkwithN_out.txt",sep="/"
 }else{
 print("no intact k")
 }
+
+}  #close bracket for process good kmers
