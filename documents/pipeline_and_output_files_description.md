@@ -208,6 +208,10 @@ flk_dist_stat: summary statistics <sup> 3 </sup> for distance between flanks acr
 
 **my0_intactk_StartL_mean**: for intact kmers in control genomes, mean upstream flank start coordinate, round to number of significant digits indicated by -x flag in main.sh)
 
+**fwd_intact_count**: count of intatc kmers in forward orientation
+
+**rev_intact_count**: count of intatc kmers in reverse orientation
+
 **label**: labels generated for the kmers containing the above information. Kmers with duplicated genome positions are defined by those showing identical values in this column
 
 10. myintactkwithN_out.txt, include the following information in columns:
