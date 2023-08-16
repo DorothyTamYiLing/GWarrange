@@ -78,8 +78,7 @@ Criteria 2: both flanks of the kmers should be found in the genomes (there shoul
 
 Criteria 3: Each flank should only show one unique blast hit per genome
 
-Criteria 4: Both flanks should be fully aligned with the genomes (the flank start and end coordinates in the blast hit should be consistent 
-with those in flank_coor.txt)
+Criteria 4: Each flank should show at least 95% identity match and E-value of no more than 0.00005
 
 SNPs and gaps are allowed. 
 
@@ -269,10 +268,9 @@ script function:
 
 Criteria 1: the kmer should show blast match to at least 95% of the genomes
 
-Criteria 2: Each flank should only show one unique blast hit per genome
+Criteria 2: the kmer should only show one unique blast hit per genome
 
-Criteria 3: Both flanks should be fully aligned with the genomes (the flank start and end coordinates in the blast hit should be consistent 
-with those in flank_coor.txt)
+Criteria 3: the kmer should show at least 95% identity match and E-value of no more than 0.00005
 
 3. For intact kmers passing the fliter, make summary of their position and orientation in the genomes.
 
