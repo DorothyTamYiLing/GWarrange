@@ -659,6 +659,8 @@ myintactk_out<-rbind(myintactk_out,myrowout)
 
 }
 
+myintactk_out<-myintactk_out[-1,]
+	
 write.table(myintactk_out,file=paste(opt$outdir,"myintactkwithN_out.txt",sep="/"),quote=F,row.names = F,col.names = T,sep="\t")
 }else{
 print("no intact k")
