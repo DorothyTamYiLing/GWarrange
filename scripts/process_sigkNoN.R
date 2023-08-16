@@ -60,9 +60,14 @@ if(any(myfreqtable$Freq>1)){
 multi_hit_k<-c(multi_hit_k,mykmer[i])
 }
 
-#the blast match must be cover at least 95% of the kmers' length
-if(any(mykrow$alig_len<(200*0.95))){
-alignlen_k<-c(alignlen_k,mykmer[i])
+#the blast match must be cover at least 95% of the kmers' length, not use this filter anymore, 27/7/2023
+#if(any(mykrow$alig_len<(200*0.95))){
+#alignlen_k<-c(alignlen_k,mykmer[i])
+#}
+
+#use this filter instead, 27/7/2023
+if(any(mykrow$identity<95) | any(mykrow$evalue>0.00005)){
+  alignlen_k<-c(alignlen_k,mykmer[i])
 }
 
 }#close the for loop
