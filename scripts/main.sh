@@ -88,12 +88,6 @@ then
 
 echo "plotting intact k with N"
 
-#subset the intact kmers that are reverse in majority of the 0 genomes, and forward and majority of the 1 genomes
-awk -F "\t" 'NR==1; NR > 1{ if ($6 < 0.5 && $7 > 0.5 && $8 > 0.5 && $9 < 0.5) { print } }' ${outdir}/myintactkwithN_out.txt > ${outdir}/myintactkwithN_rev0fwd1_set.txt
-
-#subset the intact kmers that are reverse in majority of the 1 genomes, and forward and majority of the 0 genomes
-awk -F "\t" 'NR==1; NR > 1{ if ($6 > 0.5 && $7 < 0.5 && $8 < 0.5 && $9 > 0.5) { print } }' ${outdir}/myintactkwithN_out.txt > ${outdir}/myintactkwithN_rev1fwd0_set.txt
-
 Rscript ./scripts/plot_intactk.R --input ${outdir}/myintactkwithN_rev0fwd1_set.txt \
 --outdir ${outdir} \
 --outname myintactkwithN_rev0fwd1 \
@@ -103,6 +97,12 @@ Rscript ./scripts/plot_intactk.R --input ${outdir}/myintactkwithN_rev0fwd1_set.t
 Rscript ./scripts/plot_intactk.R --input ${outdir}/myintactkwithN_rev1fwd0_set.txt \
 --outdir ${outdir} \
 --outname myintactkwithN_rev1fwd0 \
+--gen_size ${gen_size} \
+--intkrd ${intkrd}
+
+Rscript ./scripts/plot_intactk.R --input ${outdir}/myintactkwithN_other_set.txt \
+--outdir ${outdir} \
+--outname myintactkwithN_other \
 --gen_size ${gen_size} \
 --intkrd ${intkrd}
 
@@ -116,12 +116,6 @@ then
 
 echo "plotting intact k withoutN"
 
-#subset the intact kmers that are reverse in majority of the 0 genomes, and forward and majority of the 1 genomes
-awk -F "\t" 'NR==1; NR > 1{ if ($6 < 0.5 && $7 > 0.5 && $8 > 0.5 && $9 < 0.5) { print } }' ${outdir}/myNoNintactk_out.txt > ${outdir}/myNoNintactk_rev0fwd1_set.txt
-
-#subset the intact kmers that are reverse in majority of the 1 genomes, and forward and majority of the 0 genomes
-awk -F "\t" 'NR==1; NR > 1{ if ($6 > 0.5 && $7 < 0.5 && $8 < 0.5 && $9 > 0.5) { print } }' ${outdir}/myNoNintactk_out.txt > ${outdir}/myNoNintactk_rev1fwd0_set.txt
-
 Rscript ./scripts/plot_intactk.R --input ${outdir}/myNoNintactk_rev0fwd1_set.txt \
 --outdir ${outdir} \
 --outname myNoNintactk_rev0fwd1 \
@@ -131,6 +125,12 @@ Rscript ./scripts/plot_intactk.R --input ${outdir}/myNoNintactk_rev0fwd1_set.txt
 Rscript ./scripts/plot_intactk.R --input ${outdir}/myNoNintactk_rev1fwd0_set.txt \
 --outdir ${outdir} \
 --outname myNoNintactk_rev1fwd0 \
+--gen_size ${gen_size} \
+--intkrd ${intkrd}
+
+Rscript ./scripts/plot_intactk.R --input ${outdir}/myNoNintactk_other_set.txt \
+--outdir ${outdir} \
+--outname myNoNintactk_other \
 --gen_size ${gen_size} \
 --intkrd ${intkrd}
 
