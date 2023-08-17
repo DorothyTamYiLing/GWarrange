@@ -660,8 +660,31 @@ myintactk_out<-rbind(myintactk_out,myrowout)
 }
 
 myintactk_out<-myintactk_out[-1,]
+
+myintactk_out<-as.data.frame(myintactk_out)
+
+myintactk_out$set<-"other"
+
+myintactk_out[which(myintactk_out$fwdk_0gen_prop>0.5 & myintactk_out$revk_0gen_prop<0.5 & myintactk_out$fwdk_1gen_prop<0.5 & myintactk_out$revk_1gen_prop>0.5),"set"]<-"rev1fwd0"
+
+myintactk_out[which(myintactk_out$fwdk_0gen_prop<0.5 & myintactk_out$revk_0gen_prop>0.5 & myintactk_out$fwdk_1gen_prop>0.5 & myintactk_out$revk_1gen_prop<0.5),"set"]<-"rev0fwd1"
+
+write.table(myintactk_out,file=paste(opt$outdir,"myintactkwithN_out.txt",sep="/"),quote=F,row.names = F,col.names = T,sep="\t")
+
+myrev0fwd1<-myintactk_out[which(myintactk_out$set=="rev0fwd1"),]
+
+write.table(myrev0fwd1,file=paste(opt$outdir,"myintactkwithN_rev0fwd1_set.txt",sep="/"),quote=F,row.names = F,col.names = T,sep="\t")
+
+myrev1fwd0<-myintactk_out[which(myintactk_out$set=="rev1fwd0"),]
+
+write.table(myrev1fwd0,file=paste(opt$outdir,"myintactkwithN_rev1fwd0_set.txt",sep="/"),quote=F,row.names = F,col.names=T,sep="\t")
+
+myother<-myintactk_out[which(myintactk_out$set=="other"),]
+
+write.table(myother,file=paste(opt$outdir,"myintactkwithN_other_set.txt",sep="/"),quote=F,row.names = F,col.names=T,sep="\t")
 	
 write.table(myintactk_out,file=paste(opt$outdir,"myintactkwithN_out.txt",sep="/"),quote=F,row.names = F,col.names = T,sep="\t")
+	
 }else{
 print("no intact k")
 }
