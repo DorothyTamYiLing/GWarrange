@@ -41,19 +41,22 @@ myphenofile<-read.table(opt$pheno,header=F)
 mykmer<-as.character(unique(mytable$query))  #get the list of kmers with blast output
 mygen<-as.character(unique(myphenofile$V1))  #get the list of the genomes from the pheno file
 
-#set the output for the rows of kmers with absence of >5% genomes
-abs_gen_k<-c()
-
 #set the output for the rows of kmers with deletions
 del_k<-c()
 
-#set the output for the rows with multiple blast hits in flank 
+#set the output for the rows with multiple blast hits in flank
 multi_hit_k<-c()
 
-#set the output for the rows with incomplete flank alignment
-alignlen_issue_k<-c()
+#set the output for the rows with alignment issue
+align_issue_k<-c()
 
-#looping through kmers 
+#set the output for the rows with alignment issue
+align_len_k<-c()
+
+#set the output for the rows with identity e value issue
+ID_E_issue_k<-c()
+
+#looping through kmers
 for (i in 1:length(mykmer)){
 
 #print(mykmer[i])
@@ -61,11 +64,15 @@ myflk_coor_k<-unlist(c(1,myflk_coor[which(as.character(myflk_coor$kmer)==as.char
 mykrow<-mytable[which(mytable$query==as.character(mykmer[i])),]
 #mykrow<-mytable[which(mytable$query=="kmer51"),]
 
+#number of genomes in this kmer's blast match
+mygenlen<-length(unique(mykrow$subject))
+#print(mygenlen)
 
 #blast hit must contain >=95% of the genomes used
 if(length(unique(mykrow$subject))<(0.95*length(mygen))){
 abs_gen_k<-c(abs_gen_k,mykmer[i])
 }
+#print("1")
 
 #each genome must appear twice
 myfreqtable<-data.frame(table(mykrow$subject))
@@ -76,24 +83,45 @@ del_k<-c(del_k,mykmer[i])
 if(any(myfreqtable$Freq>2)){
 multi_hit_k<-c(multi_hit_k,mykmer[i])
 }
+#print("2")
 
-#kmer blast match coordinates must match , not use this filter anymore, 27/7/2023
-#mycoor<-unique(c(mykrow$qstart,mykrow$qend))
-#if((any(mycoor%in%myflk_coor_k==F) | any(myflk_coor_k%in%mycoor==F))){
-#alignlen_issue_k<-c(alignlen_issue_k,mykmer[i])
-#}
+#each genome should contain a upsteam hit and downstream hit
+  mykrow$flk<-NA
+  mykrow[which(mykrow$qstart<=myflk_coor_k[2] & mykrow$qend<=myflk_coor_k[2]),"flk"]<-"upstream"
+  mykrow[which(mykrow$qstart>=myflk_coor_k[3] & mykrow$qend>=myflk_coor_k[3]),"flk"]<-"downstream"
+  mykrow$label<-apply(mykrow[,c("subject","flk")],1,paste,collapse="=")
+  if(length(unique(mykrow$label))!=mygenlen*2){
+    align_issue_k<-c(align_issue_k,mykmer[i])
+  }
+#  print("3")
 
-#use this filter instead, 27/7/2023
-if(any(mykrow$identity<95) | any(mykrow$evalue>0.00005)){
-  alignlen_issue_k<-c(alignlen_issue_k,mykmer[i])
+  #each blast match should be at least 95% in length of the flank length
+  myuplen<-myflk_coor_k[2]-1+1
+  #print(myuplen)
+  mydownlen<-myflk_coor_k[4]-myflk_coor_k[3]+1
+  #print(mydownlen)
+  mykrow$alignlen<-NA
+  #print("a")
+  mykrow[which(mykrow$flk=="upstream"),"alignlen"]<-mykrow[which(mykrow$flk=="upstream"),"alig_len"]/myuplen
+  mykrow[which(mykrow$flk=="downstream"),"alignlen"]<-mykrow[which(mykrow$flk=="downstream"),"alig_len"]/mydownlen
+  #print("b")
+  if(any(mykrow$alignlen<0.9)){
+    align_len_k<-c(align_len_k,mykmer[i])
+  }
+ # print("4")
+
+#use percentage identity and E value filter
+if(any(mykrow$identity<95) | any(mykrow$evalue>10e-10)){
+  ID_E_issue_k<-c(ID_E_issue_k,mykmer[i])
 }
+#print("5")
 
 }#close the for loop
 
 #make summary for kmer quality control
-myfilterout<-matrix(0,length(mykmer),4)
+myfilterout<-matrix(0,length(mykmer),6)
 rownames(myfilterout)<-mykmer
-colnames(myfilterout)<-c("abs_gen_k","del_k","multi_hit_k","alignlen_issue_k")
+colnames(myfilterout)<-c("abs_gen_k","del_k","multi_hit_k","align_issue_k","align_len_k","ID_E_issue_k")
 
 myfilterout<-as.data.frame(myfilterout)
 #myfilterout
@@ -127,21 +155,39 @@ write.table(my_multi_hit_k,file=paste(opt$outdir,"kmer_with_multi_hits.txt",sep=
 print("no multi_hit_k")
 }
 
-if (length(unique(alignlen_issue_k))>0){
-print(paste("alignlen_issue_k has ",length(unique(alignlen_issue_k))," kmers",sep=""))
-myfilterout[alignlen_issue_k,"alignlen_issue_k"]<-"yes"
-my_alignlen_issue_k<-mytable[which(mytable$query%in%unique(alignlen_issue_k)),]
-write.table(my_alignlen_issue_k,file=paste(opt$outdir,"kmer_with_alignlen_issue.txt",sep="/"),quote=F,row.names=F,col.names = T,sep="\t")
+if (length(unique(align_issue_k))>0){
+print(paste("align_issue_k has ",length(unique(align_issue_k))," kmers",sep=""))
+myfilterout[align_issue_k,"align_issue_k"]<-"yes"
+my_align_issue_k<-mytable[which(mytable$query%in%unique(align_issue_k)),]
+write.table(my_align_issue_k,file=paste(opt$outdir,"kmer_with_align_issue.txt",sep="/"),quote=F,row.names=F,col.names = T,sep="\t")
 }else{
-print("no alignlen_issue_k")
+print("no align_issue_k")
+}
+
+if (length(unique(align_len_k))>0){
+print(paste("align_len_k has ",length(unique(align_len_k))," kmers",sep=""))
+myfilterout[align_len_k,"align_len_k"]<-"yes"
+my_align_len_k<-mytable[which(mytable$query%in%unique(align_len_k)),]
+write.table(my_align_len_k,file=paste(opt$outdir,"kmer_with_align_len.txt",sep="/"),quote=F,row.names=F,col.names = T,sep="\t")
+}else{
+print("no align_len_k")
+}
+
+if (length(unique(ID_E_issue_k))>0){
+print(paste("ID_E_issue_k has ",length(unique(ID_E_issue_k))," kmers",sep=""))
+myfilterout[ID_E_issue_k,"ID_E_issue_k"]<-"yes"
+my_ID_E_issue_k<-mytable[which(mytable$query%in%unique(ID_E_issue_k)),]
+write.table(my_ID_E_issue_k,file=paste(opt$outdir,"kmer_with_ID_E_issue_k.txt",sep="/"),quote=F,row.names=F,col.names = T,sep="\t")
+}else{
+print("no ID_E_issue_k")
 }
 
 write.table(myfilterout,file=paste(opt$outdir,"filterk_out_summary.txt",sep="/"),quote=F,row.names = T,col.names =T,sep="\t")
 
 
 #output the good kmers for further processing
-mybadk<-unique(c(abs_gen_k,del_k,multi_hit_k,alignlen_issue_k))
-#mybadk<-unique(c(del_k,multi_hit_k))
+mybadk<-unique(c(abs_gen_k,del_k,multi_hit_k,align_issue_k,align_len_k,ID_E_issue_k))
+
 mygoodk<-mykmer[which(!is.element(mykmer,mybadk))]
 
 if(length(mygoodk)==0){
