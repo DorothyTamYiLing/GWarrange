@@ -464,8 +464,8 @@ for (j in 1:length(myk4plot)){ #open bracket for looping through each kmer
   myout$kmer<-mykmer
 
 #making the output matrix for short all out
-  myshortout<-matrix(0,1,8)
-  colnames(myshortout)<-c("kmer","intactk_mygp_ctrl_prop","intactk_mygp_case_prop","otherk_mygp_ctrl_prop","otherk_mygp_case_prop","my0_intactk_StartL_mean","fwd_intactk_count","rev_intactk_count")
+  myshortout<-matrix(0,1,9)
+  colnames(myshortout)<-c("kmer","intactk_mygp_ctrl_prop","intactk_mygp_case_prop","otherk_mygp_ctrl_prop","otherk_mygp_case_prop","my0_intactk_StartL_mean","my1_intactk_StartL_mean","fwd_intactk_count","rev_intactk_count")
   myshortout<-as.data.frame(myshortout)
   myshortout$kmer<-mykmer  
   
@@ -525,9 +525,21 @@ for (j in 1:length(myk4plot)){ #open bracket for looping through each kmer
         #for myshortout
 	myshortout$intactk_mygp_ctrl_prop<-mygp_ctrl_prop
 	myshortout$intactk_mygp_case_prop<-mygp_case_prop
-        myshortout$my0_intactk_StartL_mean<-signif(as.numeric(mean(mytable[which(mytable$mybehave==mygp & mytable$case_control=="0"),"StartL"])),digits = as.numeric(as.character(opt$dedupk)))	
+	myintact0<-which(mytable$mybehave==mygp & mytable$case_control=="0")
+		if(length(myintact0>0)){
+        myshortout$my0_intactk_StartL_mean<-signif(as.numeric(mean(mytable[myintact0,"StartL"])),digits = as.numeric(as.character(opt$dedupk)))	
+	#myshortout$my0_intactk_StartL_mean<-signif(as.numeric(mean(mytable[which(mytable$mybehave==mygp & mytable$case_control=="0"),"StartL"])),digits = as.numeric(as.character(opt$dedupk)))	
+	}else{
+		myshortout$my0_intactk_StartL_mean<-"nointact0"
+			}
+	myintact1<-which(mytable$mybehave==mygp & mytable$case_control=="1")
+		if(length(myintact1>0)){
+        myshortout$my1_intactk_StartL_mean<-signif(as.numeric(mean(mytable[myintact1,"StartL"])),digits = as.numeric(as.character(opt$dedupk)))	
+	}else{
+		myshortout$my1_intactk_StartL_mean<-"nointact1"	
+		   }
 	}
-	
+
 	if(any(c(mygp_ctrl_prop, mygp_case_prop)>0.2) & (mygp!="intact_k")){ #check that this behaviour is not the minority ones
 	
 	myout$otherk<-as.character(mygp)
@@ -576,7 +588,7 @@ myshortout$rev_intactk_count<-length(which(mytable$intactk_orien=="intactk_rev")
 } #close bracket for looping through each kmer
 
 #keeping only the unique row for myshort_allout
-myshort_allout$label<-apply( myshort_allout[,2:8] , 1 , paste , collapse = "-" )
+myshort_allout$label<-apply( myshort_allout[,2:9] , 1 , paste , collapse = "-" )
 myshort_allout_uniq<-myshort_allout[!duplicated(myshort_allout$label),]
 myshort_allout_uniq<-myshort_allout_uniq[-1,]
 
