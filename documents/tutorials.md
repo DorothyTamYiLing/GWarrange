@@ -321,13 +321,13 @@ gunzip ./example_data/32genomes.fna.gz
 #blast dnaA with genomes
 blastn -query ./example_data/dnaA.fasta \
 -subject ./example_data/32genomes.fna \
--outfmt 6 -out 32genomes_gidA_out.txt
+-outfmt 6 -out 32genomes_dnaA_out.txt
 ```
 
 Then, genome assemblies are re-orientated according to the position and orientation of dnaA in the genomes, using the script fix_genome.py:
 
 ```
-python3 ./scripts/fix_genome.py --input ./example_data/PRN_468.fna --mycoor PRN_468_gidA_out.txt
+python3 ./scripts/fix_genome.py --input ./example_data/32genomes.fna --mycoor 32genomes_dnaA_out.txt
 ```
 The output file name for the genomes with same orientation is "fixed_genomes.fasta".
 
