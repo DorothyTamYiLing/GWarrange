@@ -113,7 +113,9 @@ Range of IS elements can be found in https://github.com/thanhleviet/ISfinder-seq
 
 # Requirements:
 
-blastn 2.6.0+, R scripting front-end version 3.4.4, Python 3.9.12
+pyseer 1.3.10
+
+blastn: 2.2.31+, R 4.2.2, Python 3.9.16
 
 python modules: argparse, SeqIO, csv, pandas, gzip
 
