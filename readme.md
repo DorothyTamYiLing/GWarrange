@@ -117,7 +117,6 @@ pyseer 1.3.10
 
 blastn: 2.2.31+, R 4.2.2, Python 3.9.16
 
-python modules: argparse, SeqIO, csv, pandas, gzip
+python modules: argparse, SeqIO, csv, pandas, gzip, os, Bio.Seq
 
-R module: optparse
-
+R modules: optparse, plyr
