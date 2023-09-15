@@ -66,9 +66,9 @@ python3 ./scripts/fix_genome.py --input <multifasta genome sequences, unzipped> 
 The output file name for the genomes with same orientation is "fixed_genomes.fasta".
 
 
-## Locating IS elements in the genome assemblies
+## Locating repeated sequences in the genome assemblies
 
-Location of IS elements in the genomes are obtained by blasting. Sequences of more than one IS elements can be put in the same multifasta file for obtaining genome locations for all at once.
+List of repeated sequences (such as IS elements) within the genome are replaced with short placeholder sequences of Nx15, so that flanking regions can be incorporated into the length of a k-mer. Location of repeated sequences in the genomes are obtained by blasting. Multiple repeated sequences can be put in the same multifasta file for obtaining genome locations for all at once.
 ```
 blastn -query <multifasta file for IS elements to be located in the genomes> \
 -subject fixed_genomes.fasta \
@@ -76,11 +76,11 @@ blastn -query <multifasta file for IS elements to be located in the genomes> \
 ```
 
 ## "Extending and Merging" repeated seqeunces in genome set
-(optional, recommended for gemones with high frequency of IS elements and genome rearrangements)
+(optional, recommended for genomes with high frequency of repeated sequences and genome rearrangements)
 
 Repeated sequences, such as IS elements, can sometimes be found in clusters in bacterial genomes, or different types of repeated sequences can co-locate next to one another forming homologous sequence blocks. Since effective detection of genome rearrangement relies on unique mapping of flanking sequences to genomes, to ensure that flanking sequences do not contain any homologous sequence without prior information of the size of homologous sequence blocks, it would be necessary to replace the whole homologous sequence block/IS clusters by short placeholder sequences. This can be done by extending the genome coordinates of each repeated sequence for a number of base pairs in both directions, and/or to merge repeated sequences that are less than a number of base pairs distance apart .
 
-Then, each "extended and merged" IS element are replaced by a shorter placeholder sequence (e.g. Nx15) in the genome set. 
+Then, each "extended and merged" repeated sequences are replaced by a shorter placeholder sequence (e.g. Nx15) in the genome set. 
 
 It is advised to perform extension and merging with caution, as any genome rearrangement event that sits completely within the replaced region will not be detected. To overcome this potential issue, user can choose to perfrom minimal extension (i.e. extend 100bp from each side, default) and merging overlapping repeated sequences only (i.e. those that are less than 3 bp apart, default) at the same time when users choose longer extension and/or merging repeated sequences that are further apart. This will lead to a separaet set of genomes being produced.
 
