@@ -10,7 +10,7 @@ git clone https://github.com/DorothyTamYiLing/genome_rearrangement.git
 
 ## For detecting genome rearrangement in genomes
 ```
-bash ./scripts/main.sh -k <sigk> -g <genomes> -p <phenotype> -o <output directory> -l <size of kmers> -f <flanking seqeunces minimum length> -d <replaced size>
+bash ./scripts/main.sh -k <sigk> -g <genomes> -p <phenotype> -o <output directory> -f <flanking seqeunces minimum length> -d <replaced size>
 
 ```
 
@@ -24,9 +24,7 @@ Arguments:
 
 **o** : directory being created where the output files will be generated 
 
-**l** : length (bp) of significant kmers (all kmers have to be the output of one GWAS hence are of the same size) 
-
-**f** :  Minimum length (bp) of flanking sequences (both side) for the kmer to be blasted with the genomes; default: 30bp 
+**f** : minimum length (bp) of flanking sequences (both side) for the kmer to be blasted with the genomes; default: 30bp 
 
 **d** : maximum size of repetitive sequences blocks that are replaced by shorter placed holder sequence (i.e. Maximum distance (bp) between the upstream and downstream flanks in the genome for a kmer to be defined as intact kmer)  
 
@@ -37,7 +35,7 @@ Arguments:
 Example:
 
 ```
-bash ./scripts/main.sh -k allsigk.fasta -g genomes.fna.gz -p phenotye.txt -o output_dir -l 200 -f 30 -d 200000 -x 2 -y 100 
+bash ./scripts/main.sh -k allsigk.fasta -g genomes.fna.gz -p phenotye.txt -o output_dir -f 30 -d 200000 -x 2 -y 100 
 
 ```
  
@@ -77,22 +75,20 @@ blastn -query <multifasta file for IS elements to be located in the genomes> \
 -outfmt 6 -out <output file name>
 ```
 
-## "Extending and Merging" IS elements in genome set
+## "Extending and Merging" repeated seqeunces in genome set
 (optional, recommended for gemones with high frequency of IS elements and genome rearrangements)
 
-It has been observed (for example in _Bordetella pertussis_) that genome rearrangements can be mediated by blocks of homologous sequences that are several thousands bp in size and consist of more than one IS element. Therefore, in order to detect the boundaries for these type of rearangements, it is necessary to replace the whole homologous sequence block. This can be done by extending IS cordinates for a number of bp in both direction to ensure complete mask of the IS. Default is to extend 100bp from each side. 
-
-There is also an option to merge coordinates of adjacent IS elements (i.e. IS that are less than a certain number of bases apart) and treating them as "one IS". Default is to merge adjacent IS elements that are no more than 3bp apart.
+Repeated sequences, such as IS elements, can sometimes be found in clusters in bacterial genomes, or different types of repeated sequences can co-locate next to one another forming homologous sequence blocks. Since effective detection of genome rearrangement relies on unique mapping of flanking sequences to genomes, to ensure that flanking sequences do not contain any homologous sequence without prior information of the size of homologous sequence blocks, it would be necessary to replace the whole homologous sequence block/IS clusters by short placeholder sequences. This can be done by extending the genome coordinates of each repeated sequence for a number of base pairs in both directions, and/or to merge repeated sequences that are less than a number of base pairs distance apart .
 
 Then, each "extended and merged" IS element are replaced by a shorter placeholder sequence (e.g. Nx15) in the genome set. 
 
-It is advised to perform IS extension and merging with caution, as any genome rearrangement event that sits completely within the "replaced IS" region will not be detected. To overcome this potential issue, user can choose to perfrom minimal IS extension (i.e. extend 100bp from each side, default) and merging overlapping IS only (i.e. IS that are less than 3 bp apart, default) at the same time when users choose longer extension and/or merging IS that are further apart. This will lead to a separaet set of IS-replaced genomes being produced.
+It is advised to perform extension and merging with caution, as any genome rearrangement event that sits completely within the replaced region will not be detected. To overcome this potential issue, user can choose to perfrom minimal extension (i.e. extend 100bp from each side, default) and merging overlapping repeated sequences only (i.e. those that are less than 3 bp apart, default) at the same time when users choose longer extension and/or merging repeated sequences that are further apart. This will lead to a separaet set of genomes being produced.
 
 ```
-bash merge_replace_IS.sh -g fixed_genomes.fasta -i <blast outout file fo IS location in genomes> \
+bash merge_replace_IS.sh -g fixed_genomes.fasta -i <blast outout file fo repeated seqeunces location in genomes> \
 -e <number of bp to extend from each side of each IS, default:100> \
--m <maximum number of bp for mergeing adjacent IS, default:3 (i.e. merging overlapping IS)> \
--s <"on" or "off" string argument for outputting separate set of genomes with minimal IS extension and merging overlapping IS only>
+-m <maximum number of bp for mergeing adjacent repeated sequences, default:3> \
+-s <"on" or "off" string argument for outputting separate set of genomes with minimal extension and merging overlapping repeated seqeunces only>
 ```
 Example:
 ```
@@ -101,7 +97,7 @@ bash ./scripts/merge_replace_IS.sh -g fixed_genomes.fasta -i IS_coor.txt -e 7000
 
 ## Kmer-based GWAS
 
-Then, a kmer-based GWAS is performed on the IS-replaced genome set (created as described above) searching for kmers that are associated with the phenotype of interested. K-mer based GWAS can be performed using pyseer (https://pyseer.readthedocs.io/en/master/index.html). K-mers can be generated using fsm-lite (https://github.com/nvalimak/fsm-lite). (See the tutorial section for detailed instructions)
+Then, a kmer-based GWAS is performed on the genome set with replacement (created as described above) searching for kmers that are associated with the phenotype of interested. K-mer based GWAS can be performed using pyseer (https://pyseer.readthedocs.io/en/master/index.html). K-mers can be generated using fsm-lite (https://github.com/nvalimak/fsm-lite). (See the tutorial section for detailed instructions)
 
 From the output of pyseer, the kmers that are significantly associated with the phenotype and contain the short placeholder sequence are converted into a multi-fasta file, which is then used as one of the inputs of this pipeline (i.e. argument "kmers" of the main.sh script) for detecting potential genome rearrangement events that are associated with the phenotype of interest. (See the tutorial section for detailed instructions)
  
