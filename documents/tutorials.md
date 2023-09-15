@@ -2,7 +2,7 @@ Click [here](https://drive.google.com/drive/folders/1RQU1a7kxcVSsIQr94MwSKgRf9PC
 
 # Tutorial 1
 
-This tutorial is based a subset of _Bordetella pertussis_ genomes as described in Weigand _et al_. 2019, in which chromosome structures were defined by MAUVE exhaustive pairwise alignment. A subset of 47 genomes that display two different chromosome structures (18 genomes with structure 1 and 29 genomes with structure 2) (See Fig. 1) were used. Structure phenotype of two pairs of genomes were swapped for demonstration purpose.  
+This tutorial is based a subset of _Bordetella pertussis_ genomes as described in Weigand _et al_. 2019, in which chromosome structures were defined by MAUVE exhaustive pairwise alignment. A subset of 47 genomes that display two different chromosome structures (18 genomes with structure 1 and 29 genomes with structure 2) (See Fig. 1) were used in GWAS with structure information as phenotype. Structure phenotype of two pairs of genomes were swapped for demonstration purpose.  
 
 <img width="1159" alt="Screenshot 2023-04-02 at 10 32 23 PM" src="https://user-images.githubusercontent.com/34043893/229380077-f0c15dba-7ed3-4fc3-a0d7-6d9a5f52b556.png">
 Fig 1: Two different chromosome structures were found among 47 _Bordetella pertussis_ genomes. 
@@ -307,7 +307,7 @@ Ref: Lefrancq, N., Bouchez, V., Fernandes, N., Barkoff, A.M., Bosch, T., Dalby, 
 
 # Tutorial 3
 
-_Enterococcus faecium_'s genomes are known to be enriched with IS elements, which could play important role in their genome structure's diversification (Leavis et al. 2007). Genome structure of 75 Enterococcus faecium were characterised by socru (Page et al. 2020), Among which, a subset of 32 genomes display two different chromosome structures (21 genomes with structure "0" and 11 genomes with structure "1") (See Fig. ) were used. Structure phenotype of two pairs of genomes were swapped for demonstration purpose. 
+_Enterococcus faecium_'s genomes are known to be enriched with IS elements, which could play important role in their genome structure's diversification (Leavis et al. 2007). Genome structure of 75 Enterococcus faecium were characterised by socru (Page et al. 2020), Among which, a subset of 32 genomes display two different chromosome structures (21 genomes with structure "0" and 11 genomes with structure "1") (See Fig. ) were used in GWAS, with structure information as phenotype. Structure phenotype of two pairs of genomes were swapped for demonstration purpose. 
 
 ![Screenshot 2023-08-01 222347](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/0f0c348f-936b-4983-be54-180cc6b8d838)
 Fig : Two different chromosome structures were found among 32 _Enterococcus faecium_ genomes. 
