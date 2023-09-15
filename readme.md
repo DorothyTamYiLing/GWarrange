@@ -16,7 +16,7 @@ bash ./scripts/main.sh -k <sigk> -g <genomes> -p <phenotype> -o <output director
 
 Arguments:
 
-**k** : multifasta file of significant phenotype-associated kmers that may or may not contain repetitive elements placeholder sequence (e.g. Nx15)
+**k** : multifasta file of significant phenotype-associated k-mers/unitigs that may or may not contain repetitive elements placeholder sequence (e.g. Nx15)
 
 **g** : gzipped/gunzipped multifasta file of genomes set (original sequence without IS replacement)
 
@@ -28,9 +28,9 @@ Arguments:
 
 **d** : maximum size of repetitive sequences blocks that are replaced by shorter placed holder sequence (i.e. Maximum distance (bp) between the upstream and downstream flanks in the genome for a kmer to be defined as intact kmer)  
 
-**x** : parameter for plotting split kmers. Number of significant digits (e.g. 2,3,4; default: 2) for rounding off mean upstream flank start coordinate, for selecting split kmers with unique proportion and genome position information for plotting
+**x** : parameter for plotting split k-mers. Number of significant digits (e.g. 2,3,4; default: 2) for rounding off mean upstream flank start coordinate, for selecting split kmers with unique proportion and genome position information for plotting
 
-**y** : parameter for plotting intact kmers. The closest multiplier of selected value (e.g. 100, 1000, 10000; default :1000) used for rounding off median genome position of intact kmer, for selecting intact kmers with unique genome position information for plotting
+**y** : parameter for plotting intact k-mers. The closest multiplier of selected value (e.g. 100, 1000, 10000; default :1000) used for rounding off median genome position of intact kmer, for selecting intact k-mers with unique genome position information for plotting
 
 Example:
 
@@ -95,11 +95,11 @@ Example:
 bash ./scripts/merge_replace_IS.sh -g fixed_genomes.fasta -i IS_coor.txt -e 7000 -m 200 -s "on"
 ```
 
-## Kmer-based GWAS
+## K-mer/unitigs-based GWAS
 
-Then, a kmer-based GWAS is performed on the genome set with replacement (created as described above) searching for kmers that are associated with the phenotype of interested. K-mer based GWAS can be performed using pyseer (https://pyseer.readthedocs.io/en/master/index.html). K-mers can be generated using fsm-lite (https://github.com/nvalimak/fsm-lite). (See the tutorial section for detailed instructions)
+Then, a kmer/unitigs-based GWAS is performed on the genome set with replacement (created as described above) searching for k-mers/unitigs that are associated with the phenotype of interested. K-mer/unitigs-based GWAS can be performed using pyseer (https://pyseer.readthedocs.io/en/master/index.html). K-mers can be generated using fsm-lite (https://github.com/nvalimak/fsm-lite). Unitigs can be generated using unitig-callers (Holley and Melsted, 2020) (See the tutorial section for detailed instructions)
 
-From the output of pyseer, the kmers that are significantly associated with the phenotype and contain the short placeholder sequence are converted into a multi-fasta file, which is then used as one of the inputs of this pipeline (i.e. argument "kmers" of the main.sh script) for detecting potential genome rearrangement events that are associated with the phenotype of interest. (See the tutorial section for detailed instructions)
+From the output of pyseer, the k-mers/unitigs that are significantly associated with the phenotype and contain the short placeholder sequence are converted into a multi-fasta file, which is then used as one of the inputs of this pipeline (i.e. argument "kmers" of the main.sh script) for detecting potential genome rearrangement events that are associated with the phenotype of interest. (See the tutorial section for detailed instructions)
  
  
 ## IS elements databaes 
