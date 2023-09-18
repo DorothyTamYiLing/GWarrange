@@ -1,5 +1,0 @@
-111_yearGWAS_genlist.fasta.gz filter=lfs diff=lfs merge=lfs -text
-allsig_kmer_withN.fasta filter=lfs diff=lfs merge=lfs -text
-k200_maf0.05_output.txt.gz filter=lfs diff=lfs merge=lfs -text
-clus1clus2_47.fna.gz filter=lfs diff=lfs merge=lfs -text
-PRN_468.fna.gz filter=lfs diff=lfs merge=lfs -text
