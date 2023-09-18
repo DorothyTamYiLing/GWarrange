@@ -9,10 +9,10 @@ option_list = list(
               help="kmer to plot", metavar="character"),
   make_option("--outdir", type="character", default=NULL,
               help="kmer to plot", metavar="character")
-) 
+)
 
 opt_parser = OptionParser(option_list=option_list);
-opt = parse_args(opt_parser); 
+opt = parse_args(opt_parser);
 
 #headers from the blast output
 #query, subject, identity, alig_len, mismatches, gap, qstart, qend, sStart, sEnd, evalue, bitscore
@@ -21,7 +21,6 @@ opt = parse_args(opt_parser);
 #all kmer that should show at least one blast hit
 
 #setwd(opt$outdir)
-
 #load in phenotype file
 myphenofile<-read.table(opt$pheno,header=F)
 #myphenofile<-read.table("prn_status_pheno.txt",header=F)  #check that there should be no header in phenotype file
@@ -143,7 +142,7 @@ mygoodk<-mykmer[which(!is.element(mykmer,mybadk))]
 
 myprocess<-mytable[which(mytable$query%in%mygoodk),]
 
-#the myprocess table should refere to kmers that are present in all genomes with both flanks; the flanks are also fully aligned with no SNPs nor gaps, and the flanks show unique blast hit in each genome 
+#the myprocess table should refere to kmers that are present in all genomes with both flanks; the flanks are also fully aligned with no SNPs nor gaps, and the flanks show unique blast hit in each genome
 write.table(myprocess,file=paste(opt$outdir,"rows_for_process_NoN.txt",sep="/"),quote=F,row.names = F,col.names = T,sep="\t")
 
 #read in myprocess table
@@ -169,15 +168,15 @@ write.table(myflk_behave_pheno,file=paste(opt$outdir,"myflk_behave_pheno_NoN.txt
 myintactk_only_tab<-read.table(paste(opt$outdir,"myflk_behave_pheno_NoN.txt",sep="/"),sep="\t",header=T)
 colnames(myintactk_only_tab)[5]<-"k_orien"
 
-#now process table of kmers with flank behaviour of "intact_k" only, 
+#now process table of kmers with flank behaviour of "intact_k" only,
 #the theory is these intact kmers is flagged as significantly associated in GWAS because it is within the "inverted" genomic region
-#aim to find association between fwd_k and rev_k and "0" and "1", i.e. 
+#aim to find association between fwd_k and rev_k and "0" and "1", i.e.
 #the proportion of "0" genomes with fwd_k
 #the proportion of "0" genomes with rev_k
 #the proportion of "1" genomes with fwd_k
 #the proportion of "1" genomes with rev_k
-#let's say fwd_k is associated with "0", then if the SD of the genomic position is 
-#very small (i.e. suggesting the same position), then plot the medium genomic 
+#let's say fwd_k is associated with "0", then if the SD of the genomic position is
+#very small (i.e. suggesting the same position), then plot the medium genomic
 #position of where the fwd_k is mapped in "0" genomes
 
 #specify the number of genomes
@@ -190,14 +189,14 @@ numgen<-length(mygen)
 #first check if the rows for each kmer (one row per genome) is the same as the total number of genomes used in GWAS
 myfreq<-as.data.frame(table(myintactk_only_tab$kmer))
 table(myfreq$Freq)
-#    0    47 
-#  504 10220 
+#    0    47
+#  504 10220
 
 #keep those kmers with blast hit in all genomes only (list of kmers), optional
 #myk4paint<-myfreq[which(myfreq$Freq==numgen),"Var1"]   #change genome number here
 
 #get the list of intact kmers for process
-myk4paint<-myfreq[,"Var1"] 
+myk4paint<-myfreq[,"Var1"]
 
 #making intact_k summary output table for all intact kmer
 myintactk_out<-matrix(0,1,21)
@@ -245,19 +244,19 @@ my1_fwdk_count<-nrow(mysub[which(mysub$case_control==1 & mysub$k_orien=="fwd_k")
 #the number of "1" genomes with rev_k
 my1_revk_count<-nrow(mysub[which(mysub$case_control==1 & mysub$k_orien=="rev_k"),])
 
-#describe the median and SD genomic position of fwd_k + "0" genomes 
+#describe the median and SD genomic position of fwd_k + "0" genomes
 my0_fwdk_medium<-median(mysub[which(mysub$case_control==0 & mysub$k_orien=="fwd_k"),"sStart"])
 my0_fwdk_sd<-sd(mysub[which(mysub$case_control==0 & mysub$k_orien=="fwd_k"),"sStart"])
 
-#describe the median and SD genomic position of rev_k + "0" genomes 
+#describe the median and SD genomic position of rev_k + "0" genomes
 my0_revk_medium<-median(mysub[which(mysub$case_control==0 & mysub$k_orien=="rev_k"),"sStart"])
 my0_revk_sd<-sd(mysub[which(mysub$case_control==0 & mysub$k_orien=="rev_k"),"sStart"])
 
-#describe the median and SD genomic position of fwd_k + "1" genomes 
+#describe the median and SD genomic position of fwd_k + "1" genomes
 my1_fwdk_medium<-median(mysub[which(mysub$case_control==1 & mysub$k_orien=="fwd_k"),"sStart"])
 my1_fwdk_sd<-sd(mysub[which(mysub$case_control==1 & mysub$k_orien=="fwd_k"),"sStart"])
 
-#describe the median and SD genomic position of rev_k + "1" genomes 
+#describe the median and SD genomic position of rev_k + "1" genomes
 my1_revk_medium<-median(mysub[which(mysub$case_control==1 & mysub$k_orien=="rev_k"),"sStart"])
 my1_revk_sd<-sd(mysub[which(mysub$case_control==1 & mysub$k_orien=="rev_k"),"sStart"])
 
@@ -269,4 +268,27 @@ myintactk_out<-rbind(myintactk_out,myrowout)
 
 myintactk_out<-myintactk_out[-1,]
 
+
+myintactk_out<-as.data.frame(myintactk_out)
+
+myintactk_out$set<-"other"
+
+myintactk_out[which(myintactk_out$fwdk_0gen_prop>0.5 & myintactk_out$revk_0gen_prop<0.5 & myintactk_out$fwdk_1gen_prop<0.5 & myintactk_out$revk_1gen_prop>0.5),"set"]<-"rev1fwd0"
+
+myintactk_out[which(myintactk_out$fwdk_0gen_prop<0.5 & myintactk_out$revk_0gen_prop>0.5 & myintactk_out$fwdk_1gen_prop>0.5 & myintactk_out$revk_1gen_prop<0.5),"set"]<-"rev0fwd1"
+
 write.table(myintactk_out,file=paste(opt$outdir,"myNoNintactk_out.txt",sep="/"),quote=F,row.names = F,col.names = T,sep="\t")
+
+myrev0fwd1<-myintactk_out[which(myintactk_out$set=="rev0fwd1"),]
+
+write.table(myrev0fwd1,file=paste(opt$outdir,"myNoNintactk_rev0fwd1_set.txt",sep="/"),quote=F,row.names = F,col.names = T,sep="\t")
+
+myrev1fwd0<-myintactk_out[which(myintactk_out$set=="rev1fwd0"),]
+
+write.table(myrev1fwd0,file=paste(opt$outdir,"myNoNintactk_rev1fwd0_set.txt",sep="/"),quote=F,row.names = F,col.names=T,sep="\t")
+
+myother<-myintactk_out[which(myintactk_out$set=="other"),]
+
+write.table(myother,file=paste(opt$outdir,"myNoNintactk_other_set.txt",sep="/"),quote=F,row.names = F,col.names=T,sep="\t")
+
+
