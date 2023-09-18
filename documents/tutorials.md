@@ -1,5 +1,6 @@
 
-<img width="591" alt="Screenshot 2023-09-18 215805" src="https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/7e903343-1199-47a4-898d-0ff0603f8b77">
+<img width="591" alt="Screenshot 2023-09-18 215805" src="https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/f3501563-7c65-4c04-98c5-12a13ed3c3ad">
+
 Genome rearrangement pipeline summary chart
 
 Click [here](https://drive.google.com/drive/folders/1RQU1a7kxcVSsIQr94MwSKgRf9PC0YnZO?usp=share_link) for downloading genomes files required for the tutorials. After installing genome_rearangement with git clone, place the downloaded genomes files in ~/genome_rearrangement/example_data for later use.
