@@ -1,5 +1,5 @@
 
-<img width="606" alt="pipeline_flowchart_new" src="https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/f0b669db-1f77-4473-9146-a857f6b82a26">
+<img width="511" alt="Screenshot 2023-09-18 215435" src="https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/ffaf6cde-64ae-4f25-8a7a-6c0d71d121bb">
 
 Genome rearrangement pipeline summary chart
 
