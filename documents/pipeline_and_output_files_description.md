@@ -2,7 +2,7 @@
 
 ## Pipeline description:
 
-<img width="511" alt="Screenshot 2023-09-18 215435" src="https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/da803f00-ae74-4c41-aa11-ec6ec5bcca55">
+<img width="511" alt="Screenshot 2023-09-18 215435" src="https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/1d1a187b-3afe-4fd9-837d-7e599ee99e78">
 
 ## Script functions and output files
 
