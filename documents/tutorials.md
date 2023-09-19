@@ -124,7 +124,7 @@ Then, these kmers were blasted with the original genome set for studying potenti
 
 bash ./scripts/main.sh -k ./ext7000_merge200_ISreplaced_genomes/sigk_seq.fasta \
 -g ./example_data/clus1clus2_47.fna \
--p ./example_data/clus1clus2_pheno.txt -l 200 -d 110000 -f 30 \
+-p ./example_data/clus1clus2_pheno.txt -d 110000 -f 30 \
 -o ./clus1clus2_47_ext7000_merge200_outdir -s 4300 -x 2 -y 1000
 
 ```
