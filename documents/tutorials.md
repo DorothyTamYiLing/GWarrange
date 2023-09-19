@@ -12,7 +12,15 @@ This tutorial is based a subset of _Bordetella pertussis_ genomes as described i
 <img width="1159" alt="Screenshot 2023-04-02 at 10 32 23 PM" src="https://user-images.githubusercontent.com/34043893/229380077-f0c15dba-7ed3-4fc3-a0d7-6d9a5f52b556.png">
 Fig 1: Two different chromosome structures were found among 47 _Bordetella pertussis_ genomes. 
 
-First, genomes asemblies from which genome rearrangements are detected are re-orientated by a chosen gene. In the case of Boredetella pertussis, the gene is gidA since it is the first gene after origin of replication. The location and orientation of gidA in the genomes are obtained by blasting it with multifasta file of genome assemblies.
+
+First, the genome assemblies multifasta file is prepared by concatenating genome fasta files.
+```
+#concatenating genome fasta files for use
+cd ./example_data/example_genomes/clus1clus2_47_genomes
+cat *fasta.gz > ../clus1clus2_47.fna.gz
+```
+
+Genomes asemblies from which genome rearrangements are detected are re-orientated by a chosen gene. In the case of Boredetella pertussis, the gene is gidA since it is the first gene after origin of replication. The location and orientation of gidA in the genomes are obtained by blasting it with multifasta file of genome assemblies.
 ```
 #unzip the genome file if neccesasry
 gunzip ./example_data/clus1clus2_47.fna.gz
