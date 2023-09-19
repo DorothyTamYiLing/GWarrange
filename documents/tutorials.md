@@ -91,7 +91,7 @@ Generate number of unique pattterns and p value significance threshold informati
 ```
 Extract kmers with p value below the the significance threshold:
 ```
-awk '{ if ($4 <= 5.21E-04) { print } }' clus1clus2_47_ext7000merge200_k200_MAF0.05_nopopctrl > sigk_pyseer.txt
+awk '{ if ($4 <= 4.59E-04) { print } }' clus1clus2_47_ext7000merge200_k200_MAF0.05_nopopctrl > sigk_pyseer.txt
 ```
 
 26,665 kmers were found to be significantly associated with the structural phenotype. The sequences of these kmers were extracted and placed in a multifasta file.
