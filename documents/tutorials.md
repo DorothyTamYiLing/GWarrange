@@ -18,7 +18,7 @@ First, the genome assemblies multifasta file is prepared by concatenating genome
 ```
 #concatenating genome fasta files for use
 cd ./example_data/example_genomes/clus1clus2_47_genomes
-cat *fasta.gz > ../clus1clus2_47.fna.gz
+cat *fasta.gz > ../../clus1clus2_47.fna.gz
 ```
 
 Genomes asemblies from which genome rearrangements are detected are re-orientated by a chosen gene. In the case of Boredetella pertussis, the gene is gidA since it is the first gene after origin of replication. The location and orientation of gidA in the genomes are obtained by blasting it with multifasta file of genome assemblies.
