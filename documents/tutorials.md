@@ -12,7 +12,7 @@ This tutorial is based a subset of _Bordetella pertussis_ genomes as described i
 <img width="1159" alt="Screenshot 2023-04-02 at 10 32 23 PM" src="https://user-images.githubusercontent.com/34043893/229380077-f0c15dba-7ed3-4fc3-a0d7-6d9a5f52b556.png">
 Fig 1: Two different chromosome structures were found among 47 _Bordetella pertussis_ genomes. 
 
-<br/>
+##
 
 First, the genome assemblies multifasta file is prepared by concatenating genome fasta files.
 ```
