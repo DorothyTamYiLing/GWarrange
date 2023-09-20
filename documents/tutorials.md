@@ -167,7 +167,7 @@ Note that the value used for -d parameter should be larger than the "Maximum siz
 
 **Visualising genome rearrangements that are captured by kmer**
 
-From genome set with 7000bp extension and 200bp merging, 756 kmers were found to be split (_i.e._ flanking sequences mapped to different positions) when mapped to the original genomes.
+From genome set with 7000bp extension and 200bp merging, 978 kmers were found to be split (_i.e._ flanking sequences mapped to different positions) when mapped to the original genomes.
 
 1) Plotting split kmers for visualising rearrangement boundaries
 
