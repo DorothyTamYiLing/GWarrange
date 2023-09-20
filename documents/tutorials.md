@@ -72,6 +72,8 @@ fsm-lite -l clus1clus2_47_input.list -v -s 3 -S 44 -t tmp -m 200 -M 200 | gzip -
 ########################################################################
 
 #For ext100_merge3_ISreplaced_genomes set
+cd ./ext100_merge3_ISreplaced_genomes
+
 for f in *_ext100_merge3_ISreplaced.fasta; do id=$(basename "$f" _ext100_merge3_ISreplaced.fasta); echo $id $f; done > clus1clus2_47_input.list
 
 #generating kmers with size of 200 bases with minor allel frequency 0.05
