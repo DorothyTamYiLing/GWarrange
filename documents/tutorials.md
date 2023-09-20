@@ -163,11 +163,11 @@ bash ./scripts/main.sh -k ./ext100_merge3_ISreplaced_genomes/sigk_seq.fasta \
 
 ```
 
-Note that the value used for -d parameter should be larger than the "Maximum size of merged ISs" value in "ext7000_merge200_mergedISstat.txt".
+Note that the value used for -d parameter should be larger than the "Maximum size of merged ISs" value in *mergedISstat.txt.
 
 **Visualising genome rearrangements that are captured by kmer**
 
-756 kmers were found to be split (_i.e._ flanking sequences mapped to different positions) when mapped to the original genomes.
+From genome set with 7000bp extension and 200bp merging, 756 kmers were found to be split (_i.e._ flanking sequences mapped to different positions) when mapped to the original genomes.
 
 1) Plotting split kmers for visualising rearrangement boundaries
 
