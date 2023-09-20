@@ -341,19 +341,24 @@ script functions:
 output files:
 
 1. myintactkwithN_rev1fwd0_set.txt (output of bash command before the script)
-set of N-containing kmers that are in reverse orientation in majority of the case genomes and forward in orientation in majority of control genomes
+
+Set of N-containing kmers that are in reverse orientation in majority of the case genomes and forward in orientation in majority of control genomes
 
 2. myintactkwithN_rev0fwd1_set.txt (output of bash command before the script)
-set of N-containing kmers that are in reverse orientation in majority of the control genomes and forward in orientation in majority of case genomes
+
+Set of N-containing kmers that are in reverse orientation in majority of the control genomes and forward in orientation in majority of case genomes
 
 3. myNoNintactk_rev1fwd0_set.txt (output of bash command before the script)
-set of kmers without N that are in reverse orientation in majority of the case genomes and forward in orientation in majority of control genomes
+
+Set of kmers without N that are in reverse orientation in majority of the case genomes and forward in orientation in majority of control genomes
 
 4. myNoNintactk_rev0fwd1_set.txt (output of bash command before the script)
-set of kmers without N that are in reverse orientation in majority of the control genomes and forward in orientation in majority of case genomes
+
+Set of kmers without N that are in reverse orientation in majority of the control genomes and forward in orientation in majority of case genomes
 
 4. myNoNintactk_other_set.txt (output of bash command before the script)
-set of kmers without N that do not belong to "rev0fwd1_set" nor "rev1fwd0_set"
+
+Set of kmers without N that do not belong to "rev0fwd1_set" nor "rev1fwd0_set"
 
 6. myintactkwithN_rev0fwd1_kmer4plot.txt / myintactkwithN_rev1fwd0_kmer4plot.txt / myNoNintactk_rev0fwd1_kmer4plot.txt / myNoNintactk_rev1fwd0_kmer4plot.txt/ myNoNintactk_other_kmer4plot.txt
 
