@@ -352,10 +352,10 @@ set of kmers without N that are in reverse orientation in majority of the case g
 4. myNoNintactk_rev0fwd1_set.txt (output of bash command before the script)
 set of kmers without N that are in reverse orientation in majority of the control genomes and forward in orientation in majority of case genomes
 
-4. myNoNintactk_rev0fwd1_other.txt (output of bash command before the script)
+4. myNoNintactk_other_set.txt (output of bash command before the script)
 set of kmers without N that do not belong to "rev0fwd1_set" nor "rev1fwd0_set"
 
-6. myintactkwithN_rev0fwd1_kmer4plot.txt / myintactkwithN_rev1fwd0_kmer4plot.txt / myNoNintactk_rev0fwd1_kmer4plot.txt / myNoNintactk_rev1fwd0_kmer4plot.txt/ myNoNintactk_other_otherkmer4plot.txt
+6. myintactkwithN_rev0fwd1_kmer4plot.txt / myintactkwithN_rev1fwd0_kmer4plot.txt / myNoNintactk_rev0fwd1_kmer4plot.txt / myNoNintactk_rev1fwd0_kmer4plot.txt/ myNoNintactk_other_kmer4plot.txt
 Set of kmers with unqiue genome position <sup> 5 </sup> used in the final plot
 
 7. myintactkwithN_rev0fwd1.png / myintactkwithN_rev1fwd0.png / myNoNintactk_rev0fwd1.png / myNoNintactk_rev1fwd0.png / myNoNintactk_other.png
