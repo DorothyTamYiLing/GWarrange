@@ -57,9 +57,10 @@ Each set of IS-replaced genomes using different IS merging and extending paramet
 
 Statistics on the sizes and distances between each pair of adjacent "extended and merged" IS are printed in files *_mergedISstat.txt.
 
-Prior to GWAS, each set of IS-replaced genomes using different IS merging and extending parameters were used for generating kmers. Here, we use the kmer generation tool fsm-lite to generate kmers from genomes in directory /ext7000_merge200_ISreplaced_genomes.
+Prior to GWAS, each set of IS-replaced genomes using different IS merging and extending parameters were used for generating kmers.
 
 ```
+#For ext7000_merge200_ISreplaced_genomes set
 cd ./ext7000_merge200_ISreplaced_genomes
 
 #generating fsm-ite input file
@@ -67,6 +68,15 @@ for f in *_ext7000_merge200_ISreplaced.fasta; do id=$(basename "$f" _ext7000_mer
 
 #generating kmers with size of 200 bases with minor allel frequency 0.05
 fsm-lite -l clus1clus2_47_input.list -v -s 3 -S 44 -t tmp -m 200 -M 200 | gzip - > clus1clus2_47_ext7000merge200_k200_output.txt.gz
+
+########################################################################
+
+#For ext100_merge3_ISreplaced_genomes set
+for f in *_ext100_merge3_ISreplaced.fasta; do id=$(basename "$f" _ext100_merge3_ISreplaced.fasta); echo $id $f; done > clus1clus2_47_input.list
+
+#generating kmers with size of 200 bases with minor allel frequency 0.05
+fsm-lite -l clus1clus2_47_input.list -v -s 3 -S 44 -t tmp -m 200 -M 200 | gzip - > clus1clus2_47_ext100merge3_k200_output.txt.gz
+
 ```
 
 Then, a kmer-based GWAS was conducted using pyseer with an aim to identify kmers whose presence-absence patterns were associated with chromosome structures phenotype. Population structure is not contolled.
