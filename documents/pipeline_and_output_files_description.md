@@ -352,10 +352,13 @@ set of kmers without N that are in reverse orientation in majority of the case g
 4. myNoNintactk_rev0fwd1_set.txt (output of bash command before the script)
 set of kmers without N that are in reverse orientation in majority of the control genomes and forward in orientation in majority of case genomes
 
-5. myintactkwithN_rev0fwd1_kmer4plot.txt / myintactkwithN_rev1fwd0_kmer4plot.txt / myNoNintactk_rev0fwd1_kmer4plot.txt / myNoNintactk_rev1fwd0_kmer4plot.txt
+4. myNoNintactk_rev0fwd1_other.txt (output of bash command before the script)
+set of kmers without N that do not belong to "rev0fwd1_set" nor "rev1fwd0_set"
+
+6. myintactkwithN_rev0fwd1_kmer4plot.txt / myintactkwithN_rev1fwd0_kmer4plot.txt / myNoNintactk_rev0fwd1_kmer4plot.txt / myNoNintactk_rev1fwd0_kmer4plot.txt/ myNoNintactk_other_otherkmer4plot.txt
 Set of kmers with unqiue genome position <sup> 5 </sup> used in the final plot
 
-6. myintactkwithN_rev0fwd1.png / myintactkwithN_rev1fwd0.png / myNoNintactk_rev0fwd1.png / myNoNintactk_rev1fwd0.png
+7. myintactkwithN_rev0fwd1.png / myintactkwithN_rev1fwd0.png / myNoNintactk_rev0fwd1.png / myNoNintactk_rev1fwd0.png / myNoNintactk_other.png
 Final plot of kmers set with unique genome position <sup> 5 </sup>
 
-<sup> 5 </sup> kmers with duplicated genome positions are defined by those showing identical values after rounding off median genome position of forward kmer in control genomes (column "fwdk_0gen_med") to the closest multiplier of selected value (e.g. 100, 1000, 10000) as indicated by the y flag in. main.sh
+<sup> 5 </sup> kmers with unique genome positions are defined by those showing identical median StartL values when k-mers are in forward/reverse orientation in case/control genomes, after rounded off to the closest multiplier of selected value (e.g. 100, 1000, 10000), as indicated by the y flag.
