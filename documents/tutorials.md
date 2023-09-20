@@ -118,10 +118,10 @@ Extract kmers with p value below the the significance threshold:
 awk '{ if ($4 <= 4.59E-04) { print } }' clus1clus2_47_ext7000merge200_k200_MAF0.05_nopopctrl > sigk_pyseer.txt
 
 #For ext100_merge3_ISreplaced_genomes set
-awk '{ if ($4 <= ) { print } }' clus1clus2_47_ext7000merge200_k200_MAF0.05_nopopctrl > sigk_pyseer.txt
+awk '{ if ($4 <= 5.62E-04) { print } }' clus1clus2_47_ext100merge3_k200_MAF0.05_nopopctrl > sigk_pyseer.txt
 ```
 
-26,665 kmers were found to be significantly associated with the structural phenotype. The sequences of these kmers were extracted and placed in a multifasta file.
+The sequences of kmers that were found to be significantly associated with the structural phenotyp were extracted and placed in a multifasta file.
 
 Extract significant kmer sequences and convert them into fasta format:
 ```
@@ -149,9 +149,16 @@ Then, these kmers were blasted with the original genome set for studying potenti
 ```
 #run in the first level of /genome_rearrangement directory
 
+#For ext7000_merge200_ISreplaced_genomes set
 bash ./scripts/main.sh -k ./ext7000_merge200_ISreplaced_genomes/sigk_seq.fasta \
 -g ./example_data/clus1clus2_47.fna \
 -p ./example_data/clus1clus2_pheno.txt -d 110000 -f 30 \
+-o ./clus1clus2_47_ext7000_merge200_outdir -s 4300 -x 2 -y 1000
+
+#For ext100_merge3_ISreplaced_genomes set
+bash ./scripts/main.sh -k ./ext100_merge3_ISreplaced_genomes/sigk_seq.fasta \
+-g ./example_data/clus1clus2_47.fna \
+-p ./example_data/clus1clus2_pheno.txt -d 5000 -f 30 \
 -o ./clus1clus2_47_ext7000_merge200_outdir -s 4300 -x 2 -y 1000
 
 ```
