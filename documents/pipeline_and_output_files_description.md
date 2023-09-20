@@ -71,15 +71,13 @@ script functions:
 
 1. Filtering kmers based on blast hit information. Kmer passing the filter should have blast hits that fulfill the following criteria:
 
-Criteria 1: the kmer should show blast match to at least 95% of the genomes
+Criteria 1: the k-mer should have a blast match with >=95% of samples in dataset
 
-Criteria 2: both flanks of the kmers should be found in the genomes (there should be 2 blast hits per kmer, one for each flank)
+Criteria 2: each blast alignment should be >=90% of the flanking sequence’s length
 
-Criteria 3: Each flank should only show one unique blast hit per genome
+Criteria 3: each blast alignment should show have >=95% identity match and <=10e-10 E-value
 
-Criteria 4: Each flank should show at least 95% identity match and E-value of no more than 0.00005
-
-SNPs and gaps are allowed. 
+Criteria 4: the k-mer should show two blast hits to each genome, one hit for each flanking sequence
 
 2. For those kmers that have passed the filter, determine:
 
@@ -92,8 +90,7 @@ SNPs and gaps are allowed.
 -`EndR` (genome coordinate of the end of downstream/right flank)
 
 3. Determine kmers' flank behaviours in each genome (behaviours could be 
-`intact_k` (intact kmer), `mv_away` (flanks move away from each other), `swp_flk` (flanks swap in position),`mv&flp` (one flank has 
-move away and flipped) according to the following rules:
+`intact_k` (intact kmer), `mv_away` (flanks move away from each other), `swp_flk` (flanks swap in position),`mv&flp` (one flank has move away and flipped) according to the following rules:
 
 To be defined as "intact kmer":
 
@@ -134,7 +131,7 @@ To be defined as "mv&flp":
 Flank behaviours are defined as `undefined_behave` when none of the rules above are fulfilled for that kmer.
 
 
-4. For each kmer (across all genomes), count the number (and proportion) of case/control genome that in which each type of flank behaviour is found, determine the flank behaviour that is associated with case genomes and control genome respectively, including information of where in the genome the flank behaviours take place (in the form of summary statistics of genome coordinates. Finally, the most possible genome rearrangement event as indicated by each kmer is determined by the following rules:
+4. For each k-mer (across all genomes), count the number (and proportion) of case/control genome that in which each type of flank behaviour is found, determine the flank behaviour that is associated with case genomes and control genome respectively, including information of where in the genome the flank behaviours take place (in the form of summary statistics of genome coordinates. Finally, the most possible genome rearrangement event as indicated by each kmer is determined by the following rules:
 
 - Define as `translocation` when case genomes/contrl genomes associated flank behaviour include `mv_away` or `swp_flk`.
 
@@ -142,25 +139,31 @@ Flank behaviours are defined as `undefined_behave` when none of the rules above 
 
 
 output files: 
-1. rows_for_process.txt (blast hit of kemrs that pass the filter)
+1. rows_for_process.txt (blast hit of k-mers that pass the filters) <sup> 1 </sup>
 
-2. kmer_with_missinggenomes.txt (blast hit of kmers that do not fulfill criteria 1) <sup> 1 </sup>
- 
-3. kmer_with_deletion.txt (blast hit of kmers that do not fulfill criteria 2) <sup> 1 </sup>
+2. kmer_with_missinggenomes.txt (blast hit of k-mers that do not fulfill criteria 1) <sup> 1 </sup>
 
-4. kmer_with_multi_hits.txt (blast hit of kmers that do not fulfill criteria 3) <sup> 1 </sup>
+3. kmer_genomeappearonce.txt (blast hit of k-mers that do not fulfill criteria 4) <sup> 1 </sup>
 
-5. kmer_with_alignlen_issue.txt (blast hit of kmers that do not fulfill criteria 4) <sup> 1 </sup>
+4. kmer_with_multi_hits.txt (blast hit of k-mers that do not fulfill criteria 4) <sup> 1 </sup>
 
-6. myundefine_k.txt (blast hit of kmers with undefined behaviour in at least one genome) <sup> 1 </sup>
+5. kmer_with_alignlen_issue.txt (blast hit of k-mers that do not fulfill criteria 4) <sup> 1 </sup>
 
-7. myflk_behave_pheno.txt (kmers with `StartL`,`EndL`,`StartR`,`EndR`, flank behaviour, kmer orientation (for intactk only), flank distance in each genome defined, and merged with phenotype information)
+6. kmer_with_align_len.txt (blast hit of k-mers that do not fulfill criteria 2) <sup> 1 </sup>
 
-8. mysplitk_out.txt, include the following information in columns:
+7. kmer_with_ID_E_issue_k.txt (blast hit of k-mers that do not fulfill criteria 3) <sup> 1 </sup>
 
-**kmer**: N-contaiing kmer ID
+8. filterk_out_summary.txt (table summary fo each k-mer that do not fulfill criteria 1-4)
+   
+9. myundefine_k.txt (blast hit of k-mers with undefined behaviour in at least one genome) <sup> 1 </sup>
 
-**event_sum**: list of flank behaviours obserevd across genomes for this kmer, seperated by ":"
+10. myflk_behave_pheno.txt (k-mers with `StartL`,`EndL`,`StartR`,`EndR`, flank behaviour, kmer orientation (for intactk only), flank distance in each genome defined, and merged with phenotype information)
+
+11. mysplitk_out.txt, include the following information in columns:
+
+**kmer**: N-contaiing k-mer ID
+
+**event_sum**: list of flank behaviours obserevd across genomes for this k-mer, seperated by ":"
 
 **flk_behaviour**: count and proportion of case and control genomes for each behaviour; format: `count of case genomes with behaviour/total number of case genomes (proportion): count of control genomes with behaviour/total number of control genomes (proportion)`
 
@@ -192,98 +195,113 @@ flk_dist_stat: summary statistics <sup> 3 </sup> for distance between flanks acr
 
 <sup> 3 </sup>  summary statistics format: `minimum, 1st quantile, median, mean, 3rd quantile, maximum`
 
-9. myshort_splitk_out_uniq.txt, contain kmers with unique proportion and genome position information for plotting. Include the following information in columns:
+12. myshort_splitk_out_uniq.txt, contain k-mers with unique proportion, genome position and orientation information for plotting. Include the following information in columns:
 
-**kmer**: N-contaiing kmer ID
+**kmer**: N-contaiing k-mer ID
 
-**intactk_mygp_ctrl_prop**: proportion of control genomes with intact kmer 
+**intactk_mygp_ctrl_prop**: proportion of control genomes with intact k-mer 
 
-**intactk_mygp_case_prop**: proportion of case genomes with intact kmer 
+**intactk_mygp_case_prop**: proportion of case genomes with intact k-mer 
 
-**otherk_mygp_ctrl_prop**: proportion of control genomes with kmer of other behaviour 
+**otherk_mygp_ctrl_prop**: proportion of control genomes with k-mer of other behaviour 
 
-**otherk_mygp_case_prop**: proportion of case genomes with kmer of other behaviour 
+**otherk_mygp_case_prop**: proportion of case genomes with k-mer of other behaviour 
 
-**my0_intactk_StartL_mean**: for intact kmers in control genomes, mean upstream flank start coordinate, round to number of significant digits indicated by -x flag in main.sh)
+**my0_intactk_StartL_mean**: for intact k-mers in control genomes, mean upstream flank start coordinate, round to number of significant digits indicated by -x flag in main.sh)
 
-**fwd_intactk_count**: count of intact kmers in forward orientation
+**fwd_intactk_count**: count of intact k-mers in forward orientation
 
-**rev_intactk_count**: count of intact kmers in reverse orientation
+**rev_intactk_count**: count of intact k-mers in reverse orientation
 
-**label**: labels generated for the kmers containing the above information. Kmers with duplicated genome positions are defined by those showing identical values in this column
+**label**: labels generated for the k-mers containing the above information. K-mers with duplicated genome positions are defined by those showing identical values in this column
 
-10. myintactkwithN_out.txt, include the following information in columns:
+13. myintactkwithN_out.txt, include the following information in columns:
 
-**kmer**:	N-contaiing kmer ID
+**kmer**:	N-contaiing k-mer ID
 
 **kmer_behaviour**:	"intact k"
 
 **flk_dist**: all observed values of flank distance across genomes
 
-**fwdk_gen_count**:	number of genomes with kmer in forward orientation
+**fwdk_gen_count**:	number of genomes with k-mer in forward orientation
 
-**revk_gen_count**	: number of genomes with kmer in reverse orientation
+**revk_gen_count**	: number of genomes with k-mer in reverse orientation
 
-**fwdk_0gen_prop**	: proportion of control genomes with kmer in forward orientation
+**fwdk_0gen_prop**	: proportion of control genomes with k-mer in forward orientation
 
-**revk_0gen_prop**: proportion of control genomes with kmer in reverse orientation
+**revk_0gen_prop**: proportion of control genomes with k-mer in reverse orientation
 
-**fwdk_1gen_prop**	: proportion of case genomes with kmer in forward orientation
+**fwdk_1gen_prop**	: proportion of case genomes with k-mer in forward orientation
 
-**revk_1gen_prop**	: proportion of case genomes with kmer in reverse orientation
+**revk_1gen_prop**	: proportion of case genomes with k-mer in reverse orientation
 
-**fwdk_0gen_count**	: count of control genomes with kmer in forward orientation
+**fwdk_0gen_count**	: count of control genomes with k-mer in forward orientation
 
-**revk_0gen_count**: count of control genomes with kmer in reverse orientation
+**revk_0gen_count**: count of control genomes with k-mer in reverse orientation
 
-**fwdk_1gen_count**	: count of case genomes with kmer in forward orientation
+**fwdk_1gen_count**	: count of case genomes with k-mer in forward orientation
 
-**revk_1gen_count**	: count of case genomes with kmer in reverse orientation
+**revk_1gen_count**	: count of case genomes with k-mer in reverse orientation
 
-**fwdk_0gen_med**	: median genome position of forward kmer in control genomes
+**fwdk_0gen_med**	: median genome position of forward k-mer in control genomes
 
-**fwdk_0gen_sd**	: standard deviation of genome position of forward kmer in control genomes
+**fwdk_0gen_sd**	: standard deviation of genome position of forward k-mer in control genomes
 
-**revk_0gen_med**: median genome position of reverser kmer in control genomes
+**revk_0gen_med**: median genome position of reverser k-mer in control genomes
 
-**revk_0gen_sd**	: standard deviation of genome position of reverse kmer in control genomes
+**revk_0gen_sd**	: standard deviation of genome position of reverse k-mer in control genomes
 
-**fwdk_1gen_med**	: median genome position of forward kmer in case genomes
+**fwdk_1gen_med**	: median genome position of forward k-mer in case genomes
 
-**fwdk_1gen_sd**	: standard deviation of genome position of forward kmer in case genomes
+**fwdk_1gen_sd**	: standard deviation of genome position of forward k-mer in case genomes
 
-**revk_1gen_med**: median genome position of reverse kmer in case genomes
+**revk_1gen_med**: median genome position of reverse k-mer in case genomes
 
-**revk_1gen_sd**: standard deviation of genome position of reverse kmer in case genomes
+**revk_1gen_sd**: standard deviation of genome position of reverse k-mer in case genomes
 
+`extract_knoN_length.py` (called by main.sh, for k-mers do not contain N only)
 
-`process_sigkNoN.R` (called by main.sh, for kmers do not contain N only)
+script function: 
+
+1. extract length of k-mers that do not contain N
+
+output file: 
+
+1. kmernoN_length.txt
+
+`process_sigkNoN.R` (called by main.sh, for k-mers do not contain N only)
 
 script function:
 
-1. blasts the intact kmers with the genomes.
+1. blasts the intact k-mers with the genomes.
 
-2. filtering kmers based on blast hit information. Kmer passing the filter should have blast hits that fulfill the following criteria:
+2. filtering kmers based on blast hit information. K-mer passing the filter should have blast hits that fulfill the following criteria:
 
-Criteria 1: the kmer should show blast match to at least 95% of the genomes
+Criteria 1: the k-mer should show blast match to at least 95% of the genomes
 
-Criteria 2: the kmer should only show one unique blast hit per genome
+Criteria 2: the k-mer should only show one unique blast hit per genome
 
-Criteria 3: the kmer should show at least 95% identity match and E-value of no more than 0.00005
+Criteria 3: each blast alignment should be >=90% of the k-mer's length
+
+Criteria 4: the k-mer should show at least 95% identity match and E-value of no more than 10e-10
 
 3. For intact kmers passing the fliter, make summary of their position and orientation in the genomes.
 
 output files:
 
-1. rows_for_process_NoN.txt (blast hit of kemrs that pass the filter)
+1. rows_for_process_NoN.txt (blast hit of k-mers that pass the filter)
 
-2. kmer_with_missinggenomes_NoN.txt (blast hit of kmers that do not fulfill criteria 1) <sup> 1 </sup>
+2. kmer_with_missinggenomes_NoN.txt (blast hit of k-mers that do not fulfill criteria 1) <sup> 1 </sup>
  
-3. kmer_with_multi_hits_NoN.txt (blast hit of kmers that do not fulfill criteria 3) <sup> 1 </sup>
+3. kmer_with_multi_hits_NoN.txt (blast hit of k-mers that do not fulfill criteria 2) <sup> 1 </sup>
 
-4. kmer_with_alignlen_issue_NoN.txt (blast hit of kmers that do not fulfill criteria 4) <sup> 1 </sup>
+4. kmer_with_align_len_noN.txt (blast hit of k-mers that do not fulfill criteria 3) <sup> 1 </sup>
 
-7. myflk_behave_pheno_NoN.txt (kmers with start and end genome position, kmer orientation in each genome defined, and merged with phenotype information)
+5. kmer_with_ID_E_issue_noN.txt (blast hit of k-mers that do not fulfill criteria 4) <sup> 1 </sup>
+
+6. filterk_out_summary_noN.txt (table summary fo each k-mer that do not fulfill criteria 1-4)
+
+7. myflk_behave_pheno_NoN.txt (k-mers with start and end genome position, k-mer orientation in each genome defined, and merged with phenotype information)
 
 8. myNoNintactk_out.txt, same column information as in myintactkwithN_out.txt
 
