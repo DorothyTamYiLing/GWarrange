@@ -221,7 +221,14 @@ Reference: Weigand, M.R., Williams, M.M., Peng, Y., Kania, D., Pawloski, L.C., T
 
 This tutorial is based on 468 _Bordetella pertussis_ genomes with pertactin (PRN) expression information. Among them, 165 genomes show the presence of pertactin expression and 303 show absence. Pertactin expression information is taken from the supplementary material summarised in Lefrancq _et al._ 2022.
 
-First, genomes asemblies from which genome rearrangements are detected are re-orientated by a chosen gene, i.e. gidA. The location and orientation of gidA in the genomens are obtained by blasting it with multifasta file of genome assemblies.
+First, the genome assemblies multifasta file is prepared by concatenating genome fasta files.
+```
+#concatenating genome fasta files for use
+cd ./example_data/example_genomes/PRN_468
+cat *fasta.gz > ../../PRN_468.fna.gz
+```
+
+Genomes asemblies from which genome rearrangements are detected are re-orientated by a chosen gene, i.e. gidA. The location and orientation of gidA in the genomens are obtained by blasting it with multifasta file of genome assemblies.
 ```
 #unzip the genome file if neccesasry
 gunzip ./example_data/PRN_468.fna.gz
@@ -248,19 +255,29 @@ Here, sequences extending 7000bp to both direction from each IS were replaced. I
 ```
 bash ./scripts/merge_replace_IS.sh -g fixed_genomes.fasta -i PRN_468_blastIS_out.txt -e 7000 -m 200 -s "on"
 ```
-Prior to GWAS, each set of IS-replaced genomes using different IS merging and extending parameters were used for generating kmers. Here, we use the kmer generation tool fsm-lite to generate kmers from genomes in directory /ext7000_merge200_ISreplaced_genomes.
+Prior to GWAS, each set of IS-replaced genomes using different IS merging and extending parameters were used for generating kmers.
 ```
+#For ext7000_merge200_ISreplaced_genomes set
 cd ./ext7000_merge200_ISreplaced_genomes
-```
 
 #generating fsm-ite input file
-```
 for f in *_ext7000_merge200_ISreplaced.fasta; do id=$(basename "$f" _ext7000_merge200_ISreplaced.fasta); echo $id $f; done > PRN_468_input.list
-```
 
 #generating kmers with size of 200 bases with minor allel frequency 0.05
-```
+
 fsm-lite -l PRN_468_input.list -v -s 24 -S 444 -t tmp -m 200 -M 200 | gzip - > PRN_468_ext7000merge200_k200_output.txt.gz
+
+##############################################################################
+
+#For ext100_merge3_ISreplaced_genomes set
+cd ./ext100_merge3_ISreplaced_genomes
+
+#generating fsm-ite input file
+for f in *_ext100_merge3_ISreplaced.fasta; do id=$(basename "$f" _ext100_merge3_ISreplaced.fasta); echo $id $f; done > PRN_468_input.list
+
+#generating kmers with size of 200 bases with minor allel frequency 0.05
+fsm-lite -l PRN_468_input.list -v -s 24 -S 444 -t tmp -m 200 -M 200 | gzip - > PRN_468_ext100merge3_k200_output.txt.gz
+
 ```
 Then, a kmer-based GWAS was conducted using pyseer with an aim to identify kmers whose presence-absence patterns are associated with PRN expression phenotype. Population structure is controlled by phylogenetic similarity matrix.
 
@@ -275,6 +292,14 @@ pyseer --lmm --phenotypes ../example_data/prn_status_pheno_4pyseer.txt \
 --min-af 0.05 --max-af 0.95 \
 --print-samples --output-patterns kmer_patterns.txt \
 > PRN_468_ext7000merge200_k200_MAF0.05_nopopctrl
+
+#run pyseer
+pyseer --lmm --phenotypes ../example_data/prn_status_pheno_4pyseer.txt \
+--kmers PRN_468_ext100merge3_k200_output.txt.gz \
+--similarity ../example_data/ClfML_kappa4.964_phylogeny_similarity.tsv \
+--min-af 0.05 --max-af 0.95 \
+--print-samples --output-patterns kmer_patterns.txt \
+> PRN_468_ext100merge3_k200_MAF0.05_nopopctrl
 ```
 
 Generate number of unique pattterns and p value significance threshold information:
