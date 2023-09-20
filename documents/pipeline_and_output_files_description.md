@@ -2,7 +2,7 @@
 
 ## Pipeline description:
 
-<img width="537" alt="Screenshot 2023-09-18 215435" src="https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/791c8d79-446b-4912-bcd2-e7eb556a6937">
+<img width="553" alt="Screenshot 2023-09-18 215435" src="https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/61e1b575-5117-4a39-8124-c9d938c8e847">
 
 ## Script functions and output files
 
@@ -18,37 +18,37 @@ output file:
 
 script functions:
 
-1. Merging coordinates of adjacent IS elements that are less than a certain number of bases apart (indicated by -m flag in merge_replace_IS.sh) and treating them as "one IS" during IS replacement.
+1. Merging coordinates of adjacent repeated sequences that are less than a certain number of bases apart (indicated by -m flag in merge_replace_IS.sh) and treating them as one "repeated sequence block" during replacement.
 
-2. Extend the IS cordinates for a number of base pair (indicated by -e flag) on each side to ensure complete mask of the IS. 
+2. Extend the repeated sequences cordinates for a number of base pair (indicated by -e flag) on each side to ensure complete mask of repeated seqeunces. 
 
 output files:
-1. ext{}_merge{}_mergedIS.txt (new IS start and end coordinates after extension and merging)
+1. ext{}_merge{}_mergedIS.txt (new start and end coordinates after extension and merging)
 
-2. ext{}_merge{}_mergedISstat.txt (statistics of IS coordinates after extension and merging, including distance between ISs and size of IS)
+2. ext{}_merge{}_mergedISstat.txt (statistics of coordinates after extension and merging, including size of and distance between repeated sequences)
 
 `iSreplace_2col.py` (called by merge_replace_IS.sh)
 
 script functions:
 
-1. replacing each of the "merged IS" by 15xN placeholder sequence.
+1. replacing each of the "repeated sequence block" by 15xN placeholder sequence.
 
 output files:
-1. IS-replaced genomes in a new directory (directory name: ext{}_merge{}_ISreplaced_genomes)
+1. repeated sequence-replaced genomes in a new directory (directory name: ext{}_merge{}_ISreplaced_genomes)
 
 `class_k.py` (called by `main.sh`)
 
 script functions:
-1. separate significant kmers from GWAS into those contain N and those do not, and output them into separate fasta files for further processing. 
+1. separate significant k-mers from GWAS into those contain N and those do not, and output them into separate fasta files for further processing. 
 
 output files:
-1. sigk_withN.fasta (kmers contain N)
-2. sigk_noN.fasta (kmers do not contain N)
+1. sigk_withN.fasta (k-mers contain N)
+2. sigk_noN.fasta (k-mers do not contain N)
 
 `filtering_kmer_and_blast.sh` (called by `main.sh`, for processing kmers containing N only)
 
 script functions:
-1. filters significant kmers by keeping only the kmers that contain flanking sequences (both side) of at least `$flnk_len` bp in size
+1. filters significant k-mers by keeping only the kmers that contain flanking sequences (both side) of at least `$flnk_len` bp in size
 2. blasts the filtered kmers with the genomes
 
 output files: 
