@@ -291,17 +291,17 @@ echo "samples binary" | cat - ../example_data/prn_status_pheno.txt > ../example_
 pyseer --lmm --phenotypes ../example_data/prn_status_pheno_4pyseer.txt \
 --kmers PRN_468_ext7000merge200_k200_output.txt.gz \
 --similarity ../example_data/ClfML_kappa4.964_phylogeny_similarity.tsv \
---min-af 0.05 --max-af 0.95 \
---print-samples --output-patterns kmer_patterns.txt \
-> PRN_468_ext7000merge200_k200_MAF0.05_nopopctrl
+--min-af 0.05 --max-af 0.95 --covariates ../example_data/covariates.txt --use-covariates 2 \
+--print-samples --output-patterns kmer_patterns_covariate.txt \
+> PRN468_ext7000merge200_k200_MAF0.05_covariate
 
 #For ext100_merge3_ISreplaced_genomes set
 pyseer --lmm --phenotypes ../example_data/prn_status_pheno_4pyseer.txt \
 --kmers PRN_468_ext100merge3_k200_output.txt.gz \
 --similarity ../example_data/ClfML_kappa4.964_phylogeny_similarity.tsv \
---min-af 0.05 --max-af 0.95 \
---print-samples --output-patterns kmer_patterns.txt \
-> PRN_468_ext100merge3_k200_MAF0.05_nopopctrl
+--min-af 0.05 --max-af 0.95 --covariates ../example_data/covariates.txt --use-covariates 2 \
+--print-samples --output-patterns kmer_patterns_covariate.txt \
+> PRN468_ext100merge3_k200_MAF0.05_covariate
 ```
 
 Generate number of unique pattterns and p value significance threshold information:
