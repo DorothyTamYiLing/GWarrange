@@ -64,7 +64,7 @@ abline(h=0) #to separate the case from control kmers
 text(x_length-200,50,"1/case genomes",cex=0.6)
 text(x_length-200,-50,"0/control genomes",cex=0.6)
 
-title(main = paste(mykmer,"(height of arrow is the proportion of case/control genomes)",sep="\n"))
+title(main = paste(mykmer," ",sep=""))
 
 #R flank (downstream) is red, L flank (upstream) is blue
 
@@ -201,11 +201,11 @@ myflk_name="intactk"
 
 #add legend
 polygon(c((x_length-750),(x_length-750),(x_length-700)), c(350,330,340),border = NA,col=rgb(1, 0, 0,0.5))
-text(x=(x_length-300),y=340,"kmer dowstream flank",cex = 0.6)
+text(x=(x_length-280),y=340,"kmer dowstream flank",cex = 0.6)
 polygon(c((x_length-750),(x_length-750),(x_length-700)), c(320,300,310),border = NA,col=rgb(0, 0, 1,0.5))
 text(x=(x_length-300),y=310,"kmer upstream flank",cex = 0.6)
 polygon(c((x_length-750),(x_length-750),(x_length-700)), c(290,270,280),border = NA,col=rgb(0, 1, 0,0.5))
-text(x=(x_length-450),y=280,"intact kmer",cex = 0.6)
+text(x=(x_length-470),y=280,"intact kmer",cex = 0.6)
 
 #export the plot
 dev.off()
