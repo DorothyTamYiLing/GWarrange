@@ -105,7 +105,7 @@ p  <- ggplot(data = myx_unqiue) +
   geom_link(aes(x = revk_1gen_med, y = 1, xend = revk_1gen_med-15, yend = 1, color=mycol_index),arrow = grid::arrow(length = grid::unit(myx_unqiue$revk_1gen_prop, 'cm')))+
   geom_link(aes(x = fwdk_1gen_med, y = 0.9, xend = fwdk_1gen_med+15, yend = 0.9, color=mycol_index),arrow = grid::arrow(length = grid::unit(myx_unqiue$fwdk_1gen_prop, 'cm')))+
   geom_link(aes(x = revk_0gen_med, y = 0.1, xend = revk_0gen_med-15, yend = 0.1, color=mycol_index),arrow = grid::arrow(length = grid::unit(myx_unqiue$revk_0gen_prop, 'cm')))+
-  scale_colour_gradientn(name = "mycol_index",
+  scale_colour_gradientn(name = "kmer/colour_index",
                          colours=c("darkred","orange","red","blue","chartreuse3"))+
   scale_x_continuous(limits = c(-100, mysize),breaks = seq(1, mysize, by = 100000))+
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
