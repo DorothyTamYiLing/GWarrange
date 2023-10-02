@@ -450,6 +450,14 @@ pyseer --phenotypes ../example_data/Efaecium32genomes_pheno_1swap.txt \
 --min-af 0.05 --max-af 0.95 \
 --print-samples --output-patterns kmer_patterns.txt \
 > ext100merge3_k200_min20samp_nopopctrl
+
+pyseer --phenotypes ../example_data/Efaecium32genomes_pheno_1swap.txt \
+--kmers unitigcall_out.pyseer.gz \
+--no-distances \
+--min-af 0.05 --max-af 0.95 \
+--print-samples --output-patterns kmer_unitig_patterns.txt \
+> ext100merge3_k200_min20samp_unitig_nopopctrl
+
 ```
 Generate number of unique pattterns and p value significance threshold information:
 ```
