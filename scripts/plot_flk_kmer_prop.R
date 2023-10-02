@@ -61,8 +61,8 @@ x_length=(as.numeric(as.character(opt$genome.size))+1000)
 plot(1, type="n", xlim=c(1,x_length), ylim=c(-350,350), xlab="genome position (thousands)",ylab="",yaxt="n")
 
 abline(h=0) #to separate the case from control kmers
-text(x_length-100,50,"1/case genomes",cex=1)
-text(x_length-100,-50,"0/control genomes",cex=1)
+text(x_length-200,50,"1/case genomes",cex=0.6)
+text(x_length-200,-50,"0/control genomes",cex=0.6)
 
 title(main = paste(mykmer,"(height of arrow is the proportion of case/control genomes)",sep="\n"))
 
