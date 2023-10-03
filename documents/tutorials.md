@@ -151,7 +151,7 @@ Then, these kmers were blasted with the original genome set for studying potenti
 
 #For ext7000_merge200_ISreplaced_genomes set
 bash ./scripts/main.sh -k ./ext7000_merge200_ISreplaced_genomes/sigk_seq.fasta \
--g ./example_data/clus1clus2_47.fna \
+-g ./example_data/clus1clus2_47.fna.gz \
 -p ./example_data/clus1clus2_pheno.txt -d 110000 -f 30 \
 -o ./clus1clus2_47_ext7000_merge200_outdir -s 4300 -x 2 -y 1000
 
@@ -159,7 +159,7 @@ bash ./scripts/main.sh -k ./ext7000_merge200_ISreplaced_genomes/sigk_seq.fasta \
 bash ./scripts/main.sh -k ./ext100_merge3_ISreplaced_genomes/sigk_seq.fasta \
 -g ./example_data/clus1clus2_47.fna \
 -p ./example_data/clus1clus2_pheno.txt -d 5000 -f 30 \
--o ./clus1clus2_47_ext7000_merge200_outdir -s 4300 -x 2 -y 1000
+-o ./clus1clus2_47_ext100_merge3_outdir -s 4300 -x 2 -y 1000
 
 ```
 
@@ -346,13 +346,15 @@ Then, these kmers were blasted with the original genome set for studying potenti
 ```
 #run in the first level of /genome_rearrangement directory
 
+#For ext7000_merge200_ISreplaced_genomes set
 bash ./scripts/main.sh -k ./ext7000_merge200_ISreplaced_genomes/sigk_seq.fasta \
 -g ./example_data/PRN_468.fna \
 -p ./example_data/prn_status_pheno.txt -d 110000 -f 30 \
 -o ./PRN_468_ext7000_merge200_outdir -s 4300 -x 2 -y 1000
 
+#For ext100_merge3_ISreplaced_genomes set
 bash ./scripts/main.sh -k ./ext100_merge3_ISreplaced_genomes/sigk_seq.fasta \
--g ./example_data/PRN_468.fna \
+-g ./example_data/PRN_468.fna.gz \
 -p ./example_data/prn_status_pheno.txt -d 5000 -f 30 \
 -o ./PRN_468_ext100_merge3_outdir -s 4300 -x 2 -y 1000
 
@@ -505,10 +507,17 @@ Then, these kmers were blasted with the original genome set for studying potenti
 
 #run in the first level of /genome_rearrangement directory
 ```
-bash ./scripts/main.sh -k ./ext100_merge3_ISreplaced_genomes/sigkwithN_noN5000.fasta \
--g ./example_data/32genomes.fna \
--p ./example_data/Efaecium32genomes_pheno_1swap.txt -l 200 -d 3000 -f 30 \
--o ./Efaecium32genomes_ext100merge3_1swap_noN5000_outdir -s 3000 -x 2 -y 1000
+#For ext100_merge3_ISreplaced_genomes set k-mers with N 
+bash ./scripts/main.sh -k ./ext100_merge3_ISreplaced_genomes/sigk_withN.fasta \
+-g ./example_data/Efaecium_32genomes.fna.gz \
+-p ./example_data/Efaecium32genomes_pheno_1swap.txt -d 3000 -f 30 \
+-o ./Efaecium32genomes_ext100merge3_1swap_Nonly_outdir -s 3000 -x 2 -y 1000
+
+#For ext100_merge3_ISreplaced_genomes set unitigs
+bash ./scripts/main.sh -k ./ext100_merge3_ISreplaced_genomes/sigk_unitig_seq.fasta \
+-g ./example_data/Efaecium_32genomes.fna.gz \
+-p ./example_data/Efaecium32genomes_pheno_1swap.txt -d 3000 -f 30 \
+-o ./Efaecium32genomes_ext100merge3_1swap_unitig_outdir -s 3000 -x 2 -y 1000
 ```
 Note that the value used for -d parameter should be larger than the "Maximum size of merged ISs" value in "ext100_merge3_mergedISstat.txt".
 
