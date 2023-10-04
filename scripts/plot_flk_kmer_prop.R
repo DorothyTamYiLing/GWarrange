@@ -60,11 +60,13 @@ x_length=(as.numeric(as.character(opt$genome.size))+1000)
 #x_length=5000
 plot(1, type="n", xlim=c(1,x_length), ylim=c(-350,350), xlab="genome position (thousands)",ylab="",yaxt="n")
 
+mtext(side=3, line=0.5, at=-0.01, adj=0, cex=0.7, "Heights of arrows correspond to proportion of case/control genomes")
+
 abline(h=0) #to separate the case from control kmers
 text(x_length-200,50,"1/case genomes",cex=0.6)
 text(x_length-200,-50,"0/control genomes",cex=0.6)
 
-title(main = paste(mykmer," ",sep=""))
+title(main = mykmer)
 
 #R flank (downstream) is red, L flank (upstream) is blue
 
