@@ -101,20 +101,17 @@ Rects = data.frame(xmin = c(-100, -100), xmax = c(mysize, mysize),
                    ymin = c(-0.05,0.8), ymax = c(0.2, 1.05))
 
 p  <- ggplot(data = myx_unqiue) +
-  geom_link(aes(x = fwdk_0gen_med, y = 0, xend = fwdk_0gen_med+15, y>
-  geom_link(aes(x = revk_1gen_med, y = 1, xend = revk_1gen_med-15, y>
-  geom_link(aes(x = fwdk_1gen_med, y = 0.9, xend = fwdk_1gen_med+15,>
-  geom_link(aes(x = revk_0gen_med, y = 0.1, xend = revk_0gen_med-15,>
+  geom_link(aes(x = fwdk_0gen_med, y = 0, xend = fwdk_0gen_med+15, yend = 0, color=mycol_index),arrow = grid::arrow(length = grid::unit(myx_unqiue$fwdk_0gen_prop, 'cm')))+
+  geom_link(aes(x = revk_1gen_med, y = 1, xend = revk_1gen_med-15, yend = 1, color=mycol_index),arrow = grid::arrow(length = grid::unit(myx_unqiue$revk_1gen_prop, 'cm')))+
+  geom_link(aes(x = fwdk_1gen_med, y = 0.9, xend = fwdk_1gen_med+15, yend = 0.9, color=mycol_index),arrow = grid::arrow(length = grid::unit(myx_unqiue$fwdk_1gen_prop, 'cm')))+
+  geom_link(aes(x = revk_0gen_med, y = 0.1, xend = revk_0gen_med-15, yend = 0.1, color=mycol_index),arrow = grid::arrow(length = grid::unit(myx_unqiue$revk_0gen_prop, 'cm')))+
   scale_colour_gradientn(name = "kmer/colour_index",
-                         colours=c("darkred","orange","red","blue",">
-  scale_x_continuous(name="genome position",limits = c(-100, mysize)>
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)>
+                         colours=c("darkred","orange","red","blue","chartreuse3"))+
+  scale_x_continuous(name="genome position",limits = c(-100, mysize),breaks = seq(1, mysize, by = 100000))+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
 geom_rect(aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
               data = Rects, fill = "grey50", alpha = 0.1)+
- scale_y_continuous(name="genome phenotype group", breaks=seq(0,1,1)>
-labs(caption = "Heights of arrows correspond to proportion of case/c>
-K-mer/colour indices refer to the my_colindex column in the correspo>
-  theme(plot.caption.position = "plot")
+ scale_y_continuous(name="genome phenotype group", breaks=seq(0,1,1))
 
 p
 dev.off()
