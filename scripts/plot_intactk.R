@@ -112,7 +112,7 @@ p  <- ggplot(data = myx_unqiue) +
 geom_rect(aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
               data = Rects, fill = "grey50", alpha = 0.1)+
  scale_y_continuous(name="genome phenotype group", breaks=seq(0,1,1))+
-labs(caption = "Height of arrows corresponds to proportion of case/control genomes \n K-mer/colour indices refer to the mycol_index column in the corresponding kmer4plot.txt")
+labs(caption = "Height of arrows corresponds to proportion of case/control genomes \n Genome positions of k-mers are indicated by the tips of arrows \n K-mer/colour indices refer to the mycol_index column in the corresponding kmer4plot.txt")
 
 p
 dev.off()
