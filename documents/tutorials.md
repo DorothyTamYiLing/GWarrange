@@ -508,13 +508,13 @@ Then, these kmers were blasted with the original genome set for studying potenti
 #run in the first level of /genome_rearrangement directory
 ```
 #For ext100_merge3_ISreplaced_genomes set k-mers with N 
-bash ./scripts/main.sh -k ./ext100_merge3_ISreplaced_genomes/sigk_withN.fasta \
+bash ./scripts/main.sh -k ./ext100_merge3_ISreplaced_genomes/sigkwithN_noN5000.fasta \
 -g ./example_data/Efaecium_32genomes.fna.gz \
 -p ./example_data/Efaecium32genomes_pheno_1swap.txt -d 3000 -f 30 \
--o ./Efaecium32genomes_ext100merge3_1swap_Nonly_outdir -s 3000 -x 2 -y 1000
+-o ./Efaecium32genomes_ext100merge3_1swap_withNnoN5000_outdir -s 3000 -x 2 -y 1000
 
 #For ext100_merge3_ISreplaced_genomes set unitigs
-bash ./scripts/main.sh -k ./ext100_merge3_ISreplaced_genomes/sigk_unitig_seq.fasta \
+bash ./scripts/main.sh -k ./ext100_merge3_ISreplaced_genomes/siguni_seq.fasta \
 -g ./example_data/Efaecium_32genomes.fna.gz \
 -p ./example_data/Efaecium32genomes_pheno_1swap.txt -d 3000 -f 30 \
 -o ./Efaecium32genomes_ext100merge3_1swap_unitig_outdir -s 3000 -x 2 -y 1000
