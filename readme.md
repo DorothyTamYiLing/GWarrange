@@ -97,7 +97,7 @@ bash ./scripts/merge_replace_IS.sh -g fixed_genomes.fasta -i IS_coor.txt -e 7000
 
 ## K-mer/unitigs-based GWAS
 
-Then, a kmer/unitigs-based GWAS is performed on the genome set with replacement (created as described above) searching for k-mers/unitigs that are associated with the phenotype of interested. K-mer/unitigs-based GWAS can be performed using pyseer (https://pyseer.readthedocs.io/en/master/index.html). K-mers can be generated using fsm-lite (https://github.com/nvalimak/fsm-lite). Unitigs can be generated using unitig-callers (Holley and Melsted, 2020) (See the tutorial section for detailed instructions)
+Then, a kmer/unitigs-based GWAS is performed on the genome set with replacement (created as described above) searching for k-mers/unitigs that are associated with the phenotype of interested. K-mer/unitigs-based GWAS can be performed using pyseer (https://pyseer.readthedocs.io/en/master/index.html). K-mers can be generated using fsm-lite (https://github.com/nvalimak/fsm-lite). Unitigs can be generated using unitig-callers ((https://github.com/bacpop/unitig-caller) (See the tutorial section for detailed instructions)
 
 From the output of pyseer, the k-mers/unitigs that are significantly associated with the phenotype and contain the short placeholder sequence are converted into a multi-fasta file, which is then used as one of the inputs of this pipeline (i.e. argument "kmers" of the main.sh script) for detecting potential genome rearrangement events that are associated with the phenotype of interest. (See the tutorial section for detailed instructions)
  
