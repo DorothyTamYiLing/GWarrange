@@ -212,7 +212,7 @@ Colour indices refer to the "colour index" column in the corresponding *kmer4plo
 
 **Important notes:**
 
-Inversion boundaries between genome region 1500000 and 2500000 were not detected using ext100_merge3_ISreplaced_genomes. This is because this inversion is mediated by IS-containing homologous sequence blocks that are several thousands bp in size. Inversion boundary can only be detected when the whole homologous sequence block is completely replaced by shorter placeholder sequence.
+Inversion boundaries between genome region 1500000 and 2500000 were not detected using ext100_merge3_ISreplaced_genomes. This is because the whole homologous sequence block/IS clusters at these boundaries are not completely replaced by shorter placeholder sequences, this leads to the presence of homologous sequence within flanking sequences, hence reducing senesitivity in detecting rearrangement boundaries. To ensure replacing the whole homologous sequence block/IS clusters by short placeholder sequences, we can extending the genome coordinates of each repeated sequence for a number of base pairs in both directions, and/or to merge repeated sequences that are less than a number of base pairs distance apart.
 
 Reference: Weigand, M.R., Williams, M.M., Peng, Y., Kania, D., Pawloski, L.C., Tondella, M.L. and CDC Pertussis Working Group, 2019. Genomic survey of Bordetella pertussis diversity, United States, 2000–2013. Emerging infectious diseases, 25(4), p.780.
 
