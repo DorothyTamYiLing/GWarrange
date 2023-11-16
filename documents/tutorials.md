@@ -589,9 +589,9 @@ Genome position of intact kmers without N from /ext100_merge3_ISreplaced_genomes
 
 Plot of intact kmers that show sequence rearrangements that are significantly associated with the PRN expression phenotype.
 
-![myNoNintactk_rev0fwd1](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/d0022eff-2cec-4941-9ba4-c8fc69567924)
+![myNoNintactk_rev0fwd1](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/a7bd07cc-5538-4c01-a3a8-fa80152d3412)
 
-![myNoNintactk_rev1fwd0](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/b39e83fa-a961-4d7a-8de7-fa8f04e4b32d)
+![myNoNintactk_rev1fwd0](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/0d89d495-32a1-400e-a2a9-321bc436dbf0)
 
 Height of arrows corresponds to proporiton of case/control genomes.
 
