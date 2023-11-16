@@ -278,14 +278,14 @@ Then, kmer-based and unitig-based GWAS were conducted using pyseer with an aim t
 echo "samples binary" | cat - ../example_data/Efaecium32genomes_pheno_1swap.txt > ../example_data/Efaecium32genomes_pheno_1swap_4pyseer.txt
 
 #run pyseer using k-mer and unitig file
-pyseer --phenotypes ../example_data/Efaecium32genomes_pheno_1swap.txt \
+pyseer --phenotypes ../example_data/Efaecium32genomes_pheno_1swap_4pyseer.txt \
 --kmers ext100merge3_k200_output.txt.gz \
 --no-distances \
 --min-af 0.05 --max-af 0.95 \
 --print-samples --output-patterns kmer_patterns.txt \
 > ext100merge3_k200_min20samp_nopopctrl
 
-pyseer --phenotypes ../example_data/Efaecium32genomes_pheno_1swap.txt \
+pyseer --phenotypes ../example_data/Efaecium32genomes_pheno_1swap_4pyseer.txt \
 --kmers unitigcall_out.pyseer.gz \
 --no-distances \
 --min-af 0.05 --max-af 0.95 \
