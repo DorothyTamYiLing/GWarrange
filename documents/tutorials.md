@@ -255,7 +255,7 @@ Here, sequences extending 7000bp to both direction from each IS were replaced. I
 ```
 bash ./scripts/merge_replace_IS.sh -g fixed_genomes.fasta -i blastIS30_IS1252_in_HOU503_32genomes_out.txt -e 7000 -m 200 -s "on"
 ```
-Prior to GWAS, each set of IS-replaced genomes using different IS merging and extending parameters were used for generating kmers. Here, we use the kmer generation tool fsm-lite to generate kmers from genomes in directory /ext100_merge3_ISreplaced_genomes.
+Prior to GWAS, each set of IS-replaced genomes using different IS merging and extending parameters were used for generating kmers and unitigs. Here, we use the kmer generation tool fsm-lite and unitig generation tool unitig-caller to generate kmers and unitigs from genomes in directory /ext100_merge3_ISreplaced_genomes.
 ```
 cd ./ext100_merge3_ISreplaced_genomes
 
@@ -265,13 +265,19 @@ for f in *_ext100_merge3_ISreplaced.fasta; do id=$(basename "$f" _ext100_merge3_
 #generating kmers with size of 200 bases kmers present in at least 20 samples
 
 fsm-lite -l input.list -v -s 20 -S 30 -t tmp -m 200 -M 200 | gzip - > ext100merge3_k200_output.txt.gz
+
+#generating input file for unitig-caller
+ls -d -1 $PWD/*.fasta > input.txt
+
+#running unitig-caller
+unitig-caller --call --rtab --pyseer --refs input.txt --out unitigcall_out
 ```
-Then, a kmer-based GWAS was conducted using pyseer with an aim to identify kmers whose presence-absence patterns were associated with chromosome structures phenotype. Population structure is not contolled.
+Then, kmer-based and unitig-based GWAS were conducted using pyseer with an aim to identify kmers/unitigs whose presence-absence patterns were associated with chromosome structures phenotype. Population structure is not contolled.
 ```
 #adding header to phenotype file for pyseer input format
 echo "samples binary" | cat - ../example_data/Efaecium32genomes_pheno_1swap.txt > ../example_data/Efaecium32genomes_pheno_1swap_4pyseer.txt
 
-#run pyseer
+#run pyseer using k-mer and unitig file
 pyseer --phenotypes ../example_data/Efaecium32genomes_pheno_1swap.txt \
 --kmers ext100merge3_k200_output.txt.gz \
 --no-distances \
@@ -291,14 +297,18 @@ Generate number of unique pattterns and p value significance threshold informati
 ```
 #count_patterns.py is a script from pyseer package for calculating p-value threshold using Bonferroni correction. To access pyseer scripts, one needs to have cloned the pyseer github repository and go to scripts/directory.
 ../scripts/count_patterns.py kmer_patterns.txt > count_pattern.txt
+
+../scripts/count_patterns.py unitigs_kmer_patterns.txt > count_pattern.txt
 ```
-Extract kmers with p value below the the significance threshod:
+Extract kmers/unitigs with p value below the the significance threshod:
 ```
 awk '{ if ($4 <= 1.92E-05) { print } }' ext100merge3_k200_min20samp_nopopctrl > sigk_pyseer.txt
-```
-430,942 kmers were found to be significantly associated with chromosome structure. The sequences of the kmers were extracted and placed in a multifasta file.
 
-Extract significant kmer sequences and convert then into fasta format
+awk '{ if ($4 <= 7.62E-06) { print } }' ext100merge3_k200_min20samp_unitigs_nopopctrl > siguni_pyseer.txt
+```
+448,330 kmers and 3,737 unitigs were found to be significantly associated with chromosome structure. The sequences of which were extracted and placed in respective multifasta file.
+
+Extract significant kmer sequences and convert them into fasta format
 ```
 #get the seqeunce only
 awk '{print $1}' sigk_pyseer.txt > sigk_seq.txt 
@@ -329,7 +339,29 @@ head -25000 sigk_noN.fasta > sigk_noN_5000.fasta
 #combine the kmers with "N" and the first 5000 kmers without "N"
 cat sigk_withN.fasta sigk_noN_5000.fasta > sigkwithN_noN5000.fasta
 ```
-Then, these kmers were blasted with the original genome set for studying potential genome rearrangment that are captured by them, implemented by the following script:
+
+Extract significant unitig sequences and convert then into fasta format
+```
+#get the seqeunce only
+awk '{print $1}' siguni_pyseer.txt > siguni_seq.txt 
+
+#create multifasta file for significant unitig sequences
+number=$(cat siguni_seq.txt | wc -l)
+
+rm header.txt   #remove any existing header file
+
+START=1
+let "END=$number" 
+ 
+for (( c=$START; c<=$END; c++ ))
+do
+	echo ">kmer""$c " >> header.txt
+done
+
+paste -d \\n header.txt siguni_seq.txt > siguni_seq.fasta
+```
+
+Then, these kmers and unitigs were blasted with the original genome set for studying potential genome rearrangment that are captured by them, implemented by the following script:
 
 #run in the first level of /genome_rearrangement directory
 ```
@@ -375,22 +407,24 @@ Two rearrangement boundaries were found, and they potentially refer to a single 
 
 Height of arrows corresponds to proporiton of case/control genomes.
 
-2) Plotting intact kmers without N for visualising sequence content of rearrangement :
+No significant split unitigs were identified as unitig-caller was not able to generate unitigs containing placeholder sequences.
 
-Genome position of intact kmers without N from /ext100_merge3_ISreplaced_genomes (minimal IS extension and merging overlapping IS only) were plotted. Only kmers with unqiue genome position information (by rounding off to the nearest multiple of 1000) were kept for plotting (as shown in *kmer4plot.txt files). 
+2) Plotting intact unitigs (without N) for visualising sequence content of rearrangement :
 
-Plot of intact kmers that showed rearrangements in two genome regions that were significantly associated with structural phenotype.
+Genome position of unitigs from /ext100_merge3_ISreplaced_genomes (minimal IS extension and merging overlapping IS only) were plotted. Only unitigs with unqiue genome position information (by rounding off to the nearest multiple of 1000) were kept for plotting (as shown in *kmer4plot.txt files). 
 
-![myNoNintactk_rev0fwd1](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/b7ea6eeb-01bd-467f-a439-81978e4aec75)
+Plot of unitigs that showed rearrangements significantly associated with structural phenotype.
 
-![myNoNintactk_rev1fwd0](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/983fd53b-dfb1-4fd4-a669-ed0025d81e26)
+![myNoNintactk_rev0fwd1](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/a9ce4a68-3de4-48d1-b2ab-4675cc2ee8a9)
+
+![myNoNintactk_rev1fwd0](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/2799983d-f31f-4bdc-a200-6e4e58909c00)
 
 Height of arrows corresponds to proporiton of case/control genomes.
 
-(Above: 102 intact kmers that are in forward orientation in majority of structure "1" genomes, as well as in reverse orientation in majority of structure "0" genomes;
-Below: 303 intact kmers that are in reverse orientation in majority of structure "1" genomes, as well as in forward orientation in majority of structure "0" genomes)
+(Above: 191 intact kmers that are in forward orientation in majority of structure "1" genomes, as well as in reverse orientation in majority of structure "0" genomes;
+Below: 370 intact kmers that are in reverse orientation in majority of structure "1" genomes, as well as in forward orientation in majority of structure "0" genomes)
 
-Colour indices refer to the "colour index" column in the corresponding *kmer4plot.txt file (with the same prefix), hence the corresponding kmers.
+Colour indices refer to the "colour index" column in the corresponding *kmer4plot.txt file (with the same prefix), hence the corresponding unitigs.
 
 Page, A.J., Ainsworth, E.V. and Langridge, G.C., 2020. socru: typing of genome-level order and orientation around ribosomal operons in bacteria. Microbial Genomics, 6(7).
 
