@@ -520,20 +520,22 @@ pyseer --lmm --phenotypes ../example_data/prn_status_pheno_4pyseer.txt \
 Generate number of unique pattterns and p value significance threshold information:
 ```
 #count_patterns.py is a script from pyseer package for calculating p-value threshold using Bonferroni correction. To access pyseer scripts, one needs to have cloned the pyseer github repository and go to scripts/directory.
-./scripts/count_patterns.py kmer_patterns.txt > count_pattern.txt
+
+#For both ext7000_merge200_ISreplaced_genomes set and ext100_merge3_ISreplaced_genomes set
+./scripts/count_patterns.py kmer_patterns_covariate.txt > count_pattern.txt
 ```
 Extract kmers with p value below the the significance threshold:
 ```
 #For ext7000_merge200_ISreplaced_genomes set
-awk '{ if ($4 <= ) { print } }' PRN_468_ext7000merge200_k200_MAF0.05_nopopctrl > sigk_pyseer.txt
+awk '{ if ($4 <= 1.53E-04) { print } }' PRN_468_ext7000merge200_k200_MAF0.05_nopopctrl > sigk_pyseer.txt
 
 #For ext100_merge3_ISreplaced_genomes set
-awk '{ if ($4 <= ) { print } }' PRN_468_ext100merge3_k200_MAF0.05_nopopctrl > sigk_pyseer.txt
+awk '{ if ($4 <=  1.62E-04) { print } }' PRN_468_ext100merge3_k200_MAF0.05_nopopctrl > sigk_pyseer.txt
 ```
 
 The sequences of kmers that were found to be significantly associated with the structural phenotyp were extracted and placed in a multifasta file.
 
-Extract significant kmer sequences and convert them into multifasta format:
+Extract significant kmer sequences and convert them into multifasta format (For both ext7000_merge200_ISreplaced_genomes set and ext100_merge3_ISreplaced_genomes set):
 ```
 #get the seqeunce only
 awk '{print $1}' sigk_pyseer.txt > sigk_seq.txt 
