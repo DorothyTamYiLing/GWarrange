@@ -298,7 +298,7 @@ Generate number of unique pattterns and p value significance threshold informati
 #count_patterns.py is a script from pyseer package for calculating p-value threshold using Bonferroni correction. To access pyseer scripts, one needs to have cloned the pyseer github repository and go to scripts/directory.
 ../scripts/count_patterns.py kmer_patterns.txt > count_pattern.txt
 
-../scripts/count_patterns.py unitigs_kmer_patterns.txt > count_pattern.txt
+../scripts/count_patterns.py unitigs_kmer_patterns.txt > count_uni_pattern.txt 
 ```
 Extract kmers/unitigs with p value below the the significance threshod:
 ```
