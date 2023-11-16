@@ -596,7 +596,7 @@ Plot of intact kmers that show sequence rearrangements that are significantly as
 Height of arrows corresponds to proporiton of case/control genomes.
 
 (Above: 7 intact kmers that are in forward orientation in half of PRN+ (1) genomes, as well as reverse in majority of PRN- (0) genomes;
-Below: 4 intact kmers that are in reverse orientation in half of PRN+ (1) genomes, as well as forward in majority of PRN- (0) genomes)
+Below: 5 intact kmers that are in reverse orientation in half of PRN+ (1) genomes, as well as forward in majority of PRN- (0) genomes)
 
 Colour indices refer to the "colour index" column in the corresponding *kmer4plot.txt file (with the same prefix), hence the corresponding kmers.
 
