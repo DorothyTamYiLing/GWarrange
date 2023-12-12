@@ -69,7 +69,7 @@ cd ./ext7000_merge200_ISreplaced_genomes
 #generating fsm-ite input file
 for f in *_ext7000_merge200_ISreplaced.fasta; do id=$(basename "$f" _ext7000_merge200_ISreplaced.fasta); echo $id $f; done > clus1clus2_47_input.list
 
-#generating kmers with size of 200 bases with minor allel frequency 0.05
+#generating kmers with size of 200 bases with minor allele frequency 0.05
 fsm-lite -l clus1clus2_47_input.list -v -s 3 -S 44 -t tmp -m 200 -M 200 | gzip - > clus1clus2_47_ext7000merge200_k200_output.txt.gz
 
 ########################################################################
