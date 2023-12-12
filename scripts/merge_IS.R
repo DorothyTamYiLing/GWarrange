@@ -47,7 +47,7 @@ colnames(mymerge_all)<-c("sseqid","mystart","myend")
 mylist<-unique(myinput$sseqid)
 
 for(k in 1:length(mylist)){   #open bracket for looping samples
-  print(mylist[k])
+  #print(mylist[k])
   mytable<-myinput[which(myinput$sseqid==mylist[k]),]
   
   #mytable<-myinput[which(myinput$sseqid=="F578"),]
