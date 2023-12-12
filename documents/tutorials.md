@@ -13,6 +13,11 @@ Fig 1: Two different chromosome structures were found among 47 _Bordetella pertu
 
 ##
 
+Go to the top level of /genome_rearrangement directory
+```
+cd ./genome_rearrangement
+```
+
 First, the genome assemblies multifasta file is prepared by concatenating genome fasta files.
 ```
 #concatenating genome fasta files for use
@@ -145,7 +150,7 @@ paste -d \\n header.txt sigk_seq.txt > sigk_seq.fasta
 Then, these kmers were blasted with the original genome set for studying potential genome rearrangment that are captured by them, implemented by the following script:
 
 ```
-#run in the first level of /genome_rearrangement directory
+#run in the top level of /genome_rearrangement directory
 
 #For ext7000_merge200_ISreplaced_genomes set
 bash ./scripts/main.sh -k ./ext7000_merge200_ISreplaced_genomes/sigk_seq.fasta \
