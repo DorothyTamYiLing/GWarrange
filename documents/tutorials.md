@@ -222,12 +222,24 @@ Reference: Weigand, M.R., Williams, M.M., Peng, Y., Kania, D., Pawloski, L.C., T
 
 # Tutorial 2
 
-_Enterococcus faecium_'s genomes are known to be enriched with IS elements, which could play important role in their genome structure's diversification (Leavis et al. 2007). Genome structure of 75 Enterococcus faecium were characterised by socru (Page et al. 2020), Among which, a subset of 32 genomes display two different chromosome structures (21 genomes with structure "0" and 11 genomes with structure "1") (See Fig. ) were used in GWAS, with structure information as phenotype. Structure phenotype of two pairs of genomes were swapped for demonstration purpose. 
+_Enterococcus faecium_'s genomes are known to be enriched with IS elements, which could play important role in their genome structure's diversification (Leavis et al. 2007). Genome structure of 75 _Enterococcus faecium_ were characterised by socru (Page et al. 2020), Among which, a subset of 32 genomes display two different chromosome structures (21 genomes with structure "0" and 11 genomes with structure "1") (See Fig. ) were used in GWAS, with structure information as phenotype. Structure phenotype of two pairs of genomes were swapped for demonstration purpose. 
 
 ![Screenshot 2023-08-01 222347](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/0f0c348f-936b-4983-be54-180cc6b8d838)
 Fig : Two different chromosome structures were found among 32 _Enterococcus faecium_ genomes. 
 
 First, genomes asemblies from which genome rearrangements are detected are re-orientated by a chosen gene, i.e. dnaA. The location and orientation of dnaA in the genomens are obtained by blasting it with multifasta file of genome assemblies.
+
+Go to the top level of /genome_rearrangement directory
+```
+cd ./genome_rearrangement
+```
+First, the genome assemblies multifasta file is prepared by concatenating genome fasta files.
+```
+#concatenating genome fasta files for use
+cat ./example_data/example_genomes/Efaecium_32genomes/*fasta.gz > ./example_data/32genomes.fna.gz
+```
+
+Genomes asemblies from which genome rearrangements are detected are re-orientated by a chosen gene. In the case of _Enterococcus faecium_, the chosen gene can be dnaA. The location and orientation of dnaA in the genomes are obtained by blasting it with multifasta file of genome assemblies.
 
 ```
 #unzip the genome file if neccesasry
@@ -366,7 +378,7 @@ paste -d \\n header.txt siguni_seq.txt > siguni_seq.fasta
 
 Then, these kmers and unitigs were blasted with the original genome set for studying potential genome rearrangment that are captured by them, implemented by the following script:
 
-#run in the first level of /genome_rearrangement directory
+#run in the top level of /genome_rearrangement directory
 ```
 #For ext100_merge3_ISreplaced_genomes set k-mers with N 
 bash ./scripts/main.sh -k ./ext100_merge3_ISreplaced_genomes/sigkwithN_noN5000.fasta \
@@ -437,11 +449,15 @@ Leavis, H.L., Willems, R.J.L., van Wamel, W.J.B., Schuren, F.H., Caspers, M.P.M.
 
 This tutorial is based on 468 _Bordetella pertussis_ genomes with pertactin (PRN) expression information. Among them, 165 genomes show the presence of pertactin expression and 303 show absence. Pertactin expression information is taken from the supplementary material summarised in Lefrancq _et al._ 2022.
 
+Go to the top level of /genome_rearrangement directory
+```
+cd ./genome_rearrangement
+```
+
 First, the genome assemblies multifasta file is prepared by concatenating genome fasta files.
 ```
 #concatenating genome fasta files for use
-cd ./example_data/example_genomes/PRN_468
-cat *fasta.gz > ../../PRN_468.fna.gz
+cat ./example_data/example_genomes/PRN_468/*fasta.gz > ./example_data/PRN_468.fna.gz
 ```
 
 Genomes asemblies from which genome rearrangements are detected are re-orientated by a chosen gene, i.e. gidA. The location and orientation of gidA in the genomens are obtained by blasting it with multifasta file of genome assemblies.
@@ -479,7 +495,7 @@ cd ./ext7000_merge200_ISreplaced_genomes
 #generating fsm-ite input file
 for f in *_ext7000_merge200_ISreplaced.fasta; do id=$(basename "$f" _ext7000_merge200_ISreplaced.fasta); echo $id $f; done > PRN_468_input.list
 
-#generating kmers with size of 200 bases with minor allel frequency 0.05
+#generating kmers with size of 200 bases with minor allele frequency 0.05
 
 fsm-lite -l PRN_468_input.list -v -s 24 -S 444 -t tmp -m 200 -M 200 | gzip - > PRN_468_ext7000merge200_k200_output.txt.gz
 
