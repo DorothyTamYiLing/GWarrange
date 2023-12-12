@@ -42,7 +42,7 @@ python3 ./scripts/fix_genome.py --input ./example_data/clus1clus2_47.fna --mycoo
 
 The output file name for the genomes with same orientation is "fixed_genomes.fasta".
 
-Genome rearrangments in _Bordetella pertussis_ are belived to be largely mediated by homologous recombination of insertion sequence (IS) elements (such as IS481 and IS110). Location of IS elements in the genomes are obtained by blasting with target IS sequences. Sequences of more than one target IS elements can be placed in the same multifasta file for obtaining their genome locations in all genomes at once.
+Genome rearrangments in _Bordetella pertussis_ are believed to be largely mediated by homologous recombination of insertion sequence (IS) elements (such as IS481 and IS110). Location of IS elements in the genomes are obtained by blasting with target IS sequences. Sequences of more than one target IS elements can be placed in the same multifasta file for obtaining their genome locations in all genomes at once.
 ```
 blastn -query ./example_data/IS_NZ_CP025371.1.fasta \
 -subject fixed_genomes.fasta \
