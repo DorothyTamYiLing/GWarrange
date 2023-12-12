@@ -42,7 +42,7 @@ with open(str(myinput), "rt") as handle:
 #with gzip.open("E541_E537_rename.fna.gz", "rt") as handle:
         fasta_sequences = SeqIO.parse(handle,'fasta')
         for record in fasta_sequences:
-                print(record.id)
+                #print(record.id)
 #               print(repr(record.seq))
                 df=mydf.loc[mydf['sseqid'] == record.id]  #select rows that refer to the sample
                 total_rows = df.shape[0]
