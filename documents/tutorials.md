@@ -378,8 +378,9 @@ paste -d \\n header.txt siguni_seq.txt > siguni_seq.fasta
 
 Then, these kmers and unitigs are blasted with the original genome set for studying potential genome rearrangement that are captured by them, implemented by the following script:
 
-#run in the top level of /genome_rearrangement directory
+
 ```
+#run in the top level of /genome_rearrangement directory
 #For ext100_merge3_ISreplaced_genomes set k-mers with N 
 bash ./scripts/main.sh -k ./ext100_merge3_ISreplaced_genomes/sigkwithN_noN5000.fasta \
 -g ./example_data/Efaecium_32genomes.fna.gz \
