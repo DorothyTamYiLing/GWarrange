@@ -6,10 +6,10 @@ Genome rearrangement pipeline summary chart
 
 # Tutorial 1
 
-This tutorial is based a subset of _Bordetella pertussis_ genomes as described in Weigand _et al_. 2019, in which chromosome structures were defined by MAUVE exhaustive pairwise alignment. A subset of 47 genomes that display two different chromosome structures (18 genomes with structure 1 and 29 genomes with structure 2) (See Fig. 1) were used in GWAS with structure information as phenotype. Structure phenotype of two pairs of genomes were swapped for demonstration purpose.  
+This tutorial is based a subset of _Bordetella pertussis_ genomes as described in Weigand _et al_. 2019, in which chromosome structures are defined by MAUVE exhaustive pairwise alignment. A subset of 47 genomes that display two different chromosome structures (18 genomes with structure 1 and 29 genomes with structure 2) (See figure below) aree used in GWAS with structure information as phenotype. Structure phenotype of two pairs of genomes are swapped for demonstration purpose.  
 
 <img width="1159" alt="Screenshot 2023-04-02 at 10 32 23 PM" src="https://user-images.githubusercontent.com/34043893/229380077-f0c15dba-7ed3-4fc3-a0d7-6d9a5f52b556.png">
-Fig 1: Two different chromosome structures were found among 47 _Bordetella pertussis_ genomes. 
+Fig : Two different chromosome structures that are found among 47 _Bordetella pertussis_ genomes. 
 
 ##
 
@@ -18,13 +18,13 @@ Go to the top level of /genome_rearrangement directory
 cd ./genome_rearrangement
 ```
 
-First, the genome assemblies multifasta file is prepared by concatenating genome fasta files.
+First, the genome assemblies multifasta file is prepared by concatenating the genome fasta files.
 ```
 #concatenating genome fasta files for use
 cat ./example_data/example_genomes/clus1clus2_47_genomes/*fasta.gz > ./example_data/clus1clus2_47.fna.gz
 ```
 
-Genomes asemblies from which genome rearrangements are detected are re-orientated by a chosen gene. In the case of Boredetella pertussis, the gene is gidA since it is the first gene after origin of replication. The location and orientation of gidA in the genomes are obtained by blasting it with multifasta file of genome assemblies.
+Genomes assemblies from which genome rearrangements are detected are re-orientated by a chosen gene. In the case of _Boredetella pertussis_, the gene is _gidA_ since it is the first gene after origin of replication. The location and orientation of _gidA_ in the genomes are obtained by blasting it with multifasta file of genome assemblies.
 ```
 #unzip the genome file if neccesasry
 gunzip ./example_data/clus1clus2_47.fna.gz
@@ -35,32 +35,32 @@ blastn -query ./example_data/gidA.fasta \
 -outfmt 6 -out clus1clus2_47_gidA_out.txt
 ```
 
-Then, genome assemblies are re-orientated according to the position and orientation of gidA in the genomes, using the script fix_genome.py:
+Then, genome assemblies are re-orientated according to the position and orientation of _gidA_ in the genomes, using the script fix_genome.py:
 ```
 python3 ./scripts/fix_genome.py --input ./example_data/clus1clus2_47.fna --mycoor clus1clus2_47_gidA_out.txt
 ```
 
-The output file name for the genomes with same orientation is "fixed_genomes.fasta".
+The output multifasta file name for the genomes with the same orientation is "fixed_genomes.fasta".
 
-Genome rearrangments in _Bordetella pertussis_ are believed to be largely mediated by homologous recombination of insertion sequence (IS) elements (such as IS481 and IS110). Location of IS elements in the genomes are obtained by blasting with target IS sequences. Sequences of more than one target IS elements can be placed in the same multifasta file for obtaining their genome locations in all genomes at once.
+Genome rearrangments in _Bordetella pertussis_ are believed to be largely mediated by homologous recombination between insertion sequence (IS) elements (such as IS481 and IS110). Location of target IS elements in the genomes are obtained through BLAST. Sequences of more than one target IS element can be placed in the same multifasta file for obtaining their genome locations in all genomes at once.
 ```
 blastn -query ./example_data/IS_NZ_CP025371.1.fasta \
 -subject fixed_genomes.fasta \
 -outfmt 6 -out clus1clus2_47_blastIS_out.txt
 ```
 
-In addition, genome rearrangments in _Bordetella pertussis_ have also been observed to be mediated by homologous recombination of sequence blocks that consist of one or more IS elements. These duplicated sequence blocks are found throughout the genome and can be as large as several thousand base pairs in size. To ensure sensitivity in genome rearrangements detection, it is advised to replace these sequence blocks **completely** with shorter placeholder sequence. Without additional information of the actual size of the homologous sequence blocks, sequences extending several thousands base pairs to both direction from each IS can be replaced.
+In addition, genome rearrangements in _Bordetella pertussis_ have also been observed to be mediated by homologous recombination of sequence blocks that consist of one or more IS elements. These duplicated sequence blocks are found throughout the genome and can be as large as several thousand base pairs in size. To ensure sensitivity in genome rearrangement detection, it is advised to replace these sequence blocks **completely** with shorter placeholder sequence. Without additional information of the actual size of the homologous sequence blocks, sequences extending several thousands base pairs to both direction from each IS can be replaced.
 
-Here, sequences extending 7000bp to both direction from each IS were replaced. IS elements that were no more than 200bp apart (after extension) in each genome were also "merged". Then, each of these "extended and merged" IS elements were replaced with shorter placedholder sequences (N x 15). A seperate set of IS-replaced genomes were also produced by enabling performing minimal IS extension (i.e. 100bp to both direction) and merging overlapping IS only (i.e. ISs that are less than 3bp apart) through passing string argument "on" to the -s flag.
+Here, sequences extending 7000bp to both direction from each IS are replaced. IS elements that are no more than 200bp apart (after extension) in each genome are also "merged". Then, each of these "extended and merged" IS elements are replaced with shorter placedholder sequences (N x 15). A seperate set of IS-replaced genomes are also produced by enabling performing minimal IS extension (i.e. 100bp to both direction) and merging overlapping IS only (i.e. ISs that are less than 3bp apart) through passing a string argument "on" to the -s flag.
 ```
 bash ./scripts/merge_replace_IS.sh -g fixed_genomes.fasta -i clus1clus2_47_blastIS_out.txt -e 7000 -m 200 -s "on"
 ```
 
-Each set of IS-replaced genomes using different IS merging and extending parameters were output into new directories "ext7000_merge200_ISreplaced_genomes" and "ext100_merge3_ISreplaced_genomes" respectively.
+Each set of IS-replaced genomes using different IS merging and extending parameters are output into new directories "ext7000_merge200_ISreplaced_genomes" and "ext100_merge3_ISreplaced_genomes" respectively.
 
 Statistics on the sizes and distances between each pair of adjacent "extended and merged" IS are printed in files *_mergedISstat.txt.
 
-Prior to GWAS, each set of IS-replaced genomes using different IS merging and extending parameters were used for generating kmers.
+Prior to GWAS, each set of IS-replaced genomes using different IS merging and extending parameters are used for generating kmers.
 
 ```
 #For ext7000_merge200_ISreplaced_genomes set
@@ -79,12 +79,12 @@ cd ./ext100_merge3_ISreplaced_genomes
 
 for f in *_ext100_merge3_ISreplaced.fasta; do id=$(basename "$f" _ext100_merge3_ISreplaced.fasta); echo $id $f; done > clus1clus2_47_input.list
 
-#generating kmers with size of 200 bases with minor allel frequency 0.05
+#generating kmers with size of 200 bases with minor allele frequency 0.05
 fsm-lite -l clus1clus2_47_input.list -v -s 3 -S 44 -t tmp -m 200 -M 200 | gzip - > clus1clus2_47_ext100merge3_k200_output.txt.gz
 
 ```
 
-Then, a kmer-based GWAS was conducted using pyseer with an aim to identify kmers whose presence-absence patterns were associated with chromosome structures phenotype. Population structure is not contolled.
+Then, a kmer-based GWAS was conducted using pyseer with an aim to identify kmers whose presence-absence patterns were associated with chromosome structures phenotype. Population structure is not controlled.
 
 ```
 #adding header to phenotype file for pyseer input format
@@ -110,9 +110,9 @@ pyseer --phenotypes ../example_data/clus1clus2_pheno_4pyseer.txt \
 
 ```
 
-Generate number of unique pattterns and p value significance threshold information:
+Generate number of unique patterns and p value significance threshold information:
 ```
-#count_patterns.py is a script from pyseer package for calculating p-value threshold using Bonferroni correction. To access pyseer scripts, one needs to have cloned the pyseer github repository and go to scripts/directory.
+#count_patterns.py is a script from pyseer package for calculating p-value threshold using Bonferroni correction
 ../scripts/count_patterns.py kmer_patterns.txt > count_pattern.txt
 ```
 Extract kmers with p value below the the significance threshold:
@@ -124,7 +124,7 @@ awk '{ if ($4 <= 4.59E-04) { print } }' clus1clus2_47_ext7000merge200_k200_MAF0.
 awk '{ if ($4 <= 5.62E-04) { print } }' clus1clus2_47_ext100merge3_k200_MAF0.05_nopopctrl > sigk_pyseer.txt
 ```
 
-The sequences of kmers that were found to be significantly associated with the structural phenotyp were extracted and placed in a multifasta file.
+The sequences of kmers that are found to be significantly associated with structural phenotype are extracted and placed in a multifasta file.
 
 Extract significant kmer sequences and convert them into fasta format:
 ```
@@ -147,7 +147,7 @@ done
 paste -d \\n header.txt sigk_seq.txt > sigk_seq.fasta
 ```
 
-Then, these kmers were blasted with the original genome set for studying potential genome rearrangment that are captured by them, implemented by the following script:
+Then, these kmers are blasted with the original genome set for studying potential genome rearrangements that are captured by them, implemented by the following script:
 
 ```
 #run in the top level of /genome_rearrangement directory
@@ -170,13 +170,13 @@ Note that the value used for -d parameter should be larger than the "Maximum siz
 
 **Visualising genome rearrangements that are captured by kmer**
 
-From genome set with 7000bp extension and 200bp merging, 978 kmers were found to be split (_i.e._ flanking sequences mapped to different positions) when mapped to the original genomes.
+From genome set with 7000bp extension and 200bp merging, 978 kmers are found to be split (_i.e._ flanking sequences mapped to different positions) when mapped to the original genomes.
 
 1) Plotting split kmers for visualising rearrangement boundaries
 
-Since kmers contain highly redundant information, only kmers with unique information (genome position, case and control count and proportion) were kept. They can be found in output file myshort_splitk_out_uniq.txt.
+Since kmers contain highly redundant information, only kmers with unique information (genome position, case and control count and proportion) are kept. They can be found in output file myshort_splitk_out_uniq.txt.
 
-Four rearrangement boundaries were found, and they potentially refer to two inversion events, i.e. between 43000bp and 3600000bp, as well as between 1500000bp and 2500000bp, one inversion nested within the other. The four boundaries can be indicated by sixteen different significant split kmers that were mapped to each of the boundary, split in case/control genomes, and in forward/reverse orientation (plots of four split kmers were shown below as examples). Full information of these kmers can be found in output file mysplitk_out.txt.
+Four rearrangement boundaries are found, and they potentially refer to two inversion events, i.e. between 43000bp and 3600000bp, as well as between 1500000bp and 2500000bp, one inversion nested within the other. The four boundaries can be indicated by sixteen different significant split kmers that are mapped to each of the boundary, split in case/control genomes, and in forward/reverse orientation (plots of four split kmers are shown below as examples). Full information of these kmers can be found in output file mysplitk_out.txt.
 
 Inversion within genome region 43000 and 3600000, 43000bp boundary, kmer being intact in case genomes and split in control genomes, in forward orientation:
 
@@ -194,13 +194,13 @@ Inversion within genome region 1500000 and 2500000, 2500000bp boundary, kmer bei
 
 <img width="904" alt="Screenshot 2023-05-07 at 9 48 39 PM" src="https://user-images.githubusercontent.com/34043893/236681684-c2a4eaf5-0460-4243-8d3c-f87988834efa.png">
 
-Height of arrows corresponds to proporiton of case/control genomes.
+Height of arrows corresponds to proportion of case/control genomes.
 
 2) Plotting intact kmers without N for visualising sequence content of rearrangement :
 
-Genome position of intact kmers without N from /ext100_merge3_ISreplaced_genomes (minimal IS extension and merging overlapping IS only) were plotted. Only kmers with unqiue genome position information (by rounding off to the nearest multiple of 1000) were kept for plotting (as shown in *kmer4plot.txt files). 
+Genome position of intact kmers without N from /ext100_merge3_ISreplaced_genomes (minimal IS extension and merging overlapping IS only) are plotted. Only kmers with unqiue genome position information (by rounding off to the nearest multiple of 1000) are kept for plotting (as shown in *kmer4plot.txt files). 
 
-Plot of intact kmers that showed rearrangements in two genome regions that were significantly associated with structural phenotype.
+Plot of intact kmers that show rearrangements in two genome regions that are significantly associated with structural phenotype.
 
 ![myNoNintactk_rev0fwd1](https://user-images.githubusercontent.com/34043893/231439466-2dce018c-89f4-4873-a4a2-486f655af203.png)
 
@@ -215,17 +215,17 @@ Colour indices refer to the "colour index" column in the corresponding *kmer4plo
 
 **Important notes:**
 
-Inversion boundaries between genome region 1500000 and 2500000 were not detected using ext100_merge3_ISreplaced_genomes. This is because the whole homologous sequence block/IS clusters at these boundaries are not completely replaced by shorter placeholder sequences, this leads to the presence of homologous sequence within flanking sequences, hence reducing senesitivity in detecting rearrangement boundaries. To ensure replacing the whole homologous sequence block/IS clusters by short placeholder sequences, we can extending the genome coordinates of each repeated sequence for a number of base pairs in both directions, and/or to merge repeated sequences that are less than a number of base pairs distance apart.
+Inversion boundaries at 1500000bp and 2500000bp are not detected using ext100_merge3_ISreplaced_genomes. This is because the whole homologous sequence block/IS clusters at these boundaries are not completely replaced by shorter placeholder sequences, this leads to the presence of homologous sequence within flanking sequences in the kmers, hence reducing sensitivity in detecting rearrangement boundaries. To ensure replacing the whole homologous sequence block/IS clusters by short placeholder sequences, we can extend the genome coordinates of each repeated sequence for a number of base pairs in both directions, and/or to merge repeated sequences that are less than a number of base pairs distance apart.
 
 Reference: Weigand, M.R., Williams, M.M., Peng, Y., Kania, D., Pawloski, L.C., Tondella, M.L. and CDC Pertussis Working Group, 2019. Genomic survey of Bordetella pertussis diversity, United States, 2000–2013. Emerging infectious diseases, 25(4), p.780.
 
 
 # Tutorial 2
 
-_Enterococcus faecium_'s genomes are known to be enriched with IS elements, which could play important role in their genome structure's diversification (Leavis et al. 2007). Genome structure of 75 _Enterococcus faecium_ were characterised by socru (Page et al. 2020), Among which, a subset of 32 genomes display two different chromosome structures (21 genomes with structure "0" and 11 genomes with structure "1") (See Fig. ) were used in GWAS, with structure information as phenotype. Structure phenotype of two pairs of genomes were swapped for demonstration purpose. 
+_Enterococcus faecium_'s genomes are known to be enriched with IS elements, which could play important role in their genome structure's diversification (Leavis _et al._ 2007). Genome structure of 75 _Enterococcus faecium_ were characterised by socru (Page _et al._ 2020), Among which, a subset of 32 genomes displaying two different chromosome structures (21 genomes with structure "0" and 11 genomes with structure "1") (See Fig. ) are used in GWAS, with structure information as phenotype. Structure phenotype of two pairs of genomes sre swapped for demonstration purpose. 
 
 ![Screenshot 2023-08-01 222347](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/0f0c348f-936b-4983-be54-180cc6b8d838)
-Fig : Two different chromosome structures were found among 32 _Enterococcus faecium_ genomes. 
+Fig : Two different chromosome structures are found among 32 _Enterococcus faecium_ genomes. 
 
 First, genomes asemblies from which genome rearrangements are detected are re-orientated by a chosen gene, i.e. dnaA. The location and orientation of dnaA in the genomens are obtained by blasting it with multifasta file of genome assemblies.
 
@@ -266,11 +266,11 @@ blastn -query ./example_data/IS30_IS1252_in_HOU503_657692to658645.fasta \
 -outfmt 6 -out blastIS30_IS1252_in_HOU503_32genomes_out.txt
 ```
 
-Here, sequences extending 7000bp to both direction from each IS were replaced. IS elements that were no more than 200bp apart (after extension) in each genome were also "merged". Then, each of these "extended and merged" IS element were replaced with shorter placedholder sequences (N x 15). A seperate set of IS-replaced genomes were also produced by enabling performing minimal IS extension (i.e. 100bp) and merging overlapping IS only (i.e. IS that are less than 3 bp apart) through passing string argument "on" to the -s flag.
+Here, sequences extending 7000bp to both directions from each IS are replaced. IS elements that are no more than 200bp apart (after extension) in each genome are also "merged". Then, each of these "extended and merged" IS element are replaced with shorter placedholder sequences (N x 15). A seperate set of IS-replaced genomes are also produced by enabling performing minimal IS extension (i.e. 100bp) and merging overlapping IS only (i.e. IS that are less than 3 bp apart) through passing string argument "on" to the -s flag.
 ```
 bash ./scripts/merge_replace_IS.sh -g fixed_genomes.fasta -i blastIS30_IS1252_in_HOU503_32genomes_out.txt -e 7000 -m 200 -s "on"
 ```
-Prior to GWAS, each set of IS-replaced genomes using different IS merging and extending parameters were used for generating kmers and unitigs. Here, we use the kmer generation tool fsm-lite and unitig generation tool unitig-caller to generate kmers and unitigs from genomes in directory /ext100_merge3_ISreplaced_genomes.
+Prior to GWAS, each set of IS-replaced genomes using different IS merging and extending parameters are used for generating kmers and unitigs. Here, we use the kmer generation tool fsm-lite and unitig generation tool unitig-caller to generate kmers and unitigs from genomes in directory /ext100_merge3_ISreplaced_genomes.
 ```
 cd ./ext100_merge3_ISreplaced_genomes
 
@@ -287,7 +287,7 @@ ls -d -1 $PWD/*.fasta > input.txt
 #running unitig-caller
 unitig-caller --call --rtab --pyseer --refs input.txt --out unitigcall_out
 ```
-Then, kmer-based and unitig-based GWAS were conducted using pyseer with an aim to identify kmers/unitigs whose presence-absence patterns were associated with chromosome structures phenotype. Population structure is not contolled.
+Then, kmer-based and unitig-based GWAS are conducted using pyseer with an aim to identify kmers/unitigs whose presence-absence patterns are associated with chromosome structure phenotype. Population structure is not controlled.
 ```
 #adding header to phenotype file for pyseer input format
 echo "samples binary" | cat - ../example_data/Efaecium32genomes_pheno_1swap.txt > ../example_data/Efaecium32genomes_pheno_1swap_4pyseer.txt
@@ -308,20 +308,20 @@ pyseer --phenotypes ../example_data/Efaecium32genomes_pheno_1swap_4pyseer.txt \
 > ext100merge3_k200_min20samp_unitig_nopopctrl
 
 ```
-Generate number of unique pattterns and p value significance threshold information:
+Generate number of unique patterns and p value significance threshold information:
 ```
-#count_patterns.py is a script from pyseer package for calculating p-value threshold using Bonferroni correction. To access pyseer scripts, one needs to have cloned the pyseer github repository and go to scripts/directory.
+#count_patterns.py is a script from pyseer package for calculating p-value threshold using Bonferroni correction. 
 ../scripts/count_patterns.py kmer_patterns.txt > count_pattern.txt
 
 ../scripts/count_patterns.py unitigs_kmer_patterns.txt > count_uni_pattern.txt 
 ```
-Extract kmers/unitigs with p value below the the significance threshod:
+Extract kmers/unitigs with p value below the the significance threshold:
 ```
 awk '{ if ($4 <= 1.92E-05) { print } }' ext100merge3_k200_min20samp_nopopctrl > sigk_pyseer.txt
 
 awk '{ if ($4 <= 7.62E-06) { print } }' ext100merge3_k200_min20samp_unitigs_nopopctrl > siguni_pyseer.txt
 ```
-448,330 kmers and 3,737 unitigs were found to be significantly associated with chromosome structure. The sequences of which were extracted and placed in respective multifasta file.
+448,330 kmers and 3,737 unitigs are found to be significantly associated with chromosome structure. The sequences of which were extracted and placed in respective multifasta file.
 
 Extract significant kmer sequences and convert them into fasta format
 ```
@@ -343,7 +343,7 @@ done
 
 paste -d \\n header.txt sigk_seq.txt > sigk_seq.fasta
 ```
-#Due to the large number of significant kmers, only the kmers that contain "N" and the first 5000 kmers without "N" were used for structural analysis.
+Due to the large number of significant kmers, only the kmers that contain "N" and the first 5000 kmers without "N" were used for structural analysis.
 ```
 #classifying kmers into those containing "N" and those do not contain "N"
 python3 ../scripts/class_k.py --input sigk_seq.fasta --outdir .
@@ -355,7 +355,7 @@ head -25000 sigk_noN.fasta > sigk_noN_5000.fasta
 cat sigk_withN.fasta sigk_noN_5000.fasta > sigkwithN_noN5000.fasta
 ```
 
-Extract significant unitig sequences and convert then into fasta format
+Extract significant unitig sequences and convert them into fasta format
 ```
 #get the seqeunce only
 awk '{print $1}' siguni_pyseer.txt > siguni_seq.txt 
@@ -376,7 +376,7 @@ done
 paste -d \\n header.txt siguni_seq.txt > siguni_seq.fasta
 ```
 
-Then, these kmers and unitigs were blasted with the original genome set for studying potential genome rearrangment that are captured by them, implemented by the following script:
+Then, these kmers and unitigs are blasted with the original genome set for studying potential genome rearrangement that are captured by them, implemented by the following script:
 
 #run in the top level of /genome_rearrangement directory
 ```
@@ -396,13 +396,13 @@ Note that the value used for -d parameter should be larger than the "Maximum siz
 
 **Visualising genome rearrangements that are captured by kmer**
 
-219 kmers were found to be split (_i.e._ flanking sequences mapped to different positions) when mapped to the original genomes.
+219 kmers are found to be split (_i.e._ flanking sequences mapped to different positions) when mapped to the original genomes.
 
 1) Plotting split kmers for visualising rearrangement boundaries
 
-Since kmers contain highly redundant information, only kmers with unique information (genome position, case and control count and proportion) were kept. They can be found in output file myshort_splitk_out_uniq.txt.
+Since kmers contain highly redundant information, only kmers with unique information (genome position, case and control count and proportion) are kept. They can be found in output file myshort_splitk_out_uniq.txt.
 
-Two rearrangement boundaries were found, and they potentially refer to a single inversion event between 72000bp and 2100000bp. All of the split kmers were found to be split in case geomes and intact in control genomes. This could be explained by the absence of IS elements in the rearrangement boundaries in case genomes, which has been confirmed by manual sequence check. The two boundaries can be indicated by four different significant split kmers that were mapped to each of the boundary and in forward/reverse orientation (plots of one of these kmers are shown below). Full information of these kmers can be found in output file mysplitk_out.txt.
+Two rearrangement boundaries are found, and they potentially refer to a single inversion event between 72000bp and 2100000bp. All of the split kmers are found to be split in case geomes and intact in control genomes. This could be explained by the absence of IS elements in the rearrangement boundaries in case genomes, which has been confirmed by manual sequence check. The two boundaries can be indicated by four different significant split kmers that are mapped to each of the boundaries in forward/reverse orientation (plots of one of these kmers are shown below). Full information of these kmers can be found in output file mysplitk_out.txt.
 
 72000bp boundary, intact kmer in forward orientation:
 
@@ -422,19 +422,19 @@ Two rearrangement boundaries were found, and they potentially refer to a single 
 
 Height of arrows corresponds to proporiton of case/control genomes.
 
-No significant split unitigs were identified as unitig-caller was not able to generate unitigs containing placeholder sequences.
+No significant split unitigs are identified as unitig-caller are not able to generate unitigs containing placeholder sequences.
 
 2) Plotting intact unitigs (without N) for visualising sequence content of rearrangement :
 
-Genome position of unitigs from /ext100_merge3_ISreplaced_genomes (minimal IS extension and merging overlapping IS only) were plotted. Only unitigs with unqiue genome position information (by rounding off to the nearest multiple of 1000) were kept for plotting (as shown in *kmer4plot.txt files). 
+Genome position of unitigs from /ext100_merge3_ISreplaced_genomes (minimal IS extension and merging overlapping IS only) are plotted. Only unitigs with unqiue genome position information (by rounding off to the nearest multiple of 1000) are kept for plotting (as shown in *kmer4plot.txt files). 
 
-Plot of unitigs that showed rearrangements significantly associated with structural phenotype.
+Plot of unitigs that showe rearrangements significantly associated with structure phenotype.
 
 ![myNoNintactk_rev0fwd1](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/a9ce4a68-3de4-48d1-b2ab-4675cc2ee8a9)
 
 ![myNoNintactk_rev1fwd0](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/2799983d-f31f-4bdc-a200-6e4e58909c00)
 
-Height of arrows corresponds to proporiton of case/control genomes.
+Height of arrows corresponds to proportion of case/control genomes.
 
 (Above: 191 intact kmers that are in forward orientation in majority of structure "1" genomes, as well as in reverse orientation in majority of structure "0" genomes;
 Below: 370 intact kmers that are in reverse orientation in majority of structure "1" genomes, as well as in forward orientation in majority of structure "0" genomes)
@@ -476,18 +476,18 @@ python3 ./scripts/fix_genome.py --input ./example_data/PRN_468.fna --mycoor PRN_
 ```
 The output file name for the genomes with same orientation is "fixed_genomes.fasta".
 
-Location of IS elements in the genomes are obtained by blasting with target IS sequences. Sequences of more than one target IS elements can be placed in the same multifasta file for obtaining their genome locations in all genomes at once.
+Location of IS elements in the genomes are obtained by blasting with target IS sequences. Sequences of more than one target IS element can be placed in the same multifasta file for obtaining their genome locations in all genomes at once.
 ```
 blastn -query ./example_data/IS_NZ_CP025371.1.fasta \
 -subject fixed_genomes.fasta \
 -outfmt 6 -out PRN_468_blastIS_out.txt
 ```
 
-Here, sequences extending 7000bp to both direction from each IS were replaced. IS elements that were no more than 200bp apart (after extension) in each genome were also "merged". Then, each of these "extended and merged" IS element were replaced with shorter placedholder sequences (N x 15). A seperate set of IS-replaced genomes were also produced by enabling performing minimal IS extension (i.e. 100bp) and merging overlapping IS only (i.e. IS that are less than 3 bp apart) through passing string argument "on" to the -s flag.
+Here, sequences extending 7000bp to both directions from each IS are replaced. IS elements that are no more than 200bp apart (after extension) in each genome are also "merged". Then, each of these "extended and merged" IS element are replaced with shorter placedholder sequences (N x 15). A seperate set of IS-replaced genomes are also produced by enabling performing minimal IS extension (i.e. 100bp) and merging overlapping IS only (i.e. IS that are less than 3 bp apart) through passing string argument "on" to the -s flag.
 ```
 bash ./scripts/merge_replace_IS.sh -g fixed_genomes.fasta -i PRN_468_blastIS_out.txt -e 7000 -m 200 -s "on"
 ```
-Prior to GWAS, each set of IS-replaced genomes using different IS merging and extending parameters were used for generating kmers.
+Prior to GWAS, each set of IS-replaced genomes using different IS merging and extending parameters are used for generating kmers.
 ```
 #For ext7000_merge200_ISreplaced_genomes set
 cd ./ext7000_merge200_ISreplaced_genomes
@@ -511,7 +511,7 @@ for f in *_ext100_merge3_ISreplaced.fasta; do id=$(basename "$f" _ext100_merge3_
 fsm-lite -l PRN_468_input.list -v -s 24 -S 444 -t tmp -m 200 -M 200 | gzip - > PRN_468_ext100merge3_k200_output.txt.gz
 
 ```
-Then, a kmer-based GWAS was conducted using pyseer with an aim to identify kmers whose presence-absence patterns are associated with PRN expression phenotype. Population structure is controlled by phylogenetic similarity matrix.
+Then, a kmer-based GWAS is conducted using pyseer with an aim to identify kmers whose presence-absence patterns are associated with PRN expression phenotype. Population structure is controlled by phylogenetic similarity matrix.
 
 ```
 #adding header to phenotype file for pyseer input format
@@ -552,7 +552,7 @@ awk '{ if ($4 <= 1.53E-04) { print } }' PRN_468_ext7000merge200_k200_MAF0.05_nop
 awk '{ if ($4 <=  1.62E-04) { print } }' PRN_468_ext100merge3_k200_MAF0.05_nopopctrl > sigk_pyseer.txt
 ```
 
-The sequences of kmers that were found to be significantly associated with the structural phenotyp were extracted and placed in a multifasta file.
+The sequences of kmers that are found to be significantly associated with the structure phenotyp are extracted and placed in a multifasta file.
 
 Extract significant kmer sequences and convert them into multifasta format (For both ext7000_merge200_ISreplaced_genomes set and ext100_merge3_ISreplaced_genomes set):
 ```
@@ -575,7 +575,7 @@ done
 paste -d \\n header.txt sigk_seq.txt > sigk_seq.fasta
 ```
 
-Then, these kmers were blasted with the original genome set for studying potential genome rearrangment that are captured by them, implemented by the following script:
+Then, these kmers are blasted with the original genome set for studying potential genome rearrangement that are captured by them, implemented by the following script:
 
 ```
 #run in the first level of /genome_rearrangement directory
@@ -600,19 +600,19 @@ Note that the value used for -d parameter should be larger than the "Maximum siz
 
 1) Plotting split kmers for visualising rearrangement boundaries
 
-No split kmer that indicated phenotype-associated rearrangement boundary was detected.
+No split kmer that indicated phenotype-associated rearrangement boundary is detected.
 
 2) Plotting intact kmers without N for visualising sequence content of rearrangement :
 
-Genome position of intact kmers without N from /ext100_merge3_ISreplaced_genomes (merging overlapping IS only) were plotted. Only kmers with unqiue genome position information (by rounding off to the nearest multiple of 1000) 
+Genome position of intact kmers without N from /ext100_merge3_ISreplaced_genomes (merging overlapping IS only) are plotted. Only kmers with unqiue genome position information (by rounding off to the nearest multiple of 1000) are used in the plot.
 
-Plot of intact kmers that show sequence rearrangements that are significantly associated with the PRN expression phenotype.
+Plots of intact kmers that show sequence rearrangements that are significantly associated with PRN expression phenotype.
 
 ![myNoNintactk_rev0fwd1](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/a7bd07cc-5538-4c01-a3a8-fa80152d3412)
 
 ![myNoNintactk_rev1fwd0](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/0d89d495-32a1-400e-a2a9-321bc436dbf0)
 
-Height of arrows corresponds to proporiton of case/control genomes.
+Height of arrows corresponds to proportion of case/control genomes.
 
 (Above: 7 intact kmers that are in forward orientation in half of PRN+ (1) genomes, as well as reverse in majority of PRN- (0) genomes;
 Below: 5 intact kmers that are in reverse orientation in half of PRN+ (1) genomes, as well as forward in majority of PRN- (0) genomes)
@@ -621,7 +621,7 @@ Colour indices refer to the "colour index" column in the corresponding *kmer4plo
 
 **Important notes:**
 
-Some of the significant intack kmers without N (e.g. kmer2189, kmer1450, kmer2126) contains sequence of pertactin autotransporter. These kmers was not found using ext7000_merge200_ISreplaced_genomes. This is because the gene pertactin autotransporter is located immediately next to an IS element in pertusis genomes, and any genome rearrangement that sits completely within the "replaced IS" region will not be detected. 
+Some of the significant intack kmers without N (e.g. kmer2189, kmer1450, kmer2126) contain sequence of pertactin autotransporter. These kmers are not found using ext7000_merge200_ISreplaced_genomes. This is because the gene pertactin autotransporter is located immediately next to an IS element in _pertusis_ genomes, and any genome rearrangement that sits completely within the "replaced IS" region will not be detected. 
 
 Ref: Lefrancq, N., Bouchez, V., Fernandes, N., Barkoff, A.M., Bosch, T., Dalby, T., Åkerlund, T., Darenberg, J., Fabianova, K., Vestrheim, D.F. and Fry, N.K., 2022. Global spatial dynamics and vaccine-induced fitness changes of Bordetella pertussis. Science Translational Medicine, 14(642), p.eabn3253.
 
