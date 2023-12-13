@@ -213,14 +213,13 @@ Genome position of intact kmers without N from /ext100_merge3_ISreplaced_genomes
 
 Plot of intact kmers that show rearrangements in two genome regions that are significantly associated with structural phenotype.
 
-![myNoNintactk_rev0fwd1](https://user-images.githubusercontent.com/34043893/231439466-2dce018c-89f4-4873-a4a2-486f655af203.png)
+![myNoNintactk_rev0fwd1](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/afde6c42-add7-4e07-ada9-7eedd348f3d3)
 
-![myNoNintactk_rev1fwd0](https://user-images.githubusercontent.com/34043893/231439513-45c179bf-8bc6-4d1b-98b6-fe8f896ce57e.png)
+![myNoNintactk_rev1fwd0](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/b8a70fdd-1a4a-4cc0-b60e-e873a00a8d42)
 
-Height of arrows corresponds to proporiton of case/control genomes.
 
-(Above: 15 intact kmers that are in forward orientation in majority of structure "1" genomes, as well as in reverse orientation in majority of structure "0" genomes;
-Below: 17 intact kmers that are in reverse orientation in majority of structure "1" genomes, as well as in forward orientation in majority of structure "0" genomes)
+(Above: 10 intact kmers that are in forward orientation in majority of structure "1" genomes, as well as in reverse orientation in majority of structure "0" genomes;
+Below: 13 intact kmers that are in reverse orientation in majority of structure "1" genomes, as well as in forward orientation in majority of structure "0" genomes)
 
 Colour indices refer to the "colour index" column in the corresponding *kmer4plot.txt file (with the same prefix), hence the corresponding kmers.
 
