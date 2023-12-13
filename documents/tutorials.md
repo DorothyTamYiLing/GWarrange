@@ -193,19 +193,17 @@ Inversion within genome region 43000 and 3600000, 43000bp boundary, kmer being i
 
 <img width="707" alt="kmer940" src="https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/4a747e7c-93e3-44b6-abe2-81b90e758370">
 
-<img width="927" alt="Screenshot 2023-05-07 at 9 37 35 PM" src="https://user-images.githubusercontent.com/34043893/236681154-15c6b72f-9c61-40d9-9fd4-04ae35d22620.png">
-
 Inversion within genome region 43000 and 3600000, 3600000bp boundary, kmer being intact in control genomes and split in case genomes, in reverse orientation:
 
-<img width="910" alt="Screenshot 2023-05-07 at 9 45 08 PM" src="https://user-images.githubusercontent.com/34043893/236681643-a20c9927-79fb-47b3-8a8b-ebd83a239528.png">
+<img width="728" alt="kmer985" src="https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/17d5a869-2cd7-49a9-884c-684d2a30ac17">
 
 Inversion within genome region 1500000 and 2500000, 1500000bp boundary, kmer being intact in control genomes and split in case genomes, forward orientation kmer:
 
-<img width="906" alt="Screenshot 2023-05-07 at 9 50 43 PM" src="https://user-images.githubusercontent.com/34043893/236681673-c8ac9e6a-fa77-4314-af17-022e6b851552.png">
+<img width="733" alt="kmer882" src="https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/80de6ab4-952d-4c85-b15c-4cc74d80f990">
 
 Inversion within genome region 1500000 and 2500000, 2500000bp boundary, kmer being intact in case genomes and split in control genomes, reverse orientation kmer:
 
-<img width="904" alt="Screenshot 2023-05-07 at 9 48 39 PM" src="https://user-images.githubusercontent.com/34043893/236681684-c2a4eaf5-0460-4243-8d3c-f87988834efa.png">
+<img width="740" alt="kmer881" src="https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/4197c388-32b7-4456-acba-47a78f3ffdb8">
 
 Height of arrows corresponds to proportion of case/control genomes.
 
