@@ -631,7 +631,7 @@ Right: 5 intact kmers that are in reverse orientation in half of PRN+ (1) genome
 
 **Important notes:**
 
-Some of the significant intack kmers without N (e.g. kmer2189, kmer1450, kmer2126) contain sequence of pertactin autotransporter. These kmers are not found using ext7000_merge200_ISreplaced_genomes. This is because the gene pertactin autotransporter is located immediately next to an IS element in _pertusis_ genomes, and any genome rearrangement that sits completely within the "replaced IS" region will not be detected. 
+Some of the significant intack kmers without N contain sequence of pertactin autotransporter (indicated by black arrows). These kmers are not found using ext7000_merge200_ISreplaced_genomes. This is because the gene pertactin autotransporter is located immediately next to an IS element in _pertusis_ genomes, and any genome rearrangement that sits completely within the "replaced IS" region will not be detected. 
 
 Ref: Lefrancq, N., Bouchez, V., Fernandes, N., Barkoff, A.M., Bosch, T., Dalby, T., Åkerlund, T., Darenberg, J., Fabianova, K., Vestrheim, D.F. and Fry, N.K., 2022. Global spatial dynamics and vaccine-induced fitness changes of Bordetella pertussis. Science Translational Medicine, 14(642), p.eabn3253.
 
