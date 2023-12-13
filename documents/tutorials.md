@@ -516,13 +516,15 @@ cd ./ext100_merge3_ISreplaced_genomes
 #generating fsm-ite input file
 for f in *_ext100_merge3_ISreplaced.fasta; do id=$(basename "$f" _ext100_merge3_ISreplaced.fasta); echo $id $f; done > PRN_468_input.list
 
-#generating kmers with size of 200 bases with minor allel frequency 0.05
+#generating kmers with size of 200 bases with minor allele frequency 0.05
 fsm-lite -l PRN_468_input.list -v -s 24 -S 444 -t tmp -m 200 -M 200 | gzip - > PRN_468_ext100merge3_k200_output.txt.gz
 
 ```
 Then, a kmer-based GWAS is conducted using pyseer with an aim to identify kmers whose presence-absence patterns are associated with PRN expression phenotype. Population structure is controlled by phylogenetic similarity matrix.
 
 ```
+#Run inside corresponding *_ISreplaced_genomes directory
+
 #adding header to phenotype file for pyseer input format
 echo "samples binary" | cat - ../example_data/prn_status_pheno.txt > ../example_data/prn_status_pheno_4pyseer.txt
 
@@ -547,13 +549,17 @@ pyseer --lmm --phenotypes ../example_data/prn_status_pheno_4pyseer.txt \
 
 Generate number of unique pattterns and p value significance threshold information:
 ```
-#count_patterns.py is a script from pyseer package for calculating p-value threshold using Bonferroni correction. To access pyseer scripts, one needs to have cloned the pyseer github repository and go to scripts/directory.
+#count_patterns.py is a script from pyseer package for calculating p-value threshold using Bonferroni correction. 
 
 #For both ext7000_merge200_ISreplaced_genomes set and ext100_merge3_ISreplaced_genomes set
+#Run inside corresponding *_ISreplaced_genomes directory
 ./scripts/count_patterns.py kmer_patterns_covariate.txt > count_pattern.txt
+
 ```
 Extract kmers with p value below the the significance threshold:
 ```
+#Run inside corresponding *_ISreplaced_genomes directory
+
 #For ext7000_merge200_ISreplaced_genomes set
 awk '{ if ($4 <= 1.53E-04) { print } }' PRN_468_ext7000merge200_k200_MAF0.05_nopopctrl > sigk_pyseer.txt
 
@@ -565,6 +571,8 @@ The sequences of kmers that are found to be significantly associated with the st
 
 Extract significant kmer sequences and convert them into multifasta format (For both ext7000_merge200_ISreplaced_genomes set and ext100_merge3_ISreplaced_genomes set):
 ```
+#Run inside corresponding *_ISreplaced_genomes directory
+
 #get the seqeunce only
 awk '{print $1}' sigk_pyseer.txt > sigk_seq.txt 
 
