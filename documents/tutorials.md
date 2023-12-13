@@ -549,7 +549,7 @@ pyseer --lmm --phenotypes ../example_data/prn_status_pheno_4pyseer.txt \
 > PRN468_ext100merge3_k200_MAF0.05_covariate
 ```
 
-Generate number of unique pattterns and p value significance threshold information (For both ext7000_merge200_ISreplaced_genomes set and ext100_merge3_ISreplaced_genomes set):
+Generate number of unique patterns and p value significance threshold information (For both ext7000_merge200_ISreplaced_genomes set and ext100_merge3_ISreplaced_genomes set):
 ```
 #Run inside corresponding *_ISreplaced_genomes directory
 
@@ -558,7 +558,7 @@ Generate number of unique pattterns and p value significance threshold informati
 #count_patterns.py is a script from pyseer package for calculating p-value threshold using Bonferroni correction. 
 
 ```
-Extract kmers with p value below the the significance threshold (For both ext7000_merge200_ISreplaced_genomes set and ext100_merge3_ISreplaced_genomes set):
+Extract kmers with p value below the significance threshold (For both ext7000_merge200_ISreplaced_genomes set and ext100_merge3_ISreplaced_genomes set):
 ```
 #Run inside corresponding *_ISreplaced_genomes directory
 
@@ -569,7 +569,7 @@ awk '{ if ($4 <= 1.53E-04) { print } }' PRN_468_ext7000merge200_k200_MAF0.05_nop
 awk '{ if ($4 <=  1.62E-04) { print } }' PRN_468_ext100merge3_k200_MAF0.05_nopopctrl > sigk_pyseer.txt
 ```
 
-The sequences of kmers that are found to be significantly associated with the structure phenotyp are extracted and placed in a multifasta file.
+The sequences of kmers that are found to be significantly associated with the structure phenotype are extracted and placed in a multifasta file.
 
 Extract significant kmer sequences and convert them into multifasta format (For both ext7000_merge200_ISreplaced_genomes set and ext100_merge3_ISreplaced_genomes set):
 ```
@@ -594,7 +594,7 @@ done
 paste -d \\n header.txt sigk_seq.txt > sigk_seq.fasta
 ```
 
-Then, these kmers are blasted with the original genome set for studying potential genome rearrangement that are captured by them, implemented by the following script:
+Then, these kmers are blasted with the original genome set for studying potential genome rearrangements that are captured by them, implemented by the following script:
 
 ```
 #run in the first level of /genome_rearrangement directory
