@@ -549,9 +549,8 @@ pyseer --lmm --phenotypes ../example_data/prn_status_pheno_4pyseer.txt \
 > PRN468_ext100merge3_k200_MAF0.05_covariate
 ```
 
-Generate number of unique pattterns and p value significance threshold information:
+Generate number of unique pattterns and p value significance threshold information (For both ext7000_merge200_ISreplaced_genomes set and ext100_merge3_ISreplaced_genomes set):
 ```
-#For both ext7000_merge200_ISreplaced_genomes set and ext100_merge3_ISreplaced_genomes set
 #Run inside corresponding *_ISreplaced_genomes directory
 
 ./scripts/count_patterns.py kmer_patterns_covariate.txt > count_pattern.txt
@@ -559,7 +558,7 @@ Generate number of unique pattterns and p value significance threshold informati
 #count_patterns.py is a script from pyseer package for calculating p-value threshold using Bonferroni correction. 
 
 ```
-Extract kmers with p value below the the significance threshold:
+Extract kmers with p value below the the significance threshold (For both ext7000_merge200_ISreplaced_genomes set and ext100_merge3_ISreplaced_genomes set):
 ```
 #Run inside corresponding *_ISreplaced_genomes directory
 
