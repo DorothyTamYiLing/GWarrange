@@ -6,6 +6,8 @@
 
 ## Script functions and output files
 
+Each script has its "script functions" and "output file" section
+
 `fix_genome.py`
 
 script functions:
