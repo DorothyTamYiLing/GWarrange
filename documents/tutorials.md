@@ -221,8 +221,6 @@ Plot of intact kmers that show rearrangements in two genome regions that are sig
 (Above: 10 intact kmers that are in forward orientation in majority of structure "1" genomes, as well as in reverse orientation in majority of structure "0" genomes;
 Below: 13 intact kmers that are in reverse orientation in majority of structure "1" genomes, as well as in forward orientation in majority of structure "0" genomes)
 
-Colour indices refer to the "colour index" column in the corresponding *kmer4plot.txt file (with the same prefix), hence the corresponding kmers.
-
 **Important notes:**
 
 Inversion boundaries at 1500000bp and 2500000bp are not detected using ext100_merge3_ISreplaced_genomes. This is because the whole homologous sequence block/IS clusters at these boundaries are not completely replaced by shorter placeholder sequences, this leads to the presence of homologous sequence within flanking sequences in the kmers, hence reducing sensitivity in detecting rearrangement boundaries. To ensure replacing the whole homologous sequence block/IS clusters by short placeholder sequences, we can extend the genome coordinates of each repeated sequence for a number of base pairs in both directions, and/or to merge repeated sequences that are less than a number of base pairs distance apart.
