@@ -358,7 +358,7 @@ Set of kmers without N that are in reverse orientation in majority of the case g
 
 Set of kmers without N that are in reverse orientation in majority of the control genomes and forward in orientation in majority of case genomes
 
-4. myNoNintactk_other_set.txt (output of bash command before the script)
+5. myNoNintactk_other_set.txt (output of bash command before the script)
 
 Set of kmers without N that do not belong to "rev0fwd1_set" nor "rev1fwd0_set"
 
