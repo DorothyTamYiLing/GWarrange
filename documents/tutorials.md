@@ -116,8 +116,10 @@ Generate number of unique patterns and p value significance threshold informatio
 ```
 #Run inside corresponding *_ISreplaced_genomes directory
 
-#count_patterns.py is a script from pyseer package for calculating p-value threshold using Bonferroni correction
 ../scripts/count_patterns.py kmer_patterns.txt > count_pattern.txt
+
+#count_patterns.py is a script from pyseer package for calculating p-value threshold using Bonferroni correction
+
 ```
 Extract kmers with p value below the significance threshold:
 ```
@@ -318,10 +320,10 @@ pyseer --phenotypes ../example_data/Efaecium32genomes_pheno_1swap_4pyseer.txt \
 ```
 Generate number of unique patterns and p value significance threshold information:
 ```
-#count_patterns.py is a script from pyseer package for calculating p-value threshold using Bonferroni correction. 
 ../scripts/count_patterns.py kmer_patterns.txt > count_pattern.txt
 
-../scripts/count_patterns.py unitigs_kmer_patterns.txt > count_uni_pattern.txt 
+../scripts/count_patterns.py unitigs_kmer_patterns.txt > count_uni_pattern.txt
+#count_patterns.py is a script from pyseer package for calculating p-value threshold using Bonferroni correction. 
 ```
 Extract kmers/unitigs with p value below the the significance threshold:
 ```
@@ -549,11 +551,12 @@ pyseer --lmm --phenotypes ../example_data/prn_status_pheno_4pyseer.txt \
 
 Generate number of unique pattterns and p value significance threshold information:
 ```
-#count_patterns.py is a script from pyseer package for calculating p-value threshold using Bonferroni correction. 
-
 #For both ext7000_merge200_ISreplaced_genomes set and ext100_merge3_ISreplaced_genomes set
 #Run inside corresponding *_ISreplaced_genomes directory
+
 ./scripts/count_patterns.py kmer_patterns_covariate.txt > count_pattern.txt
+
+#count_patterns.py is a script from pyseer package for calculating p-value threshold using Bonferroni correction. 
 
 ```
 Extract kmers with p value below the the significance threshold:
