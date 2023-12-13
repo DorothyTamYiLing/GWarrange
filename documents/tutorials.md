@@ -622,16 +622,12 @@ Genome position of intact kmers without N from /ext100_merge3_ISreplaced_genomes
 
 Plots of intact kmers that show sequence rearrangements that are significantly associated with PRN expression phenotype.
 
-![myNoNintactk_rev0fwd1](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/a7bd07cc-5538-4c01-a3a8-fa80152d3412)
+<img width="1053" alt="Screenshot 2023-12-13 at 01 34 22" src="https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/cbcc34a4-fc21-442a-b9ca-6849f483db66">
 
-![myNoNintactk_rev1fwd0](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/0d89d495-32a1-400e-a2a9-321bc436dbf0)
+(Left: 7 intact kmers that are in forward orientation in half of PRN+ (1) genomes, as well as reverse in majority of PRN- (0) genomes;
+Right: 5 intact kmers that are in reverse orientation in half of PRN+ (1) genomes, as well as forward in majority of PRN- (0) genomes)
 
-Height of arrows corresponds to proportion of case/control genomes.
 
-(Above: 7 intact kmers that are in forward orientation in half of PRN+ (1) genomes, as well as reverse in majority of PRN- (0) genomes;
-Below: 5 intact kmers that are in reverse orientation in half of PRN+ (1) genomes, as well as forward in majority of PRN- (0) genomes)
-
-Colour indices refer to the "colour index" column in the corresponding *kmer4plot.txt file (with the same prefix), hence the corresponding kmers.
 
 **Important notes:**
 
