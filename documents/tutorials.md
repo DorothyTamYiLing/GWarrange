@@ -178,13 +178,13 @@ Note that the value used for -d parameter should be larger than the "Maximum siz
 
 **Visualising genome rearrangements that are captured by kmer**
 
-From genome set with 7000bp extension and 200bp merging, 1008 kmers are found to be split (_i.e._ flanking sequences mapped to different positions) when mapped to the original genomes. They can be found in ./kmers_withN/mysplitk_out.txt.
+From genome set with 7000bp extension and 200bp merging, 1008 kmers are found to be split (_i.e._ flanking sequences mapped to different positions) when mapped to the original genomes. They can be found in ./clus1clus2_47_ext7000_merge200_outdir/kmers_withN/mysplitk_out.txt.
 
 1) Plotting split kmers for visualising rearrangement boundaries
 
-Since kmers contain highly redundant information, only kmers with unique information (genome position, case and control count and proportion) are kept. They can be found in output file ./kmers_withN/myshort_splitk_out_uniq.txt.
+Since kmers contain highly redundant information, only kmers with unique information (genome position, case and control count and proportion) are kept. They can be found in output file ./clus1clus2_47_ext7000_merge200_outdir/kmers_withN/myshort_splitk_out_uniq.txt.
 
-Four rearrangement boundaries are found, and they potentially refer to two inversion events, i.e. between 43000bp and 3600000bp, as well as between 1500000bp and 2500000bp, one inversion nested within the other. The four boundaries can be indicated by sixteen different significant split kmers that are mapped to each of the boundary, split in case/control genomes, and in forward/reverse orientation (plots of four split kmers are shown below as examples). Full information of these kmers can be found in output file ./kmers_withN/mysplitk_out.txt.
+Four rearrangement boundaries are found, and they potentially refer to two inversion events, i.e. between 43000bp and 3600000bp, as well as between 1500000bp and 2500000bp, one inversion nested within the other. The four boundaries can be indicated by sixteen different significant split kmers that are mapped to each of the boundary, split in case/control genomes, and in forward/reverse orientation (plots of four split kmers are shown below as examples). Full information of these kmers can be found in output file ./clus1clus2_47_ext7000_merge200_outdir/kmers_withN/mysplitk_out.txt.
 
 Inversion within genome region 43000 and 3600000, 43000bp boundary, kmer being intact in case genomes and split in control genomes, in forward orientation:
 
@@ -206,7 +206,7 @@ Height of arrows corresponds to proportion of case/control genomes.
 
 2) Plotting intact kmers without N for visualising sequence content of rearrangement :
 
-Genome position of intact kmers without N from /ext100_merge3_ISreplaced_genomes (minimal IS extension and merging overlapping IS only) are plotted. Only kmers with unqiue genome position information (by rounding off to the nearest multiple of 1000) are kept for plotting (as shown in ./kmers_noN/*kmer4plot.txt files). 
+Genome position of intact kmers without N from /ext100_merge3_ISreplaced_genomes (minimal IS extension and merging overlapping IS only) are plotted. Only kmers with unqiue genome position information (by rounding off to the nearest multiple of 1000) are kept for plotting (as shown in ./clus1clus2_47_ext100_merge3_outdir/kmers_noN/*kmer4plot.txt files). 
 
 Plot of intact kmers that show rearrangements in two genome regions that are significantly associated with structural phenotype.
 
@@ -325,9 +325,9 @@ Generate number of unique patterns and p value significance threshold informatio
 ```
 Extract kmers/unitigs with p value below the the significance threshold:
 ```
-awk '{ if ($4 <= 1.92E-05) { print } }' ext100merge3_k200_min20samp_nopopctrl > sigk_pyseer.txt
+awk '{ if ($4 <= 2.29E-05) { print } }' ext100merge3_k200_min20samp_nopopctrl > sigk_pyseer.txt #kmer
 
-awk '{ if ($4 <= 7.62E-06) { print } }' ext100merge3_k200_min20samp_unitigs_nopopctrl > siguni_pyseer.txt
+awk '{ if ($4 <= 7.62E-06) { print } }' ext100merge3_k200_min20samp_unitigs_nopopctrl > siguni_pyseer.txt #unitig
 ```
 448,330 kmers and 3,737 unitigs are found to be significantly associated with chromosome structure. The sequences of which were extracted and placed in respective multifasta file.
 
@@ -353,7 +353,7 @@ paste -d \\n header.txt sigk_seq.txt > sigk_seq.fasta
 ```
 Due to the large number of significant kmers, only the kmers that contain "N" and the first 5000 kmers without "N" were used for structural analysis.
 ```
-#classifying kmers into those containing "N" and those do not contain "N"
+#classifying kmers into those containing "N" and those do not contain "N". Produce "sigk_noN.fasta" and "sigk_withN.fasta".
 python3 ../scripts/class_k.py --input sigk_seq.fasta --outdir .
 
 #extract first 5000 kmers without "N"
@@ -405,11 +405,11 @@ Note that the value used for -d parameter should be larger than the "Maximum siz
 
 **Visualising genome rearrangements that are captured by kmer**
 
-219 kmers are found to be split (_i.e._ flanking sequences mapped to different positions) when mapped to the original genomes.
+215 kmers are found to be split (_i.e._ flanking sequences mapped to different positions) when mapped to the original genomes. They can be found in ./Efaecium32genomes_ext100merge3_1swap_withNnoN5000_outdir/kmers_withN/mysplitk_out.txt.
 
 1) Plotting split kmers for visualising rearrangement boundaries
 
-Since kmers contain highly redundant information, only kmers with unique information (genome position, case and control count and proportion) are kept. They can be found in output file myshort_splitk_out_uniq.txt.
+Since kmers contain highly redundant information, only kmers with unique information (genome position, case and control count and proportion) are kept. They can be found in output file ./Efaecium32genomes_ext100merge3_1swap_withNnoN5000_outdir/kmers_withN/myshort_splitk_out_uniq.txt.
 
 Two rearrangement boundaries are found, and they potentially refer to a single inversion event between 72000bp and 2100000bp. All of the split kmers are found to be split in case geomes and intact in control genomes. This could be explained by the absence of IS elements in the rearrangement boundaries in case genomes, which has been confirmed by manual sequence check. The two boundaries can be indicated by four different significant split kmers that are mapped to each of the boundaries in forward/reverse orientation (plots of one of these kmers are shown below). Full information of these kmers can be found in output file mysplitk_out.txt.
 
@@ -435,7 +435,7 @@ No significant split unitigs are identified as unitig-caller are not able to gen
 
 2) Plotting intact unitigs (without N) for visualising sequence content of rearrangement :
 
-Genome position of unitigs from /ext100_merge3_ISreplaced_genomes (minimal IS extension and merging overlapping IS only) are plotted. Only unitigs with unqiue genome position information (by rounding off to the nearest multiple of 1000) are kept for plotting (as shown in *kmer4plot.txt files). 
+Genome position of unitigs from /ext100_merge3_ISreplaced_genomes (minimal IS extension and merging overlapping IS only) are plotted. Only unitigs with unqiue genome position information (by rounding off to the nearest multiple of 1000) are kept for plotting (as shown in ./Efaecium32genomes_ext100merge3_1swap_unitig_outdir/kmers_noN/*kmer4plot.txt files). 
 
 Plot of unitigs that showe rearrangements significantly associated with structure phenotype.
 
