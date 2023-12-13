@@ -232,7 +232,7 @@ Reference: Weigand, M.R., Williams, M.M., Peng, Y., Kania, D., Pawloski, L.C., T
 
 _Enterococcus faecium_'s genomes are known to be enriched with IS elements, which could play important role in their genome structure's diversification (Leavis _et al._ 2007). Genome structure of 75 _Enterococcus faecium_ were characterised by socru (Page _et al._ 2020), Among which, a subset of 32 genomes displaying two different chromosome structures (21 genomes with structure "0" and 11 genomes with structure "1") (See Fig. below) are used in GWAS, with structure information as phenotype. Structure phenotype of two pairs of genomes sre swapped for demonstration purpose. 
 
-![Screenshot 2023-08-01 222347](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/0f0c348f-936b-4983-be54-180cc6b8d838)
+<img width="602" alt="Screenshot 2023-10-05 234635" src="https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/05b4aa5b-71ea-4903-963f-ba5542adcac5">
 Fig : Two different chromosome structures are found among 32 _Enterococcus faecium_ genomes. 
 
 First, genomes asemblies from which genome rearrangements are detected are re-orientated by a chosen gene, i.e. dnaA. The location and orientation of dnaA in the genomens are obtained by blasting it with multifasta file of genome assemblies.
