@@ -87,6 +87,8 @@ fsm-lite -l clus1clus2_47_input.list -v -s 3 -S 44 -t tmp -m 200 -M 200 | gzip -
 Then, a kmer-based GWAS was conducted using pyseer with an aim to identify kmers whose presence-absence patterns were associated with chromosome structures phenotype. Population structure is not controlled.
 
 ```
+#Run inside corresponding *_ISreplaced_genomes directory
+
 #adding header to phenotype file for pyseer input format
 echo "samples binary" | cat - ../example_data/clus1clus2_pheno.txt > ../example_data/clus1clus2_pheno_4pyseer.txt
 
@@ -112,11 +114,15 @@ pyseer --phenotypes ../example_data/clus1clus2_pheno_4pyseer.txt \
 
 Generate number of unique patterns and p value significance threshold information:
 ```
+#Run inside corresponding *_ISreplaced_genomes directory
+
 #count_patterns.py is a script from pyseer package for calculating p-value threshold using Bonferroni correction
 ../scripts/count_patterns.py kmer_patterns.txt > count_pattern.txt
 ```
 Extract kmers with p value below the the significance threshold:
 ```
+#Run inside corresponding *_ISreplaced_genomes directory
+
 #For ext7000_merge200_ISreplaced_genomes set
 awk '{ if ($4 <= 4.59E-04) { print } }' clus1clus2_47_ext7000merge200_k200_MAF0.05_nopopctrl > sigk_pyseer.txt
 
@@ -128,6 +134,8 @@ The sequences of kmers that are found to be significantly associated with struct
 
 Extract significant kmer sequences and convert them into fasta format:
 ```
+#Run inside corresponding *_ISreplaced_genomes directory
+
 #get the seqeunce only
 awk '{print $1}' sigk_pyseer.txt > sigk_seq.txt 
 
