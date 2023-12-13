@@ -119,7 +119,7 @@ Generate number of unique patterns and p value significance threshold informatio
 #count_patterns.py is a script from pyseer package for calculating p-value threshold using Bonferroni correction
 ../scripts/count_patterns.py kmer_patterns.txt > count_pattern.txt
 ```
-Extract kmers with p value below the the significance threshold:
+Extract kmers with p value below the significance threshold:
 ```
 #Run inside corresponding *_ISreplaced_genomes directory
 
