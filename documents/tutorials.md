@@ -439,16 +439,13 @@ Genome position of unitigs from /ext100_merge3_ISreplaced_genomes (minimal IS ex
 
 Plot of unitigs that showe rearrangements significantly associated with structure phenotype.
 
-![myNoNintactk_rev0fwd1](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/a9ce4a68-3de4-48d1-b2ab-4675cc2ee8a9)
+![myNoNintactk_rev0fwd1_unitigs](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/313eba86-1052-48bb-ac29-c4e070cbf11b)
 
-![myNoNintactk_rev1fwd0](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/2799983d-f31f-4bdc-a200-6e4e58909c00)
-
-Height of arrows corresponds to proportion of case/control genomes.
+![myNoNintactk_rev1fwd0_unitigs](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/231b818a-df08-46f8-b64b-dba226a23494)
 
 (Above: 191 intact kmers that are in forward orientation in majority of structure "1" genomes, as well as in reverse orientation in majority of structure "0" genomes;
 Below: 370 intact kmers that are in reverse orientation in majority of structure "1" genomes, as well as in forward orientation in majority of structure "0" genomes)
 
-Colour indices refer to the "colour index" column in the corresponding *kmer4plot.txt file (with the same prefix), hence the corresponding unitigs.
 
 Page, A.J., Ainsworth, E.V. and Langridge, G.C., 2020. socru: typing of genome-level order and orientation around ribosomal operons in bacteria. Microbial Genomics, 6(7).
 
