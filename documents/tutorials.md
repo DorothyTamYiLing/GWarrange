@@ -178,13 +178,13 @@ Note that the value used for -d parameter should be larger than the "Maximum siz
 
 **Visualising genome rearrangements that are captured by kmer**
 
-From genome set with 7000bp extension and 200bp merging, 978 kmers are found to be split (_i.e._ flanking sequences mapped to different positions) when mapped to the original genomes.
+From genome set with 7000bp extension and 200bp merging, 1008 kmers are found to be split (_i.e._ flanking sequences mapped to different positions) when mapped to the original genomes. They can be found in ./kmers_withN/mysplitk_out.txt.
 
 1) Plotting split kmers for visualising rearrangement boundaries
 
-Since kmers contain highly redundant information, only kmers with unique information (genome position, case and control count and proportion) are kept. They can be found in output file myshort_splitk_out_uniq.txt.
+Since kmers contain highly redundant information, only kmers with unique information (genome position, case and control count and proportion) are kept. They can be found in output file ./kmers_withN/myshort_splitk_out_uniq.txt.
 
-Four rearrangement boundaries are found, and they potentially refer to two inversion events, i.e. between 43000bp and 3600000bp, as well as between 1500000bp and 2500000bp, one inversion nested within the other. The four boundaries can be indicated by sixteen different significant split kmers that are mapped to each of the boundary, split in case/control genomes, and in forward/reverse orientation (plots of four split kmers are shown below as examples). Full information of these kmers can be found in output file mysplitk_out.txt.
+Four rearrangement boundaries are found, and they potentially refer to two inversion events, i.e. between 43000bp and 3600000bp, as well as between 1500000bp and 2500000bp, one inversion nested within the other. The four boundaries can be indicated by sixteen different significant split kmers that are mapped to each of the boundary, split in case/control genomes, and in forward/reverse orientation (plots of four split kmers are shown below as examples). Full information of these kmers can be found in output file ./kmers_withN/mysplitk_out.txt.
 
 Inversion within genome region 43000 and 3600000, 43000bp boundary, kmer being intact in case genomes and split in control genomes, in forward orientation:
 
@@ -206,7 +206,7 @@ Height of arrows corresponds to proportion of case/control genomes.
 
 2) Plotting intact kmers without N for visualising sequence content of rearrangement :
 
-Genome position of intact kmers without N from /ext100_merge3_ISreplaced_genomes (minimal IS extension and merging overlapping IS only) are plotted. Only kmers with unqiue genome position information (by rounding off to the nearest multiple of 1000) are kept for plotting (as shown in *kmer4plot.txt files). 
+Genome position of intact kmers without N from /ext100_merge3_ISreplaced_genomes (minimal IS extension and merging overlapping IS only) are plotted. Only kmers with unqiue genome position information (by rounding off to the nearest multiple of 1000) are kept for plotting (as shown in ./kmers_noN/*kmer4plot.txt files). 
 
 Plot of intact kmers that show rearrangements in two genome regions that are significantly associated with structural phenotype.
 
@@ -230,7 +230,7 @@ Reference: Weigand, M.R., Williams, M.M., Peng, Y., Kania, D., Pawloski, L.C., T
 
 # Tutorial 2
 
-_Enterococcus faecium_'s genomes are known to be enriched with IS elements, which could play important role in their genome structure's diversification (Leavis _et al._ 2007). Genome structure of 75 _Enterococcus faecium_ were characterised by socru (Page _et al._ 2020), Among which, a subset of 32 genomes displaying two different chromosome structures (21 genomes with structure "0" and 11 genomes with structure "1") (See Fig. ) are used in GWAS, with structure information as phenotype. Structure phenotype of two pairs of genomes sre swapped for demonstration purpose. 
+_Enterococcus faecium_'s genomes are known to be enriched with IS elements, which could play important role in their genome structure's diversification (Leavis _et al._ 2007). Genome structure of 75 _Enterococcus faecium_ were characterised by socru (Page _et al._ 2020), Among which, a subset of 32 genomes displaying two different chromosome structures (21 genomes with structure "0" and 11 genomes with structure "1") (See Fig. below) are used in GWAS, with structure information as phenotype. Structure phenotype of two pairs of genomes sre swapped for demonstration purpose. 
 
 ![Screenshot 2023-08-01 222347](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/0f0c348f-936b-4983-be54-180cc6b8d838)
 Fig : Two different chromosome structures are found among 32 _Enterococcus faecium_ genomes. 
