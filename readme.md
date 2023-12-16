@@ -1,6 +1,17 @@
 # Introduction
 This pipeline detects and visualises phenotype-associated genome rearrangement events in bacterial genomes that are mediated by homologous recombination between repetitive elements (such as IS elements). 
 
+
+# Requirements:
+
+pyseer 1.3.10
+
+blastn: 2.2.31+, R 4.2.2, Python 3.9.16
+
+python modules: argparse, SeqIO, csv, pandas, gzip, os, Bio.Seq
+
+R modules: optparse, plyr, ggplot2, ggforce, ggpubr
+
 # Installation
 genome_rearrangement can be installed using the `git clone` command
 ```
@@ -106,15 +117,5 @@ From the output of pyseer, the k-mers/unitigs that are significantly associated 
 Range of IS elements can be found in https://github.com/thanhleviet/ISfinder-sequences for multiple bacterial species.
 
 
-
-# Requirements:
-
-pyseer 1.3.10
-
-blastn: 2.2.31+, R 4.2.2, Python 3.9.16
-
-python modules: argparse, SeqIO, csv, pandas, gzip, os, Bio.Seq
-
-R modules: optparse, plyr, ggplot2, ggforce, ggpubr
 
 
