@@ -2,7 +2,7 @@
 This pipeline detects and visualises phenotype-associated genome rearrangement events in bacterial genomes that are mediated by homologous recombination between repetitive elements (such as IS elements). 
 
 
-# Requirements:
+# Requirements
 
 pyseer 1.3.10
 
