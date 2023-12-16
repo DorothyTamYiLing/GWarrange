@@ -16,36 +16,36 @@ Fig : Two different chromosome structures that are found among 47 _Bordetella pe
 
 Go to the top level of /genome_rearrangement directory
 ```
-cd ./genome_rearrangement
+cd /path/to/genome_rearrangement
 ```
 
 First, the genome assemblies multifasta file is prepared by concatenating the genome fasta files.
 ```
 #concatenating genome fasta files for use
-cat ./example_data/example_genomes/clus1clus2_47_genomes/*fasta.gz > ./example_data/clus1clus2_47.fna.gz
+cat example_data/example_genomes/clus1clus2_47_genomes/*fasta.gz > example_data/clus1clus2_47.fna.gz
 ```
 
 Genomes assemblies from which genome rearrangements are detected are re-orientated by a chosen gene. In the case of _Boredetella pertussis_, the gene is _gidA_ since it is the first gene after origin of replication. The location and orientation of _gidA_ in the genomes are obtained by blasting it with multifasta file of genome assemblies.
 ```
 #unzip the genome file if neccesasry
-gunzip ./example_data/clus1clus2_47.fna.gz
+gunzip example_data/clus1clus2_47.fna.gz
 
 #blast gidA with genomes
-blastn -query ./example_data/gidA.fasta \
--subject ./example_data/clus1clus2_47.fna \
+blastn -query example_data/gidA.fasta \
+-subject example_data/clus1clus2_47.fna \
 -outfmt 6 -out clus1clus2_47_gidA_out.txt
 ```
 
 Then, genome assemblies are re-orientated according to the position and orientation of _gidA_ in the genomes, using the script fix_genome.py:
 ```
-python3 ./scripts/fix_genome.py --input ./example_data/clus1clus2_47.fna --mycoor clus1clus2_47_gidA_out.txt
+python3 scripts/fix_genome.py --input example_data/clus1clus2_47.fna --mycoor clus1clus2_47_gidA_out.txt
 ```
 
 The output multifasta file name for the genomes with the same orientation is "fixed_genomes.fasta".
 
 Genome rearrangments in _Bordetella pertussis_ are believed to be largely mediated by homologous recombination between insertion sequence (IS) elements (such as IS481 and IS110). Location of target IS elements in the genomes are obtained through BLAST. Sequences of more than one target IS element can be placed in the same multifasta file for obtaining their genome locations in all genomes at once.
 ```
-blastn -query ./example_data/IS_NZ_CP025371.1.fasta \
+blastn -query example_data/IS_NZ_CP025371.1.fasta \
 -subject fixed_genomes.fasta \
 -outfmt 6 -out clus1clus2_47_blastIS_out.txt
 ```
@@ -54,7 +54,7 @@ In addition, genome rearrangements in _Bordetella pertussis_ have also been obse
 
 Here, sequences extending 7000bp to both direction from each IS are replaced. IS elements that are no more than 200bp apart (after extension) in each genome are also "merged". Then, each of these "extended and merged" IS elements are replaced with shorter placedholder sequences (N x 15). A seperate set of IS-replaced genomes are also produced by enabling performing minimal IS extension (i.e. 100bp to both direction) and merging overlapping IS only (i.e. ISs that are less than 3bp apart) through passing a string argument "on" to the -s flag.
 ```
-bash ./scripts/merge_replace_IS.sh -g fixed_genomes.fasta -i clus1clus2_47_blastIS_out.txt -e 7000 -m 200 -s "on"
+bash scripts/merge_replace_IS.sh -g fixed_genomes.fasta -i clus1clus2_47_blastIS_out.txt -e 7000 -m 200 -s "on"
 ```
 
 Each set of IS-replaced genomes using different IS merging and extending parameters are output into new directories "ext7000_merge200_ISreplaced_genomes" and "ext100_merge3_ISreplaced_genomes" respectively.
@@ -65,7 +65,7 @@ Prior to GWAS, each set of IS-replaced genomes using different IS merging and ex
 
 ```
 #For ext7000_merge200_ISreplaced_genomes set
-cd ./ext7000_merge200_ISreplaced_genomes
+cd ext7000_merge200_ISreplaced_genomes
 
 #generating fsm-ite input file
 for f in *_ext7000_merge200_ISreplaced.fasta; do id=$(basename "$f" _ext7000_merge200_ISreplaced.fasta); echo $id $f; done > clus1clus2_47_input.list
@@ -76,7 +76,7 @@ fsm-lite -l clus1clus2_47_input.list -v -s 3 -S 44 -t tmp -m 200 -M 200 | gzip -
 ########################################################################
 
 #For ext100_merge3_ISreplaced_genomes set
-cd ./ext100_merge3_ISreplaced_genomes
+cd ext100_merge3_ISreplaced_genomes
 
 for f in *_ext100_merge3_ISreplaced.fasta; do id=$(basename "$f" _ext100_merge3_ISreplaced.fasta); echo $id $f; done > clus1clus2_47_input.list
 
@@ -164,16 +164,16 @@ Then, these kmers are blasted with the original genome set for studying potentia
 #run in the top level of /genome_rearrangement directory
 
 #For ext7000_merge200_ISreplaced_genomes set
-bash ./scripts/main.sh -k ./ext7000_merge200_ISreplaced_genomes/sigk_seq.fasta \
--g ./example_data/clus1clus2_47.fna.gz \
--p ./example_data/clus1clus2_pheno.txt -d 110000 -f 30 \
--o ./clus1clus2_47_ext7000_merge200_outdir -s 4300 -x 2 -y 1000
+bash scripts/main.sh -k ext7000_merge200_ISreplaced_genomes/sigk_seq.fasta \
+-g example_data/clus1clus2_47.fna.gz \
+-p example_data/clus1clus2_pheno.txt -d 110000 -f 30 \
+-o clus1clus2_47_ext7000_merge200_outdir -s 4300 -x 2 -y 1000
 
 #For ext100_merge3_ISreplaced_genomes set
-bash ./scripts/main.sh -k ./ext100_merge3_ISreplaced_genomes/sigk_seq.fasta \
--g ./example_data/clus1clus2_47.fna \
--p ./example_data/clus1clus2_pheno.txt -d 5000 -f 30 \
--o ./clus1clus2_47_ext100_merge3_outdir -s 4300 -x 2 -y 1000
+bash scripts/main.sh -k ext100_merge3_ISreplaced_genomes/sigk_seq.fasta \
+-g example_data/clus1clus2_47.fna \
+-p example_data/clus1clus2_pheno.txt -d 5000 -f 30 \
+-o clus1clus2_47_ext100_merge3_outdir -s 4300 -x 2 -y 1000
 
 ```
 
@@ -181,13 +181,13 @@ Note that the value used for -d parameter should be larger than the "Maximum siz
 
 **Visualising genome rearrangements that are captured by kmer**
 
-From genome set with 7000bp extension and 200bp merging, 1008 kmers are found to be split (_i.e._ flanking sequences mapped to different positions) when mapped to the original genomes. They can be found in ./clus1clus2_47_ext7000_merge200_outdir/kmers_withN/mysplitk_out.txt.
+From genome set with 7000bp extension and 200bp merging, 1008 kmers are found to be split (_i.e._ flanking sequences mapped to different positions) when mapped to the original genomes. They can be found in clus1clus2_47_ext7000_merge200_outdir/kmers_withN/mysplitk_out.txt.
 
 1) Plotting split kmers for visualising rearrangement boundaries
 
 Since kmers contain highly redundant information, only kmers with unique information (genome position, case and control count and proportion) are kept. They can be found in output file ./clus1clus2_47_ext7000_merge200_outdir/kmers_withN/myshort_splitk_out_uniq.txt.
 
-Four rearrangement boundaries are found, and they potentially refer to two inversion events, i.e. between 43000bp and 3600000bp, as well as between 1500000bp and 2500000bp, one inversion nested within the other. The four boundaries can be indicated by sixteen different significant split kmers that are mapped to each of the boundary, split in case/control genomes, and in forward/reverse orientation (plots of four split kmers are shown below as examples). Full information of these kmers can be found in output file ./clus1clus2_47_ext7000_merge200_outdir/kmers_withN/mysplitk_out.txt.
+Four rearrangement boundaries are found, and they potentially refer to two inversion events, i.e. between 43000bp and 3600000bp, as well as between 1500000bp and 2500000bp, one inversion nested within the other. The four boundaries can be indicated by sixteen different significant split kmers that are mapped to each of the boundary, split in case/control genomes, and in forward/reverse orientation (plots of four split kmers are shown below as examples). Full information of these kmers can be found in output file clus1clus2_47_ext7000_merge200_outdir/kmers_withN/mysplitk_out.txt.
 
 Inversion within genome region 43000 and 3600000, 43000bp boundary, kmer being intact in case genomes and split in control genomes, in forward orientation:
 
@@ -240,48 +240,48 @@ First, genomes asemblies from which genome rearrangements are detected are re-or
 
 Go to the top level of /genome_rearrangement directory
 ```
-cd ./genome_rearrangement
+cd /path/to/genome_rearrangement
 ```
 First, the genome assemblies multifasta file is prepared by concatenating genome fasta files.
 ```
 #concatenating genome fasta files for use
-cat ./example_data/example_genomes/Efaecium_32genomes/*fasta.gz > ./example_data/32genomes.fna.gz
+cat example_data/example_genomes/Efaecium_32genomes/*fasta.gz > example_data/32genomes.fna.gz
 ```
 
 Genomes asemblies from which genome rearrangements are detected are re-orientated by a chosen gene. In the case of _Enterococcus faecium_, the chosen gene can be dnaA. The location and orientation of dnaA in the genomes are obtained by blasting it with multifasta file of genome assemblies.
 
 ```
 #unzip the genome file if neccesasry
-gunzip ./example_data/32genomes.fna.gz
+gunzip example_data/32genomes.fna.gz
 
 #blast dnaA with genomes
-blastn -query ./example_data/dnaA.fasta \
--subject ./example_data/32genomes.fna \
+blastn -query example_data/dnaA.fasta \
+-subject example_data/32genomes.fna \
 -outfmt 6 -out 32genomes_dnaA_out.txt
 ```
 
 Then, genome assemblies are re-orientated according to the position and orientation of dnaA in the genomes, using the script fix_genome.py:
 
 ```
-python3 ./scripts/fix_genome.py --input ./example_data/32genomes.fna --mycoor 32genomes_dnaA_out.txt
+python3 scripts/fix_genome.py --input example_data/32genomes.fna --mycoor 32genomes_dnaA_out.txt
 ```
 The output file name for the genomes with same orientation is "fixed_genomes.fasta".
 
 Location of IS elements in the genomes are obtained by blasting with target IS sequences. Sequences of more than one target IS elements can be placed in the same multifasta file for obtaining their genome locations in all genomes at once.
 
 ```
-blastn -query ./example_data/IS30_IS1252_in_HOU503_657692to658645.fasta \
+blastn -query example_data/IS30_IS1252_in_HOU503_657692to658645.fasta \
 -subject fixed_genomes.fasta \
 -outfmt 6 -out blastIS30_IS1252_in_HOU503_32genomes_out.txt
 ```
 
 Here, sequences extending 7000bp to both directions from each IS are replaced. IS elements that are no more than 200bp apart (after extension) in each genome are also "merged". Then, each of these "extended and merged" IS element are replaced with shorter placedholder sequences (N x 15). A seperate set of IS-replaced genomes are also produced by enabling performing minimal IS extension (i.e. 100bp) and merging overlapping IS only (i.e. IS that are less than 3 bp apart) through passing string argument "on" to the -s flag.
 ```
-bash ./scripts/merge_replace_IS.sh -g fixed_genomes.fasta -i blastIS30_IS1252_in_HOU503_32genomes_out.txt -e 7000 -m 200 -s "on"
+bash scripts/merge_replace_IS.sh -g fixed_genomes.fasta -i blastIS30_IS1252_in_HOU503_32genomes_out.txt -e 7000 -m 200 -s "on"
 ```
 Prior to GWAS, each set of IS-replaced genomes using different IS merging and extending parameters are used for generating kmers and unitigs. Here, we use the kmer generation tool fsm-lite and unitig generation tool unitig-caller to generate kmers and unitigs from genomes in directory /ext100_merge3_ISreplaced_genomes.
 ```
-cd ./ext100_merge3_ISreplaced_genomes
+cd ext100_merge3_ISreplaced_genomes
 
 #generating fsm-ite input file
 for f in *_ext100_merge3_ISreplaced.fasta; do id=$(basename "$f" _ext100_merge3_ISreplaced.fasta); echo $id $f; done > 32genomes_input.list
@@ -391,26 +391,26 @@ Then, these kmers and unitigs are blasted with the original genome set for study
 ```
 #run in the top level of /genome_rearrangement directory
 #For ext100_merge3_ISreplaced_genomes set k-mers with N 
-bash ./scripts/main.sh -k ./ext100_merge3_ISreplaced_genomes/sigkwithN_noN5000.fasta \
--g ./example_data/Efaecium_32genomes.fna.gz \
--p ./example_data/Efaecium32genomes_pheno_1swap.txt -d 3000 -f 30 \
--o ./Efaecium32genomes_ext100merge3_1swap_withNnoN5000_outdir -s 3000 -x 2 -y 1000
+bash scripts/main.sh -k ext100_merge3_ISreplaced_genomes/sigkwithN_noN5000.fasta \
+-g example_data/Efaecium_32genomes.fna.gz \
+-p example_data/Efaecium32genomes_pheno_1swap.txt -d 3000 -f 30 \
+-o Efaecium32genomes_ext100merge3_1swap_withNnoN5000_outdir -s 3000 -x 2 -y 1000
 
 #For ext100_merge3_ISreplaced_genomes set unitigs
-bash ./scripts/main.sh -k ./ext100_merge3_ISreplaced_genomes/siguni_seq.fasta \
--g ./example_data/Efaecium_32genomes.fna.gz \
--p ./example_data/Efaecium32genomes_pheno_1swap.txt -d 3000 -f 30 \
--o ./Efaecium32genomes_ext100merge3_1swap_unitig_outdir -s 3000 -x 2 -y 1000
+bash scripts/main.sh -k ext100_merge3_ISreplaced_genomes/siguni_seq.fasta \
+-g example_data/Efaecium_32genomes.fna.gz \
+-p example_data/Efaecium32genomes_pheno_1swap.txt -d 3000 -f 30 \
+-o Efaecium32genomes_ext100merge3_1swap_unitig_outdir -s 3000 -x 2 -y 1000
 ```
 Note that the value used for -d parameter should be larger than the "Maximum size of merged ISs" value in "ext100_merge3_mergedISstat.txt".
 
 **Visualising genome rearrangements that are captured by kmer**
 
-215 kmers are found to be split (_i.e._ flanking sequences mapped to different positions) when mapped to the original genomes. They can be found in ./Efaecium32genomes_ext100merge3_1swap_withNnoN5000_outdir/kmers_withN/mysplitk_out.txt.
+215 kmers are found to be split (_i.e._ flanking sequences mapped to different positions) when mapped to the original genomes. They can be found in Efaecium32genomes_ext100merge3_1swap_withNnoN5000_outdir/kmers_withN/mysplitk_out.txt.
 
 1) Plotting split kmers for visualising rearrangement boundaries
 
-Since kmers contain highly redundant information, only kmers with unique information (genome position, case and control count and proportion) are kept. They can be found in output file ./Efaecium32genomes_ext100merge3_1swap_withNnoN5000_outdir/kmers_withN/myshort_splitk_out_uniq.txt.
+Since kmers contain highly redundant information, only kmers with unique information (genome position, case and control count and proportion) are kept. They can be found in output file Efaecium32genomes_ext100merge3_1swap_withNnoN5000_outdir/kmers_withN/myshort_splitk_out_uniq.txt.
 
 Two rearrangement boundaries are found, and they potentially refer to a single inversion event between 72000bp and 2100000bp. All of the split kmers are found to be split in case geomes and intact in control genomes. This could be explained by the absence of IS elements in the rearrangement boundaries in case genomes, which has been confirmed by manual sequence check. The two boundaries can be indicated by four different significant split kmers that are mapped to each of the boundaries in forward/reverse orientation (plots of one of these kmers are shown below). Full information of these kmers can be found in output file mysplitk_out.txt.
 
@@ -457,46 +457,46 @@ This tutorial is based on 468 _Bordetella pertussis_ genomes with pertactin (PRN
 
 Go to the top level of /genome_rearrangement directory
 ```
-cd ./genome_rearrangement
+cd /path/to/genome_rearrangement
 ```
 
 First, the genome assemblies multifasta file is prepared by concatenating genome fasta files.
 ```
 #concatenating genome fasta files for use
-cat ./example_data/example_genomes/PRN_468/*fasta.gz > ./example_data/PRN_468.fna.gz
+cat example_data/example_genomes/PRN_468/*fasta.gz > example_data/PRN_468.fna.gz
 ```
 
 Genomes asemblies from which genome rearrangements are detected are re-orientated by a chosen gene, i.e. gidA. The location and orientation of gidA in the genomens are obtained by blasting it with multifasta file of genome assemblies.
 ```
 #unzip the genome file if neccesasry
-gunzip ./example_data/PRN_468.fna.gz
+gunzip example_data/PRN_468.fna.gz
 
 #blast gidA with genomes
-blastn -query ./example_data/gidA.fasta \
--subject ./example_data/PRN_468.fna \
+blastn -query example_data/gidA.fasta \
+-subject example_data/PRN_468.fna \
 -outfmt 6 -out PRN_468_gidA_out.txt
 ```
 Then, genome assemblies are re-orientated according to the position and orientation of gidA in the genomes, using the script fix_genome.py:
 ```
-python3 ./scripts/fix_genome.py --input ./example_data/PRN_468.fna --mycoor PRN_468_gidA_out.txt
+python3 scripts/fix_genome.py --input example_data/PRN_468.fna --mycoor PRN_468_gidA_out.txt
 ```
 The output file name for the genomes with same orientation is "fixed_genomes.fasta".
 
 Location of IS elements in the genomes are obtained by blasting with target IS sequences. Sequences of more than one target IS element can be placed in the same multifasta file for obtaining their genome locations in all genomes at once.
 ```
-blastn -query ./example_data/IS_NZ_CP025371.1.fasta \
+blastn -query example_data/IS_NZ_CP025371.1.fasta \
 -subject fixed_genomes.fasta \
 -outfmt 6 -out PRN_468_blastIS_out.txt
 ```
 
 Here, sequences extending 7000bp to both directions from each IS are replaced. IS elements that are no more than 200bp apart (after extension) in each genome are also "merged". Then, each of these "extended and merged" IS element are replaced with shorter placedholder sequences (N x 15). A seperate set of IS-replaced genomes are also produced by enabling performing minimal IS extension (i.e. 100bp) and merging overlapping IS only (i.e. IS that are less than 3 bp apart) through passing string argument "on" to the -s flag.
 ```
-bash ./scripts/merge_replace_IS.sh -g fixed_genomes.fasta -i PRN_468_blastIS_out.txt -e 7000 -m 200 -s "on"
+bash scripts/merge_replace_IS.sh -g fixed_genomes.fasta -i PRN_468_blastIS_out.txt -e 7000 -m 200 -s "on"
 ```
 Prior to GWAS, each set of IS-replaced genomes using different IS merging and extending parameters are used for generating kmers.
 ```
 #For ext7000_merge200_ISreplaced_genomes set
-cd ./ext7000_merge200_ISreplaced_genomes
+cd ext7000_merge200_ISreplaced_genomes
 
 #generating fsm-ite input file
 for f in *_ext7000_merge200_ISreplaced.fasta; do id=$(basename "$f" _ext7000_merge200_ISreplaced.fasta); echo $id $f; done > PRN_468_input.list
@@ -508,7 +508,7 @@ fsm-lite -l PRN_468_input.list -v -s 24 -S 444 -t tmp -m 200 -M 200 | gzip - > P
 ##############################################################################
 
 #For ext100_merge3_ISreplaced_genomes set
-cd ./ext100_merge3_ISreplaced_genomes
+cd ext100_merge3_ISreplaced_genomes
 
 #generating fsm-ite input file
 for f in *_ext100_merge3_ISreplaced.fasta; do id=$(basename "$f" _ext100_merge3_ISreplaced.fasta); echo $id $f; done > PRN_468_input.list
@@ -548,7 +548,7 @@ Generate number of unique patterns and p value significance threshold informatio
 ```
 #Run inside corresponding *_ISreplaced_genomes directory
 
-./scripts/count_patterns.py kmer_patterns_covariate.txt > count_pattern.txt
+scripts/count_patterns.py kmer_patterns_covariate.txt > count_pattern.txt
 
 #count_patterns.py is a script from pyseer package for calculating p-value threshold using Bonferroni correction. 
 
@@ -595,16 +595,16 @@ Then, these kmers are blasted with the original genome set for studying potentia
 #run in the first level of /genome_rearrangement directory
 
 #For ext7000_merge200_ISreplaced_genomes set
-bash ./scripts/main.sh -k ./ext7000_merge200_ISreplaced_genomes/sigk_seq.fasta \
--g ./example_data/PRN_468.fna \
--p ./example_data/prn_status_pheno.txt -d 110000 -f 30 \
--o ./PRN_468_ext7000_merge200_outdir -s 4300 -x 2 -y 1000
+bash scripts/main.sh -k ext7000_merge200_ISreplaced_genomes/sigk_seq.fasta \
+-g example_data/PRN_468.fna \
+-p example_data/prn_status_pheno.txt -d 110000 -f 30 \
+-o PRN_468_ext7000_merge200_outdir -s 4300 -x 2 -y 1000
 
 #For ext100_merge3_ISreplaced_genomes set
-bash ./scripts/main.sh -k ./ext100_merge3_ISreplaced_genomes/sigk_seq.fasta \
--g ./example_data/PRN_468.fna.gz \
--p ./example_data/prn_status_pheno.txt -d 5000 -f 30 \
--o ./PRN_468_ext100_merge3_outdir -s 4300 -x 2 -y 1000
+bash scripts/main.sh -k ext100_merge3_ISreplaced_genomes/sigk_seq.fasta \
+-g example_data/PRN_468.fna.gz \
+-p example_data/prn_status_pheno.txt -d 5000 -f 30 \
+-o PRN_468_ext100_merge3_outdir -s 4300 -x 2 -y 1000
 
 ```
 
