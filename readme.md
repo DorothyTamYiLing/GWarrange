@@ -47,7 +47,8 @@ Arguments:
 Example:
 
 ```
-bash ./scripts/main.sh -k allsigk.fasta -g genomes.fna.gz -p phenotye.txt -o output_dir -f 30 -d 200000 -x 2 -y 100 
+cd /path/to/genome_rearrangement
+bash scripts/main.sh -k allsigk.fasta -g genomes.fna.gz -p phenotye.txt -o output_dir -f 30 -d 200000 -x 2 -y 100 
 
 ```
  
