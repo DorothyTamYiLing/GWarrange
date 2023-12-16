@@ -162,6 +162,7 @@ Then, these kmers are blasted with the original genome set for studying potentia
 
 ```
 #run in the top level of /genome_rearrangement directory
+cd /path/to/genome_rearrangement
 
 #For ext7000_merge200_ISreplaced_genomes set
 bash scripts/main.sh -k ext7000_merge200_ISreplaced_genomes/sigk_seq.fasta \
@@ -390,6 +391,8 @@ Then, these kmers and unitigs are blasted with the original genome set for study
 
 ```
 #run in the top level of /genome_rearrangement directory
+cd /path/to/genome_rearrangement
+
 #For ext100_merge3_ISreplaced_genomes set k-mers with N 
 bash scripts/main.sh -k ext100_merge3_ISreplaced_genomes/sigkwithN_noN5000.fasta \
 -g example_data/Efaecium_32genomes.fna.gz \
@@ -592,7 +595,8 @@ paste -d \\n header.txt sigk_seq.txt > sigk_seq.fasta
 Then, these kmers are blasted with the original genome set for studying potential genome rearrangements that are captured by them, implemented by the following script:
 
 ```
-#run in the first level of /genome_rearrangement directory
+#run in the top level of /genome_rearrangement directory
+cd /path/to/genome_rearrangement
 
 #For ext7000_merge200_ISreplaced_genomes set
 bash scripts/main.sh -k ext7000_merge200_ISreplaced_genomes/sigk_seq.fasta \
