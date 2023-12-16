@@ -21,7 +21,8 @@ git clone https://github.com/DorothyTamYiLing/genome_rearrangement.git
 
 ## For detecting genome rearrangement in genomes
 ```
-bash ./scripts/main.sh -k <sigk> -g <genomes> -p <phenotype> -o <output directory> -f <flanking seqeunces minimum length> -d <replaced size>
+cd /path/to/genome_rearrangement
+bash scripts/main.sh -k <sigk> -g <genomes> -p <phenotype> -o <output directory> -f <flanking seqeunces minimum length> -d <replaced size>
 
 ```
 
