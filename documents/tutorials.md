@@ -186,7 +186,7 @@ From genome set with 7000bp extension and 200bp merging, 1008 kmers are found to
 
 1) Plotting split kmers for visualising rearrangement boundaries
 
-Since kmers contain highly redundant information, only kmers with unique information (genome position, case and control count and proportion) are kept. They can be found in output file ./clus1clus2_47_ext7000_merge200_outdir/kmers_withN/myshort_splitk_out_uniq.txt.
+Since kmers contain highly redundant information, only kmers with unique information (genome position, case and control count and proportion) are kept. They can be found in output file clus1clus2_47_ext7000_merge200_outdir/kmers_withN/myshort_splitk_out_uniq.txt.
 
 Four rearrangement boundaries are found, and they potentially refer to two inversion events, i.e. between 43000bp and 3600000bp, as well as between 1500000bp and 2500000bp, one inversion nested within the other. The four boundaries can be indicated by sixteen different significant split kmers that are mapped to each of the boundary, split in case/control genomes, and in forward/reverse orientation (plots of four split kmers are shown below as examples). Full information of these kmers can be found in output file clus1clus2_47_ext7000_merge200_outdir/kmers_withN/mysplitk_out.txt.
 
