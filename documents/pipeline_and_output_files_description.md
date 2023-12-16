@@ -147,7 +147,7 @@ output files:
 
 3. kmer_genomeappearonce.txt (blast hit of k-mers that do not fulfill criteria 4, k-mers showing one blast hit to at least one genome) <sup> 1 </sup>
 
-4. kmer_with_multi_hits.txt (blast hit of k-mers that do not fulfill criteria 4, k-mers showing more than two blast hit to at least one genome) <sup> 1 </sup>
+4. kmer_with_multi_hits.txt (blast hit of k-mers that do not fulfill criteria 4, k-mers showing more than two blast hits to at least one genome) <sup> 1 </sup>
 
 5. kmer_with_alignlen_issue.txt (blast hit of k-mers that do not fulfill criteria 4, k-mers missing upstream or downstream hit) <sup> 1 </sup>
 
