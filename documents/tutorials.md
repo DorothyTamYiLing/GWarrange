@@ -438,7 +438,7 @@ No significant split unitigs are identified as unitig-caller are not able to gen
 
 2) Plotting intact unitigs (without N) for visualising sequence content of rearrangement :
 
-Genome position of unitigs from /ext100_merge3_ISreplaced_genomes (minimal IS extension and merging overlapping IS only) are plotted. Only unitigs with unqiue genome position information (by rounding off to the nearest multiple of 1000) are kept for plotting (as shown in Efaecium32genomes_ext100merge3_1swap_unitig_outdir/kmers_noN/*kmer4plot.txt files). Plots for intact kmers can be found in folder Efaecium32genomes_ext100merge3_1swap_unitig_outdir/kmers_noN.
+Genome position of unitigs from /ext100_merge3_ISreplaced_genomes (minimal IS extension and merging overlapping IS only) are plotted. Only unitigs with unqiue genome position information (by rounding off to the nearest multiple of 1000) are kept for plotting (as shown in Efaecium32genomes_ext100merge3_1swap_unitig_outdir/kmers_noN/*kmer4plot.txt files). Plots for unitigs can be found in folder Efaecium32genomes_ext100merge3_1swap_unitig_outdir/kmers_noN.
 
 Plot of unitigs that showe rearrangements significantly associated with structure phenotype.
 
