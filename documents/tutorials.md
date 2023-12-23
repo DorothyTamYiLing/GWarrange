@@ -302,6 +302,8 @@ ls -d -1 $PWD/*.fasta > input.txt
 
 #running unitig-caller
 unitig-caller --call --rtab --pyseer --refs input.txt --out unitigcall_out
+
+gzip unitigcall_out.pyseer
 ```
 Then, kmer-based and unitig-based GWAS are conducted using pyseer with an aim to identify kmers/unitigs whose presence-absence patterns are associated with chromosome structure phenotype. Population structure is not controlled.
 ```
