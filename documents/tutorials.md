@@ -408,13 +408,13 @@ cd /path/to/genome_rearrangement
 
 #For ext100_merge3_ISreplaced_genomes set k-mers with N 
 bash scripts/main.sh -k ext100_merge3_ISreplaced_genomes/sigkwithN_noN5000.fasta \
--g example_data/Efaecium_32genomes.fna.gz \
+-g example_data/32genomes.fna.gz \
 -p example_data/Efaecium32genomes_pheno_1swap.txt -d 3000 -f 30 \
 -o Efaecium32genomes_ext100merge3_1swap_withNnoN5000_outdir -s 3000 -x 2 -y 1000
 
 #For ext100_merge3_ISreplaced_genomes set unitigs
 bash scripts/main.sh -k ext100_merge3_ISreplaced_genomes/siguni_seq.fasta \
--g example_data/Efaecium_32genomes.fna.gz \
+-g example_data/32genomes.fna.gz \
 -p example_data/Efaecium32genomes_pheno_1swap.txt -d 3000 -f 30 \
 -o Efaecium32genomes_ext100merge3_1swap_unitig_outdir -s 3000 -x 2 -y 1000
 ```
