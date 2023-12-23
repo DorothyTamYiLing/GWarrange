@@ -1,6 +1,8 @@
 # Introduction
 This pipeline detects and visualises phenotype-associated genome rearrangement events in bacterial genomes that are mediated by homologous recombination between repetitive elements (such as IS elements). 
 
+Currently, this package only supports binary phenotypes.
+
 
 # Requirements
 
