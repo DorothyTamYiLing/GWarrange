@@ -294,7 +294,7 @@ for f in *_ext100_merge3_ISreplaced.fasta; do id=$(basename "$f" _ext100_merge3_
 
 #generating kmers with size of 200 bases kmers present in at least 20 samples
 
-fsm-lite -l input.list -v -s 20 -S 30 -t tmp -m 200 -M 200 | gzip - > ext100merge3_k200_output.txt.gz
+fsm-lite -l 32genomes_input.list -v -s 20 -S 30 -t tmp -m 200 -M 200 | gzip - > ext100merge3_k200_output.txt.gz
 
 #generating input file for unitig-caller
 ls -d -1 $PWD/*.fasta > input.txt
