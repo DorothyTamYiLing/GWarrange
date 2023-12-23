@@ -101,7 +101,7 @@ It is advised to perform extension and merging with caution, as any genome rearr
 bash merge_replace_IS.sh -g fixed_genomes.fasta -i <blast outout file fo repeated seqeunces location in genomes> \
 -e <number of bp to extend from each side of each IS, default:100> \
 -m <maximum number of bp for mergeing adjacent repeated sequences, default:3> \
--s <"on" or "off" string argument for outputting separate set of genomes with minimal extension and merging overlapping repeated seqeunces only>
+-s <"on" or "off" string argument for outputting separate set of genomes with minimal extension and merging overlapping repeated seqeunces only (i.e. using the default values)>
 ```
 Example:
 ```
