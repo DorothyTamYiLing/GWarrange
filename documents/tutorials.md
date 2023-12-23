@@ -117,7 +117,7 @@ Generate number of unique patterns and p value significance threshold informatio
 ```
 #Run inside corresponding *_ISreplaced_genomes directory
 
-../scripts/count_patterns.py kmer_patterns.txt > count_pattern.txt
+python3 ../scripts/count_patterns.py kmer_patterns.txt > count_pattern.txt
 
 #count_patterns.py is a script from pyseer package for calculating p-value threshold using Bonferroni correction
 
@@ -320,7 +320,7 @@ pyseer --phenotypes ../example_data/Efaecium32genomes_pheno_1swap_4pyseer.txt \
 ```
 Generate number of unique patterns and p value significance threshold information:
 ```
-../scripts/count_patterns.py kmer_patterns.txt > count_pattern.txt
+python3 ../scripts/count_patterns.py kmer_patterns.txt > count_pattern.txt
 
 ../scripts/count_patterns.py unitigs_kmer_patterns.txt > count_uni_pattern.txt
 #count_patterns.py is a script from pyseer package for calculating p-value threshold using Bonferroni correction. 
@@ -551,7 +551,7 @@ Generate number of unique patterns and p value significance threshold informatio
 ```
 #Run inside corresponding *_ISreplaced_genomes directory
 
-scripts/count_patterns.py kmer_patterns_covariate.txt > count_pattern.txt
+python3 ../scripts/count_patterns.py kmer_patterns_covariate.txt > count_pattern.txt
 
 #count_patterns.py is a script from pyseer package for calculating p-value threshold using Bonferroni correction. 
 
