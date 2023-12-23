@@ -145,7 +145,12 @@ awk '{print $1}' sigk_pyseer.txt > sigk_seq.txt
 #create multifasta file for significant kmer sequences
 number=$(cat sigk_seq.txt | wc -l)
 
-rm header.txt   #remove any existing header file
+#remove any existing header file
+if ! [ -f header.txt ]; then
+  echo "header file does not exist."
+else
+  rm header.txt
+fi
 
 START=1
 let "END=$number" 
@@ -341,7 +346,12 @@ awk '{print $1}' sigk_pyseer.txt > sigk_seq.txt
 #create multifasta file for significant kmer sequences
 number=$(cat sigk_seq.txt | wc -l)
 
-rm header.txt   #remove any existing header file
+#remove any existing header file
+if ! [ -f header.txt ]; then
+  echo "header file does not exist."
+else
+  rm header.txt
+fi
 
 START=1
 let "END=$number" 
@@ -579,7 +589,12 @@ awk '{print $1}' sigk_pyseer.txt > sigk_seq.txt
 #create multifasta file for significant kmer sequences
 number=$(cat sigk_seq.txt | wc -l)
 
-rm header.txt   #remove any existing header file
+#remove any existing header file
+if ! [ -f header.txt ]; then
+  echo "header file does not exist."
+else
+  rm header.txt
+fi
 
 START=1
 let "END=$number" 
