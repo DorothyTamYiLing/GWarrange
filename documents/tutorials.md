@@ -3,7 +3,7 @@
 
 Genome rearrangement pipeline summary chart
 
-Tip: To avoid files confusion, before start running a new tutorial, it is advisable to remove all output files/folders from previous tutorial run.
+Tip: To avoid files confusion, before running a new tutorial, it is advisable to remove all output files/folders from previous tutorial runs.
 
 # Tutorial 1
 
