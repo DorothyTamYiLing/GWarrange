@@ -1,14 +1,13 @@
-
-<img width="591" alt="Screenshot 2023-09-18 215805" src="https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/f3501563-7c65-4c04-98c5-12a13ed3c3ad">
-
-Genome rearrangement pipeline summary chart
-
 Extra requirements for the tutorials:
 pyseer 1.3.10
 unitig-caller 1.3.0
 Frequency-based String Mining (lite)
 
 Tip: To avoid files confusion, before running a new tutorial, it is advisable to remove all output files/folders from previous tutorial runs.
+
+<img width="591" alt="Screenshot 2023-09-18 215805" src="https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/f3501563-7c65-4c04-98c5-12a13ed3c3ad">
+
+Genome rearrangement pipeline summary chart
 
 # Tutorial 1
 
