@@ -3,6 +3,11 @@
 
 Genome rearrangement pipeline summary chart
 
+Extra requirements for the tutorials:
+pyseer 1.3.10
+unitig-caller 1.3.0
+Frequency-based String Mining (lite)
+
 Tip: To avoid files confusion, before running a new tutorial, it is advisable to remove all output files/folders from previous tutorial runs.
 
 # Tutorial 1
