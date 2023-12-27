@@ -6,8 +6,6 @@ Currently, this package only supports binary phenotypes.
 
 # Requirements
 
-pyseer 1.3.10
-
 blastn: 2.2.31+, R 4.2.2, Python 3.9.16
 
 python modules: argparse, SeqIO, csv, pandas, gzip, os, Bio.Seq
