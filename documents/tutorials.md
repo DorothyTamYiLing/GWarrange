@@ -131,10 +131,10 @@ Extract kmers with p value below the significance threshold:
 ```
 #Run inside corresponding *_ISreplaced_genomes directory
 
-#For ext7000_merge200_ISreplaced_genomes set
+#For ext7000_merge200_ISreplaced_genomes set, threshold may vary slightly between different runs
 awk '{ if ($4 <= 4.50E-04) { print } }' clus1clus2_47_ext7000merge200_k200_MAF0.05_nopopctrl > sigk_pyseer.txt
 
-#For ext100_merge3_ISreplaced_genomes set
+#For ext100_merge3_ISreplaced_genomes set, threshold may vary slightly between different runs
 awk '{ if ($4 <= 5.43E-04) { print } }' clus1clus2_47_ext100merge3_k200_MAF0.05_nopopctrl > sigk_pyseer.txt
 ```
 
@@ -340,7 +340,7 @@ python3 ../scripts/count_patterns.py kmer_patterns.txt > count_pattern.txt
 python3 ../scripts/count_patterns.py kmer_unitig_patterns.txt > count_uni_pattern.txt
 #count_patterns.py is a script from pyseer package for calculating p-value threshold using Bonferroni correction. 
 ```
-Extract kmers/unitigs with p value below the the significance threshold:
+Extract kmers/unitigs with p value below the the significance threshold, threshold may vary slightly between different runs:
 ```
 awk '{ if ($4 <= 2.29E-05) { print } }' ext100merge3_k200_min20samp_nopopctrl > sigk_pyseer.txt #kmer
 
@@ -580,10 +580,10 @@ Extract kmers with p value below the significance threshold (For both ext7000_me
 ```
 #Run inside corresponding *_ISreplaced_genomes directory
 
-#For ext7000_merge200_ISreplaced_genomes set
+#For ext7000_merge200_ISreplaced_genomes set, threshold may vary slightly between different runs
 awk '{ if ($4 <= 1.53E-04) { print } }' PRN_468_ext7000merge200_k200_MAF0.05_nopopctrl > sigk_pyseer.txt
 
-#For ext100_merge3_ISreplaced_genomes set
+#For ext100_merge3_ISreplaced_genomes set, threshold may vary slightly between different runs
 awk '{ if ($4 <=  1.62E-04) { print } }' PRN_468_ext100merge3_k200_MAF0.05_nopopctrl > sigk_pyseer.txt
 ```
 
