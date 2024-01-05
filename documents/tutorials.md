@@ -341,7 +341,7 @@ Extract kmers/unitigs with p value below the the significance threshold:
 ```
 awk '{ if ($4 <= 2.29E-05) { print } }' ext100merge3_k200_min20samp_nopopctrl > sigk_pyseer.txt #kmer
 
-awk '{ if ($4 <= 7.62E-06) { print } }' ext100merge3_k200_min20samp_unitigs_nopopctrl > siguni_pyseer.txt #unitig
+awk '{ if ($4 <= 7.62E-06) { print } }' ext100merge3_k200_min20samp_unitig_nopopctrl > siguni_pyseer.txt #unitig
 ```
 448,330 kmers and 3,737 unitigs are found to be significantly associated with chromosome structure. The sequences of which were extracted and placed in respective multifasta file.
 
