@@ -395,7 +395,12 @@ awk '{print $1}' siguni_pyseer.txt > siguni_seq.txt
 #create multifasta file for significant unitig sequences
 number=$(cat siguni_seq.txt | wc -l)
 
-rm header.txt   #remove any existing header file
+#remove any existing header file
+if ! [ -f header.txt ]; then
+  echo "header file does not exist."
+else
+  rm header.txt
+fi
 
 START=1
 let "END=$number" 
