@@ -224,6 +224,11 @@ Genome position of intact kmers without N from /ext100_merge3_ISreplaced_genomes
 
 Plot of intact kmers that show rearrangements in two genome regions that are significantly associated with structural phenotype.
 
+
+![ext100_merge3_myNoNintactk_rev0fwd1](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/971a12ae-c96b-487b-92c9-2156d519af1f)
+![ext100_merge3_myNoNintactk_rev1fwd0](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/40cdd68a-fa0b-43a2-90c8-e021aec398b5)
+
+
 ![myNoNintactk_rev0fwd1](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/afde6c42-add7-4e07-ada9-7eedd348f3d3)
 
 ![myNoNintactk_rev1fwd0](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/b8a70fdd-1a4a-4cc0-b60e-e873a00a8d42)
