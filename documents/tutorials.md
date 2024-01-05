@@ -226,16 +226,13 @@ Plot of intact kmers that show rearrangements in two genome regions that are sig
 
 
 ![ext100_merge3_myNoNintactk_rev0fwd1](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/971a12ae-c96b-487b-92c9-2156d519af1f)
+
 ![ext100_merge3_myNoNintactk_rev1fwd0](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/40cdd68a-fa0b-43a2-90c8-e021aec398b5)
 
 
-![myNoNintactk_rev0fwd1](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/afde6c42-add7-4e07-ada9-7eedd348f3d3)
 
-![myNoNintactk_rev1fwd0](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/b8a70fdd-1a4a-4cc0-b60e-e873a00a8d42)
-
-
-(Above: 10 intact kmers that are in forward orientation in majority of structure "1" genomes, as well as in reverse orientation in majority of structure "0" genomes;
-Below: 13 intact kmers that are in reverse orientation in majority of structure "1" genomes, as well as in forward orientation in majority of structure "0" genomes)
+(Above: 22 intact kmers that are in forward orientation in majority of structure "1" genomes, as well as in reverse orientation in majority of structure "0" genomes;
+Below: 24 intact kmers that are in reverse orientation in majority of structure "1" genomes, as well as in forward orientation in majority of structure "0" genomes)
 
 **Important notes:**
 
