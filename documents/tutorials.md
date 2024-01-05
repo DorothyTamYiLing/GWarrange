@@ -132,7 +132,7 @@ Extract kmers with p value below the significance threshold:
 #Run inside corresponding *_ISreplaced_genomes directory
 
 #For ext7000_merge200_ISreplaced_genomes set
-awk '{ if ($4 <= 4.59E-04) { print } }' clus1clus2_47_ext7000merge200_k200_MAF0.05_nopopctrl > sigk_pyseer.txt
+awk '{ if ($4 <= 4.50E-04) { print } }' clus1clus2_47_ext7000merge200_k200_MAF0.05_nopopctrl > sigk_pyseer.txt
 
 #For ext100_merge3_ISreplaced_genomes set
 awk '{ if ($4 <= 5.62E-04) { print } }' clus1clus2_47_ext100merge3_k200_MAF0.05_nopopctrl > sigk_pyseer.txt
