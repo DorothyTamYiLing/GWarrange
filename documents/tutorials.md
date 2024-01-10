@@ -13,12 +13,7 @@ Genome rearrangement pipeline summary chart
 
 This tutorial is based a subset of _Bordetella pertussis_ genomes as described in Weigand _et al_. 2019, in which chromosome structures are defined by MAUVE exhaustive pairwise alignment. A subset of 47 genomes that display two different chromosome structures (18 genomes with structure 1 and 29 genomes with structure 2) (See figure below) aree used in GWAS with structure information as phenotype. Structure phenotype of two pairs of genomes are swapped for demonstration purpose.  
 
-<img width="541" alt="Screenshot 2023-10-05 234547" src="https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/38a5f7e3-611b-4748-8a27-ab4c4e96af6b">
-
-
-![diagrams_9](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/fbb65983-f16f-4bf6-ab23-7b92db9220d0)
-
-
+<img width="652" alt="Screenshot 2024-01-10 at 18 17 39" src="https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/2ccf91f0-17bc-4b01-b8a1-b3744eb2f749">
 
 Fig : Two different chromosome structures that are found among 47 _Bordetella pertussis_ genomes. 
 
