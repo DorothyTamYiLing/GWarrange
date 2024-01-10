@@ -588,7 +588,7 @@ Extract kmers with p value below the significance threshold (For both ext7000_me
 #Run inside corresponding *_ISreplaced_genomes directory
 
 #For ext7000_merge200_ISreplaced_genomes set, threshold may vary slightly between different runs
-awk '{ if ($4 <= 1.53E-04) { print } }' PRN468_ext7000merge200_k200_MAF0.05_covariate > sigk_pyseer.txt
+awk '{ if ($4 <= 1.30E-04) { print } }' PRN468_ext7000merge200_k200_MAF0.05_covariate > sigk_pyseer.txt
 
 #For ext100_merge3_ISreplaced_genomes set, threshold may vary slightly between different runs
 awk '{ if ($4 <=  1.32E-04) { print } }' PRN468_ext100merge3_k200_MAF0.05_covariate > sigk_pyseer.txt
