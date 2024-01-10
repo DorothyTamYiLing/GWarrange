@@ -15,6 +15,10 @@ This tutorial is based a subset of _Bordetella pertussis_ genomes as described i
 
 <img width="541" alt="Screenshot 2023-10-05 234547" src="https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/38a5f7e3-611b-4748-8a27-ab4c4e96af6b">
 
+![Uploading diagrams_9.png…]()
+
+
+
 Fig : Two different chromosome structures that are found among 47 _Bordetella pertussis_ genomes. 
 
 ##
