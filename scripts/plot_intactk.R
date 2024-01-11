@@ -95,7 +95,7 @@ mysize<-as.numeric(as.character(opt$gen_size))*1000
 #turn NA into 0, added on 20July23
 myx_unqiue[is.na(myx_unqiue)]<-0
 
-png(paste(opt$outdir,"/",opt$outname,".png",sep=""))
+png(paste(opt$outdir,"/",opt$outname,".png",sep=""),res=150,width = 180, height = 185, units='mm')
 
 Rects = data.frame(xmin = c(-100, -100), xmax = c(mysize, mysize),
                    ymin = c(-0.05,0.8), ymax = c(0.2, 1.05))
