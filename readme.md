@@ -38,7 +38,7 @@ Arguments:
 
 **f** : minimum length (bp) of flanking sequences (both side) for the kmer to be blasted with the genomes; default: 30bp 
 
-**d** : maximum size of repetitive sequences blocks that are replaced by shorter placed holder sequence (i.e. Maximum distance (bp) between the upstream and downstream flanks in the genome for a kmer to be defined as intact kmer)  
+**d** : maximum size of repetitive sequences blocks that are replaced by shorter placed holder sequence (i.e. Maximum distance (bp) between the upstream and downstream flanks in the genome for a kmer to be defined as intact kmer), written as "maxrplsize" in publication Method section  
 
 **x** : parameter for plotting split k-mers. Number of significant digits (e.g. 2,3,4; default: 2) for rounding off mean upstream flank start coordinate, for selecting split kmers with unique proportion and genome position information for plotting
 
