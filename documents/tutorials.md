@@ -443,20 +443,19 @@ Two rearrangement boundaries are found, and they potentially refer to a single i
 
 72000bp boundary, intact kmer in forward orientation:
 
-<img width="659" alt="Screenshot 2023-10-17 153038" src="https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/b67776fb-34ea-48a6-a118-3b4f6e830b51">
+![kmer98323_plot](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/b012559f-bd0c-4ceb-b77e-53c0e07eadb5)
 
 72000bp boundary, intact kmer in reverse orientation:
-
-<img width="740" alt="Screenshot 2023-10-17 153257" src="https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/6a15eedf-f51f-4343-b16f-40a1042d66a6">
+![kmer97292_plot](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/237de0e6-6c80-4c5c-ae21-b9b68951af34)
 
 2100000bp boundary, intact kmer in forward orientation:
 
-<img width="814" alt="Screenshot 2023-10-17 153223" src="https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/2376419c-8dc7-4257-b98e-3d3ca3717c82">
-
+![kmer99909_plot](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/e27620d6-2ec5-4bd7-baaa-53f834bbae75)
 
 2100000bp boundary, intact kmer in reverse orientation:
 
-<img width="710" alt="Screenshot 2023-10-17 153153" src="https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/9de2d524-3c55-4550-9b16-e2bd529e82aa">
+![kmer98897_plot](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/4d33ac75-246d-473d-b189-45dc471db2c0)
+
 
 No significant split unitigs are identified as unitig-caller are not able to generate unitigs containing placeholder sequences.
 
