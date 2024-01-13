@@ -65,7 +65,7 @@ script functions:
 1. gets the flank start and end coordinates of significant kmers
 
 output files: 
-1. flank_coor.txt; format: `kmerX_{end coordinate of the upstream flank}_{start coordinate of the downstream flank}_kmer size`
+1. flank_coor.txt; format: `kmerX_{end coordinate of the left flank}_{start coordinate of the right flank}_kmer size`
 
 `make_flank_summary.R` (called by `main.sh`, for processing kmers containing N only)
 
@@ -83,13 +83,13 @@ Criteria 4: the k-mer should show two blast hits to each genome, one hit for eac
 
 2. For those kmers that have passed the filter, determine:
 
--`StartL` (genome coordinate of the start of upstream/left flank)
+-`StartL` (genome coordinate of the start of left flank)
 
--`EndL` (genome coordinate of the end of upstream/left flank)
+-`EndL` (genome coordinate of the end of left flank)
 
--`StartR` (genome coordinate of the start of downstream/right flank)
+-`StartR` (genome coordinate of the start of right flank)
 
--`EndR` (genome coordinate of the end of downstream/right flank)
+-`EndR` (genome coordinate of the end of right flank)
 
 3. Determine kmers' flank behaviours in each genome (behaviours could be 
 `intact_k` (intact kmer), `mv_away` (flanks move away from each other), `swp_flk` (flanks swap in position),`mv&flp` (one flank has move away and flipped) according to the following rules:
@@ -149,7 +149,7 @@ output files:
 
 4. kmer_with_multi_hits.txt (blast hit of k-mers that do not fulfill criteria 4, k-mers showing more than two blast hits to at least one genome) <sup> 1 </sup>
 
-5. kmer_with_alignlen_issue.txt (blast hit of k-mers that do not fulfill criteria 4, k-mers missing upstream or downstream hit) <sup> 1 </sup>
+5. kmer_with_alignlen_issue.txt (blast hit of k-mers that do not fulfill criteria 4, k-mers missing left or right hit) <sup> 1 </sup>
 
 6. kmer_with_align_len.txt (blast hit of k-mers that do not fulfill criteria 2) <sup> 1 </sup>
 
@@ -169,15 +169,15 @@ output files:
 
 **flk_behaviour**: count and proportion of case and control genomes for each behaviour; format: `count of case genomes with behaviour/total number of case genomes (proportion): count of control genomes with behaviour/total number of control genomes (proportion)`
 
-**my0_intactk_sum**: for kmers that are intact (kmers that are not split) in control genomes, summary genome positions <sup> 2 </sup> for the upstream and downstream flanks 
+**my0_intactk_sum**: for kmers that are intact (kmers that are not split) in control genomes, summary genome positions <sup> 2 </sup> for the left and right flanks 
 
-**my1_intactk_sum**: for kmers that are intact (kmers that are not split) in case genomes, summary genome positions <sup> 2 </sup> for the upstream and downstream flanks
+**my1_intactk_sum**: for kmers that are intact (kmers that are not split) in case genomes, summary genome positions <sup> 2 </sup> for the left and right flanks
 
 **otherk**: flank behaviour other than intact k
 
-**my0_otherk_sum**: for kmers that show flank behaviour other than intactk in control genomes, summary genome positions <sup> 2 </sup> for the upstream and downstream flanks
+**my0_otherk_sum**: for kmers that show flank behaviour other than intactk in control genomes, summary genome positions <sup> 2 </sup> for the left and right flanks
 
-**my1_otherk_sum**: for kmers that show flank behaviour other than intactk in case genomes, summary genome positions <sup> 2 </sup> for the upstream and downstream flanks 
+**my1_otherk_sum**: for kmers that show flank behaviour other than intactk in case genomes, summary genome positions <sup> 2 </sup> for the left and right flanks 
 
 **event**: genome rearrangemnet event
 
@@ -185,13 +185,13 @@ output files:
 
 <sup> 2 </sup> summary genome positions for flanks, format: StartL_stat | StartL_sd | StartR_stat | StartR_sd | flk_dist_stat 
 
-StartL_stat: summary statistics <sup> 3 </sup> for upstream flanks across genomes
+StartL_stat: summary statistics <sup> 3 </sup> for left flanks across genomes
 
-StartL_sd: stand deviation for upstream flanks across genomes
+StartL_sd: stand deviation for left flanks across genomes
 
-StartR_stat: summary statistics <sup> 3 </sup> for downstream flanks across genomes
+StartR_stat: summary statistics <sup> 3 </sup> for right flanks across genomes
 
-StartR_sd: standard deviation for downstream flanks across genomes
+StartR_sd: standard deviation for right flanks across genomes
 
 flk_dist_stat: summary statistics <sup> 3 </sup> for distance between flanks across genomes
 
@@ -209,7 +209,7 @@ flk_dist_stat: summary statistics <sup> 3 </sup> for distance between flanks acr
 
 **otherk_mygp_case_prop**: proportion of case genomes with k-mer of other behaviour 
 
-**my0_intactk_StartL_mean**: for intact k-mers in control genomes, mean upstream flank start coordinate, round to number of significant digits indicated by -x flag in main.sh)
+**my0_intactk_StartL_mean**: for intact k-mers in control genomes, mean left flank start coordinate, round to number of significant digits indicated by -x flag in main.sh)
 
 **fwd_intactk_count**: count of intact k-mers in forward orientation
 
@@ -319,15 +319,15 @@ output files: (within output directory /splitk_plots):
 
 1. kmerX_plot.pdf 
 
-3. case_upstreamflk.txt (information <sup> 4 </sup> for plotting case upstream flank arrows in plot)
+3. case_upstreamflk.txt (information <sup> 4 </sup> for plotting case left flank arrows in plot)
 
-4. case_downstreamflk.txt (information <sup> 4 </sup> for plotting case downstream flank arrows in plot)
+4. case_downstreamflk.txt (information <sup> 4 </sup> for plotting case right flank arrows in plot)
 
 5. case_intactk.txt (information <sup> 4 </sup> for plotting case intactk arrows in plot)
 
-6. ctrl_upstreamflk.txt (information <sup> 4 </sup> for plotting control upstream flank arrows in plot)
+6. ctrl_upstreamflk.txt (information <sup> 4 </sup> for plotting control left flank arrows in plot)
 
-7. ctrl_downstreamflk.txt (information <sup> 4 </sup> for plotting control downstream flank arrows in plot)
+7. ctrl_downstreamflk.txt (information <sup> 4 </sup> for plotting control right flank arrows in plot)
 
 8. ctrl_intactk.txt (information <sup> 4 </sup> for plotting control intactk arrows in plot)
 
