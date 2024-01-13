@@ -225,20 +225,11 @@ Genome position of intact kmers without N from /ext100_merge3_ISreplaced_genomes
 
 Plot of intact kmers that show rearrangements in two genome regions that are significantly associated with structural phenotype.
 
-![example1_ext100_merge3_myNoNintactk_rev0fwd1](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/1993c330-25a7-443d-90ed-ff78cf1b6368)
+![diagrams_17](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/fe65d012-960b-457a-818c-885bc71ded60)
 
 
-![example1_ext100_merge3_myNoNintactk_rev1fwd0](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/186e168b-f5c9-4d3b-a54f-cca828638654)
-
-
-![ext100_merge3_myNoNintactk_rev0fwd1](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/971a12ae-c96b-487b-92c9-2156d519af1f)
-
-![ext100_merge3_myNoNintactk_rev1fwd0](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/40cdd68a-fa0b-43a2-90c8-e021aec398b5)
-
-
-
-(Above: 22 intact kmers that are in forward orientation in majority of structure "1" genomes, as well as in reverse orientation in majority of structure "0" genomes;
-Below: 24 intact kmers that are in reverse orientation in majority of structure "1" genomes, as well as in forward orientation in majority of structure "0" genomes)
+(Left: 22 intact kmers that are in forward orientation in majority of structure "1" genomes, as well as in reverse orientation in majority of structure "0" genomes;
+Right: 24 intact kmers that are in reverse orientation in majority of structure "1" genomes, as well as in forward orientation in majority of structure "0" genomes)
 
 **Important notes:**
 
