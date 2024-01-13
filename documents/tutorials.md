@@ -228,8 +228,8 @@ Plot of intact kmers that show rearrangements in two genome regions that are sig
 ![diagrams_17](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/fe65d012-960b-457a-818c-885bc71ded60)
 
 
-(Left: 22 intact kmers that are in forward orientation in majority of structure "1" genomes, as well as in reverse orientation in majority of structure "0" genomes;
-Right: 24 intact kmers that are in reverse orientation in majority of structure "1" genomes, as well as in forward orientation in majority of structure "0" genomes)
+(Left: intact kmers that are in forward orientation in majority of structure "1" genomes, as well as in reverse orientation in majority of structure "0" genomes;
+Right: intact kmers that are in reverse orientation in majority of structure "1" genomes, as well as in forward orientation in majority of structure "0" genomes)
 
 **Important notes:**
 
@@ -465,12 +465,11 @@ Genome position of unitigs from /ext100_merge3_ISreplaced_genomes (minimal IS ex
 
 Plot of unitigs that showe rearrangements significantly associated with structure phenotype.
 
-![myNoNintactk_rev0fwd1_unitigs](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/313eba86-1052-48bb-ac29-c4e070cbf11b)
+![diagrams_18](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/1d5f7076-33c3-4ccb-86f8-9ff4ee8e3cdd)
 
-![myNoNintactk_rev1fwd0_unitigs](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/231b818a-df08-46f8-b64b-dba226a23494)
 
-(Above: 191 intact kmers that are in forward orientation in majority of structure "1" genomes, as well as in reverse orientation in majority of structure "0" genomes;
-Below: 370 intact kmers that are in reverse orientation in majority of structure "1" genomes, as well as in forward orientation in majority of structure "0" genomes)
+(Left: intact kmers that are in forward orientation in majority of structure "1" genomes, as well as in reverse orientation in majority of structure "0" genomes;
+Right: intact kmers that are in reverse orientation in majority of structure "1" genomes, as well as in forward orientation in majority of structure "0" genomes)
 
 
 Page, A.J., Ainsworth, E.V. and Langridge, G.C., 2020. socru: typing of genome-level order and orientation around ribosomal operons in bacteria. Microbial Genomics, 6(7).
