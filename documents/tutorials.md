@@ -12,7 +12,7 @@ Genome rearrangement pipeline summary chart
 
 # Tutorial 1
 
-This tutorial is based a subset of _Bordetella pertussis_ genomes as described in Weigand _et al_. 2019, in which chromosome structures are defined by MAUVE exhaustive pairwise alignment. A subset of 47 genomes that display two different chromosome structures (18 genomes with structure 1 and 29 genomes with structure 0 (See figure below) are used in GWAS with structure information as phenotype. Structure phenotype of two pairs of genomes are swapped for demonstration purpose.  
+This tutorial is based a subset of _Bordetella pertussis_ genomes as described in Weigand _et al_. 2019, in which chromosome structures are defined by MAUVE exhaustive pairwise alignment. A subset of 47 genomes that display two different chromosome structures (18 genomes with structure "1" and 29 genomes with structure "0" (See figure below) are used in GWAS with structure information as phenotype. Structure phenotype of two pairs of genomes are swapped for demonstration purpose.  
 
 <img width="652" alt="Screenshot 2024-01-10 at 18 17 39" src="https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/2ccf91f0-17bc-4b01-b8a1-b3744eb2f749">
 
