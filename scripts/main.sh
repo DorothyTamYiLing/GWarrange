@@ -173,6 +173,31 @@ else
 echo "no myintactknoN_out.txt for plot"
 fi
 
+#plotting rev0fwd1 all intactk set
+if [[ -f ${outdir}/myintactkwithN_rev0fwd1_set.txt && -f ${outdir}/myNoNintactk_rev0fwd1_set.txt ]]; then
+sed '1d' ${outdir}/myNoNintactk_rev0fwd1_set.txt > ${outdir}/myNoNintactk_rev0fwd1_set_no1stline.txt
+cat ${outdir}/myintactkwithN_rev0fwd1_set.txt ${outdir}/myNoNintactk_rev0fwd1_set_no1stline.txt > ${outdir}/myallintactk_rev0fwd1_set.txt
+echo "plotting myallintactk_rev0fwd1_set"
+Rscript ./scripts/plot_intactk.R --input ${outdir}/myallintactk_rev0fwd1_set.txt \
+--outdir ${outdir} \
+--outname myallintactk_rev0fwd1 \
+--gen_size ${gen_size} \
+--intkrd ${intkrd}
+fi
+
+
+#plotting rev1fwd0 all intactk set
+if [[ -f ${outdir}/myintactkwithN_rev1fwd0_set.txt && -f ${outdir}/myNoNintactk_rev1fwd0_set.txt ]]; then
+sed '1d' ${outdir}/myNoNintactk_rev1fwd0_set.txt > ${outdir}/myNoNintactk_rev1fwd0_set_no1stline.txt
+cat ${outdir}/myintactkwithN_rev1fwd0_set.txt ${outdir}/myNoNintactk_rev1fwd0_set_no1stline.txt > ${outdir}/myallintactk_rev1fwd0_set.txt
+echo "plotting myallintactk_rev1fwd0_set"
+Rscript ./scripts/plot_intactk.R --input ${outdir}/myallintactk_rev1fwd0_set.txt \
+--outdir ${outdir} \
+--outname myallintactk_rev1fwd0 \
+--gen_size ${gen_size} \
+--intkrd ${intkrd}
+fi
+
 #placing output files into different output directories
 mkdir ${outdir}/preprocssing
 
@@ -466,6 +491,55 @@ fi
 if [[ ${present} -eq 1 ]]
 then
 mv ${outdir}/splitk_plots ${outdir}/kmers_withN
+fi
+
+mkdir ${outdir}/allintack_combinedplots
+[ -s ${outdir}/myallintactk_rev0fwd1.png ] && present=1 || present=0
+if [[ ${present} -eq 1 ]]
+then
+mv ${outdir}/myallintactk_rev0fwd1.png ${outdir}/allintack_combinedplots
+fi
+
+[ -s ${outdir}/myallintactk_rev1fwd0.png ] && present=1 || present=0
+if [[ ${present} -eq 1 ]]
+then
+mv ${outdir}/myallintactk_rev1fwd0.png ${outdir}/allintack_combinedplots
+fi
+
+[ -s ${outdir}/myallintactk_rev0fwd1_kmer4plot.txt ] && present=1 || present=0
+if [[ ${present} -eq 1 ]]
+then
+mv ${outdir}/myallintactk_rev0fwd1_kmer4plot.txt ${outdir}/allintack_combinedplots
+fi
+
+[ -s ${outdir}/myallintactk_rev0fwd1_set.txt ] && present=1 || present=0
+if [[ ${present} -eq 1 ]]
+then
+mv ${outdir}/myallintactk_rev0fwd1_set.txt ${outdir}/allintack_combinedplots
+fi
+
+[ -s ${outdir}/myallintactk_rev1fwd0_kmer4plot.txt ] && present=1 || present=0
+if [[ ${present} -eq 1 ]]
+then
+mv ${outdir}/myallintactk_rev1fwd0_kmer4plot.txt ${outdir}/allintack_combinedplots
+fi
+
+[ -s ${outdir}/myallintactk_rev1fwd0_set.txt ] && present=1 || present=0
+if [[ ${present} -eq 1 ]]
+then
+mv ${outdir}/myallintactk_rev1fwd0_set.txt ${outdir}/allintack_combinedplots
+fi
+
+[ -s ${outdir}/myNoNintactk_rev0fwd1_set_no1stline.txt ] && present=1 || present=0
+if [[ ${present} -eq 1 ]]
+then
+rm ${outdir}/myNoNintactk_rev0fwd1_set_no1stline.txt
+fi
+
+[ -s ${outdir}/myNoNintactk_rev1fwd0_set_no1stline.txt ] && present=1 || present=0
+if [[ ${present} -eq 1 ]]
+then
+rm ${outdir}/myNoNintactk_rev1fwd0_set_no1stline.txt
 fi
 
 gzip ${gen/.gz}
