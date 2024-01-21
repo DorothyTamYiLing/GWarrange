@@ -203,9 +203,9 @@ myflk_name="intactk"
 
 #add legend
 polygon(c((x_length-750),(x_length-750),(x_length-700)), c(350,330,340),border = NA,col=rgb(1, 0, 0,0.5))
-text(x=(x_length-400),y=340,"kmer dowstream flank",cex = 0.6)
+text(x=(x_length-400),y=340,"kmer right flank",cex = 0.6)
 polygon(c((x_length-750),(x_length-750),(x_length-700)), c(320,300,310),border = NA,col=rgb(0, 0, 1,0.5))
-text(x=(x_length-410),y=310,"kmer upstream flank",cex = 0.6)
+text(x=(x_length-410),y=310,"kmer left flank",cex = 0.6)
 polygon(c((x_length-750),(x_length-750),(x_length-700)), c(290,270,280),border = NA,col=rgb(0, 1, 0,0.5))
 text(x=(x_length-470),y=280,"intact kmer",cex = 0.6)
 
