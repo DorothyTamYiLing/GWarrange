@@ -342,31 +342,39 @@ script functions:
 
 output files:
 
-1. myintactkwithN_rev1fwd0_set.txt (output of bash command before the script)
+1. myintactkwithN_rev1fwd0_set.txt
 
 Set of N-containing kmers that are in reverse orientation in majority of the case genomes and forward in orientation in majority of control genomes
 
-2. myintactkwithN_rev0fwd1_set.txt (output of bash command before the script)
+2. myintactkwithN_rev0fwd1_set.txt
 
 Set of N-containing kmers that are in reverse orientation in majority of the control genomes and forward in orientation in majority of case genomes
 
-3. myNoNintactk_rev1fwd0_set.txt (output of bash command before the script)
+3. myNoNintactk_rev1fwd0_set.txt
 
 Set of kmers without N that are in reverse orientation in majority of the case genomes and forward in orientation in majority of control genomes
 
-4. myNoNintactk_rev0fwd1_set.txt (output of bash command before the script)
+4. myNoNintactk_rev0fwd1_set.txt
 
 Set of kmers without N that are in reverse orientation in majority of the control genomes and forward in orientation in majority of case genomes
 
-5. myNoNintactk_other_set.txt (output of bash command before the script)
+5. myNoNintactk_other_set.txt
 
 Set of kmers without N that do not belong to "rev0fwd1_set" nor "rev1fwd0_set"
 
-6. myintactkwithN_rev0fwd1_kmer4plot.txt / myintactkwithN_rev1fwd0_kmer4plot.txt / myNoNintactk_rev0fwd1_kmer4plot.txt / myNoNintactk_rev1fwd0_kmer4plot.txt/ myNoNintactk_other_kmer4plot.txt
+6. myallintactk_rev0fwd1_set.txt
+
+Combined set of kmers with and without N that are in reverse orientation in majority of the control genomes and forward in orientation in majority of case genomes
+
+7. myallintactk_rev1fwd0_set.txt
+
+Combined set of kmers with and without N that are in reverse orientation in majority of the case genomes and forward in orientation in majority of control genomes
+
+8. myintactkwithN_rev0fwd1_kmer4plot.txt / myintactkwithN_rev1fwd0_kmer4plot.txt / myNoNintactk_rev0fwd1_kmer4plot.txt / myNoNintactk_rev1fwd0_kmer4plot.txt/ myNoNintactk_other_kmer4plot.txt / myallintactk_rev0fwd1_kmer4plot.txt / myallintactk_rev1fwd0_kmer4plot.txt
 
 Set of kmers with unqiue genome position <sup> 5 </sup> used in the final plot
 
-7. myintactkwithN_rev0fwd1.png / myintactkwithN_rev1fwd0.png / myNoNintactk_rev0fwd1.png / myNoNintactk_rev1fwd0.png / myNoNintactk_other.png
+9. myintactkwithN_rev0fwd1.png / myintactkwithN_rev1fwd0.png / myNoNintactk_rev0fwd1.png / myNoNintactk_rev1fwd0.png / myNoNintactk_other.png / myallintactk_rev0fwd1.png / myallintactk_rev1fwd0.png
 
 Final plot of kmers set with unique genome position <sup> 5 </sup>
 
