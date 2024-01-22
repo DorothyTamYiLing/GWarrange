@@ -16,6 +16,8 @@ script functions:
 output file:
 1. fixed_genomes.fasta  
 
+###################################################
+
 `merge_IS.R` (called by merge_replace_IS.sh)
 
 script functions:
