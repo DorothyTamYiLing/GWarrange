@@ -199,9 +199,9 @@ column "ID_E_issue_k" refers to k-mers in kmer_with_ID_E_issue_k.txt
 
 **otherk**: flank behaviour other than intact k
 
-**my0_otherk_sum**: when kmer show flank behaviour other than intactk in control genomes, summary genome positions <sup> 2 </sup> for the left and right flanks
+**my0_otherk_sum**: when kmer shows flank behaviour other than intactk in control genomes, summary genome positions <sup> 2 </sup> for the left and right flanks
 
-**my1_otherk_sum**: when kmer show flank behaviour other than intactk in case genomes, summary genome positions <sup> 2 </sup> for the left and right flanks 
+**my1_otherk_sum**: when kmer shows flank behaviour other than intactk in case genomes, summary genome positions <sup> 2 </sup> for the left and right flanks 
 
 **event**: genome rearrangemnet event
 
