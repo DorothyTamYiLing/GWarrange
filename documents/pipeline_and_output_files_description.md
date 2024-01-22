@@ -187,7 +187,7 @@ column "ID_E_issue_k" refers to k-mers in kmer_with_ID_E_issue_k.txt
 
 11. mysplitk_out.txt, include the following information in columns:
 
-**kmer**: N-contaiing k-mer ID
+**kmer**: N-containing k-mer ID
 
 **event_sum**: list of flank behaviours obserevd across genomes for this k-mer, seperated by ":"
 
