@@ -161,19 +161,25 @@ output files:
 
 4. kmer_with_multi_hits.txt (blast hit of k-mers that do not fulfill criteria 4, k-mers showing more than two blast hits to at least one genome) <sup> 1 </sup>
 
-5. kmer_with_alignlen_issue.txt (blast hit of k-mers that do not fulfill criteria 4, k-mers missing left or right hit) <sup> 1 </sup>
+5. kmer_with_align_issue.txt (blast hit of k-mers that do not fulfill criteria 4, k-mers missing left or right hit) <sup> 1 </sup>
 
 6. kmer_with_align_len.txt (blast hit of k-mers that do not fulfill criteria 2) <sup> 1 </sup>
 
 7. kmer_with_ID_E_issue_k.txt (blast hit of k-mers that do not fulfill criteria 3) <sup> 1 </sup>
 
 8. filterk_out_summary.txt (table summary fo each k-mer that do not fulfill criteria 1-4)
+column "abs_gen_k" refers to k-mers in kmer_with_missinggenomes.txt
+column "del_k" refers to k-mers in kmer_genomeappearonce.txt
+column "multi_hit_k" refers to k-mers in kmer_with_multi_hits.txt
+column "align_issue_k" refers to k-mers in kmer_with_align_issue.txt
+column "align_len_k" refers to k-mers in kmer_with_align_len.tx
+column "ID_E_issue_k" refers to k-mers in kmer_with_ID_E_issue_k.txt
    
-9. myundefine_k.txt (blast hit of k-mers with undefined behaviour in at least one genome) <sup> 1 </sup>
+10. myundefine_k.txt (blast hit of k-mers with undefined behaviour in at least one genome) <sup> 1 </sup>
 
-10. myflk_behave_pheno.txt (k-mers with `StartL`,`EndL`,`StartR`,`EndR`, flank behaviour, kmer orientation (for intactk only), flank distance in each genome defined, and merged with phenotype information)
+11. myflk_behave_pheno.txt (k-mers with `StartL`,`EndL`,`StartR`,`EndR`, flank behaviour, kmer orientation (for intactk only), flank distance in each genome defined, and merged with phenotype information)
 
-11. mysplitk_out.txt, include the following information in columns:
+12. mysplitk_out.txt, include the following information in columns:
 
 **kmer**: N-contaiing k-mer ID
 
