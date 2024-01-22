@@ -209,7 +209,7 @@ flk_dist_stat: summary statistics <sup> 3 </sup> for distance between flanks acr
 
 <sup> 3 </sup>  summary statistics format: `minimum, 1st quantile, median, mean, 3rd quantile, maximum`
 
-12. myshort_splitk_out_uniq.txt, contain k-mers with unique behaviour count and proportion in case/control genomes, unique genome position (represented by the mean StartL of intact k-mers in control genomes, rounded off to two significant digits, as indicated by the x flag), and unique forward/reverse intact k-mers count are used for plotting. Include the following information in columns:
+12. myshort_splitk_out_uniq.txt, contain k-mers with unique behaviour count and proportion in case/control genomes, unique genome position (represented by the mean StartL when k-mers are intact in case genomes, rounded off to two significant digits, as indicated by the x flag), and unique forward/reverse intact k-mers count are used for plotting. Include the following information in columns:
 
 **kmer**: N-contaiing k-mer ID
 
@@ -397,4 +397,4 @@ Set of kmers with unqiue genome position <sup> 5 </sup> used in the final plot
 
 Final plot of kmers set with unique genome position <sup> 5 </sup>
 
-<sup> 5 </sup> kmers with unique genome positions are defined by those showing identical median StartL values when k-mers are in forward/reverse orientation in case/control genomes, after rounded off to the closest multiplier of selected value (e.g. 100, 1000, 10000), as indicated by the y flag.
+<sup> 5 </sup> kmers with unique genome position are plotted. K-mers with duplicated genome positions are defined by those showing identical median StartL values when k-mers are in forward orientation in control genomes, after rounded off to the closest multiplier of selected value (e.g. 100, 1000, 10000), as indicated by the y flag.
