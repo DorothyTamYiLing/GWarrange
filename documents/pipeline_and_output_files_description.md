@@ -223,7 +223,7 @@ flk_dist_stat: summary statistics <sup> 3 </sup> for distance between flanks acr
 
 12. myshort_splitk_out_uniq.txt, contain k-mers with unique behaviour count and proportion in case/control genomes, unique genome position (represented by the mean StartL when k-mers are intact in case genomes, rounded off to two significant digits, as indicated by the x flag), and unique forward/reverse intact k-mers count are used for plotting. Include the following information in columns:
 
-**kmer**: N-contaiing k-mer ID
+**kmer**: N-containing k-mer ID
 
 **intactk_mygp_ctrl_prop**: proportion of control genomes with intact k-mer 
 
