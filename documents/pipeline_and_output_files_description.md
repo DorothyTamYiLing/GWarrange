@@ -329,7 +329,16 @@ output files:
 
 5. kmer_with_ID_E_issue_noN.txt (blast hit of k-mers that do not fulfill criteria 4) <sup> 1 </sup>
 
-6. filterk_out_summary_noN.txt (table summary fo each k-mer that do not fulfill criteria 1-4)
+6. filterk_out_summary_noN.txt (table summary fo each k-mer that do not fulfill criteria 1-4), with columns as follow:
+
+column "abs_gen_k" refers to k-mers in kmer_with_missinggenomes_NoN.txt
+
+column "multi_hit_k" refers to k-mers in kmer_with_multi_hits_NoN.txt
+
+column "align_len_k" refers to k-mers in kmer_with_align_len_noN.txt
+
+column "ID_E_issue_k" refers to k-mers in kmer_with_ID_E_issue_noN.txt
+
 
 7. myflk_behave_pheno_NoN.txt (k-mers with start and end genome position, k-mer orientation in each genome defined, and merged with phenotype information)
 
