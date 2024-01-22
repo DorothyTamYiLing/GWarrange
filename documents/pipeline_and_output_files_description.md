@@ -31,6 +31,8 @@ output files:
 
 2. ext{}_merge{}_mergedISstat.txt (statistics of coordinates after extension and merging, including size of and distance between repeated sequences)
 
+###################################################
+
 `iSreplace_2col.py` (called by merge_replace_IS.sh)
 
 script functions:
@@ -40,6 +42,8 @@ script functions:
 output files:
 1. repeated sequence-replaced genomes in a new directory (directory name: ext{}_merge{}_ISreplaced_genomes)
 
+###################################################
+
 `class_k.py` (called by `main.sh`)
 
 script functions:
@@ -48,6 +52,8 @@ script functions:
 output files:
 1. sigk_withN.fasta (k-mers contain N)
 2. sigk_noN.fasta (k-mers do not contain N)
+
+###################################################
 
 `filtering_kmer_and_blast.sh` (called by `main.sh`, for processing kmers containing N only)
 
@@ -61,6 +67,8 @@ output files:
 3. kmer_flanktooshort_flkcoor.txt (flank start and end coordinates of the kmers being removed)
 4. kmer_forblast.fasta (multifasta file of kmer that have passed the filter and for blasting with genomes)
 
+###################################################
+
 `extract_flank_coor.py` (called by `filtering_kmer_and_blast.sh`, for processing kmers containing N only)
 
 script functions:
@@ -68,6 +76,8 @@ script functions:
 
 output files: 
 1. flank_coor.txt; format: `kmerX_{end coordinate of the left flank}_{start coordinate of the right flank}_kmer size`
+
+###################################################
 
 `make_flank_summary.R` (called by `main.sh`, for processing kmers containing N only)
 
@@ -263,6 +273,8 @@ flk_dist_stat: summary statistics <sup> 3 </sup> for distance between flanks acr
 
 **revk_1gen_sd**: standard deviation of genome position of reverse k-mer in case genomes
 
+###################################################
+
 `extract_knoN_length.py` (called by main.sh, for k-mers do not contain N only)
 
 script function: 
@@ -272,6 +284,8 @@ script function:
 output file: 
 
 1. kmernoN_length.txt
+
+###################################################
 
 `process_sigkNoN.R` (called by main.sh, for k-mers do not contain N only)
 
@@ -311,6 +325,8 @@ output files:
 
 <sup> 1 </sup> files are not produced when there is no content
 
+###################################################
+
 `plot_flk_kmer_prop.R` (called by main.sh, for plotting split kmers)
 
 script functions: 
@@ -335,6 +351,7 @@ output files: (within output directory /splitk_plots):
 
 <sup> 4 </sup> information includes median start and end coordinates, count and proportion of genomes
 
+###################################################
 
 `plot_intactk.R` (called by main.sh, for plotting intact kmers)
 
