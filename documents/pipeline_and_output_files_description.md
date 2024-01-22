@@ -167,7 +167,7 @@ output files:
 
 7. kmer_with_ID_E_issue_k.txt (blast hit of k-mers that do not fulfill criteria 3) <sup> 1 </sup>
 
-8. filterk_out_summary.txt (table summary fo each k-mer that do not fulfill criteria 1-4)
+8. filterk_out_summary.txt (table summary fo each k-mer that do not fulfill criteria 1-4), with columns as follow:
    
 column "abs_gen_k" refers to k-mers in kmer_with_missinggenomes.txt
 
