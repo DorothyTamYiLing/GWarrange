@@ -188,10 +188,10 @@ for(i in 1:2){
       startlevel<-(startlevel)+max(mymed$prop)+50 #set again the starting y axis level
     }
 if(myflk=="L"){
-myflk_name="upstreamflk"
+myflk_name="leftflk"
 }
 if(myflk=="R"){
-myflk_name="downstreamflk"
+myflk_name="rightflk"
 }
 if(myflk=="in"){
 myflk_name="intactk"
