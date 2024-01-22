@@ -193,15 +193,15 @@ column "ID_E_issue_k" refers to k-mers in kmer_with_ID_E_issue_k.txt
 
 **flk_behaviour**: count and proportion of case and control genomes for each behaviour; format: `count of case genomes with behaviour/total number of case genomes (proportion): count of control genomes with behaviour/total number of control genomes (proportion)`
 
-**my0_intactk_sum**: for kmers that are intact (kmers that are not split) in control genomes, summary genome positions <sup> 2 </sup> for the left and right flanks 
+**my0_intactk_sum**: when kmer is intact (kmers that are not split) in control genomes, summary genome positions <sup> 2 </sup> for the left and right flanks 
 
-**my1_intactk_sum**: for kmers that are intact (kmers that are not split) in case genomes, summary genome positions <sup> 2 </sup> for the left and right flanks
+**my1_intactk_sum**: when kmer is intact (kmers that are not split) in case genomes, summary genome positions <sup> 2 </sup> for the left and right flanks
 
 **otherk**: flank behaviour other than intact k
 
-**my0_otherk_sum**: for kmers that show flank behaviour other than intactk in control genomes, summary genome positions <sup> 2 </sup> for the left and right flanks
+**my0_otherk_sum**: when kmer show flank behaviour other than intactk in control genomes, summary genome positions <sup> 2 </sup> for the left and right flanks
 
-**my1_otherk_sum**: for kmers that show flank behaviour other than intactk in case genomes, summary genome positions <sup> 2 </sup> for the left and right flanks 
+**my1_otherk_sum**: when kmer show flank behaviour other than intactk in case genomes, summary genome positions <sup> 2 </sup> for the left and right flanks 
 
 **event**: genome rearrangemnet event
 
