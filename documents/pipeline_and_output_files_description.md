@@ -285,7 +285,7 @@ flk_dist_stat: summary statistics <sup> 3 </sup> for distance between flanks acr
 
 **revk_1gen_sd**: standard deviation of genome position of reverse k-mer in case genomes
 
-**set**: label "rev1fwd0" (kmer in reverse orientation in majority of case genomes, in forward orientation in majority of control genomes) or "rev0fwd1" (kmer in reverse orientation in majority of control genomes, in forward orientation in majority of case genomes)
+**set**: label "rev1fwd0" (kmer in reverse orientation in majority of case genomes, in forward orientation in majority of control genomes) or "rev0fwd1" (kmer in reverse orientation in majority of control genomes, in forward orientation in majority of case genomes) or "other" (situations not defined as above)
 
 ###################################################
 
