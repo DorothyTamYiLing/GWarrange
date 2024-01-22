@@ -243,7 +243,7 @@ flk_dist_stat: summary statistics <sup> 3 </sup> for distance between flanks acr
 
 13. myintactkwithN_out.txt, include the following information in columns:
 
-**kmer**:	N-contaiing k-mer ID
+**kmer**:	N-containing k-mer ID
 
 **kmer_behaviour**:	"intact k"
 
