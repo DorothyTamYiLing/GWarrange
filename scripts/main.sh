@@ -2,8 +2,9 @@
 flk_len=30
 dedupk=2
 intkrd=1000
+thread=8
 
-while getopts k:g:p:f:d:o:s:d:x:y: flag
+while getopts k:g:p:f:d:o:s:d:x:y:t: flag
 do
     case "${flag}" in
         k) sigk=${OPTARG};;
@@ -15,6 +16,7 @@ do
         s) gen_size=${OPTARG};;
         x) dedupk=${OPTARG};;
         y) intkrd=${OPTARG};;
+        t) thread=${OPTARG};;
     esac
 done
 echo "sigk: $sigk";
@@ -26,6 +28,7 @@ echo "outdir: $outdir";
 echo "genome size for plot: $gen_size";
 echo "genome pos sig digit for dedup split k in plot: $dedupk";
 echo "round off intact k genome position to the nearest multiple of an integar: $intkrd";
+echo "number of thread: $thread";
 
 #create output directory, replace old one if exists
 if [[ -d ./$outdir ]]; then
@@ -38,8 +41,8 @@ fi
 python3 ./scripts/class_k.py --input $sigk --outdir $outdir
 echo "classifying sig k"
 
-gunzip $gen
-echo "unzipping genomes"
+#gunzip $gen
+#echo "unzipping genomes"
 
 #processing sig kmers with N, only when the input fasta file is present
 [ -s ${outdir}/sigk_withN.fasta ] && withN=1 || withN=0
@@ -48,7 +51,7 @@ if [[ ${withN} -eq 1 ]]
 then
 echo "there is sigk withN"
 echo "now run filtering_kmer_and_blast.sh"
-bash ./scripts/filtering_kmer_and_blast.sh ${outdir}/sigk_withN.fasta ${gen/.gz} $outdir $flk_len
+bash ./scripts/filtering_kmer_and_blast.sh ${outdir}/sigk_withN.fasta $gen $outdir $flk_len $thread
 echo "now run make_flank_summary.R"
 Rscript ./scripts/make_flank_summary.R --pheno $pheno --outdir $outdir --flkdist $flk_dist  --dedupk ${dedupk}
 else
@@ -62,7 +65,7 @@ if [[ ${noN} -eq 1 ]]
 then
 echo  "there is sigk_noN.fasta"
 python3 ./scripts/extract_knoN_length.py --input ${outdir}/sigk_noN.fasta --outdir ${outdir}
-blastn -query ${outdir}/sigk_noN.fasta -subject ${gen/.gz} -outfmt 6 -out ${outdir}/mynoN_out.txt
+blastn -num_threads ${thread} -query ${outdir}/sigk_noN.fasta -db $gen -outfmt 6 -out ${outdir}/mynoN_out.txt
 echo "now run process_sigkNoN.R"
 Rscript ./scripts/process_sigkNoN.R --pheno $pheno --outdir $outdir
 else
@@ -542,4 +545,5 @@ then
 rm ${outdir}/myNoNintactk_rev1fwd0_set_no1stline.txt
 fi
 
-gzip ${gen/.gz}
+#gzip ${gen/.gz}
+
