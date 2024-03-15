@@ -1,3 +1,6 @@
+#run within kmers_noN or kmers_withN directory
+#Rscript ../../scripts/plot_intactk.R --input myintactkwithN_rev1fwd0_set.txt --outdir . --outname myintactkwithN_rev1fwd0 --gen_size 4300 --intkrd 1000
+
 library("optparse")
 #install.packages("tidyr")
 
