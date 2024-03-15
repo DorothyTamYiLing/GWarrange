@@ -11,7 +11,13 @@ option_list = list(
   make_option("--outname", type="character", default=NULL,
               help="kmer to plot", metavar="character"),
   make_option("--intkrd", type="character", default=NULL,
-              help="kmer to plot", metavar="character")
+              help="kmer to plot", metavar="character"),
+  make_option("--height", type="character", default=100,
+              help="set the plot height", metavar="character"),
+  make_option("--width", type="character", default=180,
+              help="set the plot width", metavar="character"),
+    make_option("--res", type="character", default=150,
+              help="set the plot resolution", metavar="character")
 )
 
 opt_parser = OptionParser(option_list=option_list);
@@ -25,6 +31,12 @@ library("ggforce")
 #library("ggpubr")
 library("plyr",warn.conflicts = FALSE)
 library("tidyr")
+
+myheight<-as.numeric(as.character(opt$height))
+
+mywidth<-as.numeric(as.character(opt$width))
+
+myres<-as.numeric(as.character(opt$res))
 
 myx<-read.delim(opt$input,header=T,sep="\t")
 #mytable<-mytable[-1,]
@@ -95,16 +107,16 @@ mysize<-as.numeric(as.character(opt$gen_size))*1000
 #turn NA into 0, added on 20July23
 myx_unqiue[is.na(myx_unqiue)]<-0
 
-png(paste(opt$outdir,"/",opt$outname,".png",sep=""),res=150,width = 180, height = 185, units='mm')
+png(paste(opt$outdir,"/",opt$outname,".png",sep=""),res=myres,width = mywidth, height = myheight, units='mm')
 
 Rects = data.frame(xmin = c(-100, -100), xmax = c(mysize, mysize),
-                   ymin = c(-0.05,0.8), ymax = c(0.2, 1.05))
+                   ymin = c(-0.3,0.7), ymax = c(0.3, 1.3))
 
 p  <- ggplot(data = myx_unqiue) +
   geom_link(aes(x = fwdk_0gen_med, y = 0, xend = fwdk_0gen_med+15, yend = 0, color=mycol_index),arrow = grid::arrow(length = grid::unit(myx_unqiue$fwdk_0gen_prop, 'cm')))+
   geom_link(aes(x = revk_1gen_med, y = 1, xend = revk_1gen_med-15, yend = 1, color=mycol_index),arrow = grid::arrow(length = grid::unit(myx_unqiue$revk_1gen_prop, 'cm')))+
-  geom_link(aes(x = fwdk_1gen_med, y = 0.9, xend = fwdk_1gen_med+15, yend = 0.9, color=mycol_index),arrow = grid::arrow(length = grid::unit(myx_unqiue$fwdk_1gen_prop, 'cm')))+
-  geom_link(aes(x = revk_0gen_med, y = 0.1, xend = revk_0gen_med-15, yend = 0.1, color=mycol_index),arrow = grid::arrow(length = grid::unit(myx_unqiue$revk_0gen_prop, 'cm')))+
+  geom_link(aes(x = fwdk_1gen_med, y = 0.8, xend = fwdk_1gen_med+15, yend = 0.8, color=mycol_index),arrow = grid::arrow(length = grid::unit(myx_unqiue$fwdk_1gen_prop, 'cm')))+
+  geom_link(aes(x = revk_0gen_med, y = 0.2, xend = revk_0gen_med-15, yend = 0.2, color=mycol_index),arrow = grid::arrow(length = grid::unit(myx_unqiue$revk_0gen_prop, 'cm')))+
   scale_colour_gradientn(name = "kmer/colour_index",
                          colours=c("darkred","orange","red","blue","chartreuse3"))+
   scale_x_continuous(name="genome position",limits = c(-100, mysize),breaks = seq(1, mysize, by = 100000))+
