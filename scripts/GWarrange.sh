@@ -181,23 +181,23 @@ echo "build database for efficient blasting"
 makeblastdb -in example_data/${gen/.gz} -dbtype nucl -out genome_db
 
 #calculate value for d flag
-default_cut=$(grep "Maximum size" ext${min_ext}_merge${min_mrg}_mergedISstat.txt | cut -d$'\t' -f 2)
-default_d=$(awk "BEGIN { print int(${default_cut}*1.2)}")
+min_cut=$(grep "Maximum size" ext${min_ext}_merge${min_mrg}_mergedISstat.txt | cut -d$'\t' -f 2)
+min_d=$(awk "BEGIN { print int(${default_cut}*1.2)}")
 
-alt_cut=$(grep "Maximum size" ext${max_ext}_merge${max_mrg}_mergedISstat.txt | cut -d$'\t' -f 2)
-alt_d=$(awk "BEGIN { print int(${alt_cut}*1.2)}")
+max_cut=$(grep "Maximum size" ext${max_ext}_merge${max_mrg}_mergedISstat.txt | cut -d$'\t' -f 2)
+max_d=$(awk "BEGIN { print int(${alt_cut}*1.2)}")
 
 
 #running main.sh For ext100_merge3_ISreplaced_genomes set unitigs
 bash scripts/main.sh -k ext${min_ext}_merge${min_mrg}_ISreplaced_genomes/final_sig.fasta \
 -g genome_db \
--p example_data/${pheno} -d ${default_d} -f ${flk_len} \
+-p example_data/${pheno} -d ${min_d} -f ${flk_len} \
 -o ${gen/.fna.gz}_ext${min_ext}_merge${min_mrg}_outdir -s ${gen_size} -x ${dedupk} -y ${intkrd} -t ${thread_blast}
 
 #running main.sh For ext7000_merge200_ISreplaced_genomes set unitigs
 bash scripts/main.sh -k ext${max_ext}_merge${max_mrg}_ISreplaced_genomes/final_sig.fasta \
 -g genome_db \
--p example_data/${pheno} -d ${alt_d} -f ${flk_len} \
+-p example_data/${pheno} -d ${max_d} -f ${flk_len} \
 -o ${gen/.fna.gz}_ext${max_ext}_merge${max_mrg}_outdir -s ${gen_size} -x ${dedupk} -y ${intkrd} -t ${thread_blast}
 
 
