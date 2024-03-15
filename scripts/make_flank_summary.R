@@ -583,6 +583,8 @@ myshort_allout$label<-apply( myshort_allout[,2:8] , 1 , paste , collapse = "-" )
 myshort_allout_uniq<-myshort_allout[!duplicated(myshort_allout$label),]
 myshort_allout_uniq<-myshort_allout_uniq[-1,]
 
+myall_out<-myall_out[-1,]
+  
 write.table(myall_out,file=paste(opt$outdir,"mysplitk_out.txt",sep="/"),quote=F,row.names = F,col.names = T,sep="\t")
 write.table(myshort_allout_uniq,file=paste(opt$outdir,"myshort_splitk_out_uniq.txt",sep="/"),quote=F,row.names = F,col.names = T,sep="\t")
 }else{
