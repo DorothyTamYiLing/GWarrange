@@ -1,7 +1,14 @@
-#Usage: Rscript plot_flk_kmer_prop.R --kmer kmer93 --phen /home/ubuntu/Dorothy/genome_rearrangement/phenotypes.tsv \
-#--coor /home/ubuntu/Dorothy/genome_rearrangement/output/myflk_behave_pheno.txt \
-#--genome.size 4000 --outdir /home/ubuntu/Dorothy/genome_rearrangement/output --flk.dist 2500
-
+#reproduce the plot only
+#run it at the level of /splitk_plots, running this will replace existing splitk_plots directory 
+#sed 1d myshort_splitk_out_uniq.txt > myshort_splitk_out_uniq_nohead.txt
+#for x in $(cut -f1 myshort_splitk_out_uniq_nohead.txt)
+#do
+# echo $x
+# Rscript ../../scripts/plot_flk_kmer_prop.R --kmer $x \
+# --phen ../../example_data/clus1clus2_pheno.txt --coor ../kmers_withN/myflk_behave_pheno.txt \
+# --genome.size 4300 --outdir splitk_plots/plot${x} --flk.dist 110000 --exp_fac 86
+#done
+#rm myshort_splitk_out_uniq_nohead.txt
 
 #this script plot one kmer at a time
 library("optparse")
@@ -18,8 +25,17 @@ option_list = list(
   make_option("--flk.dist", type="character", default=NULL, 
               help="Maximum distance between flanks to define intact kmer", metavar="character"),
   make_option("--outdir", type="character", default=NULL,
-              help="kmer to plot", metavar="character")
-
+              help="kmer to plot", metavar="character"),
+  make_option("--exp_fac", type="character", default=86,
+              help="how much the arrow expand horizontally for visibility in relative to the genome size, larger number leads to less expansion", metavar="character"),
+  make_option("--yaxis", type="character", default=360,
+              help="set the y-axis height of the plot", metavar="character"),
+  make_option("--arr.dist", type="character", default=70,
+              help="set the vertical distance between arrows", metavar="character"),
+  make_option("--height", type="character", default=7,
+              help="set height of the plot", metavar="character"),
+  make_option("--width", type="character", default=10,
+              help="set the width of the plot", metavar="character")
 ) 
 
 opt_parser = OptionParser(option_list=option_list);
@@ -51,22 +67,37 @@ mykmer_tab<-mymerge[which(mymerge$kmer==mykmer),]
 #specify the rows correspond to the behaviours to be plotted (optional)
 #mykmer_tab<-mykmer_tab[which(mykmer_tab$mybehave%in%c("mv&flp","intact_k")),]
 
+#set the height of the plot
+yaxis<-as.numeric(as.character(opt$yaxis))
+
+#set the vertical distance between arrows
+arr_dist<-as.numeric(as.character(opt$arr.dist))
+
+#set the width of the plot
+width<-as.numeric(as.character(opt$width))
+
+#set the height of the plot
+height<-as.numeric(as.character(opt$height))
+
 #making the background plot
 pdf(file = paste0(opt$outdir,"/",mykmer,"_plot.pdf"),   # The directory you want to save the file in
-    width = 8, # The width of the plot in inches
-    height = 4) # The height of the plot in inches
+    width = width, # The width of the plot in inches
+    height = height) # The height of the plot in inches
 
 x_length=(as.numeric(as.character(opt$genome.size))+1000)
 #x_length=5000
-plot(1, type="n", xlim=c(1,x_length), ylim=c(-350,350), xlab="genome position (thousands)",ylab="",yaxt="n")
+plot(1, type="n", xlim=c(1,x_length), ylim=c(-yaxis,yaxis), xlab="genome position (thousands)",ylab="",yaxt="n")
 
-mtext(side=3, line=0.5, at=-0.01, adj=0, cex=0.7, "Heights of arrows correspond to proportion of case/control genomes")
+mtext(side=3, line=0.5, at=-0.01, adj=0, cex=0.8, "Heights of arrows correspond to proportion of case/control genomes ; genome position is shown as the mid vertical axis of arrows")
 
 abline(h=0) #to separate the case from control kmers
-text(x_length-200,50,"1/case genomes",cex=0.6)
-text(x_length-200,-50,"0/control genomes",cex=0.6)
+text(x_length-200,50,"1/case genomes",cex=0.8)
+text(x_length-200,-50,"0/control genomes",cex=0.8)
 
 title(main = mykmer)
+
+#set arrrow expansion factor
+exp_fac<-as.numeric(as.character(opt$genome.size))/as.numeric(as.character(opt$exp_fac))
 
 #R flank (downstream) is red, L flank (upstream) is blue
 
@@ -91,17 +122,17 @@ for(i in 1:2){
     if(myflk=="L"){
       mystart<-"StartL"
       myend<-"EndL"
-      mycol=rgb(0, 0, 1,0.5) #blue
+      mycol="#56B4E9" #blue
     }
     if(myflk=="R"){
       mystart<-"StartR"
       myend<-"EndR"
-      mycol=rgb(1, 0, 0,0.5) #red
+      mycol="#E66820" #orange
     }
     if(myflk=="in"){
       mystart<-"StartL"
       myend<-"EndR"
-      mycol=rgb(0,1,0,0.5) #green
+      mycol="#000000" #green
     }
     if(myflk%in%c("L","R")){  #extract the split kmer rows and specify the pheno to plot
       myktab<-mykmer_tab[which(abs(mykmer_tab$EndL-mykmer_tab$StartR)>as.numeric(as.character(opt$flk.dist)) & mykmer_tab$case_control==x),]
@@ -158,34 +189,34 @@ for(i in 1:2){
     #plot
     for(k in 1:nrow(mymed)){
       if(mymed$endmed[k]<mymed$startmed[k]){   #check if this flank has flipped (in the context of fwd_k)
-        plot_start<-mymed$startmed[k]/1000+50
-        plot_end<-mymed$endmed[k]/1000-50
+        plot_start<-mymed$startmed[k]/1000+exp_fac
+        plot_end<-mymed$endmed[k]/1000-exp_fac
       }else{
-        plot_start<-mymed$startmed[k]/1000-50
-        plot_end<-mymed$endmed[k]/1000+50
+        plot_start<-mymed$startmed[k]/1000-exp_fac
+        plot_end<-mymed$endmed[k]/1000+exp_fac
       }
-      sizefactor<-mymed$prop[k]
+      sizefactor<-mymed$prop[k]*1.5
       
       if(mypheno=="ctrl"){
         plotx <- c(plot_start, plot_start, plot_end)  
         #y format (top point, bottom point, central point)
         ploty <- c((startlevel-sizefactor), startlevel,(startlevel-(sizefactor/2))) 
-        polygon(plotx, ploty,border = NA,col=mycol)
+        polygon(plotx, ploty,border = mycol,col=mycol)
       }
       
       if(mypheno=="case"){
         plotx <- c(plot_start, plot_start, plot_end)  
         #y format (top point, bottom point, central point)
         ploty <- c((startlevel+sizefactor), startlevel,(startlevel+(sizefactor/2))) 
-        polygon(plotx, ploty,border = NA,col=mycol)
+        polygon(plotx, ploty,border = mycol,col=mycol)
       }
     }
     
     if(mypheno=="ctrl"){
-      startlevel<-(startlevel)-max(mymed$prop)-50 #set again the starting y axis level
+      startlevel<-(startlevel)-max(mymed$prop)-arr_dist #set again the starting y axis level
     }
     if(mypheno=="case"){
-      startlevel<-(startlevel)+max(mymed$prop)+50 #set again the starting y axis level
+      startlevel<-(startlevel)+max(mymed$prop)+arr_dist #set again the starting y axis level
     }
 if(myflk=="L"){
 myflk_name="leftflk"
@@ -202,12 +233,12 @@ myflk_name="intactk"
 }
 
 #add legend
-polygon(c((x_length-750),(x_length-750),(x_length-700)), c(350,330,340),border = NA,col=rgb(1, 0, 0,0.5))
-text(x=(x_length-400),y=340,"kmer right flank",cex = 0.6)
-polygon(c((x_length-750),(x_length-750),(x_length-700)), c(320,300,310),border = NA,col=rgb(0, 0, 1,0.5))
-text(x=(x_length-410),y=310,"kmer left flank",cex = 0.6)
-polygon(c((x_length-750),(x_length-750),(x_length-700)), c(290,270,280),border = NA,col=rgb(0, 1, 0,0.5))
-text(x=(x_length-470),y=280,"intact kmer",cex = 0.6)
+polygon(c((x_length-750),(x_length-750),(x_length-700)), c(350,330,340),border = "#E66820",col="#E66820")
+text(x=(x_length-360),y=340,"kmer right flank",cex = 0.8)
+polygon(c((x_length-750),(x_length-750),(x_length-700)), c(320,300,310),border = "#56B4E9",col="#56B4E9")
+text(x=(x_length-390),y=310,"kmer left flank",cex = 0.8)
+polygon(c((x_length-750),(x_length-750),(x_length-700)), c(290,270,280),border = "#000000",col="#000000")
+text(x=(x_length-450),y=280,"intact kmer",cex = 0.8)
 
 #export the plot
 dev.off()
