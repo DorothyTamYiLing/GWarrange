@@ -184,6 +184,11 @@ done
 
 paste -d \\n header.txt siguni_seq.txt > siguni_seq.fasta
 
+#add kmer names to pyseer output
+sed 's/>//g' header.txt > header_1.txt
+paste header_1.txt sigk_pyseer.txt > sigk_pyseer_1.txt & mv sigk_pyseer_1.txt sigk_pyseer.txt
+rm header_1.txt
+
 #classifying unitigs into those containing "N" and those do not contain "N". Produce "sigk_noN.fasta" and "sigk_withN.fasta".
 python3 ../scripts/class_k.py --input siguni_seq.fasta --outdir .
 
