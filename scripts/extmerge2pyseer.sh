@@ -189,6 +189,12 @@ sed 's/>//g' header.txt > header_1.txt
 paste header_1.txt sigk_pyseer.txt > sigk_pyseer_1.txt & mv sigk_pyseer_1.txt sigk_pyseer.txt
 rm header_1.txt
 
+#add header line
+pyhead=$(head -1 kmer_pyseer)
+pyhead_1="kmer_ID   "${pyhead}   
+echo ${pyhead_1} >  pyhead.txt
+cat pyhead.txt sigk_pyseer.txt > sigk_pyseer_1.txt mv sigk_pyseer_1.txt sigk_pyseer.txt
+
 #classifying unitigs into those containing "N" and those do not contain "N". Produce "sigk_noN.fasta" and "sigk_withN.fasta".
 python3 ../scripts/class_k.py --input siguni_seq.fasta --outdir .
 
