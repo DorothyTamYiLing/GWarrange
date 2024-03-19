@@ -35,7 +35,9 @@ option_list = list(
   make_option("--height", type="character", default=7,
               help="set height of the plot", metavar="character"),
   make_option("--width", type="character", default=10,
-              help="set the width of the plot", metavar="character")
+              help="set the width of the plot", metavar="character"),
+  make_option("--merge", type="character", default=40000,
+              help="merge arrows into one when they are less than XXXbp apart", metavar="character")
 ) 
 
 opt_parser = OptionParser(option_list=option_list);
@@ -78,6 +80,9 @@ width<-as.numeric(as.character(opt$width))
 
 #set the height of the plot
 height<-as.numeric(as.character(opt$height))
+
+#set arrow merge threshold of the plot
+mymerge<-as.numeric(as.character(opt$merge))
 
 #making the background plot
 pdf(file = paste0(opt$outdir,"/",mykmer,"_plot.pdf"),   # The directory you want to save the file in
@@ -145,7 +150,7 @@ for(i in 1:2){
     if(nrow(myktab)!=0){
     #print(myktab)    
     myktab<-myktab[order(myktab[[mystart]],decreasing=F),]
-    breakpt<-which(diff(myktab[[mystart]])>10000)
+    breakpt<-which(diff(myktab[[mystart]])>mymerge)
     #print(breakpt)
     
     if(length(breakpt)>0){ #if at least one break point found
