@@ -182,10 +182,10 @@ makeblastdb -in example_data/${gen/.gz} -dbtype nucl -out genome_db
 
 #calculate value for d flag
 min_cut=$(grep "Maximum size" ext${min_ext}_merge${min_mrg}_mergedISstat.txt | cut -d$'\t' -f 2)
-min_d=$(awk "BEGIN { print int(${default_cut}*1.2)}")
+min_d=$(awk "BEGIN { print int(${min_cut}*1.2)}")
 
 max_cut=$(grep "Maximum size" ext${max_ext}_merge${max_mrg}_mergedISstat.txt | cut -d$'\t' -f 2)
-max_d=$(awk "BEGIN { print int(${alt_cut}*1.2)}")
+max_d=$(awk "BEGIN { print int(${max_cut}*1.2)}")
 
 
 #running main.sh For ext100_merge3_ISreplaced_genomes set unitigs
