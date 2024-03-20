@@ -8,7 +8,7 @@ pyseer_arg="--min-af 0.05 --max-af 0.95 --print-samples --no-distances --cpu 8"
 fsmlite_arg="-v -t tmp -m 200 -M 200"
 unitigcaller_arg="--threads 8"
 string_type="kmer_and_unitigs"
-thread=8
+thread_blast=8
 
 while test $# -gt 0; do
            case "$1" in
