@@ -5,9 +5,11 @@ Frequency-based String Mining (lite)
 
 Tip 1: To avoid files confusion, before running a new tutorial, it is advisable to remove all output files/folders from previous tutorial runs.
 
-Tip 2: gff file of selected reference genome for estimating homologous sequence clusters can be converted from genebank file (.gbk, downloaded from NCBI) using online tools such as http://genome2d.molgenrug.nl/g2d_tools_conversions.html
+Tip 2: gff file of selected reference genome for generating candidate repeat loci categories stimating crepeat sequence clusters can be converted from genebank file (.gbk, downloaded from NCBI) using online tools such as http://genome2d.molgenrug.nl/g2d_tools_conversions.html
 
-![diagrams_flowchart](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/6c05fe4f-5092-466e-b974-a1384dff2b80)
+
+![diagrams_flowchart](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/413abac4-e692-4547-bc3b-845023cfc787)
+
 
 Genome rearrangement pipeline summary chart
 
@@ -26,44 +28,25 @@ Go to the top level of /genome_rearrangement directory
 ```
 cd /path/to/genome_rearrangement
 ```
+First, selected reference genome C505 (accession: NZ_CP011687.1) is used for identifying repeat loci candidates and for estimating size of repeat loci clusters in the genome.
+```
+bash script/homo_main.sh -gff example_data/C505_NZ_CP011687.1.gff -fna example_data/C505_NZ_CP011687.1.fna 
+```
+IS481 family transposase, IS481-like element IS481 family transposase and IS110-like element IS1663 family transposase are identified as most ubiqitous repeat loci.
 
-First, the genome assemblies multifasta file is prepared by concatenating the genome fasta files.
-```
-#concatenating genome fasta files for use
-cat example_data/example_genomes/clus1clus2_47_genomes/*fasta.gz > example_data/clus1clus2_47.fna.gz
-```
 
 Genomes assemblies from which genome rearrangements are detected are re-orientated by a chosen gene. In the case of _Bordetella pertussis_, the gene is _gidA_ since it is the first gene after origin of replication. The location and orientation of _gidA_ in the genomes are obtained by aligning it with multifasta file of genome assemblies by BLAST.
-```
-#unzip the genome file if neccesasry
-gunzip example_data/clus1clus2_47.fna.gz
 
-#blast gidA with genomes
-blastn -query example_data/gidA.fasta \
--subject example_data/clus1clus2_47.fna \
--outfmt 6 -out clus1clus2_47_gidA_out.txt
-```
 
-Then, genome assemblies are re-orientated according to the position and orientation of _gidA_ in the genomes, using the script fix_genome.py:
-```
-python3 scripts/fix_genome.py --input example_data/clus1clus2_47.fna --mycoor clus1clus2_47_gidA_out.txt
-```
 
-The output multifasta file name for the genomes in the same orientation is "fixed_genomes.fasta".
 
 Genome rearrangrements in _Bordetella pertussis_ are believed to be largely mediated by homologous recombination between insertion sequence elements (IS elements), such as IS481 and IS110. Location of target IS elements in the genomes are obtained through BLAST. Sequences of more than one target IS element can be placed in the same multifasta file for obtaining their genome locations in all genomes at once.
-```
-blastn -query example_data/IS_NZ_CP025371.1.fasta \
--subject fixed_genomes.fasta \
--outfmt 6 -out clus1clus2_47_blastIS_out.txt
-```
+
 
 In addition, genome rearrangements in _Bordetella pertussis_ have also been observed to be mediated by homologous recombination of sequence blocks that consist of one or more IS element. These duplicated sequence blocks are found throughout the genome and can be as large as several thousands base pairs in size. To ensure sensitivity in genome rearrangement detection, it is advised to replace these sequence blocks **completely** with shorter placeholder sequence. Without additional information of the actual size of the homologous sequence blocks, sequences extending several thousands base pairs to both directions from each IS element can be replaced.
 
 Here, sequences extending 7000bp to both directions from each IS element are replaced. IS elements that are no more than 200bp apart (after extension) in each genome are also "merged". Then, each of these "extended and merged" IS elements are replaced with shorter placedholder sequences (N x 15). A seperate set of IS-replaced genomes are also produced by enabling performing minimal IS extension (i.e. 100bp to both directions) and merging overlapping IS elements only (i.e. IS elements that are less than 3bp apart) through passing a string argument "on" to the -s flag.
-```
-bash scripts/merge_replace_IS.sh -g fixed_genomes.fasta -i clus1clus2_47_blastIS_out.txt -e 7000 -m 200 -s "on"
-```
+
 
 Each set of IS-replaced genomes using different IS merging and extending parameters are output into new directories "ext7000_merge200_ISreplaced_genomes" and "ext100_merge3_ISreplaced_genomes" respectively.
 
@@ -71,105 +54,11 @@ Statistics on the sizes and distances between each pair of adjacent "extended an
 
 Prior to GWAS, each set of IS-replaced genomes using different IS merging and extending parameters are used for generating kmers.
 
-```
-#For ext7000_merge200_ISreplaced_genomes set
-cd ext7000_merge200_ISreplaced_genomes
-
-#generating fsm-ite input file
-for f in *_ext7000_merge200_ISreplaced.fasta; do id=$(basename "$f" _ext7000_merge200_ISreplaced.fasta); echo $id $f; done > clus1clus2_47_input.list
-
-#generating kmers with size of 200 bases with minor allele frequency 0.05
-fsm-lite -l clus1clus2_47_input.list -v -s 3 -S 44 -t tmp -m 200 -M 200 | gzip - > clus1clus2_47_ext7000merge200_k200_output.txt.gz
-
-########################################################################
-
-#For ext100_merge3_ISreplaced_genomes set
-cd ext100_merge3_ISreplaced_genomes
-
-for f in *_ext100_merge3_ISreplaced.fasta; do id=$(basename "$f" _ext100_merge3_ISreplaced.fasta); echo $id $f; done > clus1clus2_47_input.list
-
-#generating kmers with size of 200 bases with minor allele frequency 0.05
-fsm-lite -l clus1clus2_47_input.list -v -s 3 -S 44 -t tmp -m 200 -M 200 | gzip - > clus1clus2_47_ext100merge3_k200_output.txt.gz
-
-```
 
 Then, a kmer-based GWAS is conducted using pyseer with an aim to identify kmers whose presence-absence patterns are associated with chromosome structures phenotype. Population structure is not controlled.
 
-```
-#Run inside corresponding *_ISreplaced_genomes directory
 
-#adding header to phenotype file for pyseer input format
-echo "samples binary" | cat - ../example_data/clus1clus2_pheno.txt > ../example_data/clus1clus2_pheno_4pyseer.txt
 
-#run pyseer
-
-#For ext7000_merge200_ISreplaced_genomes set
-pyseer --phenotypes ../example_data/clus1clus2_pheno_4pyseer.txt \
---kmers clus1clus2_47_ext7000merge200_k200_output.txt.gz \
---no-distances \
---min-af 0.05 --max-af 0.95 \
---print-samples --output-patterns kmer_patterns.txt \
-> clus1clus2_47_ext7000merge200_k200_MAF0.05_nopopctrl
-
-#For ext100_merge3_ISreplaced_genomes set
-pyseer --phenotypes ../example_data/clus1clus2_pheno_4pyseer.txt \
---kmers clus1clus2_47_ext100merge3_k200_output.txt.gz \
---no-distances \
---min-af 0.05 --max-af 0.95 \
---print-samples --output-patterns kmer_patterns.txt \
-> clus1clus2_47_ext100merge3_k200_MAF0.05_nopopctrl
-
-```
-
-Generate the number of unique patterns and p value significance threshold information:
-```
-#Run inside corresponding *_ISreplaced_genomes directory
-
-python3 ../scripts/count_patterns.py kmer_patterns.txt > count_pattern.txt
-
-#count_patterns.py is a script from pyseer package for calculating p-value threshold using Bonferroni correction
-
-```
-Extract kmers with p value below the significance threshold:
-```
-#Run inside corresponding *_ISreplaced_genomes directory
-
-#For ext7000_merge200_ISreplaced_genomes set, threshold may vary slightly between different runs
-awk '{ if ($4 <= 4.50E-04) { print } }' clus1clus2_47_ext7000merge200_k200_MAF0.05_nopopctrl > sigk_pyseer.txt
-
-#For ext100_merge3_ISreplaced_genomes set, threshold may vary slightly between different runs
-awk '{ if ($4 <= 5.43E-04) { print } }' clus1clus2_47_ext100merge3_k200_MAF0.05_nopopctrl > sigk_pyseer.txt
-```
-
-The sequences of kmers that are found to be significantly associated with structural phenotype are extracted and placed in a multifasta file.
-
-Extract significant kmer sequences and convert them into fasta format:
-```
-#Run inside corresponding *_ISreplaced_genomes directory
-
-#get the seqeunce only
-awk '{print $1}' sigk_pyseer.txt > sigk_seq.txt 
-
-#create multifasta file for significant kmer sequences
-number=$(cat sigk_seq.txt | wc -l)
-
-#remove any existing header file
-if ! [ -f header.txt ]; then
-  echo "header file does not exist."
-else
-  rm header.txt
-fi
-
-START=1
-let "END=$number" 
- 
-for (( c=$START; c<=$END; c++ ))
-do
-	echo ">kmer""$c " >> header.txt
-done
-
-paste -d \\n header.txt sigk_seq.txt > sigk_seq.fasta
-```
 
 Then, these kmers are blasted with the original genome set for studying potential genome rearrangements that are captured by them, implemented by the following script:
 
