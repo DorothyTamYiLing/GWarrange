@@ -12,7 +12,7 @@ Tip 2: gff file of selected reference genome for generating candidate repeat loc
 ![diagrams_flowchart](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/413abac4-e692-4547-bc3b-845023cfc787)
 
 
-Genome rearrangement pipeline summary chart
+Fig: Genome rearrangement pipeline summary chart
 
 
 # Tutorial 1
@@ -34,54 +34,19 @@ First, selected reference genome C505 (accession: NZ_CP011687.1) is used for ide
 #using default parameters
 bash script/homo_main.sh -gff example_data/C505_NZ_CP011687.1.gff -fna example_data/C505_NZ_CP011687.1.fna 
 ```
-By looking at /output_homo/homo_occurence.txt, IS481 family transposase, IS481-like element IS481 family transposase and IS110-like element IS1663 family transposase are identified as most ubiqitous repeat loci in the reference genome. Size of largest repeat loci cluster is 5735bp (printed as standard output)
+By looking at /output_homo/homo_occurence.txt, IS481 family transposase, IS481-like element IS481 family transposase and IS110-like element IS1663 family transposase are identified as most ubiqitous repeat loci in the reference genome. Size of largest repeat loci cluster is 5735bp (printed as standard output).
 
-Detecting genome rearrangement associated with phenotype using GWarrange.sh. Genome fasta file (-gen), phenotype file (-pheno), start gene fasta file (-startgene) and repeat loci list fasta file (-replist) must be located inside /example_data directory. Minimal repeat sequence extension and merge parameters are used for preserving rearrangement breakpoints, while a separate set of genomes are generated using maximum extension of 7000bp to ensure complete replacement of repeat cluster (this number must be larger than size of largest repeat loci cluster, i.e. 5735bp )
+To detect genome rearrangement associated with phenotype using GWarrange.sh, minimal repeat sequence extension and merge parameters are used for preserving rearrangement breakpoints, while a separate set of genomes are generated using extension of 7000bp to ensure complete replacement of repeat cluster by placeholder sequence, hence increasing sensitivity in detecting rearrangement boundaries (_i.e._ this number must be larger than the estimated size of largest repeat loci cluster, _i.e._ 5735bp). K-mer size of 200 and minor allele frequency of 0.05 is used. _gidA_ gene is used to re-oriente genomes. Population structure is not controlled.
 
 ```
+#Genome fasta file (-gen), phenotype file (-pheno), start gene fasta file (-startgene) and repeat loci list fasta file (-replist) must be located inside /example_data directory
+
 bash scripts/GWarrange.sh -gen clus1clus2_47.fna.gz -pheno clus1clus2_pheno.txt \
 -gen_size 4300 -startgene gidA.fasta -replist IS_NZ_CP025371.1.fasta \
 -thread 8 \
 -fsmlite_arg "-v -s 3 -S 44 -t tmp -m 200 -M 200" \
 -ext_mrg_min "100_3" -ext_mrg_max "7000_3"
 ```
-
-Here, sequences extending 7000bp to both directions from each IS element are replaced. IS elements that are no more than 200bp apart (after extension) in each genome are also "merged". Then, each of these "extended and merged" IS elements are replaced with shorter placedholder sequences (N x 15). A seperate set of IS-replaced genomes are also produced by enabling performing minimal IS extension (i.e. 100bp to both directions) and merging overlapping IS elements only (i.e. IS elements that are less than 3bp apart) through passing a string argument "on" to the -s flag.
-
-
-Each set of IS-replaced genomes using different IS merging and extending parameters are output into new directories "ext7000_merge200_ISreplaced_genomes" and "ext100_merge3_ISreplaced_genomes" respectively.
-
-Statistics on the sizes and distances between each pair of adjacent "extended and merged" IS are printed in files *_mergedISstat.txt.
-
-Prior to GWAS, each set of IS-replaced genomes using different IS merging and extending parameters are used for generating kmers.
-
-
-Then, a kmer-based GWAS is conducted using pyseer with an aim to identify kmers whose presence-absence patterns are associated with chromosome structures phenotype. Population structure is not controlled.
-
-
-
-
-Then, these kmers are blasted with the original genome set for studying potential genome rearrangements that are captured by them, implemented by the following script:
-
-```
-#run in the top level of /genome_rearrangement directory
-cd /path/to/genome_rearrangement
-
-#For ext7000_merge200_ISreplaced_genomes set
-bash scripts/main.sh -k ext7000_merge200_ISreplaced_genomes/sigk_seq.fasta \
--g example_data/clus1clus2_47.fna.gz \
--p example_data/clus1clus2_pheno.txt -d 110000 -f 30 \
--o clus1clus2_47_ext7000_merge200_outdir -s 4300 -x 2 -y 1000
-
-#For ext100_merge3_ISreplaced_genomes set
-bash scripts/main.sh -k ext100_merge3_ISreplaced_genomes/sigk_seq.fasta \
--g example_data/clus1clus2_47.fna \
--p example_data/clus1clus2_pheno.txt -d 5000 -f 30 \
--o clus1clus2_47_ext100_merge3_outdir -s 4300 -x 2 -y 1000
-
-```
-
-Note that the value used for -d parameter should be larger than the "Maximum size of merged ISs" value in the corresponding *mergedISstat.txt file.
 
 **Visualising genome rearrangements that are captured by kmer**
 
