@@ -144,7 +144,7 @@ bash scripts/GWarrange.sh -gen Efaecium_32genomes.fna.gz -pheno Efaecium32genome
 -thread 8 \
 -fsmlite_arg "-v -t tmp -s 20 -S 30 -m 200 -M 200" \
 -pyseer_arg "--print-samples --no-distances" \
--ext_mrg_min "100_3" -ext_mrg_max "17000_3" -strnig_type "kmers_and_unitigs"
+-ext_mrg_min "100_3" -ext_mrg_max "17000_3" -string_type "kmers_and_unitigs"
 ```
 
 **Visualising genome rearrangements that are captured by kmer**
