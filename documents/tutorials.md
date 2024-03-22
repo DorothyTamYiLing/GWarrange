@@ -135,7 +135,7 @@ bash scripts/GWarrange.sh -gen Efaecium_32genomes.fna.gz -pheno Efaecium32genome
 -pyseer_arg "--print-samples --no-distances" \
 -ext_mrg_min "100_3" -ext_mrg_max "17000_3" 
 ```
-While generating the number of significant k-mers from pyseer output using 100_3 extension and merge parameters, XXX,XXX number of significant k-mers are found (as printed in the standard output). Due to the large number of k-mers that can be difficult to be procssed in a reasonable amount of time, it is recommended to incoporate the use of unitigs by indicating -string_type "kmers_and_unitigs". This allows unitig-callers to be run on top of fsm-lite, and the final list of significant "sequences" used for detecting genome rearrangement consisted of 1) k-mers containing placeholder seqeunces (for detecting rearrangement boundaries) and 2) unitigs without placeholder seqeunces (for detecting interior rearranged sequences).
+While generating the number of significant k-mers from pyseer output using 100_3 extension and merge parameters, 424,588 number of significant k-mers are found (as printed in the standard output). Due to the large number of k-mers that can be difficult to be procssed in a reasonable amount of time, it is recommended to incoporate the use of unitigs by indicating -string_type "kmers_and_unitigs". This allows unitig-callers to be run on top of fsm-lite, and the final list of significant "sequences" used for detecting genome rearrangement consisted of 1) k-mers containing placeholder seqeunces (for detecting rearrangement boundaries) and 2) unitigs without placeholder seqeunces (for detecting interior rearranged sequences).
 
 #rerun by indicating unitig-callers
 ```
@@ -149,28 +149,32 @@ bash scripts/GWarrange.sh -gen Efaecium_32genomes.fna.gz -pheno Efaecium32genome
 
 **Visualising genome rearrangements that are captured by kmer**
 
-Split kmers are found (_i.e._ flanking sequences mapped to different positions) when mapped to the original genomes. They can be found in Efaecium32genomes_ext100merge3_1swap_withNnoN5000_outdir/kmers_withN/mysplitk_out.txt.
+Split kmers are found (_i.e._ flanking sequences mapped to different positions) when mapped to the original genomes. They can be found in Efaecium_32genomes_ext100_merge3_outdir/kmers_withN/mysplitk_out.txt.
 
 1) Plotting split kmers for visualising rearrangement boundaries
 
-Since kmers contain highly redundant information, only kmers with unique information (genome position, case and control count and proportion) are kept. They can be found in output file Efaecium32genomes_ext100merge3_1swap_withNnoN5000_outdir/kmers_withN/myshort_splitk_out_uniq.txt.
+Since kmers contain highly redundant information, only kmers with unique information (genome position, case and control count and proportion) are kept. They can be found in output file Efaecium_32genomes_ext100_merge3_outdir/kmers_withN/myshort_splitk_out_uniq.txt.
 
-Two rearrangement boundaries are found, and they potentially refer to a single inversion event between 72000bp and 2100000bp. All of the split kmers are found to be split in case geomes and intact in control genomes. This could be explained by the absence of IS elements in the rearrangement boundaries in case genomes, which has been confirmed by manual sequence check. The two boundaries can be indicated by four different significant split kmers that are mapped to each of the boundaries in forward/reverse orientation (plots of one of these kmers are shown below). Full information of these kmers can be found in output file mysplitk_out.txt. Plots for split kmers can be found in folder Efaecium32genomes_ext100merge3_1swap_withNnoN5000_outdir/kmers_withN/splitk_plots.
+Two rearrangement boundaries are found, and they potentially refer to a single inversion event between 72000bp and 2100000bp. All of the split kmers are found to be split in case geomes and intact in control genomes. This could be explained by the absence of IS elements in the rearrangement boundaries in case genomes, which has been confirmed by manual sequence check. The two boundaries can be indicated by four different significant split kmers that are mapped to each of the boundaries in forward/reverse orientation (plots of one of these kmers are shown below). Full information of these kmers can be found in output file mysplitk_out.txt. Plots for split kmers can be found in folder Efaecium_32genomes_ext100_merge3_outdir/kmers_withN/splitk_plots.
 
 72000bp boundary, intact kmer in forward orientation:
 
-![kmer98323_plot](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/b012559f-bd0c-4ceb-b77e-53c0e07eadb5)
+![kmer96750_plot](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/6157461d-d2b1-4012-a56c-59c107247d69)
+
 
 72000bp boundary, intact kmer in reverse orientation:
-![kmer97292_plot](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/237de0e6-6c80-4c5c-ae21-b9b68951af34)
+
+![kmer95738_plot](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/f3689104-c879-4cf8-bc1c-c0d89d542486)
+
 
 2100000bp boundary, intact kmer in forward orientation:
 
-![kmer99909_plot](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/e27620d6-2ec5-4bd7-baaa-53f834bbae75)
+![kmer98312_plot](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/2a94de9e-bb8c-489f-a267-5a4cfd31b5fd)
+
 
 2100000bp boundary, intact kmer in reverse orientation:
 
-![kmer98897_plot](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/4d33ac75-246d-473d-b189-45dc471db2c0)
+![kmer97318_plot](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/dbae9891-4ec5-47ac-849f-e851481fe999)
 
 
 No significant split unitigs are identified as unitig-caller are not able to generate unitigs containing placeholder sequences.
