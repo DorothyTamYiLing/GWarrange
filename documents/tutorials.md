@@ -5,8 +5,7 @@ Frequency-based String Mining (lite)
 
 Tip: To avoid files confusion, before running a new tutorial, it is advisable to remove all output files/folders from previous tutorial runs.
 
-![diagrams_6](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/548a469f-0dfe-4a96-a1dc-7b3dad339ffc)
-
+![diagrams_flowchart](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/6c05fe4f-5092-466e-b974-a1384dff2b80)
 
 Genome rearrangement pipeline summary chart
 
