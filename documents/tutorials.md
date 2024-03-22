@@ -176,8 +176,9 @@ Two rearrangement boundaries are found, and they potentially refer to a single i
 
 ![kmer97318_plot](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/dbae9891-4ec5-47ac-849f-e851481fe999)
 
+Flanking sequences of split k-mers appeared in clusters. This is due to indels that are found in genomes leading to shifts in the rearrangement boundaries. For clarity in visualisation, arrows that are less than 40000bp apart (default value) are merged, as indicated by the --split_merge flag.
 
-No significant split unitigs are identified as unitig-caller are not able to generate unitigs containing placeholder sequences.
+No significant split unitigs are identified as unitig-caller unitigs containing placeholder sequences are not produced by unitig-callers.
 
 2) Plotting intact unitigs (without N) for visualising sequence content of rearrangement :
 
