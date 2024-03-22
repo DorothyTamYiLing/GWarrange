@@ -45,6 +45,7 @@ bash scripts/GWarrange.sh -gen clus1clus2_47.fna.gz -pheno clus1clus2_pheno.txt 
 -gen_size 4300 -startgene gidA.fasta -replist IS_NZ_CP025371.1.fasta \
 -thread 8 \
 -fsmlite_arg "-v -s 3 -S 44 -t tmp -m 200 -M 200" \
+-pyseer_arg "--print-samples --no-distances" \
 -ext_mrg_min "100_3" -ext_mrg_max "7000_3"
 ```
 
