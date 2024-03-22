@@ -4,6 +4,7 @@ unitig-caller 1.3.0,
 Frequency-based String Mining (lite)
 
 Tip 1: To avoid files confusion, before running a new tutorial, it is advisable to remove all output files/folders from previous tutorial runs.
+
 Tip 2: gff file of selected reference genome for estimating homologous sequence clusters can be converted from genebank file (.gbk, downloaded from NCBI) using online tools such as http://genome2d.molgenrug.nl/g2d_tools_conversions.html
 
 ![diagrams_flowchart](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/6c05fe4f-5092-466e-b974-a1384dff2b80)
