@@ -51,29 +51,33 @@ bash scripts/GWarrange.sh -gen clus1clus2_47.fna.gz -pheno clus1clus2_pheno.txt 
 
 **Visualising genome rearrangements that are captured by kmer**
 
-From genome set with 7000bp extension and 200bp merging, split kmers are found (_i.e._ flanking sequences mapped to different positions) when mapped to the original genomes. They can be found in clus1clus2_47_ext7000_merge200_outdir/kmers_withN/mysplitk_out.txt.
+From genome set with 7000bp extension and 3bp merging, split kmers are found (_i.e._ flanking sequences mapped to different positions) when mapped to the original genomes. They can be found in clus1clus2_47_ext7000_merge3_outdir/kmers_withN/mysplitk_out.txt.
 
 1) Plotting split kmers for visualising rearrangement boundaries
 
-Since kmers contain highly redundant information, only kmers with unique information, i.e. unique behaviour count and proportion in case/control genomes, unique genome position (represented by the mean StartL when k-mers are intact in case genomes, rounded off to two significant digits, as indicated by the x flag), and unique forward/reverse intact k-mers count are kept. They can be found in output file clus1clus2_47_ext7000_merge200_outdir/kmers_withN/myshort_splitk_out_uniq.txt.
+Since k-mers contain highly redundant information, each k-mer is given a label, which contains its:  behaviour count and proportion in case/control genomes, genome position (represented by the mean StartL when k-mers are intact in case genomes, rounded off to two significant digits, as indicated by the -dedupk flag), and forward/reverse intact k-mers count. Only k-mers with unique labels are kept. Deduplicated k-mers can be found in output file clus1clus2_47_ext7000_merge3_outdir/kmers_withN/myshort_splitk_out_uniq.txt.
 
-Four rearrangement boundaries are found, and they potentially refer to two inversion events, i.e. between 43000bp and 3600000bp, as well as between 1500000bp and 2500000bp, one inversion nested within the other. The four boundaries can be indicated by sixteen different significant split kmers that are mapped to each of the boundary, split in case/control genomes, and in forward/reverse orientation (plots of four split kmers are shown below as examples). Full information of these kmers can be found in output file clus1clus2_47_ext7000_merge200_outdir/kmers_withN/mysplitk_out.txt. Plots for split kmers can be found in folder clus1clus2_47_ext7000_merge200_outdir/kmers_withN/splitk_plots.
+Four rearrangement boundaries are found, and they potentially refer to two inversion events, i.e. between 43000bp and 3600000bp, as well as between 1500000bp and 2500000bp, one inversion nested within the other. The four boundaries can be indicated by sixteen different significant split kmers that are mapped to each of the boundary, split in case/control genomes, and in forward/reverse orientation (plots of four split kmers are shown below as examples). Full information of these kmers can be found in output file clus1clus2_47_ext7000_merge3_outdir/kmers_withN/mysplitk_out.txt. Plots for split kmers can be found in folder clus1clus2_47_ext7000_merge3_outdir/kmers_withN/splitk_plots.
 
 Inversion within genome region 43000 and 3600000, 43000bp boundary, kmer being intact in case genomes and split in control genomes, in forward orientation:
 
-![kmer99_plot](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/b5d132a7-8e65-453d-9b54-ffeb80334bc4)
+[kmer99_plot.pdf](https://github.com/DorothyTamYiLing/genome_rearrangement/files/14728096/kmer99_plot.pdf)
+
 
 Inversion within genome region 43000 and 3600000, 3600000bp boundary, kmer being intact in control genomes and split in case genomes, in reverse orientation:
 
-![kmer933_plot](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/bf62eeb5-ee75-449b-aab1-be13ddd4c77a)
+[kmer933_plot.pdf](https://github.com/DorothyTamYiLing/genome_rearrangement/files/14728105/kmer933_plot.pdf)
+
 
 Inversion within genome region 1500000 and 2500000, 1500000bp boundary, kmer being intact in control genomes and split in case genomes, forward orientation kmer:
 
-![kmer932_plot](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/0f97454f-107d-4643-881f-53f1fc1b7e45)
+[kmer832_plot.pdf](https://github.com/DorothyTamYiLing/genome_rearrangement/files/14728097/kmer832_plot.pdf)
+
 
 Inversion within genome region 1500000 and 2500000, 2500000bp boundary, kmer being intact in case genomes and split in control genomes, reverse orientation kmer:
 
-![kmer931_plot](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/531b0035-976e-4fca-bc53-ad21bbe5c6aa)
+
+[kmer931_plot.pdf](https://github.com/DorothyTamYiLing/genome_rearrangement/files/14728108/kmer931_plot.pdf)
 
 
 Height of arrows corresponds to proportion of case/control genomes.
