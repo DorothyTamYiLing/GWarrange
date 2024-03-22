@@ -182,15 +182,15 @@ No significant split unitigs are identified as unitig-caller unitigs containing 
 
 2) Plotting intact unitigs (without N) for visualising sequence content of rearrangement :
 
-Genome positions of unitigs from /ext100_merge3_ISreplaced_genomes (minimal IS extension and merging overlapping IS only) are plotted. Only unitigs with unqiue genome position information (by rounding off to the nearest multiple of 1000) are kept for plotting (as shown in Efaecium32genomes_ext100merge3_1swap_unitig_outdir/kmers_noN/*kmer4plot.txt files). Plots for unitigs can be found in folder Efaecium32genomes_ext100merge3_1swap_unitig_outdir/kmers_noN.
+Genome positions of unitigs from /ext100_merge3_ISreplaced_genomes (minimal IS extension and merging overlapping IS only) are plotted. Only unitigs with unqiue genome position information (by rounding off to the nearest multiple of 1000, default value in -intkrd flag) are kept for plotting (as shown in Efaecium_32genomes_ext100_merge3_outdir/kmers_noN/*kmer4plot.txt files). Plots for unitigs can be found in folder Efaecium_32genomes_ext100_merge3_outdir/kmers_noN.
 
 Plot of unitigs that show rearrangements significantly associated with structure phenotype.
 
 ![diagrams_18](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/1d5f7076-33c3-4ccb-86f8-9ff4ee8e3cdd)
 
 
-(Left: intact kmers that are in forward orientation in majority of structure "1" genomes, as well as in reverse orientation in majority of structure "0" genomes;
-Right: intact kmers that are in reverse orientation in majority of structure "1" genomes, as well as in forward orientation in majority of structure "0" genomes)
+(Left: intact unitigs that are in forward orientation in majority of structure "1" genomes, as well as in reverse orientation in majority of structure "0" genomes;
+Right: intact unitigs that are in reverse orientation in majority of structure "1" genomes, as well as in forward orientation in majority of structure "0" genomes)
 
 
 Page, A.J., Ainsworth, E.V. and Langridge, G.C., 2020. socru: typing of genome-level order and orientation around ribosomal operons in bacteria. Microbial Genomics, 6(7).
