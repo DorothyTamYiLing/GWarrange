@@ -61,23 +61,22 @@ Four rearrangement boundaries are found, and they potentially refer to two inver
 
 Inversion within genome region 43000 and 3600000, 43000bp boundary, kmer being intact in case genomes and split in control genomes, in forward orientation:
 
-[kmer99_plot.pdf](https://github.com/DorothyTamYiLing/genome_rearrangement/files/14728096/kmer99_plot.pdf)
+![kmer99_plot](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/9a4cbda0-2637-4dea-b479-fdf1f4094f9e)
 
 
 Inversion within genome region 43000 and 3600000, 3600000bp boundary, kmer being intact in control genomes and split in case genomes, in reverse orientation:
 
-[kmer933_plot.pdf](https://github.com/DorothyTamYiLing/genome_rearrangement/files/14728105/kmer933_plot.pdf)
+![kmer933_plot](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/d3244de7-e602-4c4f-8ef2-a7070e4b4735)
 
 
 Inversion within genome region 1500000 and 2500000, 1500000bp boundary, kmer being intact in control genomes and split in case genomes, forward orientation kmer:
 
-[kmer832_plot.pdf](https://github.com/DorothyTamYiLing/genome_rearrangement/files/14728097/kmer832_plot.pdf)
 
 
 Inversion within genome region 1500000 and 2500000, 2500000bp boundary, kmer being intact in case genomes and split in control genomes, reverse orientation kmer:
 
 
-[kmer931_plot.pdf](https://github.com/DorothyTamYiLing/genome_rearrangement/files/14728108/kmer931_plot.pdf)
+![kmer931_plot](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/32c29ea0-2c1b-4d22-840f-f8f6ffd51e87)
 
 
 Height of arrows corresponds to proportion of case/control genomes.
