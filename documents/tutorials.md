@@ -8,6 +8,7 @@ Tip 1: To avoid files confusion, before running a new tutorial, it is advisable 
 Tip 2: gff file of selected reference genome for generating candidate repeat loci categories stimating crepeat sequence clusters can be converted from genebank file (.gbk, downloaded from NCBI) using online tools such as http://genome2d.molgenrug.nl/g2d_tools_conversions.html
 
 
+
 ![diagrams_flowchart](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/413abac4-e692-4547-bc3b-845023cfc787)
 
 
@@ -35,16 +36,15 @@ bash script/homo_main.sh -gff example_data/C505_NZ_CP011687.1.gff -fna example_d
 ```
 By looking at /output_homo/homo_occurence.txt, IS481 family transposase, IS481-like element IS481 family transposase and IS110-like element IS1663 family transposase are identified as most ubiqitous repeat loci in the reference genome. Size of largest repeat loci cluster is 5735bp (printed as standard output)
 
+Detecting genome rearrangement associated with phenotype using GWarrange.sh. Genome fasta file (-gen), phenotype file (-pheno), start gene fasta file (-startgene) and repeat loci list fasta file (-replist) must be located inside /example_data directory. Minimal repeat sequence extension and merge parameters are used for preserving rearrangement breakpoints, while a separate set of genomes are generated using maximum extension of 7000bp to ensure complete replacement of repeat cluster (this number must be larger than size of largest repeat loci cluster, i.e. 5735bp )
 
-Genomes assemblies from which genome rearrangements are detected are re-orientated by a chosen gene. In the case of _Bordetella pertussis_, the gene is _gidA_ since it is the first gene after origin of replication. The location and orientation of _gidA_ in the genomes are obtained by aligning it with multifasta file of genome assemblies by BLAST.
-
-
-
-
-Genome rearrangrements in _Bordetella pertussis_ are believed to be largely mediated by homologous recombination between insertion sequence elements (IS elements), such as IS481 and IS110. Location of target IS elements in the genomes are obtained through BLAST. Sequences of more than one target IS element can be placed in the same multifasta file for obtaining their genome locations in all genomes at once.
-
-
-In addition, genome rearrangements in _Bordetella pertussis_ have also been observed to be mediated by homologous recombination of sequence blocks that consist of one or more IS element. These duplicated sequence blocks are found throughout the genome and can be as large as several thousands base pairs in size. To ensure sensitivity in genome rearrangement detection, it is advised to replace these sequence blocks **completely** with shorter placeholder sequence. Without additional information of the actual size of the homologous sequence blocks, sequences extending several thousands base pairs to both directions from each IS element can be replaced.
+```
+bash scripts/GWarrange.sh -gen clus1clus2_47.fna.gz -pheno clus1clus2_pheno.txt \
+-gen_size 4300 -startgene gidA.fasta -replist IS_NZ_CP025371.1.fasta \
+-thread 8 \
+-fsmlite_arg "-v -s 3 -S 44 -t tmp -m 200 -M 200" \
+-ext_mrg_min "100_3" -ext_mrg_max "7000_3"
+```
 
 Here, sequences extending 7000bp to both directions from each IS element are replaced. IS elements that are no more than 200bp apart (after extension) in each genome are also "merged". Then, each of these "extended and merged" IS elements are replaced with shorter placedholder sequences (N x 15). A seperate set of IS-replaced genomes are also produced by enabling performing minimal IS extension (i.e. 100bp to both directions) and merging overlapping IS elements only (i.e. IS elements that are less than 3bp apart) through passing a string argument "on" to the -s flag.
 
