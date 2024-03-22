@@ -34,9 +34,9 @@ First, selected reference genome C505 (accession: NZ_CP011687.1) is used for ide
 #using default parameters
 bash script/homo_main.sh -gff example_data/C505_NZ_CP011687.1.gff -fna example_data/C505_NZ_CP011687.1.fna 
 ```
-By looking at /output_homo/homo_occurence.txt, IS481 family transposase, IS481-like element IS481 family transposase and IS110-like element IS1663 family transposase are identified as most ubiqitous repeat loci in the reference genome. Size of largest repeat loci cluster is 5735bp (printed as standard output).
+By looking at /output_homo/homo_occurence.txt, IS481 family transposase, IS481-like element IS481 family transposase and IS110-like element IS1663 family transposase are identified as most ubiqitous repeat loci categories in the reference genome. Size of largest repeat loci cluster is 5735bp (printed as standard output). 
 
-To detect genome rearrangement associated with phenotype using GWarrange.sh, minimal repeat sequence extension and merge parameters are used for preserving rearrangement breakpoints, while a separate set of genomes are generated using extension of 7000bp to ensure complete replacement of repeat cluster by placeholder sequence, hence increasing sensitivity in detecting rearrangement boundaries (_i.e._ this number must be larger than the estimated size of largest repeat loci cluster, _i.e._ 5735bp). K-mer size of 200 and minor allele frequency of 0.05 is used. _gidA_ gene is used to re-oriente genomes. Population structure is not controlled.
+To detect genome rearrangement associated with phenotype (-pheno), a short list of most ubiqitous repeat loci are placed in the file IS_NZ_CP025371.1.fasta (-replist) for repeat sequence detection in the input genome set (-gen). Minimal repeat sequence extension and merge parameters (-ext_mrg_min) are used for preserving rearrangement breakpoints; while a separate set of genomes are generated using extension of 7000bp (this number must be larger than the estimated size of largest repeat loci cluster, _i.e._ 5735bp) to ensure complete replacement of repeat sequence clusters by placeholder sequences, hence increasing sensitivity in detecting rearrangement boundaries (-ext_mrg_max). K-mer size of 200bp and minor allele frequency of 0.05 is used, specified as part of fsm-lite arguments (-fsmlite_arg). _gidA_ gene is used to re-oriente genomes (-startgene). Population structure is not controlled, specified as part of pyseer arguments (-pyseer_arg).
 
 ```
 #Genome fasta file (-gen), phenotype file (-pheno), start gene fasta file (-startgene) and repeat loci list fasta file (-replist) must be located inside /example_data directory
@@ -85,7 +85,7 @@ Height of arrows corresponds to proportion of case/control genomes.
 
 2) Plotting intact kmers without N for visualising interior sequence content of rearrangements :
 
-Genome position of intact kmers without N from /ext100_merge3_ISreplaced_genomes (minimal IS extension and merging overlapping IS only) are plotted. Only kmers with unqiue genome position information (by rounding off to the nearest multiple of 1000) are kept for plotting (as shown in clus1clus2_47_ext100_merge3_outdir/kmers_noN/*kmer4plot.txt files). Plots for intact kmers can be found in folder clus1clus2_47_ext100_merge3_outdir/kmers_noN.
+Genome position of intact kmers without N from /ext100_merge3_ISreplaced_genomes (minimal IS extension and merging overlapping IS only) are plotted. Only kmers with unqiue genome position information (by rounding off to the nearest multiple of 1000 using default -intkrd flag value) are kept for plotting (as shown in clus1clus2_47_ext100_merge3_outdir/kmers_noN/*kmer4plot.txt files). Plots for intact kmers can be found in folder clus1clus2_47_ext100_merge3_outdir/kmers_noN.
 
 Plot of intact kmers that show rearrangements in two genome regions that are significantly associated with structural phenotype.
 
@@ -110,190 +110,42 @@ _Enterococcus faecium_'s genomes are known to be enriched with IS elements, whic
 
 Fig : Two different chromosome structures found among 32 _Enterococcus faecium_ genomes. 
 
-First, genomes asemblies from which genome rearrangements are detected are re-orientated by a chosen gene, i.e. dnaA. The location and orientation of dnaA in the genomens are obtained by aligning it with multifasta file of genome assemblies through BLAST.
+##
 
 Go to the top level of /genome_rearrangement directory
 ```
 cd /path/to/genome_rearrangement
 ```
-First, the genome assemblies multifasta file is prepared by concatenating genome fasta files.
+First, selected reference genome AUSMDU00004142 (accession: NZ_CP027501.1) is used for identifying repeat loci candidates and for estimating size of repeat loci clusters in the genome.
 ```
-#concatenating genome fasta files for use
-cat example_data/example_genomes/Efaecium_32genomes/*fasta.gz > example_data/32genomes.fna.gz
+#using default parameters
+bash script/homo_main.sh -gff example_data/AUSMDU00004142_NZ_CP027501.1.gff -fna example_data/AUSMDU00004142.fna 
 ```
+By looking at /output_homo/homo_occurence.txt, ISL3-like_element_ISEfa11_family_transposase, IS256-like_element_ISEf1_family_transposase and IS30_family_transposase are identified as most ubiqitous repeat loci categories in the reference genome. Size of largest repeat loci cluster is 15773bp (printed as standard output).
 
-Genomes assemblies from which genome rearrangements are detected are re-orientated by a chosen gene. In the case of _Enterococcus faecium_, the chosen gene can be dnaA. The location and orientation of dnaA in the genomes are obtained by blasting it with multifasta file of genome assemblies.
-
-```
-#unzip the genome file if neccesasry
-gunzip example_data/32genomes.fna.gz
-
-#blast dnaA with genomes
-blastn -query example_data/dnaA.fasta \
--subject example_data/32genomes.fna \
--outfmt 6 -out 32genomes_dnaA_out.txt
-```
-
-Then, genome assemblies are re-orientated according to the position and orientation of dnaA in the genomes, using the script fix_genome.py:
+To detect genome rearrangement associated with phenotype (-pheno), a short list of most ubiqitous repeat loci are placed in the file Efaecium_replist.fasta (-replist) for repeat sequence detection in the input genome set (-gen). Minimal repeat sequence extension and merge parameters (-ext_mrg_min) are used for preserving rearrangement breakpoints; while a separate set of genomes are generated using extension of 17000bp (this number must be larger than the estimated size of largest repeat loci cluster, _i.e._ 15773bp) to ensure complete replacement of repeat sequence clusters by placeholder sequences, hence increasing sensitivity in detecting rearrangement boundaries (-ext_mrg_max). K-mer size of 200bp is used and only k-mers with count between 20 to 30 are output (due to the high number of k-mers produced), specified as part of fsm-lite arguments (-fsmlite_arg). _gidA_ gene is used to re-oriente genomes (-startgene). Population structure is not controlled, specified as part of pyseer arguments (-pyseer_arg). 
 
 ```
-python3 scripts/fix_genome.py --input example_data/32genomes.fna --mycoor 32genomes_dnaA_out.txt
+#Genome fasta file (-gen), phenotype file (-pheno), start gene fasta file (-startgene) and repeat loci list fasta file (-replist) must be located inside /example_data directory
+
+bash scripts/GWarrange.sh -gen Efaecium_32genomes.fna.gz -pheno Efaecium32genomes_pheno_1swap.txt \
+-gen_size 3000 -startgene dnaA.fasta -replist Efaecium_replist.fasta \
+-thread 8 \
+-fsmlite_arg "-v -t tmp -s 20 -S 30 -m 200 -M 200" \
+-pyseer_arg "--print-samples --no-distances" \
+-ext_mrg_min "100_3" -ext_mrg_max "17000_3" 
 ```
-The output file name for the genomes with same orientation is "fixed_genomes.fasta".
+While generating the number of significant k-mers from pyseer output using 100_3 extension and merge parameters, XXX,XXX number of significant k-mers are found (as printed in the standard output). Due to the large number of k-mers that can be difficult to be procssed in a reasonable amount of time, it is recommended to incoporate the use of unitigs by indicating -string_type "kmers_and_unitigs". This allows unitig-callers to be run on top of fsm-lite, and the final list of significant "sequences" used for detecting genome rearrangement consisted of 1) k-mers containing placeholder seqeunces (for detecting rearrangement boundaries) and 2) unitigs without placeholder seqeunces (for detecting interior rearranged sequences).
 
-Location of IS elements in the genomes are obtained by aligning them with target IS elements sequences through BLAST. Sequences of more than one target IS elements can be placed in the same multifasta file for obtaining their genome locations in all genomes at once.
-
+#rerun by indicating unitig-callers
 ```
-blastn -query example_data/IS30_IS1252_in_HOU503_657692to658645.fasta \
--subject fixed_genomes.fasta \
--outfmt 6 -out blastIS30_IS1252_in_HOU503_32genomes_out.txt
+bash scripts/GWarrange.sh -gen Efaecium_32genomes.fna.gz -pheno Efaecium32genomes_pheno_1swap.txt \
+-gen_size 3000 -startgene dnaA.fasta -replist Efaecium_replist.fasta \
+-thread 8 \
+-fsmlite_arg "-v -t tmp -s 20 -S 30 -m 200 -M 200" \
+-pyseer_arg "--print-samples --no-distances" \
+-ext_mrg_min "100_3" -ext_mrg_max "17000_3" -strnig_type "kmers_and_unitigs"
 ```
-
-Here, sequences extending 7000bp to both directions from each IS elements are replaced. IS elements that are no more than 200bp apart (after extension) in each genome are also "merged". Then, each of these "extended and merged" IS elements are replaced with shorter placedholder sequences (N x 15). A seperate set of IS-replaced genomes are also produced by enabling performing minimal IS extension (i.e. 100bp) and merging overlapping IS only (i.e. IS that are less than 3 bp apart) through passing string argument "on" to the -s flag.
-```
-bash scripts/merge_replace_IS.sh -g fixed_genomes.fasta -i blastIS30_IS1252_in_HOU503_32genomes_out.txt -e 7000 -m 200 -s "on"
-```
-Prior to GWAS, each set of IS-replaced genomes using different merging and extending parameters are used for generating kmers and unitigs. Here, we use the kmer generation tool fsm-lite and unitig generation tool unitig-caller to generate kmers and unitigs from genomes in directory /ext100_merge3_ISreplaced_genomes.
-```
-cd ext100_merge3_ISreplaced_genomes
-
-#generating fsm-ite input file
-for f in *_ext100_merge3_ISreplaced.fasta; do id=$(basename "$f" _ext100_merge3_ISreplaced.fasta); echo $id $f; done > 32genomes_input.list
-
-#generating kmers with size of 200 bases kmers present in at least 20 samples
-
-fsm-lite -l 32genomes_input.list -v -s 20 -S 30 -t tmp -m 200 -M 200 | gzip - > ext100merge3_k200_output.txt.gz
-
-#generating input file for unitig-caller
-ls -d -1 $PWD/*.fasta > input.txt
-
-#running unitig-caller
-unitig-caller --call --rtab --pyseer --refs input.txt --out unitigcall_out
-
-#fixing sample names in output file
-sed -i 's/_ext100_merge3_ISreplaced//g' unitigcall_out.pyseer
-
-gzip unitigcall_out.pyseer
-```
-Then, kmer-based and unitig-based GWAS are conducted using pyseer, with an aim to identify kmers/unitigs whose presence-absence patterns are associated with chromosome structure phenotype. Population structure is not controlled.
-```
-#adding header to phenotype file for pyseer input format
-echo "samples binary" | cat - ../example_data/Efaecium32genomes_pheno_1swap.txt > ../example_data/Efaecium32genomes_pheno_1swap_4pyseer.txt
-
-#run pyseer using k-mer and unitig file
-pyseer --phenotypes ../example_data/Efaecium32genomes_pheno_1swap_4pyseer.txt \
---kmers ext100merge3_k200_output.txt.gz \
---no-distances \
---min-af 0.05 --max-af 0.95 \
---print-samples --output-patterns kmer_patterns.txt \
-> ext100merge3_k200_min20samp_nopopctrl
-
-pyseer --phenotypes ../example_data/Efaecium32genomes_pheno_1swap_4pyseer.txt \
---kmers unitigcall_out.pyseer.gz \
---no-distances \
---min-af 0.05 --max-af 0.95 \
---print-samples --output-patterns kmer_unitig_patterns.txt \
-> ext100merge3_k200_min20samp_unitig_nopopctrl
-
-```
-Generate the number of unique patterns and p value significance threshold information:
-```
-python3 ../scripts/count_patterns.py kmer_patterns.txt > count_pattern.txt
-
-python3 ../scripts/count_patterns.py kmer_unitig_patterns.txt > count_uni_pattern.txt
-#count_patterns.py is a script from pyseer package for calculating p-value threshold using Bonferroni correction. 
-```
-Extract kmers/unitigs with p value below the significance threshold, threshold may vary slightly between different runs:
-```
-awk '{ if ($4 <= 2.29E-05) { print } }' ext100merge3_k200_min20samp_nopopctrl > sigk_pyseer.txt #kmer
-
-awk '{ if ($4 <= 6.45E-06) { print } }' ext100merge3_k200_min20samp_unitig_nopopctrl > siguni_pyseer.txt #unitig
-```
-448,330 kmers and 4,853 unitigs are found to be significantly associated with chromosome structure. The sequences of which were extracted and placed in respective multifasta file.
-
-Extract significant kmer sequences and convert them into fasta format
-```
-#get the seqeunce only
-awk '{print $1}' sigk_pyseer.txt > sigk_seq.txt 
-
-#create multifasta file for significant kmer sequences
-number=$(cat sigk_seq.txt | wc -l)
-
-#remove any existing header file
-if ! [ -f header.txt ]; then
-  echo "header file does not exist."
-else
-  rm header.txt
-fi
-
-START=1
-let "END=$number" 
- 
-for (( c=$START; c<=$END; c++ ))
-do
-	echo ">kmer""$c " >> header.txt
-done
-
-paste -d \\n header.txt sigk_seq.txt > sigk_seq.fasta
-```
-Due to the large number of significant kmers, only the kmers that contain "N" and the first 5000 kmers without "N" are used for structural analysis.
-```
-#classifying kmers into those containing "N" and those do not contain "N". Produce "sigk_noN.fasta" and "sigk_withN.fasta".
-python3 ../scripts/class_k.py --input sigk_seq.fasta --outdir .
-
-#extract first 5000 kmers without "N"
-head -25000 sigk_noN.fasta > sigk_noN_5000.fasta
-
-#combine the kmers with "N" and the first 5000 kmers without "N"
-cat sigk_withN.fasta sigk_noN_5000.fasta > sigkwithN_noN5000.fasta
-```
-
-Extract significant unitig sequences and convert them into fasta format
-```
-#get the seqeunce only
-awk '{print $1}' siguni_pyseer.txt > siguni_seq.txt 
-
-#create multifasta file for significant unitig sequences
-number=$(cat siguni_seq.txt | wc -l)
-
-#remove any existing header file
-if ! [ -f header.txt ]; then
-  echo "header file does not exist."
-else
-  rm header.txt
-fi
-
-START=1
-let "END=$number" 
- 
-for (( c=$START; c<=$END; c++ ))
-do
-	echo ">kmer""$c " >> header.txt
-done
-
-paste -d \\n header.txt siguni_seq.txt > siguni_seq.fasta
-```
-
-Then, these kmers and unitigs are blasted with the original genome set for studying potential genome rearrangement that are captured by them, implemented by the following script:
-
-
-```
-#run in the top level of /genome_rearrangement directory
-cd /path/to/genome_rearrangement
-
-#For ext100_merge3_ISreplaced_genomes set k-mers with N 
-bash scripts/main.sh -k ext100_merge3_ISreplaced_genomes/sigkwithN_noN5000.fasta \
--g example_data/32genomes.fna.gz \
--p example_data/Efaecium32genomes_pheno_1swap.txt -d 3000 -f 30 \
--o Efaecium32genomes_ext100merge3_1swap_withNnoN5000_outdir -s 3000 -x 2 -y 1000
-
-#For ext100_merge3_ISreplaced_genomes set unitigs
-bash scripts/main.sh -k ext100_merge3_ISreplaced_genomes/siguni_seq.fasta \
--g example_data/32genomes.fna.gz \
--p example_data/Efaecium32genomes_pheno_1swap.txt -d 3000 -f 30 \
--o Efaecium32genomes_ext100merge3_1swap_unitig_outdir -s 3000 -x 2 -y 1000
-```
-Note that the value used for -d parameter should be larger than the "Maximum size of merged ISs" value in "ext100_merge3_mergedISstat.txt".
 
 **Visualising genome rearrangements that are captured by kmer**
 
