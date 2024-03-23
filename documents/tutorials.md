@@ -19,7 +19,7 @@ Fig: Genome rearrangement pipeline summary chart
 
 This tutorial is based a subset of _Bordetella pertussis_ genomes as described in Weigand _et al_. 2019, in which chromosome structures are defined by MAUVE exhaustive pairwise alignment. A subset of 47 genomes that display two different chromosome structures (18 genomes with structure "1" and 29 genomes with structure "0" (See figure below) are used in GWAS with structure information as phenotype. Structure phenotype of two pairs of genomes are swapped for demonstration purpose.  
 
-<img width="652" alt="Screenshot 2024-01-10 at 18 17 39" src="https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/2ccf91f0-17bc-4b01-b8a1-b3744eb2f749">
+![tutorial1_MAUVE](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/476188bc-47e6-4390-86c8-51e60cb62146)
 
 Fig : Two different chromosome structures that are found among 47 _Bordetella pertussis_ genomes. 
 
@@ -106,7 +106,7 @@ Reference: Weigand, M.R., Williams, M.M., Peng, Y., Kania, D., Pawloski, L.C., T
 
 _Enterococcus faecium_'s genomes are known to be enriched with IS elements, which could play important role in their genome structure's diversification (Leavis _et al._ 2007). Genome structure of 75 _Enterococcus faecium_ were characterised by socru (Page _et al._ 2020), Among which, a subset of 32 genomes displaying two different chromosome structures (21 genomes with structure "0" and 11 genomes with structure "1") (See Fig. below) are used in GWAS, with structure information as phenotype. Structure phenotype of two pairs of genomes are swapped for demonstration purpose. 
 
-<img width="680" alt="Screenshot 2024-01-10 at 18 17 45" src="https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/a3791047-f56b-4565-85bc-43a7f1d897c2">
+![tutorial2_MAUVE](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/7e4f08d3-ebfd-4151-a44e-c66a16f5f41a)
 
 Fig : Two different chromosome structures found among 32 _Enterococcus faecium_ genomes. 
 
@@ -245,4 +245,20 @@ Right: intact kmers that are in reverse orientation in half of PRN+ (1) genomes,
 Some of the significant intact kmers without placeholder sequence contain sequence of pertactin autotransporter (indicated by black arrows). These kmers are not found using ext7000_merge200_ISreplaced_genomes. This is because the gene pertactin autotransporter is located immediately next to an IS element in _pertusis_ genomes, and any genome rearrangement that sits completely within the "replaced IS" region will not be detected. 
 
 Ref: Lefrancq, N., Bouchez, V., Fernandes, N., Barkoff, A.M., Bosch, T., Dalby, T., Åkerlund, T., Darenberg, J., Fabianova, K., Vestrheim, D.F. and Fry, N.K., 2022. Global spatial dynamics and vaccine-induced fitness changes of Bordetella pertussis. Science Translational Medicine, 14(642), p.eabn3253.
+
+
+Tutorial 4
+
+![sim_MAUVE](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/8ac4b237-0ebe-42ab-8c9b-c6e2e0c102a1)
+
+![sim_kmer895](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/82d09019-a8f7-47e0-a479-76185c970948)
+
+![sim_kmer997](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/23e9fe73-40a1-45d8-a1b8-16463e0cd03b)
+
+![sim_kmer995](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/4b4ef2e8-5d44-4e4e-af65-b2cced2b8a8c)
+
+![sim_kmer99](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/8f2db360-ed3b-43a9-ab33-d5b7cb8673b0)
+
+
+
 
