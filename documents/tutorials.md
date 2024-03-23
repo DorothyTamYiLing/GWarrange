@@ -249,15 +249,17 @@ Ref: Lefrancq, N., Bouchez, V., Fernandes, N., Barkoff, A.M., Bosch, T., Dalby, 
 
 Tutorial 4
 
-![sim_MAUVE](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/8ac4b237-0ebe-42ab-8c9b-c6e2e0c102a1)
+![sim_MAUVE](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/cbea1606-4af4-4390-a853-797c9e874cb4)
 
-![sim_kmer895](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/82d09019-a8f7-47e0-a479-76185c970948)
+![sim_kmer895](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/3c0eea7f-f45c-49ab-ad8d-6c918f46e83d)
 
-![sim_kmer997](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/23e9fe73-40a1-45d8-a1b8-16463e0cd03b)
+![sim_kmer997](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/688492a1-f0b3-441e-9686-0d2a9125e8f4)
 
-![sim_kmer995](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/4b4ef2e8-5d44-4e4e-af65-b2cced2b8a8c)
+![sim_kmer995](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/5e2cb8d2-2d8d-4127-954b-22f61cd27eed)
 
-![sim_kmer99](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/8f2db360-ed3b-43a9-ab33-d5b7cb8673b0)
+![sim_kmer99](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/e19d0e1e-9152-403b-aadd-cf54269d2906)
+
+
 
 
 
