@@ -229,7 +229,7 @@ No split kmer that indicated phenotype-associated rearrangement boundary is dete
 
 2) Plotting intact kmers without N for visualising interior sequence content of rearrangement :
 
-Genome position of intact kmers without N from /ext100_merge3_ISreplaced_genomes (merging overlapping IS only) are plotted. Only kmers with unqiue genome position information (by rounding off to the nearest multiple of 1000) are used in the plot. Plots for intact kmers can be found in folder PRN_468_ext100_merge3_outdir/kmers_noN.
+Genome position of intact kmers without N from /ext100_merge3_ISreplaced_genomes (merging overlapping IS only) are plotted. Only kmers with unqiue genome position information (by rounding off to the nearest multiple of 1000, default value in -intkrd flag) are used in the plot. Plots for intact kmers can be found in folder PRN_468_ext100_merge3_outdir/kmers_noN.
 
 Plots of intact kmers that show interior rearranged sequence content that are significantly associated with PRN expression phenotype.
 
