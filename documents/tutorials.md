@@ -205,162 +205,21 @@ Go to the top level of /genome_rearrangement directory
 ```
 cd /path/to/genome_rearrangement
 ```
-
-First, the genome assemblies multifasta file is prepared by concatenating genome fasta files.
+Same as tutorial 1,IS481 family transposase, IS481-like element IS481 family transposase and IS110-like element IS1663 family transposase are identified as most ubiqitous repeat loci categories in the reference genome C505 (accession: NZ_CP011687.1) . Size of largest repeat loci cluster is 5735bp (printed as standard output). 
 ```
-#concatenating genome fasta files for use
-cat example_data/example_genomes/PRN_468/*fasta.gz > example_data/PRN_468.fna.gz
-```
-
-Genomes assemblies from which genome rearrangements are detected are re-orientated by a chosen gene, i.e. gidA. The location and orientation of gidA in the genomens are obtained by aligning it with multifasta file of genome assemblies through BLAST.
-```
-#unzip the genome file if neccesasry
-gunzip example_data/PRN_468.fna.gz
-
-#blast gidA with genomes
-blastn -query example_data/gidA.fasta \
--subject example_data/PRN_468.fna \
--outfmt 6 -out PRN_468_gidA_out.txt
-```
-Then, genome assemblies are re-orientated according to the position and orientation of gidA in the genomes, using the script fix_genome.py:
-```
-python3 scripts/fix_genome.py --input example_data/PRN_468.fna --mycoor PRN_468_gidA_out.txt
-```
-The output file name for the genomes in same orientation is "fixed_genomes.fasta".
-
-Locations of IS elements in the genomes are obtained by aligning them with target IS sequences through BLAST. Sequences of more than one target IS element can be placed in the same multifasta file for obtaining their genome locations in all genomes at once.
-```
-blastn -query example_data/IS_NZ_CP025371.1.fasta \
--subject fixed_genomes.fasta \
--outfmt 6 -out PRN_468_blastIS_out.txt
+#using default parameters
+bash script/homo_main.sh -gff example_data/C505_NZ_CP011687.1.gff -fna example_data/C505_NZ_CP011687.1.fna 
 ```
 
-Here, sequences extending 7000bp to both directions from each IS element are replaced. IS elements that are no more than 200bp apart (after extension) in each genome are also "merged". Then, each of these "extended and merged" IS element are replaced with shorter placedholder sequences (N x 15). A seperate set of IS-replaced genomes are also produced by enabling performing minimal IS extension (i.e. 100bp) and merging overlapping IS only (i.e. IS that are less than 3 bp apart) through passing string argument "on" to the -s flag.
+Population structure is controlled using phylogeny similarity matrix. Minor allele frequency of 0.05 is applied in generating k-mers and pyseer GWAS.
 ```
-bash scripts/merge_replace_IS.sh -g fixed_genomes.fasta -i PRN_468_blastIS_out.txt -e 7000 -m 200 -s "on"
+bash scripts/GWarrange.sh -gen PRN_468.fna.gz -pheno prn_status_pheno.txt \
+-gen_size 4300 -startgene gidA.fasta -replist IS_NZ_CP025371.1.fasta \
+-thread 8 \
+-pyseer_arg "--lmm --similarity ../example_data/ClfML_kappa4.964_phylogeny_similarity.tsv --min-af 0.05 --max-af 0.95 --covariates ../example_data/covariates.txt --use-covariates 2" \
+-fsmlite_arg "-v -t tmp -s 24 -S 444 -m 200 -M 200" \
+-ext_mrg_min "100_3" -ext_mrg_max "7000_3"
 ```
-Prior to GWAS, each set of IS-replaced genomes using different IS merging and extending parameters are used for generating kmers.
-```
-#For ext7000_merge200_ISreplaced_genomes set
-cd ext7000_merge200_ISreplaced_genomes
-
-#generating fsm-ite input file
-for f in *_ext7000_merge200_ISreplaced.fasta; do id=$(basename "$f" _ext7000_merge200_ISreplaced.fasta); echo $id $f; done > PRN_468_input.list
-
-#generating kmers with size of 200 bases with minor allele frequency 0.05
-
-fsm-lite -l PRN_468_input.list -v -s 24 -S 444 -t tmp -m 200 -M 200 | gzip - > PRN_468_ext7000merge200_k200_output.txt.gz
-
-##############################################################################
-
-#For ext100_merge3_ISreplaced_genomes set
-cd ext100_merge3_ISreplaced_genomes
-
-#generating fsm-ite input file
-for f in *_ext100_merge3_ISreplaced.fasta; do id=$(basename "$f" _ext100_merge3_ISreplaced.fasta); echo $id $f; done > PRN_468_input.list
-
-#generating kmers with size of 200 bases with minor allele frequency 0.05
-fsm-lite -l PRN_468_input.list -v -s 24 -S 444 -t tmp -m 200 -M 200 | gzip - > PRN_468_ext100merge3_k200_output.txt.gz
-
-```
-Then, a kmer-based GWAS is conducted using pyseer with an aim to identify kmers whose presence-absence patterns are associated with PRN expression phenotype. Population structure is controlled by phylogenetic similarity matrix.
-
-```
-#Run inside corresponding *_ISreplaced_genomes directory
-
-#adding header to phenotype file for pyseer input format
-echo "samples binary" | cat - ../example_data/prn_status_pheno.txt > ../example_data/prn_status_pheno_4pyseer.txt
-
-#run pyseer
-
-#For ext7000_merge200_ISreplaced_genomes set
-pyseer --lmm --phenotypes ../example_data/prn_status_pheno_4pyseer.txt \
---kmers PRN_468_ext7000merge200_k200_output.txt.gz \
---similarity ../example_data/ClfML_kappa4.964_phylogeny_similarity.tsv \
---min-af 0.05 --max-af 0.95 --covariates ../example_data/covariates.txt --use-covariates 2 \
---print-samples --output-patterns kmer_patterns_covariate.txt \
-> PRN468_ext7000merge200_k200_MAF0.05_covariate
-
-#For ext100_merge3_ISreplaced_genomes set
-pyseer --lmm --phenotypes ../example_data/prn_status_pheno_4pyseer.txt \
---kmers PRN_468_ext100merge3_k200_output.txt.gz \
---similarity ../example_data/ClfML_kappa4.964_phylogeny_similarity.tsv \
---min-af 0.05 --max-af 0.95 --covariates ../example_data/covariates.txt --use-covariates 2 \
---print-samples --output-patterns kmer_patterns_covariate.txt \
-> PRN468_ext100merge3_k200_MAF0.05_covariate
-```
-
-Generate the number of unique patterns and p value significance threshold information (For both ext7000_merge200_ISreplaced_genomes set and ext100_merge3_ISreplaced_genomes set):
-```
-#Run inside corresponding *_ISreplaced_genomes directory
-
-python3 ../scripts/count_patterns.py kmer_patterns_covariate.txt > count_pattern.txt
-
-#count_patterns.py is a script from pyseer package for calculating p-value threshold using Bonferroni correction. 
-
-```
-Extract kmers with p value below the significance threshold (For both ext7000_merge200_ISreplaced_genomes set and ext100_merge3_ISreplaced_genomes set):
-```
-#Run inside corresponding *_ISreplaced_genomes directory
-
-#For ext7000_merge200_ISreplaced_genomes set, threshold may vary slightly between different runs
-awk '{ if ($4 <= 1.30E-04) { print } }' PRN468_ext7000merge200_k200_MAF0.05_covariate > sigk_pyseer.txt
-
-#For ext100_merge3_ISreplaced_genomes set, threshold may vary slightly between different runs
-awk '{ if ($4 <=  1.32E-04) { print } }' PRN468_ext100merge3_k200_MAF0.05_covariate > sigk_pyseer.txt
-```
-
-The sequences of kmers that are found to be significantly associated with the structure phenotype are extracted and placed in a multifasta file.
-
-Extract significant kmer sequences and convert them into multifasta format (For both ext7000_merge200_ISreplaced_genomes set and ext100_merge3_ISreplaced_genomes set):
-```
-#Run inside corresponding *_ISreplaced_genomes directory
-
-#get the seqeunce only
-awk '{print $1}' sigk_pyseer.txt > sigk_seq.txt 
-
-#create multifasta file for significant kmer sequences
-number=$(cat sigk_seq.txt | wc -l)
-
-#remove any existing header file
-if ! [ -f header.txt ]; then
-  echo "header file does not exist."
-else
-  rm header.txt
-fi
-
-START=1
-let "END=$number" 
- 
-for (( c=$START; c<=$END; c++ ))
-do
-	echo ">kmer""$c " >> header.txt
-done
-
-paste -d \\n header.txt sigk_seq.txt > sigk_seq.fasta
-```
-
-Then, these kmers are aligned through BLAST with the original genome set for studying potential genome rearrangements that are captured by them, implemented by the following script:
-
-```
-#run in the top level of /genome_rearrangement directory
-cd /path/to/genome_rearrangement
-
-#For ext7000_merge200_ISreplaced_genomes set
-bash scripts/main.sh -k ext7000_merge200_ISreplaced_genomes/sigk_seq.fasta \
--g example_data/PRN_468.fna \
--p example_data/prn_status_pheno.txt -d 110000 -f 30 \
--o PRN_468_ext7000_merge200_outdir -s 4300 -x 2 -y 1000
-
-#For ext100_merge3_ISreplaced_genomes set
-bash scripts/main.sh -k ext100_merge3_ISreplaced_genomes/sigk_seq.fasta \
--g example_data/PRN_468.fna.gz \
--p example_data/prn_status_pheno.txt -d 5000 -f 30 \
--o PRN_468_ext100_merge3_outdir -s 4300 -x 2 -y 1000
-
-```
-
-Note that the value used for -d parameter should be larger than the "Maximum size of merged ISs" value in the corresponding *_mergedISstat.txt file.
 
 **Visualising genome rearrangements that are captured by kmer**
 
