@@ -40,8 +40,10 @@ awk -v var="$name" 'BEGIN{while((getline<var)>0)l[">"$1]=1}/^>/{f=!l[$1]}f' $1 >
 #remove header.txt
 rm $3/header.txt
 
-###blasting: querys are kmers in kmer_forblast.fasta; subjects are genomes in gen_input.fasta, 
-mygenome=$2
-#gunzip  $mygenome
-blastn -query $3/kmer_forblast.fasta -subject ${mygenome/.gz} -outfmt 6 -out $3/myout.txt
-#gzip  ${mygenome/.gz}
+#only blast if the file in not empty
+if [ -s $3/kmer_forblast.fasta ]; then
+	###blasting: querys are kmers in kmer_forblast.fasta; subjects are genomes in gen_input.fasta, 
+blastn -num_threads $5 -query $3/kmer_forblast.fasta -db $2 -outfmt 6 -out $3/myout.txt
+else
+echo "no kmers with N pass the quality filter hence none for blast"
+fi
