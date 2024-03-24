@@ -19,16 +19,16 @@ do
         t) thread=${OPTARG};;
     esac
 done
-echo "sigk: $sigk";
-echo "gen: $gen";
-echo "pheno: $pheno";
-echo "flk_len: $flk_len";
-echo "flk_dist: $flk_dist";
-echo "outdir: $outdir";
-echo "genome size for plot: $gen_size";
-echo "genome pos sig digit for dedup split k in plot: $dedupk";
-echo "round off intact k genome position to the nearest multiple of an integar: $intkrd";
-echo "number of thread: $thread";
+#echo "sigk: $sigk";
+#echo "gen: $gen";
+#echo "pheno: $pheno";
+#echo "flk_len: $flk_len";
+#echo "flk_dist: $flk_dist";
+#echo "outdir: $outdir";
+#echo "genome size for plot: $gen_size";
+#echo "genome pos sig digit for dedup split k in plot: $dedupk";
+#echo "round off intact k genome position to the nearest multiple of an integar: $intkrd";
+#echo "number of thread: $thread";
 
 #create output directory, replace old one if exists
 if [[ -d ./$outdir ]]; then
@@ -52,8 +52,18 @@ then
 echo "there is sigk withN"
 echo "now run filtering_kmer_and_blast.sh"
 bash ./scripts/filtering_kmer_and_blast.sh ${outdir}/sigk_withN.fasta $gen $outdir $flk_len $thread
+
+#contiinue only if some kmers pass the filter
+[ -s ${outdir}/myout.txt ] && pass=1 || pass=0
+
+if [[ ${pass} -eq 1 ]]
+then
 echo "now run make_flank_summary.R"
 Rscript ./scripts/make_flank_summary.R --pheno $pheno --outdir $outdir --flkdist $flk_dist  --dedupk ${dedupk}
+else
+echo "no kmer with N pass the filter"    
+fi
+
 else
 echo "no withN sig k"
 fi
@@ -546,4 +556,3 @@ rm ${outdir}/myNoNintactk_rev1fwd0_set_no1stline.txt
 fi
 
 #gzip ${gen/.gz}
-
