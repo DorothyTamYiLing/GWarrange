@@ -49,8 +49,13 @@ align_len_k<-c()
 #set the output for the rows with identity and  e value issue
 ID_E_issue_k<-c()
 
-#looping through kmers
+#looping through kmers for QC
+print ("QC kmers")
 for (i in 1:length(mykmer)){
+
+if(i%%10000==0){
+print(i)
+}
 
 myalignlen<-myflk_coor$kmer_len[which(as.character(myflk_coor$kmer)==as.character(mykmer[i]))]
 #print(myalignlen)
@@ -140,10 +145,23 @@ mybadk<-unique(c(abs_gen_k,multi_hit_k,align_len_k,ID_E_issue_k))
 
 mygoodk<-mykmer[which(!is.element(mykmer,mybadk))]
 
+#check if there is any good kmer left
+goodkcount<-length(mygoodk)
+
+if(goodkcount==0){
+  print(paste("there is no kmer with noN passed the filter",sep=""))
+}
+
+if(goodkcount>0){
+
+  print(paste("there are ",goodkcount," kmers with noN passed the filter",sep=""))
+
 myprocess<-mytable[which(mytable$query%in%mygoodk),]
 
 #the myprocess table should refere to kmers that are present in all genomes with both flanks; the flanks are also fully aligned with no SNPs nor gaps, and the flanks show unique blast hit in each genome
 write.table(myprocess,file=paste(opt$outdir,"rows_for_process_NoN.txt",sep="/"),quote=F,row.names = F,col.names = T,sep="\t")
+
+print("output and input rows for process NoN")
 
 #read in myprocess table
 myprocess<-read.table(paste(opt$outdir,"rows_for_process_NoN.txt",sep="/"),sep="\t",header=T)
@@ -195,6 +213,8 @@ table(myfreq$Freq)
 #keep those kmers with blast hit in all genomes only (list of kmers), optional
 #myk4paint<-myfreq[which(myfreq$Freq==numgen),"Var1"]   #change genome number here
 
+print("now process intact k NoN")
+
 #get the list of intact kmers for process
 myk4paint<-myfreq[,"Var1"]
 
@@ -204,6 +224,10 @@ myintactk_out<-matrix(0,1,21)
 colnames(myintactk_out)<-c("kmer","kmer_behaviour","flk_dist","fwdk_gen_count","revk_gen_count","fwdk_0gen_prop","revk_0gen_prop","fwdk_1gen_prop","revk_1gen_prop","fwdk_0gen_count","revk_0gen_count","fwdk_1gen_count","revk_1gen_count","fwdk_0gen_med","fwdk_0gen_sd","revk_0gen_med","revk_0gen_sd","fwdk_1gen_med","fwdk_1gen_sd","revk_1gen_med","revk_1gen_sd")
 
 for (i in 1:length(myk4paint)){
+
+if(i%%10000==0){
+print(i)
+}
 
 mykmer<-myk4paint[i]
 #mykmer<-"kmer9997"
@@ -264,7 +288,7 @@ myrowout<-c(as.character(mykmer),mybehave,"NA",myfwd_k_count,myrev_k_count,my0_f
 
 myintactk_out<-rbind(myintactk_out,myrowout)
 
-}
+} #closing bracket for (i in 1:length(myk4paint)){
 
 myintactk_out<-myintactk_out[-1,]
 
@@ -292,3 +316,4 @@ myother<-myintactk_out[which(myintactk_out$set=="other"),]
 write.table(myother,file=paste(opt$outdir,"myNoNintactk_other_set.txt",sep="/"),quote=F,row.names = F,col.names=T,sep="\t")
 
 
+}  #closing bracket for if(goodkcount>0){
