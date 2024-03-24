@@ -3,12 +3,12 @@ flk_len=30
 dedupk=2
 intkrd=1000
 ext_mrg_min="100_3"
-ext_mrg_max="7000_200"
-pyseer_arg="--min-af 0.05 --max-af 0.95 --print-samples --no-distances --cpu 8"
+ext_mrg_max="7000_3"
+pyseer_arg="--min-af 0.05 --max-af 0.95"
 fsmlite_arg="-v -t tmp -m 200 -M 200"
-unitigcaller_arg="--threads 8"
-string_type="kmer_and_unitigs"
-thread_blast=8
+unitigcaller_arg=""
+string_type="kmer"
+thread=8
 
 while test $# -gt 0; do
            case "$1" in
@@ -82,9 +82,9 @@ while test $# -gt 0; do
                     string_type=$1
                     shift
                     ;;
-                -thread_blast)
+                -thread)
                     shift
-                    thread_blast=$1
+                    thread=$1
                     shift
                     ;;
                 *)
@@ -106,28 +106,30 @@ echo "pyseer_arg: $pyseer_arg";
 echo "fsmlite_arg: $fsmlite_arg";
 echo "unitigcaller_arg: $unitigcaller_arg";
 echo "string_type: $string_type";
-echo "number of thread for BLAST: $thread_blast";
+echo "number of thread for BLAST, pyseer and unitig-callers: $thread";
 echo "minimum extension and merge parameters: $ext_mrg_min";
 echo "maximum extension and merge parameters: $ext_mrg_max";
 
-#ext_mrg="100_3"
-#pheno="prn_status_pheno.txt"
-#gen="PRN_468.fna.gz"
-#startgene="gidA.fasta"
-#replist="IS_NZ_CP025371.1.fasta"
-#string_type="kmer"
-
+min_ext=$(echo ${ext_mrg_min} | cut -d "_" -f1)
+min_mrg=$(echo ${ext_mrg_min} | cut -d "_" -f2)
+max_ext=$(echo ${ext_mrg_max} | cut -d "_" -f1)
+max_mrg=$(echo ${ext_mrg_max} | cut -d "_" -f2)
+echo "min_ext: $min_ext"
+echo "min_mrg: $min_mrg"
+echo "max_ext: $max_ext"
+echo "max_mrg: $max_mrg"
 
 #adding header to phenotype file for pyseer input format
 echo "samples binary" | cat - example_data/$pheno > example_data/${pheno/.txt}_4pyseer.txt
 
 
 #unzip the genome file if neccesasry
+
 gunzip example_data/$gen
 
-echo "blast gidA with genomes"
+echo "blast starting gene with genomes"
 
-#blast gidA with genomes
+#blast start gene with genomes
 blastn -query example_data/${startgene} \
 -subject example_data/${gen/.gz} \
 -outfmt 6 -out ${gen/.fna.gz}_${startgene/.fasta}_out.txt
@@ -146,16 +148,23 @@ blastn -query example_data/$replist \
 
 ############ script for running extension+merge, fsm-lite, unitig-caller, pyseer, pyseer post-processing ########################
 
-echo "${pyseer_arg}"
-echo "${fsmlite_arg}"
-echo "${unitigcaller_arg}"
+#echo "${pyseer_arg}"
+#echo "${fsmlite_arg}"
+#echo "${unitigcaller_arg}"
 
-echo "run extmerge2pyseer.sh using minimum extend merge parameters"
 
-min_ext=$(echo ${ext_mrg_min} | cut -d "_" -f1)
-min_mrg=$(echo ${ext_mrg_min} | cut -d "_" -f2)
-max_ext=$(echo ${ext_mrg_max} | cut -d "_" -f1)
-max_mrg=$(echo ${ext_mrg_max} | cut -d "_" -f2)
+#build database for efficient blasting
+echo "build database for efficient blasting"
+makeblastdb -in example_data/${gen/.gz} -dbtype nucl -out genome_db
+
+#if both max and min parameter are the same, then just perform one set
+if [ "${ext_mrg_min}" != "${ext_mrg_max}" ]
+
+then
+
+echo "run with both minimum and maximum extension and merge parameters"
+
+echo "Using minimum extension and merge parameters"
 
 bash scripts/extmerge2pyseer.sh \
 -extend_para ${min_ext} -merge_para ${min_mrg} \
@@ -163,9 +172,27 @@ bash scripts/extmerge2pyseer.sh \
 -pyseer_arg "${pyseer_arg}" \
 -fsmlite_arg "${fsmlite_arg}" \
 -unitigcaller_arg "${unitigcaller_arg}" \
--string_type ${string_type}
+-string_type ${string_type} \
+-thread ${thread}
 
-echo "run extmerge2pyseer.sh using maximum extend merge parameters"
+#calculate value for d flag
+min_cut=$(grep "Maximum size" ext${min_ext}_merge${min_mrg}_mergedISstat.txt | cut -d$'\t' -f 2)
+echo "Maximum size of merged repeats:"${min_cut}
+min_d=$(awk "BEGIN { print int(${min_cut}*1.2)}")
+echo "value for -d flag (1.2 times of above value) :"${min_d}
+
+if [ -s ext${min_ext}_merge${min_mrg}_ISreplaced_genomes_${string_type}/final_sig.fasta ]; then
+    echo "process final significant kmers/unitigs for detecting rearrangements"
+#running main.sh For ext100_merge3_ISreplaced_genomes set unitigs
+bash scripts/main.sh -k ext${min_ext}_merge${min_mrg}_ISreplaced_genomes_${string_type}/final_sig.fasta \
+-g genome_db \
+-p example_data/${pheno} -d ${min_d} -f ${flk_len} \
+-o ${gen/.fna.gz}_ext${min_ext}_merge${min_mrg}_${string_type}_outdir -s ${gen_size} -x ${dedupk} -y ${intkrd} -t ${thread}
+else
+    echo "no significant kmer/unitig"
+fi
+
+echo "Using maximum extension and merge parameters"
 
 bash scripts/extmerge2pyseer.sh \
 -extend_para ${max_ext} -merge_para ${max_mrg} \
@@ -173,31 +200,57 @@ bash scripts/extmerge2pyseer.sh \
 -pyseer_arg "${pyseer_arg}" \
 -fsmlite_arg "${fsmlite_arg}" \
 -unitigcaller_arg "${unitigcaller_arg}" \
--string_type ${string_type}
+-string_type ${string_type} \
+-thread ${thread}
 
 
-echo "build database for efficient blasting"
-#build database for efficient blasting
-makeblastdb -in example_data/${gen/.gz} -dbtype nucl -out genome_db
+#calculate value for d flag
+max_cut=$(grep "Maximum size" ext${max_ext}_merge${max_mrg}_mergedISstat.txt | cut -d$'\t' -f 2)
+echo "Maximum size of merged repeats:"${max_cut}
+max_d=$(awk "BEGIN { print int(${max_cut}*1.2)}")
+echo "value for -d flag (1.2 times of above value) :"${min_d}
+
+if [ -s ext${max_ext}_merge${max_mrg}_ISreplaced_genomes_${string_type}/final_sig.fasta ]; then
+    echo "process final significant kmers/unitigs for detecting rearrangements"
+#running main.sh For ext7000_merge200_ISreplaced_genomes set unitigs
+bash scripts/main.sh -k ext${max_ext}_merge${max_mrg}_ISreplaced_genomes_${string_type}/final_sig.fasta \
+-g genome_db \
+-p example_data/${pheno} -d ${max_d} -f ${flk_len} \
+-o ${gen/.fna.gz}_ext${max_ext}_merge${max_mrg}_${string_type}_outdir -s ${gen_size} -x ${dedupk} -y ${intkrd} -t ${thread}
+else
+     echo "no significant kmer/unitig"
+fi
+
+else  # else for if [ "${ext_mrg_min}" != "${ext_mrg_max}" ]
+
+echo "run with one set of extension and merge parameters"
+
+bash scripts/extmerge2pyseer.sh \
+-extend_para ${min_ext} -merge_para ${min_mrg} \
+-pheno ../example_data/${pheno/.txt}_4pyseer.txt \
+-pyseer_arg "${pyseer_arg}" \
+-fsmlite_arg "${fsmlite_arg}" \
+-unitigcaller_arg "${unitigcaller_arg}" \
+-string_type ${string_type} \
+-thread ${thread}
 
 #calculate value for d flag
 min_cut=$(grep "Maximum size" ext${min_ext}_merge${min_mrg}_mergedISstat.txt | cut -d$'\t' -f 2)
+echo "Maximum size of merged repeats:"${min_cut}
 min_d=$(awk "BEGIN { print int(${min_cut}*1.2)}")
+echo "value for -d flag (1.2 times of above value) :"${min_d}
 
-max_cut=$(grep "Maximum size" ext${max_ext}_merge${max_mrg}_mergedISstat.txt | cut -d$'\t' -f 2)
-max_d=$(awk "BEGIN { print int(${max_cut}*1.2)}")
-
-
+if [ -s ext${min_ext}_merge${min_mrg}_ISreplaced_genomes_${string_type}/final_sig.fasta ]; then
+    echo "process final significant kmers/unitigs for detecting rearrangements"
 #running main.sh For ext100_merge3_ISreplaced_genomes set unitigs
-bash scripts/main.sh -k ext${min_ext}_merge${min_mrg}_ISreplaced_genomes/final_sig.fasta \
+bash scripts/main.sh -k ext${min_ext}_merge${min_mrg}_ISreplaced_genomes_${string_type}/final_sig.fasta \
 -g genome_db \
 -p example_data/${pheno} -d ${min_d} -f ${flk_len} \
--o ${gen/.fna.gz}_ext${min_ext}_merge${min_mrg}_outdir -s ${gen_size} -x ${dedupk} -y ${intkrd} -t ${thread_blast}
+-o ${gen/.fna.gz}_ext${min_ext}_merge${min_mrg}_${string_type}_outdir -s ${gen_size} -x ${dedupk} -y ${intkrd} -t ${thread}
+else
+     echo "no significant kmer/unitig"
+fi
 
-#running main.sh For ext7000_merge200_ISreplaced_genomes set unitigs
-bash scripts/main.sh -k ext${max_ext}_merge${max_mrg}_ISreplaced_genomes/final_sig.fasta \
--g genome_db \
--p example_data/${pheno} -d ${max_d} -f ${flk_len} \
--o ${gen/.fna.gz}_ext${max_ext}_merge${max_mrg}_outdir -s ${gen_size} -x ${dedupk} -y ${intkrd} -t ${thread_blast}
+fi   #close bracket for if [ "${ext_mrg_min}" != "${ext_mrg_max}" 
 
-
+echo "DONE"
