@@ -293,7 +293,6 @@ Since k-mers contain highly redundant information, each k-mer is given a label, 
 
 Four rearrangement boundaries are found, and they potentially refer to two translocation events, as shown in the schematic diagram above. Full information of these kmers can be found in output file sim_40genomes_ext7000_merge3_kmer_outdir/kmers_withN/mysplitk_out.txt. Plots for split kmers can be found in folder sim_40genomes_ext7000_merge3_kmer_outdir/kmers_withN/splitk_plots.
 
-Inversion within genome region 43000 and 3600000, 43000bp boundary, kmer being intact in case genomes and split in control genomes, in forward orientation:
 
 1100K boundary, “mv_away” k-mer being intact in majority of control genomes in forward orientation and split in majority of case genomes:
 ![sim_kmer895](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/3c0eea7f-f45c-49ab-ad8d-6c918f46e83d)
