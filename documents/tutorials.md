@@ -249,14 +249,62 @@ Ref: Lefrancq, N., Bouchez, V., Fernandes, N., Barkoff, A.M., Bosch, T., Dalby, 
 
 Tutorial 4
 
-![sim_MAUVE](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/cbea1606-4af4-4390-a853-797c9e874cb4)
+This tutorial is based on 40 simulated genomes for demonstrating flanking seqeunce behabviours during translocation. Each chromosome structure was represented by 20 genomes, and the difference in chromosome structures can be explained by two translocation events. Simulated genome sequences were taken from Bordetella pertussis genomes, and ribosomal operons that consist of mainly 16S ribosomal RNA, 23S ribosomal RNA , 5S ribosomal RNA and tRNAs were taken from Salmonella enterica genomes and inserted in each of the rearrangement boundaries produced by translocation. 
 
+![sim_MAUVE](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/cbea1606-4af4-4390-a853-797c9e874cb4)
+Fig : Schematic diagram of the two different genome structures explained by two translocation events, present in 40 simulated genomes (20 genomes with structure “0” and 20 genomes with structure “1”) 
+
+Go to the top level of /genome_rearrangement directory
+```
+cd /path/to/genome_rearrangement
+```
+First, selected reference genome sim1.fasta is used for identifying repeat loci candidates and for estimating size of repeat loci clusters in the genome.
+```
+#using default parameters
+bash script/homo_main.sh -gff example_data/PROKKA_sim1.gff -fna example_data/sim1.fasta 
+```
+By looking at /output_homo/homo_occurence.txt, IS200/IS605 family transposase, 16S ribosomal RNA, 23S ribosomal RNA and 5S ribosomal RNA  are identified as most ubiqitous repeat loci categories in the reference genome. Size of largest repeat loci cluster is 5494bp (printed as standard output).
+
+To detect genome rearrangement associated with phenotype (-pheno), a short list of most ubiqitous repeat loci are placed in the file sim_replist.fasta (-replist) for repeat sequence detection in the input genome set (-gen). Minimal repeat sequence extension and merge parameters (-ext_mrg_min) are used for preserving rearrangement breakpoints; while a separate set of genomes are generated using extension of 7000bp (this number must be larger than the estimated size of largest repeat loci cluster, _i.e._ 5494bp) to ensure complete replacement of repeat sequence clusters by placeholder sequences, hence increasing sensitivity in detecting rearrangement boundaries (-ext_mrg_max). K-mer size of 200bp is used, specified as part of fsm-lite arguments (-fsmlite_arg). sim_startgene.fasta gene is used to re-oriente genomes (-startgene). Population structure is not controlled, specified as part of pyseer arguments (-pyseer_arg). 
+
+Concatenate genome files
+```
+cat ~/example_data/example_genomes/SIM_40genomes/*fasta.gz > ~/example_data/sim_40genomes.fna.gz
+```
+
+```
+#Genome fasta file (-gen), phenotype file (-pheno), start gene fasta file (-startgene) and repeat loci list fasta file (-replist) must be located inside /example_data directory
+
+bash scripts/GWarrange.sh -gen sim_40genomes.fna.gz -pheno sim_trans_pheno.txt \
+-gen_size 2532 -startgene sim_startgene.fasta -replist sim_replist.fasta \
+-thread 8 -string_type "kmers" \
+-fsmlite_arg "-v -t tmp -s 2 -S 38 -m 200 -M 200" \
+-unitigcaller_arg "" \           
+-ext_mrg_min "100_3" -ext_mrg_max "7000_3"
+```
+
+**Visualising genome rearrangements that are captured by kmer**
+
+From genome set with 7000bp extension and 3bp merging, split kmers are found (_i.e._ flanking sequences mapped to different positions) when mapped to the original genomes. They can be found in sim_40genomes_ext7000_merge3_kmer_outdir/kmers_withN/mysplitk_out.txt.
+
+1) Plotting split kmers for visualising rearrangement boundaries
+
+Since k-mers contain highly redundant information, each k-mer is given a label, which contains its:  behaviour count and proportion in case/control genomes, genome position (represented by the mean StartL when k-mers are intact in case genomes, rounded off to two significant digits, as indicated by the -dedupk flag), and forward/reverse intact k-mers count. Only k-mers with unique labels are kept. Deduplicated k-mers can be found in output file sim_40genomes_ext7000_merge3_kmer_outdir/kmers_withN/myshort_splitk_out_uniq.txt.
+
+Four rearrangement boundaries are found, and they potentially refer to two translocation events, as shown in the schematic diagram above. Full information of these kmers can be found in output file sim_40genomes_ext7000_merge3_kmer_outdir/kmers_withN/mysplitk_out.txt. Plots for split kmers can be found in folder sim_40genomes_ext7000_merge3_kmer_outdir/kmers_withN/splitk_plots.
+
+Inversion within genome region 43000 and 3600000, 43000bp boundary, kmer being intact in case genomes and split in control genomes, in forward orientation:
+
+1100K boundary, “mv_away” k-mer being intact in majority of control genomes in forward orientation and split in majority of case genomes:
 ![sim_kmer895](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/3c0eea7f-f45c-49ab-ad8d-6c918f46e83d)
 
+1200K boundary (in “1”/case genomes only), “swp_flk” k-mer being intact in majority of case genomes in reverse orientation and split in majority of control genomes:
 ![sim_kmer997](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/688492a1-f0b3-441e-9686-0d2a9125e8f4)
 
+1300K boundary (in “0”/control genomes only), “swp_flk” k-mer being intact in majority of control genomes in reverse orientation and split in majority of case genomes:
 ![sim_kmer995](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/5e2cb8d2-2d8d-4127-954b-22f61cd27eed)
 
+1400K boundary, “mv_away” k-mer being intact in majority of case genomes in reverse orientation and split in majority of control genomes:
 ![sim_kmer99](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/e19d0e1e-9152-403b-aadd-cf54269d2906)
 
 
