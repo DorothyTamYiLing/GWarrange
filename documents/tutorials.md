@@ -306,7 +306,8 @@ Plots for four examples k-mers that indicate translocation boundaries is shown b
 ![sim_kmer99](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/e19d0e1e-9152-403b-aadd-cf54269d2906)
 
 2) Plotting intact kmers for visualising rearrangement boundaries
-No significant intact k-mers without placeholder sequence was found. It is because the current method is not suitable for detecting translocations as they do not involve any change in sequence orientation.
+
+No significant intact k-mers without placeholder sequence was found.It is because the current method is not suitable for detecting translocations as they do not involve any change in sequence orientation.
 
 
 
