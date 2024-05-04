@@ -294,16 +294,16 @@ Four rearrangement boundaries are found, and they potentially refer to two trans
 Plots for four examples k-mers that indicate translocation boundaries is shown below:
 
 1100K boundary, “mv_away” k-mer being intact in majority of control genomes in forward orientation and split in majority of case genomes:
-![sim_kmer895](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/3c0eea7f-f45c-49ab-ad8d-6c918f46e83d)
+![sim_kmer895](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/7707f37d-7300-4317-848e-bdc6e231fc69)
 
 1200K boundary (in “1”/case genomes only), “swp_flk” k-mer being intact in majority of case genomes in reverse orientation and split in majority of control genomes:
-![sim_kmer997](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/688492a1-f0b3-441e-9686-0d2a9125e8f4)
+![sim_kmer997](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/85ff6963-a654-4bb8-9042-ca154302a770)
 
 1300K boundary (in “0”/control genomes only), “swp_flk” k-mer being intact in majority of control genomes in reverse orientation and split in majority of case genomes:
-![sim_kmer995](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/5e2cb8d2-2d8d-4127-954b-22f61cd27eed)
+![sim_kmer995](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/fdfc3ac4-f424-449f-b836-3db9d360b94d)
 
 1400K boundary, “mv_away” k-mer being intact in majority of case genomes in reverse orientation and split in majority of control genomes:
-![sim_kmer99](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/e19d0e1e-9152-403b-aadd-cf54269d2906)
+![sim_kmer99](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/0158ef46-b9cc-4ffa-bc27-87074a568399)
 
 2) Plotting intact kmers for visualising rearrangement boundaries
 
