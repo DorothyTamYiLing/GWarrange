@@ -285,7 +285,7 @@ bash scripts/GWarrange.sh -gen sim_40genomes.fna.gz -pheno sim_trans_pheno.txt \
 
 **Visualising genome rearrangements that are captured by kmer**
 
-From genome set with 7000bp extension and 3bp merging, split kmers are found (_i.e._ flanking sequences mapped to different positions) when mapped to the original genomes. They can be found in sim_40genomes_ext7000_merge3_kmer_outdir/kmers_withN/mysplitk_out.txt.
+From genome set with 7000bp extension and 3bp merging, twelve split k-mers are found (_i.e._ flanking sequences mapped to different positions) when mapped to the original genomes. They showed mv_away and swp_flk behaviour in at least one genome. They can be found in sim_40genomes_ext7000_merge3_kmer_outdir/kmers_withN/mysplitk_out.txt.
 
 1) Plotting split kmers for visualising rearrangement boundaries
 
@@ -293,6 +293,7 @@ Since k-mers contain highly redundant information, each k-mer is given a label, 
 
 Four rearrangement boundaries are found, and they potentially refer to two translocation events, as shown in the schematic diagram above. Full information of these kmers can be found in output file sim_40genomes_ext7000_merge3_kmer_outdir/kmers_withN/mysplitk_out.txt. Plots for split kmers can be found in folder sim_40genomes_ext7000_merge3_kmer_outdir/kmers_withN/splitk_plots.
 
+Plots for four examples k-mers that indicate translocation boundaries is shown below:
 
 1100K boundary, “mv_away” k-mer being intact in majority of control genomes in forward orientation and split in majority of case genomes:
 ![sim_kmer895](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/3c0eea7f-f45c-49ab-ad8d-6c918f46e83d)
@@ -306,7 +307,8 @@ Four rearrangement boundaries are found, and they potentially refer to two trans
 1400K boundary, “mv_away” k-mer being intact in majority of case genomes in reverse orientation and split in majority of control genomes:
 ![sim_kmer99](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/e19d0e1e-9152-403b-aadd-cf54269d2906)
 
-
+2) Plotting intact kmers for visualising rearrangement boundaries
+No significant intact k-mers without placeholder sequence was found. It is because the current method is not suitable for detecting translocations as they do not involve any change in sequence orientation.
 
 
 
