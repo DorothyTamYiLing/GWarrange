@@ -267,12 +267,10 @@ By looking at /output_homo/homo_occurence.txt, IS200/IS605 family transposase, 1
 
 To detect genome rearrangement associated with phenotype (-pheno), a short list of most ubiqitous repeat loci are placed in the file sim_replist.fasta (-replist) for repeat sequence detection in the input genome set (-gen). Minimal repeat sequence extension and merge parameters (-ext_mrg_min) are used for preserving rearrangement breakpoints; while a separate set of genomes are generated using extension of 7000bp (this number must be larger than the estimated size of largest repeat loci cluster, _i.e._ 5494bp) to ensure complete replacement of repeat sequence clusters by placeholder sequences, hence increasing sensitivity in detecting rearrangement boundaries (-ext_mrg_max). K-mer size of 200bp is used, specified as part of fsm-lite arguments (-fsmlite_arg). sim_startgene.fasta gene is used to re-oriente genomes (-startgene). Population structure is not controlled, specified as part of pyseer arguments (-pyseer_arg). 
 
-Concatenate genome files
 ```
+#Concatenate genome files
 cat ~/example_data/example_genomes/SIM_40genomes/*fasta.gz > ~/example_data/sim_40genomes.fna.gz
-```
 
-```
 #Genome fasta file (-gen), phenotype file (-pheno), start gene fasta file (-startgene) and repeat loci list fasta file (-replist) must be located inside /example_data directory
 
 bash scripts/GWarrange.sh -gen sim_40genomes.fna.gz -pheno sim_trans_pheno.txt \
