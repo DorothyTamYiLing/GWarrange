@@ -119,7 +119,7 @@ cd /path/to/genome_rearrangement
 First, selected reference genome AUSMDU00004142 (accession: NZ_CP027501.1) is used for identifying repeat loci candidates and for estimating size of repeat loci clusters in the genome.
 ```
 #using default parameters
-bash script/homo_main.sh -gff example_data/AUSMDU00004142_NZ_CP027501.1.gff -fna example_data/AUSMDU00004142.fna 
+bash scripts/homo_main.sh -gff example_data/AUSMDU00004142_NZ_CP027501.1.gff -fna example_data/AUSMDU00004142.fna 
 ```
 By looking at /output_homo/homo_occurence.txt, ISL3-like_element_ISEfa11_family_transposase, IS256-like_element_ISEf1_family_transposase and IS30_family_transposase are identified as most ubiqitous repeat loci categories in the reference genome. Size of largest repeat loci cluster is 15773bp (printed as standard output).
 
