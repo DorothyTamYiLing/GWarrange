@@ -22,27 +22,38 @@ git clone https://github.com/DorothyTamYiLing/genome_rearrangement.git
 ## For detecting genome rearrangement in genomes
 ```
 cd /path/to/genome_rearrangement
-bash scripts/main.sh -k <sigk> -g <genomes> -p <phenotype> -o <output directory> -f <flanking seqeunces minimum length> -d <replaced size>
+bash scripts/GWarrange.sh -gen clus1clus2_47.fna.gz -pheno clus1clus2_pheno.txt \
+-gen_size 4300 -startgene gidA.fasta -replist IS_NZ_CP025371.1.fasta \
+-thread 8 \
+-fsmlite_arg "-v -s 3 -S 44 -t tmp -m 200 -M 200" \
+-pyseer_arg "--min-af 0.05 --max-af 0.95 --no-distances" \
+-ext_mrg_min "100_3" -ext_mrg_max "7000_3"
 
 ```
 
 Arguments:
 
-**k** : multifasta file of significant phenotype-associated k-mers/unitigs that may or may not contain repetitive elements placeholder sequence (e.g. Nx15)
+**gen** : gzipped/gunzipped multifasta file of genomes set (original sequence without IS replacement)
 
-**g** : gzipped/gunzipped multifasta file of genomes set (original sequence without IS replacement)
+**pheno** : phenotype file (file format: sample names in 1st column, binary phenotype in 2nd column; no header, tab-delimited) 
 
-**p** : phenotype file (file format: sample names in 1st column, binary phenotype in 2nd column; no header, tab-delimited) 
+**gen_size** : genome size
 
-**o** : directory being created where the output files will be generated 
+**startgene** : chosen gene for reorientating genomes
 
-**f** : minimum length (bp) of flanking sequences (both side) for the kmer to be blasted with the genomes; default: 30bp 
+**replist** : representatives of repeat loci categories are aligned with reference genome
 
-**d** : maximum size of repetitive sequences blocks that are replaced by shorter placed holder sequence (i.e. Maximum distance (bp) between the left and right flanks in the genome for a kmer to be defined as intact kmer), written as "maxrplsize" in publication Method section  
+**ext_mrg_min** : minimum extending and merging neighbouring repeat sequences into blocks 
 
-**x** : parameter for plotting split k-mers. Number of significant digits (e.g. 2,3,4; default: 2) for rounding off mean upstream flank start coordinate, for selecting split kmers with unique proportion and genome position information for plotting
+**ext_mrg_max** : maximum extending and merging neighbouring repeat sequences into blocks 
 
-**y** : parameter for plotting intact k-mers. The closest multiplier of selected value (e.g. 100, 1000, 10000; default :1000) used for rounding off median genome position of intact kmer, for selecting intact k-mers with unique genome position information for plotting
+**flk_len** : minimum length (bp) of flanking sequences (both side) for the kmer to be blasted with the genomes; default: 30bp 
+
+**dedupk** : parameter for plotting split k-mers. Number of significant digits (e.g. 2,3,4; default: 2) for rounding off mean upstream flank start coordinate, for selecting split kmers with unique proportion and genome position information for plotting
+
+**intkrd** : parameter for plotting intact k-mers. The closest multiplier of selected value (e.g. 100, 1000, 10000; default :1000) used for rounding off median genome position of intact kmer, for selecting intact k-mers with unique genome position information for plotting
+
+
 
 Example:
 
