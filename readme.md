@@ -53,6 +53,19 @@ Arguments:
 
 **intkrd** : parameter for plotting intact k-mers. The closest multiplier of selected value (e.g. 100, 1000, 10000; default :1000) used for rounding off median genome position of intact kmer, for selecting intact k-mers with unique genome position information for plotting
 
+**pyseer_arg** : argument for running pyseer 
+
+**fsmlite_arg** : argument for running fsm-lite
+
+**unitigcaller_arg** : argument for running unitigcaller_arg
+
+**string_type** : "kmer" or "kmers_and_unitigs" ("kmer" for performing k-mer-based GWAS only; "kmers_and_unitigs" for performing both k-mers and unitigs based GWAS, then instead of significant k-mers without placeholder sequences, significant unitigs will be analysed together with significant k-mer containing placeholder sequences for the purpose of efficient run time (default: "kmer")
+
+![image](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/4aafed8a-5031-4f00-b360-9fbf1daa1824)
+ 
+
+
+
 
 
 Example:
