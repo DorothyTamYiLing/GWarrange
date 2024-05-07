@@ -9,6 +9,15 @@ fsmlite_arg="-v -t tmp -m 200 -M 200"
 unitigcaller_arg=""
 string_type="kmer"
 thread=8
+exp_fac=86
+yaxis=360
+arr_dist=70
+split_h=7
+split_w=10
+merge=40000
+intact_h=100
+intact_w=180
+intact_res=150
 
 while test $# -gt 0; do
            case "$1" in
@@ -87,6 +96,51 @@ while test $# -gt 0; do
                     thread=$1
                     shift
                     ;;
+                -exp_fac)
+                    shift
+                    exp_fac=$1
+                    shift
+                    ;;
+                -yaxis)
+                    shift
+                    yaxis=$1
+                    shift
+                    ;;
+                -arr_dist)
+                    shift
+                    arr_dist=$1
+                    shift
+                    ;;
+                -split_h)
+                    shift
+                    split_h=$1
+                    shift
+                    ;;
+                -split_w)
+                    shift
+                    split_w=$1
+                    shift
+                    ;;
+                -merge)
+                    shift
+                    merge=$1
+                    shift
+                    ;;
+                -intact_h)
+                    shift
+                    intact_h=$1
+                    shift
+                    ;;
+                -intact_w)
+                    shift
+                    intact_w=$1
+                    shift
+                    ;;
+                -intact_res)
+                    shift
+                    intact_res=$1
+                    shift
+                    ;;
                 *)
                    echo "$1 is not a recognized flag!"
                    return 1;
@@ -109,6 +163,16 @@ echo "string_type: $string_type";
 echo "number of thread for BLAST, pyseer and unitig-callers: $thread";
 echo "minimum extension and merge parameters: $ext_mrg_min";
 echo "maximum extension and merge parameters: $ext_mrg_max";
+echo "how much the arrow expand horizontally for visibility in relative to the genome size: $exp_fac";
+echo "y-axis height of the plot: $yaxis";
+echo "vertical distance between arrows: $arr_dist";
+echo "height of the split-k plot: $split_h";
+echo "width of the split-k plot: $split_w";
+echo "merge arrows into one when they are less than XXXbp apart: $merge";
+echo "height of the intact-k plot: $intact_h";
+echo "width of the intact-k plot: $intact_w";
+echo "set intact k plot resolution: $intact_res";
+
 
 min_ext=$(echo ${ext_mrg_min} | cut -d "_" -f1)
 min_mrg=$(echo ${ext_mrg_min} | cut -d "_" -f2)
@@ -148,11 +212,6 @@ blastn -query example_data/$replist \
 
 ############ script for running extension+merge, fsm-lite, unitig-caller, pyseer, pyseer post-processing ########################
 
-#echo "${pyseer_arg}"
-#echo "${fsmlite_arg}"
-#echo "${unitigcaller_arg}"
-
-
 #build database for efficient blasting
 echo "build database for efficient blasting"
 makeblastdb -in example_data/${gen/.gz} -dbtype nucl -out genome_db
@@ -184,10 +243,13 @@ echo "value for -d flag (1.2 times of above value) :"${min_d}
 if [ -s ext${min_ext}_merge${min_mrg}_ISreplaced_genomes_${string_type}/final_sig.fasta ]; then
     echo "process final significant kmers/unitigs for detecting rearrangements"
 #running main.sh For ext100_merge3_ISreplaced_genomes set unitigs
-bash scripts/main.sh -k ext${min_ext}_merge${min_mrg}_ISreplaced_genomes_${string_type}/final_sig.fasta \
--g genome_db \
--p example_data/${pheno} -d ${min_d} -f ${flk_len} \
--o ${gen/.fna.gz}_ext${min_ext}_merge${min_mrg}_${string_type}_outdir -s ${gen_size} -x ${dedupk} -y ${intkrd} -t ${thread}
+bash scripts/main.sh -sigk ext${min_ext}_merge${min_mrg}_ISreplaced_genomes_${string_type}/final_sig.fasta \
+-gen genome_db \
+-pheno example_data/${pheno} -flk_dist ${min_d} -flk_len ${flk_len} \
+-outdir ${gen/.fna.gz}_ext${min_ext}_merge${min_mrg}_${string_type}_outdir \
+-gen_size ${gen_size} -dedupk ${dedupk} -intkrd ${intkrd} -thread ${thread} \
+-exp_fac ${exp_fac} -yaxis ${yaxis} -arr_dist ${arr_dist} -split_h ${split_h} -split_w ${split_w} -merge ${merge} \
+-intact_h ${intact_h} -intact_w ${intact_w} -intact_res ${intact_res}
 else
     echo "no significant kmer/unitig"
 fi
@@ -207,16 +269,19 @@ bash scripts/extmerge2pyseer.sh \
 #calculate value for d flag
 max_cut=$(grep "Maximum size" ext${max_ext}_merge${max_mrg}_mergedISstat.txt | cut -d$'\t' -f 2)
 echo "Maximum size of merged repeats:"${max_cut}
-max_d=$(awk "BEGIN { print int(${max_cut}*1.2)}")
+min_d=$(awk "BEGIN { print int(${max_cut}*1.2)}")
 echo "value for -d flag (1.2 times of above value) :"${min_d}
 
 if [ -s ext${max_ext}_merge${max_mrg}_ISreplaced_genomes_${string_type}/final_sig.fasta ]; then
     echo "process final significant kmers/unitigs for detecting rearrangements"
 #running main.sh For ext7000_merge200_ISreplaced_genomes set unitigs
-bash scripts/main.sh -k ext${max_ext}_merge${max_mrg}_ISreplaced_genomes_${string_type}/final_sig.fasta \
--g genome_db \
--p example_data/${pheno} -d ${max_d} -f ${flk_len} \
--o ${gen/.fna.gz}_ext${max_ext}_merge${max_mrg}_${string_type}_outdir -s ${gen_size} -x ${dedupk} -y ${intkrd} -t ${thread}
+bash scripts/main.sh -sigk ext${max_ext}_merge${max_mrg}_ISreplaced_genomes_${string_type}/final_sig.fasta \
+-gen genome_db \
+-pheno example_data/${pheno} -flk_dist ${min_d} -flk_len ${flk_len} \
+-outdir ${gen/.fna.gz}_ext${max_ext}_merge${max_mrg}_${string_type}_outdir \
+-gen_size ${gen_size} -dedupk ${dedupk} -intkrd ${intkrd} -thread ${thread} \
+-exp_fac ${exp_fac} -yaxis ${yaxis} -arr_dist ${arr_dist} -split_h ${split_h} -split_w ${split_w} -merge ${merge} \
+-intact_h ${intact_h} -intact_w ${intact_w} -intact_res ${intact_res}
 else
      echo "no significant kmer/unitig"
 fi
@@ -243,10 +308,13 @@ echo "value for -d flag (1.2 times of above value) :"${min_d}
 if [ -s ext${min_ext}_merge${min_mrg}_ISreplaced_genomes_${string_type}/final_sig.fasta ]; then
     echo "process final significant kmers/unitigs for detecting rearrangements"
 #running main.sh For ext100_merge3_ISreplaced_genomes set unitigs
-bash scripts/main.sh -k ext${min_ext}_merge${min_mrg}_ISreplaced_genomes_${string_type}/final_sig.fasta \
--g genome_db \
--p example_data/${pheno} -d ${min_d} -f ${flk_len} \
--o ${gen/.fna.gz}_ext${min_ext}_merge${min_mrg}_${string_type}_outdir -s ${gen_size} -x ${dedupk} -y ${intkrd} -t ${thread}
+bash scripts/main.sh -sigk ext${min_ext}_merge${min_mrg}_ISreplaced_genomes_${string_type}/final_sig.fasta \
+-gen genome_db \
+-pheno example_data/${pheno} -flk_dist ${min_d} -flk_len ${flk_len} \
+-outdir ${gen/.fna.gz}_ext${min_ext}_merge${min_mrg}_${string_type}_outdir \
+-gen_size ${gen_size} -dedupk ${dedupk} -intkrd ${intkrd} -thread ${thread} \
+-exp_fac ${exp_fac} -yaxis ${yaxis} -arr_dist ${arr_dist} -split_h ${split_h} -split_w ${split_w} -merge ${merge} \
+-intact_h ${intact_h} -intact_w ${intact_w} -intact_res ${intact_res}
 else
      echo "no significant kmer/unitig"
 fi
