@@ -49,11 +49,11 @@ Arguments:
 
 **flk_len** : minimum length (bp) of flanking sequences (both side) for the kmer to be blasted with the genomes (default: 30bp)
 
-**pyseer_arg** : arguments for running pyseer (default: "--min-af 0.05 --max-af 0.95")
+**pyseer_arg** : additional arguments for running pyseer, apart from --phenotypes, --kmers, --output-patterns and --cpu. Full path should be provided for any additional input file. (default: "--min-af 0.05 --max-af 0.95")
 
-**fsmlite_arg** : arguments for running fsm-lite (default: "-v -t tmp -m 200 -M 200")
+**fsmlite_arg** : additional arguments for running fsm-lite, apart from -l (default: "-v -t tmp -m 200 -M 200")
 
-**unitigcaller_arg** : arguments for running unitigcaller (default: "")
+**unitigcaller_arg** : additional arguments for running unitigcaller, apart from --call, --pyseer, --refs, --out and --threads. (default: "")
 
 **string_type** : "kmer" or "kmers_and_unitigs" ("kmer" for performing k-mer-based GWAS only; "kmers_and_unitigs" for performing both k-mers and unitigs based GWAS, then instead of significant k-mers without placeholder sequences, significant unitigs will be analysed together with significant k-mer containing placeholder sequences for the purpose of efficient run time (default: "kmer")
 
