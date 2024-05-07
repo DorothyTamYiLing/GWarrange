@@ -43,21 +43,21 @@ Arguments:
 
 **replist** : representatives of repeat loci categories are aligned with reference genome
 
-**ext_mrg_min** : minimum extending and merging neighbouring repeat sequences into blocks 
+**ext_mrg_min** : minimum extending and merging neighbouring repeat sequences into blocks (default: "100_3")
 
-**ext_mrg_max** : maximum extending and merging neighbouring repeat sequences into blocks 
+**ext_mrg_max** : maximum extending and merging neighbouring repeat sequences into blocks (default: "7000_3")
 
-**flk_len** : minimum length (bp) of flanking sequences (both side) for the kmer to be blasted with the genomes; default: 30bp 
+**flk_len** : minimum length (bp) of flanking sequences (both side) for the kmer to be blasted with the genomes (default: 30bp)
 
-**dedupk** : parameter for plotting split k-mers. Number of significant digits (e.g. 2,3,4; default: 2) for rounding off mean upstream flank start coordinate, for selecting split kmers with unique proportion and genome position information for plotting
+**dedupk** : parameter for plotting split k-mers. Number of significant digits (e.g. 2,3,4) for rounding off mean upstream flank start coordinate, for selecting split kmers with unique proportion and genome position information for plotting (default: 2)
 
-**intkrd** : parameter for plotting intact k-mers. The closest multiplier of selected value (e.g. 100, 1000, 10000; default :1000) used for rounding off median genome position of intact kmer, for selecting intact k-mers with unique genome position information for plotting
+**intkrd** : parameter for plotting intact k-mers. The closest multiplier of selected value (e.g. 100, 1000, 10000) used for rounding off median genome position of intact kmer, for selecting intact k-mers with unique genome position information for plotting (default: 1000)
 
-**pyseer_arg** : argument for running pyseer 
+**pyseer_arg** : arguments for running pyseer (default: "--min-af 0.05 --max-af 0.95")
 
-**fsmlite_arg** : argument for running fsm-lite
+**fsmlite_arg** : arguments for running fsm-lite (default: "-v -t tmp -m 200 -M 200")
 
-**unitigcaller_arg** : argument for running unitigcaller_arg
+**unitigcaller_arg** : arguments for running unitigcaller (default: "")
 
 **string_type** : "kmer" or "kmers_and_unitigs" ("kmer" for performing k-mer-based GWAS only; "kmers_and_unitigs" for performing both k-mers and unitigs based GWAS, then instead of significant k-mers without placeholder sequences, significant unitigs will be analysed together with significant k-mer containing placeholder sequences for the purpose of efficient run time (default: "kmer")
 
