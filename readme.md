@@ -35,7 +35,7 @@ Arguments:
 
 **gen** : gzipped/gunzipped multifasta file of genomes set (original sequence without IS replacement). Must be in *.fna.gz suffix.
 
-**pheno** : phenotype file (file format: sample names in 1st column, binary phenotype in 2nd column; no header, tab-delimited) 
+**pheno** : phenotype file (file format: sample names in 1st column, binary phenotype in 2nd column; no header, tab-delimited) (must be in full directory path)
 
 **gen_size** : genome size
 
