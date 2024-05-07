@@ -61,12 +61,23 @@ Arguments:
 
 **string_type** : "kmer" or "kmers_and_unitigs" ("kmer" for performing k-mer-based GWAS only; "kmers_and_unitigs" for performing both k-mers and unitigs based GWAS, then instead of significant k-mers without placeholder sequences, significant unitigs will be analysed together with significant k-mer containing placeholder sequences for the purpose of efficient run time (default: "kmer")
 
-![image](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/4aafed8a-5031-4f00-b360-9fbf1daa1824)
- 
+**exp_fac** : how much the arrow expand horizontally for visibility in relative to the genome size. Smaller number leads to larger arrow expansion. In split kmers' plots. (default: 86)
 
+**yaxis** : height of split kmers' plots (default: 360)
 
+**arr_dist** : vertical distance between arrows, in split kmers' plots (default: 70)
 
+**split_h** : height of the device in pdf function in R, in split kmers' plots (default: 7)
 
+**split_w** : width of the device in pdf function in R, in split kmers' plots (default: 10)
+
+**merge** : merge arrows into one when they are less than this number of base pair apart (default: 40000)
+
+**intact_h** : height of the device in png function in R, in intact kmers' plots (default: 100)
+
+**intact_w** : height of the device in png function in R, in intact kmers' plots (default: 180)
+
+**intact_res** : Resolution for intact kmers' plots (default: 150)
 
 Example:
 
