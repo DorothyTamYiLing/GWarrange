@@ -39,13 +39,16 @@ By looking at /output_homo/homo_occurence.txt, IS481 family transposase, IS481-l
 To detect genome rearrangement associated with phenotype (-pheno), a short list of most ubiqitous repeat loci are placed in the file IS_NZ_CP025371.1.fasta (-replist) for repeat sequence detection in the input genome set (-gen). Minimal repeat sequence extension and merge parameters (-ext_mrg_min) are used for preserving rearrangement breakpoints; while a separate set of genomes are generated using extension of 7000bp (this number must be larger than the estimated size of largest repeat loci cluster, _i.e._ 5735bp) to ensure complete replacement of repeat sequence clusters by placeholder sequences, hence increasing sensitivity in detecting rearrangement boundaries (-ext_mrg_max). K-mer size of 200bp and minor allele frequency of 0.05 is used, specified as part of fsm-lite arguments (-fsmlite_arg). _gidA_ gene is used to re-oriente genomes (-startgene). Population structure is not controlled, specified as part of pyseer arguments (-pyseer_arg).
 
 ```
-#Genome fasta file (-gen), phenotype file (-pheno), start gene fasta file (-startgene) and repeat loci list fasta file (-replist) must be located inside /example_data directory
+#concatenating genome fasta files for use
+cat ./example_data/example_genomes/clus1clus2_47_genomes/*fasta.gz > ./example_data/clus1clus2_47.fna.gz
 
-bash scripts/GWarrange.sh -gen clus1clus2_47.fna.gz -pheno clus1clus2_pheno.txt \
--gen_size 4300 -startgene gidA.fasta -replist IS_NZ_CP025371.1.fasta \
+#Running GWarrange.sh. Full path should be provided to phenotype file
+
+bash scripts/GWarrange.sh -gen ./example_data/clus1clus2_47.fna.gz -pheno /full/path/to/example_data/clus1clus2_pheno.txt \
+-gen_size 4300 -startgene ./example_data/gidA.fasta -replist ./example_data/IS_NZ_CP025371.1.fasta \
 -thread 8 \
 -fsmlite_arg "-v -s 3 -S 44 -t tmp -m 200 -M 200" \
--pyseer_arg "--print-samples --no-distances" \
+-pyseer_arg "--min-af 0.05 --max-af 0.95 --no-distances" \
 -ext_mrg_min "100_3" -ext_mrg_max "7000_3"
 ```
 
@@ -126,10 +129,13 @@ By looking at /output_homo/homo_occurence.txt, ISL3-like_element_ISEfa11_family_
 To detect genome rearrangement associated with phenotype (-pheno), a short list of most ubiqitous repeat loci are placed in the file Efaecium_replist.fasta (-replist) for repeat sequence detection in the input genome set (-gen). Minimal repeat sequence extension and merge parameters (-ext_mrg_min) are used for preserving rearrangement breakpoints; while a separate set of genomes are generated using extension of 17000bp (this number must be larger than the estimated size of largest repeat loci cluster, _i.e._ 15773bp) to ensure complete replacement of repeat sequence clusters by placeholder sequences, hence increasing sensitivity in detecting rearrangement boundaries (-ext_mrg_max). K-mer size of 200bp is used and only k-mers with count between 20 to 30 are output (due to the high number of k-mers produced), specified as part of fsm-lite arguments (-fsmlite_arg). _gidA_ gene is used to re-oriente genomes (-startgene). Population structure is not controlled, specified as part of pyseer arguments (-pyseer_arg). 
 
 ```
-#Genome fasta file (-gen), phenotype file (-pheno), start gene fasta file (-startgene) and repeat loci list fasta file (-replist) must be located inside /example_data directory
+#concatenating genome fasta files for use
+cat ./example_data/example_genomes/Efaecium_32genomes/*fasta.gz > ./example_data/Efaecium_32genomes.fna.gz
 
-bash scripts/GWarrange.sh -gen Efaecium_32genomes.fna.gz -pheno Efaecium32genomes_pheno_1swap.txt \
--gen_size 3000 -startgene dnaA.fasta -replist Efaecium_replist.fasta \
+#Running GWarrange.sh. Full path should be provided to phenotype file
+
+bash scripts/GWarrange.sh -gen ./example_data/Efaecium_32genomes.fna.gz -pheno /full/path/to/example_data/Efaecium32genomes_pheno_1swap.txt \
+-gen_size 3000 -startgene ./example_data/dnaA.fasta -replist ./example_data/Efaecium_replist.fasta \
 -thread 8 \
 -fsmlite_arg "-v -t tmp -s 20 -S 30 -m 200 -M 200" \
 -pyseer_arg "--print-samples --no-distances" \
@@ -137,10 +143,10 @@ bash scripts/GWarrange.sh -gen Efaecium_32genomes.fna.gz -pheno Efaecium32genome
 ```
 While generating the number of significant k-mers from pyseer output using 100_3 extension and merge parameters, 424,588 number of significant k-mers are found (as printed in the standard output). Due to the large number of k-mers that can be difficult to be procssed in a reasonable amount of time, it is recommended to incoporate the use of unitigs by indicating -string_type "kmers_and_unitigs". This allows unitig-callers to be run on top of fsm-lite, and the final list of significant "sequences" used for detecting genome rearrangement consisted of 1) k-mers containing placeholder seqeunces (for detecting rearrangement boundaries) and 2) unitigs without placeholder seqeunces (for detecting interior rearranged sequences).
 
-#rerun by indicating unitig-callers
+#rerun by indicating performing both kmer-based and unitig-based GWAS
 ```
-bash scripts/GWarrange.sh -gen Efaecium_32genomes.fna.gz -pheno Efaecium32genomes_pheno_1swap.txt \
--gen_size 3000 -startgene dnaA.fasta -replist Efaecium_replist.fasta \
+bash scripts/GWarrange.sh -gen ./example_data/Efaecium_32genomes.fna.gz -pheno /full/path/to/example_data/Efaecium32genomes_pheno_1swap.txt \
+-gen_size 3000 -startgene ./example_data/dnaA.fasta -replist ./example_data/Efaecium_replist.fasta \
 -thread 8 \
 -fsmlite_arg "-v -t tmp -s 20 -S 30 -m 200 -M 200" \
 -pyseer_arg "--print-samples --no-distances" \
@@ -213,10 +219,15 @@ bash script/homo_main.sh -gff example_data/C505_NZ_CP011687.1.gff -fna example_d
 
 Population structure is controlled using phylogeny similarity matrix. Minor allele frequency of 0.05 is applied in generating k-mers and pyseer GWAS.
 ```
-bash scripts/GWarrange.sh -gen PRN_468.fna.gz -pheno prn_status_pheno.txt \
--gen_size 4300 -startgene gidA.fasta -replist IS_NZ_CP025371.1.fasta \
+#concatenating genome fasta files for use
+cat ./example_data/example_genomes/PRN_468/*fasta.gz > ./example_data/PRN_468.fna.gz
+
+#Running GWarrange.sh. Full path should be provided to phenotype file
+
+bash scripts/GWarrange.sh -gen ./example_data/PRN_468.fna.gz -pheno /full/path/to/example_data/prn_status_pheno.txt \
+-gen_size 4300 -startgene ./example_data/gidA.fasta -replist ./example_data/IS_NZ_CP025371.1.fasta \
 -thread 8 \
--pyseer_arg "--lmm --similarity ../example_data/ClfML_kappa4.964_phylogeny_similarity.tsv --min-af 0.05 --max-af 0.95 --covariates ../example_data/covariates.txt --use-covariates 2" \
+-pyseer_arg "--lmm --similarity /full/path/to/ClfML_kappa4.964_phylogeny_similarity.tsv --min-af 0.05 --max-af 0.95 --covariates ../example_data/covariates.txt --use-covariates 2" \
 -fsmlite_arg "-v -t tmp -s 24 -S 444 -m 200 -M 200" \
 -ext_mrg_min "100_3" -ext_mrg_max "7000_3"
 ```
@@ -268,13 +279,13 @@ By looking at /output_homo/homo_occurence.txt, IS200/IS605 family transposase, 1
 To detect genome rearrangement associated with phenotype (-pheno), a short list of most ubiqitous repeat loci are placed in the file sim_replist.fasta (-replist) for repeat sequence detection in the input genome set (-gen). Minimal repeat sequence extension and merge parameters (-ext_mrg_min) are used for preserving rearrangement breakpoints; while a separate set of genomes are generated using extension of 7000bp (this number must be larger than the estimated size of largest repeat loci cluster, _i.e._ 5494bp) to ensure complete replacement of repeat sequence clusters by placeholder sequences, hence increasing sensitivity in detecting rearrangement boundaries (-ext_mrg_max). K-mer size of 200bp is used, specified as part of fsm-lite arguments (-fsmlite_arg). sim_startgene.fasta gene is used to re-oriente genomes (-startgene). Population structure is not controlled, specified as part of pyseer arguments (-pyseer_arg). 
 
 ```
-#Concatenate genome files
-cat ~/example_data/example_genomes/SIM_40genomes/*fasta.gz > ~/example_data/sim_40genomes.fna.gz
+#Concatenate genome files for use
+cat ~/example_data/example_genomes/sim_translocation_39genomes/*fasta.gz > ~/example_data/sim_40genomes.fna.gz
 
-#Genome fasta file (-gen), phenotype file (-pheno), start gene fasta file (-startgene) and repeat loci list fasta file (-replist) must be located inside /example_data directory
+#Running GWarrange.sh. Full path should be provided to phenotype file
 
-bash scripts/GWarrange.sh -gen sim_40genomes.fna.gz -pheno sim_trans_pheno.txt \
--gen_size 2532 -startgene sim_startgene.fasta -replist sim_replist.fasta \
+bash scripts/GWarrange.sh -gen ./example_data/sim_40genomes.fna.gz -pheno /full/path/to/sim_trans_pheno.txt \
+-gen_size 2532 -startgene ./example_data/sim_startgene.fasta -replist ./example_data/sim_replist.fasta \
 -thread 8 -string_type "kmers" \
 -fsmlite_arg "-v -t tmp -s 2 -S 38 -m 200 -M 200" \
 -unitigcaller_arg "" \           
