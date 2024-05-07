@@ -49,10 +49,6 @@ Arguments:
 
 **flk_len** : minimum length (bp) of flanking sequences (both side) for the kmer to be blasted with the genomes (default: 30bp)
 
-**dedupk** : parameter for plotting split k-mers. Number of significant digits (e.g. 2,3,4) for rounding off mean upstream flank start coordinate, for selecting split kmers with unique proportion and genome position information for plotting (default: 2)
-
-**intkrd** : parameter for plotting intact k-mers. The closest multiplier of selected value (e.g. 100, 1000, 10000) used for rounding off median genome position of intact kmer, for selecting intact k-mers with unique genome position information for plotting (default: 1000)
-
 **pyseer_arg** : arguments for running pyseer (default: "--min-af 0.05 --max-af 0.95")
 
 **fsmlite_arg** : arguments for running fsm-lite (default: "-v -t tmp -m 200 -M 200")
@@ -60,6 +56,10 @@ Arguments:
 **unitigcaller_arg** : arguments for running unitigcaller (default: "")
 
 **string_type** : "kmer" or "kmers_and_unitigs" ("kmer" for performing k-mer-based GWAS only; "kmers_and_unitigs" for performing both k-mers and unitigs based GWAS, then instead of significant k-mers without placeholder sequences, significant unitigs will be analysed together with significant k-mer containing placeholder sequences for the purpose of efficient run time (default: "kmer")
+
+_Split k-mer plots parameters:_
+
+**dedupk** : Number of significant digits (e.g. 2,3,4) for rounding off mean upstream flank start coordinate, for selecting split kmers with unique proportion and genome position information for plotting (default: 2)
 
 **exp_fac** : how much the arrow expand horizontally for visibility in relative to the genome size. Smaller number leads to larger arrow expansion. In split kmers' plots. (default: 86)
 
@@ -72,6 +72,10 @@ Arguments:
 **split_w** : width of the device in pdf function in R, in split kmers' plots (default: 10)
 
 **merge** : merge arrows into one when they are less than this number of base pair apart (default: 40000)
+
+_Intact k-mer plots parameters:_
+
+**intkrd** : The closest multiplier of selected value (e.g. 100, 1000, 10000) used for rounding off median genome position of intact kmer, for selecting intact k-mers with unique genome position information for plotting (default: 1000)
 
 **intact_h** : height of the device in png function in R, in intact kmers' plots (default: 100)
 
