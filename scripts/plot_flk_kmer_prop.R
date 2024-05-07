@@ -6,7 +6,7 @@
 # echo $x
 # Rscript ../../scripts/plot_flk_kmer_prop.R --kmer $x \
 # --phen ../../example_data/clus1clus2_pheno.txt --coor ../kmers_withN/myflk_behave_pheno.txt \
-# --genome.size 4300 --outdir splitk_plots/plot${x} --flk.dist 110000 --exp_fac 86
+# --genome.size 4300 --outdir splitk_plots/plot${x} --flk_dist 110000 --exp_fac 86
 #done
 #rm myshort_splitk_out_uniq_nohead.txt
 
@@ -22,7 +22,7 @@ option_list = list(
               help="kmer genome combination blast coordinates", metavar="character"),
   make_option("--genome.size", type="character", default=NULL, 
               help="size of genome in Mb", metavar="character"),
-  make_option("--flk.dist", type="character", default=NULL, 
+  make_option("--flkdist", type="character", default=NULL, 
               help="Maximum distance between flanks to define intact kmer", metavar="character"),
   make_option("--outdir", type="character", default=NULL,
               help="kmer to plot", metavar="character"),
@@ -30,11 +30,11 @@ option_list = list(
               help="how much the arrow expand horizontally for visibility in relative to the genome size, larger number leads to less expansion", metavar="character"),
   make_option("--yaxis", type="character", default=360,
               help="set the y-axis height of the plot", metavar="character"),
-  make_option("--arr.dist", type="character", default=70,
+  make_option("--arr_dist", type="character", default=70,
               help="set the vertical distance between arrows", metavar="character"),
-  make_option("--height", type="character", default=7,
+  make_option("--split_h", type="character", default=7,
               help="set height of the plot", metavar="character"),
-  make_option("--width", type="character", default=10,
+  make_option("--split_w", type="character", default=10,
               help="set the width of the plot", metavar="character"),
   make_option("--merge", type="character", default=40000,
               help="merge arrows into one when they are less than XXXbp apart", metavar="character")
@@ -69,17 +69,18 @@ mykmer_tab<-mymerge[which(mymerge$kmer==mykmer),]
 #specify the rows correspond to the behaviours to be plotted (optional)
 #mykmer_tab<-mykmer_tab[which(mykmer_tab$mybehave%in%c("mv&flp","intact_k")),]
 
+
 #set the height of the plot
 yaxis<-as.numeric(as.character(opt$yaxis))
 
 #set the vertical distance between arrows
-arr_dist<-as.numeric(as.character(opt$arr.dist))
+arr_dist<-as.numeric(as.character(opt$arr_dist))
 
 #set the width of the plot
-width<-as.numeric(as.character(opt$width))
+width<-as.numeric(as.character(opt$split_w))
 
 #set the height of the plot
-height<-as.numeric(as.character(opt$height))
+height<-as.numeric(as.character(opt$split_h))
 
 #set arrow merge threshold of the plot
 mymerge<-as.numeric(as.character(opt$merge))
@@ -140,10 +141,10 @@ for(i in 1:2){
       mycol="#000000" #green
     }
     if(myflk%in%c("L","R")){  #extract the split kmer rows and specify the pheno to plot
-      myktab<-mykmer_tab[which(abs(mykmer_tab$EndL-mykmer_tab$StartR)>as.numeric(as.character(opt$flk.dist)) & mykmer_tab$case_control==x),]
+      myktab<-mykmer_tab[which(abs(mykmer_tab$EndL-mykmer_tab$StartR)>as.numeric(as.character(opt$flkdist)) & mykmer_tab$case_control==x),]
     }
     if(myflk=="in"){ #extract the intact kmer rows and specify the pheno to plot
-      myktab<-mykmer_tab[which(abs(mykmer_tab$EndL-mykmer_tab$StartR)<as.numeric(as.character(opt$flk.dist)) & mykmer_tab$case_control==x),]
+      myktab<-mykmer_tab[which(abs(mykmer_tab$EndL-mykmer_tab$StartR)<as.numeric(as.character(opt$flkdist)) & mykmer_tab$case_control==x),]
     }
     
     #make a table storing the coordinate for each arrow and the size
