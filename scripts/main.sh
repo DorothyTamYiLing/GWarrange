@@ -3,32 +3,141 @@ flk_len=30
 dedupk=2
 intkrd=1000
 thread=8
+exp_fac=86
+yaxis=360
+arr_dist=70
+split_h=7
+split_w=10
+merge=40000
+intact_h=100
+intact_w=180
+intact_res=150
 
-while getopts k:g:p:f:d:o:s:d:x:y:t: flag
-do
-    case "${flag}" in
-        k) sigk=${OPTARG};;
-        g) gen=${OPTARG};;
-        p) pheno=${OPTARG};;
-        f) flk_len=${OPTARG};;
-        d) flk_dist=${OPTARG};;
-        o) outdir=${OPTARG};;
-        s) gen_size=${OPTARG};;
-        x) dedupk=${OPTARG};;
-        y) intkrd=${OPTARG};;
-        t) thread=${OPTARG};;
-    esac
-done
-#echo "sigk: $sigk";
-#echo "gen: $gen";
-#echo "pheno: $pheno";
-#echo "flk_len: $flk_len";
-#echo "flk_dist: $flk_dist";
-#echo "outdir: $outdir";
-#echo "genome size for plot: $gen_size";
-#echo "genome pos sig digit for dedup split k in plot: $dedupk";
-#echo "round off intact k genome position to the nearest multiple of an integar: $intkrd";
-#echo "number of thread: $thread";
+while test $# -gt 0; do
+           case "$1" in
+                -sigk)
+                    shift
+                    sigk=$1
+                    shift
+                    ;;
+                -gen)
+                    shift
+                    gen=$1
+                    shift
+                    ;;
+                -pheno)
+                    shift
+                    pheno=$1
+                    shift
+                    ;;
+                -flk_dist)
+                    shift
+                    flk_dist=$1
+                    shift
+                    ;;
+                -flk_len)
+                    shift
+                    flk_len=$1
+                    shift
+                    ;; 
+                -outdir)
+                    shift
+                    outdir=$1
+                    shift
+                    ;; 
+                -gen_size)
+                    shift
+                    gen_size=$1
+                    shift
+                    ;;
+                -dedupk)
+                    shift
+                    dedupk=$1
+                    shift
+                    ;;
+                -intkrd)
+                    shift
+                    intkrd=$1
+                    shift
+                    ;;
+                -thread)
+                    shift
+                    thread=$1
+                    shift
+                    ;;
+                -exp_fac)
+                    shift
+                    exp_fac=$1
+                    shift
+                    ;;
+                -yaxis)
+                    shift
+                    yaxis=$1
+                    shift
+                    ;;
+                -arr_dist)
+                    shift
+                    arr_dist=$1
+                    shift
+                    ;;
+                -split_h)
+                    shift
+                    split_h=$1
+                    shift
+                    ;;
+                -split_w)
+                    shift
+                    split_w=$1
+                    shift
+                    ;;
+                -merge)
+                    shift
+                    merge=$1
+                    shift
+                    ;;
+                -intact_h)
+                    shift
+                    intact_h=$1
+                    shift
+                    ;;
+                -intact_w)
+                    shift
+                    intact_w=$1
+                    shift
+                    ;;
+                -intact_res)
+                    shift
+                    intact_res=$1
+                    shift
+                    ;;
+                *)
+                   echo "$1 is not a recognized flag!"
+                   return 1;
+                   ;;
+          esac
+  done  
+
+echo "sigk list: $sigk";
+echo "gen: $gen";
+echo "pheno: $pheno";
+echo "flk_dist: $flk_dist";
+echo "flk_len: $flk_len";
+echo "output directory: $outdir";
+echo "genome size for plot: $gen_size";
+echo "genome pos sig digit for dedup split k in plot: $dedupk";
+echo "round off intact k genome position to the nearest multiple of an integar: $intkrd";
+echo "number of thread for BLAST, pyseer and unitig-callers: $thread";
+echo "how much the arrow expand horizontally for visibility in relative to the genome size: $exp_fac";
+echo "y-axis height of the plot: $yaxis";
+echo "vertical distance between arrows: $arr_dist";
+echo "height of the split-k plot: $split_h";
+echo "width of the split-k plot: $split_w";
+echo "merge arrows into one when they are less than XXXbp apart: $merge";
+echo "height of the intact-k plot: $intact_h";
+echo "width of the intact-k plot: $intact_w";
+echo "set intact k plot resolution: $intact_res";
+
+
 
 #create output directory, replace old one if exists
 if [[ -d ./$outdir ]]; then
@@ -93,7 +202,9 @@ sed 1d ${outdir}/myshort_splitk_out_uniq.txt > ${outdir}/myshort_splitk_out_uniq
 for x in $(cut -f1 ${outdir}/myshort_splitk_out_uniq_nohead.txt)
 do
  echo $x
- Rscript ./scripts/plot_flk_kmer_prop.R --kmer $x --phen $pheno --coor ${outdir}/myflk_behave_pheno.txt --genome.size ${gen_size} --outdir ${mysplitkdir}/plot${x} --flk.dist ${flk_dist}
+ Rscript ./scripts/plot_flk_kmer_prop.R --kmer $x --phen $pheno --coor ${outdir}/myflk_behave_pheno.txt \
+ --genome.size ${gen_size} --outdir ${mysplitkdir}/plot${x} --flkdist ${flk_dist} --exp_fac ${exp_fac} \
+ --yaxis ${yaxis} --arr_dist ${arr_dist} --split_h ${split_h} --split_w ${split_w} --merge ${merge}
 done
 rm ${outdir}/myshort_splitk_out_uniq_nohead.txt
 else
@@ -114,7 +225,8 @@ Rscript ./scripts/plot_intactk.R --input ${outdir}/myintactkwithN_rev0fwd1_set.t
 --outdir ${outdir} \
 --outname myintactkwithN_rev0fwd1 \
 --gen_size ${gen_size} \
---intkrd ${intkrd}
+--intkrd ${intkrd} \
+--intact_h ${intact_h} --intact_w ${intact_w} --intact_res ${intact_res}
 fi
 
 [ -s ${outdir}/myintactkwithN_rev1fwd0_set.txt ] && present=1 || present=0
@@ -125,7 +237,8 @@ Rscript ./scripts/plot_intactk.R --input ${outdir}/myintactkwithN_rev1fwd0_set.t
 --outdir ${outdir} \
 --outname myintactkwithN_rev1fwd0 \
 --gen_size ${gen_size} \
---intkrd ${intkrd}
+--intkrd ${intkrd} \
+--intact_h ${intact_h} --intact_w ${intact_w} --intact_res ${intact_res}
 fi
 
 [ -s ${outdir}/myintactkwithN_other_set.txt ] && present=1 || present=0
@@ -136,7 +249,8 @@ Rscript ./scripts/plot_intactk.R --input ${outdir}/myintactkwithN_other_set.txt 
 --outdir ${outdir} \
 --outname myintactkwithN_other \
 --gen_size ${gen_size} \
---intkrd ${intkrd}
+--intkrd ${intkrd} \
+--intact_h ${intact_h} --intact_w ${intact_w} --intact_res ${intact_res}
 fi
 
 else
@@ -157,7 +271,8 @@ Rscript ./scripts/plot_intactk.R --input ${outdir}/myNoNintactk_rev0fwd1_set.txt
 --outdir ${outdir} \
 --outname myNoNintactk_rev0fwd1 \
 --gen_size ${gen_size} \
---intkrd ${intkrd}
+--intkrd ${intkrd} \
+--intact_h ${intact_h} --intact_w ${intact_w} --intact_res ${intact_res}
 fi
 
 echo "plotting myNoNintactk_rev1fwd0"
@@ -168,7 +283,8 @@ Rscript ./scripts/plot_intactk.R --input ${outdir}/myNoNintactk_rev1fwd0_set.txt
 --outdir ${outdir} \
 --outname myNoNintactk_rev1fwd0 \
 --gen_size ${gen_size} \
---intkrd ${intkrd}
+--intkrd ${intkrd} \
+--intact_h ${intact_h} --intact_w ${intact_w} --intact_res ${intact_res}
 fi
 
 echo "plotting myNoNintactk_other"
@@ -179,7 +295,8 @@ Rscript ./scripts/plot_intactk.R --input ${outdir}/myNoNintactk_other_set.txt \
 --outdir ${outdir} \
 --outname myNoNintactk_other \
 --gen_size ${gen_size} \
---intkrd ${intkrd}
+--intkrd ${intkrd} \
+--intact_h ${intact_h} --intact_w ${intact_w} --intact_res ${intact_res}
 fi
 
 else
@@ -195,7 +312,8 @@ Rscript ./scripts/plot_intactk.R --input ${outdir}/myallintactk_rev0fwd1_set.txt
 --outdir ${outdir} \
 --outname myallintactk_rev0fwd1 \
 --gen_size ${gen_size} \
---intkrd ${intkrd}
+--intkrd ${intkrd} \
+--intact_h ${intact_h} --intact_w ${intact_w} --intact_res ${intact_res}
 fi
 
 
@@ -208,7 +326,8 @@ Rscript ./scripts/plot_intactk.R --input ${outdir}/myallintactk_rev1fwd0_set.txt
 --outdir ${outdir} \
 --outname myallintactk_rev1fwd0 \
 --gen_size ${gen_size} \
---intkrd ${intkrd}
+--intkrd ${intkrd} \
+--intact_h ${intact_h} --intact_w ${intact_w} --intact_res ${intact_res}
 fi
 
 #placing output files into different output directories
