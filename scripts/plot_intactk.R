@@ -12,11 +12,11 @@ option_list = list(
               help="kmer to plot", metavar="character"),
   make_option("--intkrd", type="character", default=NULL,
               help="kmer to plot", metavar="character"),
-  make_option("--height", type="character", default=100,
+  make_option("--intact_h", type="character", default=100,
               help="set the plot height", metavar="character"),
-  make_option("--width", type="character", default=180,
+  make_option("--intact_w", type="character", default=180,
               help="set the plot width", metavar="character"),
-    make_option("--res", type="character", default=150,
+    make_option("--intact_res", type="character", default=150,
               help="set the plot resolution", metavar="character")
 )
 
@@ -32,11 +32,11 @@ library("ggforce")
 library("plyr",warn.conflicts = FALSE)
 library("tidyr")
 
-myheight<-as.numeric(as.character(opt$height))
+myheight<-as.numeric(as.character(opt$intact_h))
 
-mywidth<-as.numeric(as.character(opt$width))
+mywidth<-as.numeric(as.character(opt$intact_w))
 
-myres<-as.numeric(as.character(opt$res))
+myres<-as.numeric(as.character(opt$intact_res))
 
 myx<-read.delim(opt$input,header=T,sep="\t")
 #mytable<-mytable[-1,]
