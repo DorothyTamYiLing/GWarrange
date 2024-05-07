@@ -32,7 +32,7 @@ cd /path/to/genome_rearrangement
 First, selected reference genome C505 (accession: NZ_CP011687.1) is used for identifying repeat loci candidates and for estimating size of repeat loci clusters in the genome.
 ```
 #using default parameters
-bash scripts/homo_main.sh -gff example_data/C505_NZ_CP011687.1.gff -fna example_data/C505.fasta 
+bash scripts/homo_main.sh -gff -gff ./example_data/NZ_CP011687.1_C505.gff -fna ./example_data/C505.fasta 
 ```
 By looking at /output_homo/homo_occurence.txt, IS481 family transposase, IS481-like element IS481 family transposase and IS110-like element IS1663 family transposase are identified as most ubiqitous repeat loci categories in the reference genome. Size of largest repeat loci cluster is 5735bp (printed as standard output). 
 
