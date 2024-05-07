@@ -33,7 +33,7 @@ bash scripts/GWarrange.sh -gen clus1clus2_47.fna.gz -pheno clus1clus2_pheno.txt 
 
 Arguments:
 
-**gen** : gzipped/gunzipped multifasta file of genomes set (original sequence without IS replacement)
+**gen** : gzipped/gunzipped multifasta file of genomes set (original sequence without IS replacement). Must be in *.fna.gz suffix.
 
 **pheno** : phenotype file (file format: sample names in 1st column, binary phenotype in 2nd column; no header, tab-delimited) 
 
