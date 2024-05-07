@@ -184,29 +184,33 @@ echo "max_ext: $max_ext"
 echo "max_mrg: $max_mrg"
 
 #adding header to phenotype file for pyseer input format
-echo "samples binary" | cat - example_data/$pheno > example_data/${pheno/.txt}_4pyseer.txt
+echo "samples binary" | cat - $pheno > ${pheno/.txt}_4pyseer.txt
 
+#define genome file name
+genname=$(basename ${gen/.fna.gz})
+echo ${genname}
 
 #unzip the genome file if neccesasry
 
-gunzip example_data/$gen
+gunzip $gen
 
 echo "blast starting gene with genomes"
 
 #blast start gene with genomes
-blastn -query example_data/${startgene} \
--subject example_data/${gen/.gz} \
--outfmt 6 -out ${gen/.fna.gz}_${startgene/.fasta}_out.txt
+
+blastn -query ${startgene} \
+-subject ${gen/.gz} \
+-outfmt 6 -out blast_startgene_out.txt
 
 echo "reorientating genomes with the starting gene"
 
 #reorientating genomes with the starting gene
-python3 scripts/fix_genome.py --input example_data/${gen/.gz} --mycoor ${gen/.fna.gz}_${startgene/.fasta}_out.txt
+python3 scripts/fix_genome.py --input ${gen/.gz} --mycoor blast_startgene_out.txt
 
 echo "get coordinates for repeat sequences in reorientated genomes"
 
 #get coordinates for repeat sequences in reorientated genomes
-blastn -query example_data/$replist \
+blastn -query $replist \
 -subject fixed_genomes.fasta \
 -outfmt 6 -out blastrep_out.txt
 
@@ -214,7 +218,7 @@ blastn -query example_data/$replist \
 
 #build database for efficient blasting
 echo "build database for efficient blasting"
-makeblastdb -in example_data/${gen/.gz} -dbtype nucl -out genome_db
+makeblastdb -in ${gen/.gz} -dbtype nucl -out genome_db
 
 #if both max and min parameter are the same, then just perform one set
 if [ "${ext_mrg_min}" != "${ext_mrg_max}" ]
@@ -227,7 +231,7 @@ echo "Using minimum extension and merge parameters"
 
 bash scripts/extmerge2pyseer.sh \
 -extend_para ${min_ext} -merge_para ${min_mrg} \
--pheno ../example_data/${pheno/.txt}_4pyseer.txt \
+-pheno ${pheno/.txt}_4pyseer.txt \
 -pyseer_arg "${pyseer_arg}" \
 -fsmlite_arg "${fsmlite_arg}" \
 -unitigcaller_arg "${unitigcaller_arg}" \
@@ -245,8 +249,8 @@ if [ -s ext${min_ext}_merge${min_mrg}_ISreplaced_genomes_${string_type}/final_si
 #running main.sh For ext100_merge3_ISreplaced_genomes set unitigs
 bash scripts/main.sh -sigk ext${min_ext}_merge${min_mrg}_ISreplaced_genomes_${string_type}/final_sig.fasta \
 -gen genome_db \
--pheno example_data/${pheno} -flk_dist ${min_d} -flk_len ${flk_len} \
--outdir ${gen/.fna.gz}_ext${min_ext}_merge${min_mrg}_${string_type}_outdir \
+-pheno ${pheno} -flk_dist ${min_d} -flk_len ${flk_len} \
+-outdir ${genname}_ext${min_ext}_merge${min_mrg}_${string_type}_outdir \
 -gen_size ${gen_size} -dedupk ${dedupk} -intkrd ${intkrd} -thread ${thread} \
 -exp_fac ${exp_fac} -yaxis ${yaxis} -arr_dist ${arr_dist} -split_h ${split_h} -split_w ${split_w} -merge ${merge} \
 -intact_h ${intact_h} -intact_w ${intact_w} -intact_res ${intact_res}
@@ -258,7 +262,7 @@ echo "Using maximum extension and merge parameters"
 
 bash scripts/extmerge2pyseer.sh \
 -extend_para ${max_ext} -merge_para ${max_mrg} \
--pheno ../example_data/${pheno/.txt}_4pyseer.txt \
+-pheno ${pheno/.txt}_4pyseer.txt \
 -pyseer_arg "${pyseer_arg}" \
 -fsmlite_arg "${fsmlite_arg}" \
 -unitigcaller_arg "${unitigcaller_arg}" \
@@ -277,8 +281,8 @@ if [ -s ext${max_ext}_merge${max_mrg}_ISreplaced_genomes_${string_type}/final_si
 #running main.sh For ext7000_merge200_ISreplaced_genomes set unitigs
 bash scripts/main.sh -sigk ext${max_ext}_merge${max_mrg}_ISreplaced_genomes_${string_type}/final_sig.fasta \
 -gen genome_db \
--pheno example_data/${pheno} -flk_dist ${min_d} -flk_len ${flk_len} \
--outdir ${gen/.fna.gz}_ext${max_ext}_merge${max_mrg}_${string_type}_outdir \
+-pheno ${pheno} -flk_dist ${min_d} -flk_len ${flk_len} \
+-outdir ${genname}_ext${max_ext}_merge${max_mrg}_${string_type}_outdir \
 -gen_size ${gen_size} -dedupk ${dedupk} -intkrd ${intkrd} -thread ${thread} \
 -exp_fac ${exp_fac} -yaxis ${yaxis} -arr_dist ${arr_dist} -split_h ${split_h} -split_w ${split_w} -merge ${merge} \
 -intact_h ${intact_h} -intact_w ${intact_w} -intact_res ${intact_res}
@@ -292,7 +296,7 @@ echo "run with one set of extension and merge parameters"
 
 bash scripts/extmerge2pyseer.sh \
 -extend_para ${min_ext} -merge_para ${min_mrg} \
--pheno ../example_data/${pheno/.txt}_4pyseer.txt \
+-pheno ${pheno/.txt}_4pyseer.txt \
 -pyseer_arg "${pyseer_arg}" \
 -fsmlite_arg "${fsmlite_arg}" \
 -unitigcaller_arg "${unitigcaller_arg}" \
@@ -310,8 +314,8 @@ if [ -s ext${min_ext}_merge${min_mrg}_ISreplaced_genomes_${string_type}/final_si
 #running main.sh For ext100_merge3_ISreplaced_genomes set unitigs
 bash scripts/main.sh -sigk ext${min_ext}_merge${min_mrg}_ISreplaced_genomes_${string_type}/final_sig.fasta \
 -gen genome_db \
--pheno example_data/${pheno} -flk_dist ${min_d} -flk_len ${flk_len} \
--outdir ${gen/.fna.gz}_ext${min_ext}_merge${min_mrg}_${string_type}_outdir \
+-pheno ${pheno} -flk_dist ${min_d} -flk_len ${flk_len} \
+-outdir ${genname}_ext${min_ext}_merge${min_mrg}_${string_type}_outdir \
 -gen_size ${gen_size} -dedupk ${dedupk} -intkrd ${intkrd} -thread ${thread} \
 -exp_fac ${exp_fac} -yaxis ${yaxis} -arr_dist ${arr_dist} -split_h ${split_h} -split_w ${split_w} -merge ${merge} \
 -intact_h ${intact_h} -intact_w ${intact_w} -intact_res ${intact_res}
