@@ -21,9 +21,9 @@ git clone https://github.com/DorothyTamYiLing/genome_rearrangement.git
 
 ## For detecting genome rearrangement in genomes
 ```
-cd /path/to/genome_rearrangement
-bash scripts/GWarrange.sh -gen clus1clus2_47.fna.gz -pheno clus1clus2_pheno.txt \
--gen_size 4300 -startgene gidA.fasta -replist IS_NZ_CP025371.1.fasta \
+example:
+bash scripts/GWarrange.sh -gen genomes.fna.gz -pheno /full/path/to/pheno.txt \
+-gen_size 4300 -startgene startgene.fasta -replist replist.fasta \
 -thread 8 \
 -fsmlite_arg "-v -s 3 -S 44 -t tmp -m 200 -M 200" \
 -pyseer_arg "--min-af 0.05 --max-af 0.95 --no-distances" \
@@ -83,13 +83,7 @@ _Intact k-mer plots parameters:_
 
 **intact_res** : Resolution for intact kmers' plots (default: 150)
 
-Example:
 
-```
-cd /path/to/genome_rearrangement
-bash scripts/main.sh -k allsigk.fasta -g genomes.fna.gz -p phenotye.txt -o output_dir -f 30 -d 200000 -x 2 -y 100 
-
-```
  
 For tutorials, please go to [here](https://github.com/DorothyTamYiLing/genome_rearrangement/blob/master/documents/tutorials.md) 
 
