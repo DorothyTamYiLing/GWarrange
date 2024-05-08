@@ -36,7 +36,7 @@ Arguments:
 
 **freq** : number of occurrence/BLAST hit of a sequence in the .gff file to be defined as repeat sequence (default: 2)
 
-**idcov** : values for -perc_identity and -qcov_hsp_perc in BLAST (default: 80_80)
+**idcov** : values for -perc_identity and -qcov_hsp_perc in BLAST, in string format (default: "80_80")
 
 **dist** : define repeat sequences to belong to the same repeat sequence cluster when they are less than this number of base pairs apart (default: 1000)
 
