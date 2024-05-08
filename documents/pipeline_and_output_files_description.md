@@ -16,9 +16,15 @@ script functions:
 
 2. Estimating size of repeat sequence clusters in selected reference genome
 
-output file:
+output files:
 
-1.
+1. homo_cluster.txt (BLAST hits of repeat sequences in selected reference genome, including information of repeat sequence cluster)
+
+2. homo_deduplist.txt (repeat sequence ID, in format of coordinates in selected reference genome)
+
+3. homo_occurence.txt (Number of occurrence and annotation of repeat seqeunces)
+
+4. homodedup.fna (sequences of repeat seqeunces in selected reference genome in FASTA format)
 
 `fix_genome.py`
 
