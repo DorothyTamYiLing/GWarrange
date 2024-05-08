@@ -4,6 +4,7 @@
 
 ![diagrams_flowchart](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/3172460f-b9fe-4e3f-8706-7818b8ef5059)
 
+Tools and scripts in brackets
 
 ## Script functions and output files
 
