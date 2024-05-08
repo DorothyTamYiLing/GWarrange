@@ -8,7 +8,6 @@ Tip 1: To avoid files confusion, before running a new tutorial, it is advisable 
 Tip 2: gff file of selected reference genome for generating candidate repeat loci categories stimating crepeat sequence clusters can be converted from genebank file (.gbk, downloaded from NCBI) using online tools such as http://genome2d.molgenrug.nl/g2d_tools_conversions.html
 
 
-
 ![diagrams_flowchart](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/413abac4-e692-4547-bc3b-845023cfc787)
 
 
@@ -258,7 +257,7 @@ Some of the significant intact kmers without placeholder sequence contain sequen
 Ref: Lefrancq, N., Bouchez, V., Fernandes, N., Barkoff, A.M., Bosch, T., Dalby, T., Åkerlund, T., Darenberg, J., Fabianova, K., Vestrheim, D.F. and Fry, N.K., 2022. Global spatial dynamics and vaccine-induced fitness changes of Bordetella pertussis. Science Translational Medicine, 14(642), p.eabn3253.
 
 
-Tutorial 4
+# Tutorial 4
 
 This tutorial is based on 40 simulated genomes for demonstrating flanking seqeunce behabviours during translocation. Each chromosome structure was represented by 20 genomes, and the difference in chromosome structures can be explained by two translocation events. Simulated genome sequences were taken from Bordetella pertussis genomes, and ribosomal operons that consist of mainly 16S ribosomal RNA, 23S ribosomal RNA , 5S ribosomal RNA and tRNAs were taken from Salmonella enterica genomes and inserted in each of the rearrangement boundaries produced by translocation. 
 
@@ -318,8 +317,90 @@ Plots for four examples k-mers that indicate translocation boundaries is shown b
 
 2) Plotting intact kmers for visualising rearrangement boundaries
 
-No significant intact k-mers without placeholder sequence was found.It is because the current method is not suitable for detecting translocations as they do not involve any change in sequence orientation.
+No significant intact k-mers without placeholder sequence was found. It is because the current method is not suitable for detecting translocations as they do not involve any change in sequence orientation.
+
+# Tutorial 1.1 (instructions for running tutorial 1 step by step)
+
+Go to the top level of /genome_rearrangement directory
+```
+cd /path/to/genome_rearrangement
+```
+First, selected reference genome C505 (accession: NZ_CP011687.1) is used for identifying repeat sequence categories candidates (manually stored in IS_NZ_CP025371.1.fasta) and for estimating size of repeat loci clusters in the genome (i.e. 5735bp, printed as standard output).
+```
+#using default parameters
+bash scripts/homo_main.sh -gff ./example_data/NZ_CP011687.1_C505.gff -fna ./example_data/C505.fasta 
+```
+
+Concatenating genome fasta files for use
+```
+cat ./example_data/example_genomes/clus1clus2_47_genomes/*fasta.gz > ./example_data/clus1clus2_47.fna.gz
+```
+
+Unzip the genome file if neccesasry
+```
+gunzip example_data/clus1clus2_47.fna.gz
+```
+
+Blast starting gene gidA with genomes
+```
+blastn -query example_data/gidA.fasta \
+-subject example_data/clus1clus2_47.fna \
+-outfmt 6 -out clus1clus2_47_gidA_out.txt
+```
+
+Then, genome assemblies are re-orientated according to the position and orientation of gidA in the genomes, using the script fix_genome.py, Output file: fixed_genomes.fasta
+```
+python3 scripts/fix_genome.py --input example_data/clus1clus2_47.fna --mycoor clus1clus2_47_gidA_out.txt
+```
+
+Location of repeat sequence candidates in the genomes are obtained through BLAST. Multiple sequences can be placed in the same multifasta file for obtaining their genome locations in all genomes at once.
+```
+blastn -query example_data/IS_NZ_CP025371.1.fasta \
+-subject fixed_genomes.fasta \
+-outfmt 6 -out blastrep_out.txt
+```
+
+Generating repeat seqeunce-replaced genomes using specified extension and merging parameters, i.e. 7000bp in this example.
+```
+Rscript scripts/merge_IS.R --input blastrep_out.txt --extend 7000 --merge 3
+```
+
+Generating k-mers/unitigs using based on this set of repeat seqeunce-replaced genomes using your favourite k-mer/unitig-generation tool.
+
+Performing GWAS for finding phenotype associated k-mers/unitigs using your favourite GWAS tools.
 
 
+Build database for genome set for efficient blasting
+```
+makeblastdb -in clus1clus2_47.fna -dbtype nucl -out genome_db
+```
 
+Significant k-mers/unitis are then used for detecting genome rearrangement associated with phenotype
+```
+bash scripts/main.sh -k ext100_merge3_ISreplaced_genomes/sigk_seq.fasta \
+-g example_data/clus1clus2_47.fna \
+-p example_data/clus1clus2_pheno.txt -d 119360 -f 30 \
+-o clus1clus2_47_ext100_merge3_outdir -s 4300 -x 2 -y 1000
 
+bash scripts/main.sh -sigk final_sig.fasta \
+-gen genome_db \
+-pheno clus1clus2_pheno.txt -flk_dist 119360 -flk_len 30 \
+-outdir clus1clus2_47_ext7000_merge3_outdir \
+-gen_size 4300 -dedupk 2 -intkrd 1000 -thread 8 \
+-exp_fac 86 -yaxis 360 -arr_dist 70 -split_h 7 -split_w 10 -merge 40000 \
+-intact_h 100 -intact_w 180 -intact_res 150
+```
+Default values for main.sh parameters:
+flk_len=30
+dedupk=2
+intkrd=1000
+thread=8
+exp_fac=86
+yaxis=360
+arr_dist=70
+split_h=7
+split_w=10
+merge=40000
+intact_h=100
+intact_w=180
+intact_res=150
