@@ -319,7 +319,7 @@ Plots for four examples k-mers that indicate translocation boundaries is shown b
 
 No significant intact k-mers without placeholder sequence was found. It is because the current method is not suitable for detecting translocations as they do not involve any change in sequence orientation.
 
-# Tutorial 1.1 (instructions for running tutorial 1 step by step)
+# Tutorial 1.1 (instructions for running tutorial 1 using user's selected k-mers/unitigs generation tools and GWAS tools)
 
 Go to the top level of /genome_rearrangement directory
 ```
