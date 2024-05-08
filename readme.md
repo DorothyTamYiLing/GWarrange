@@ -17,11 +17,33 @@ genome_rearrangement can be installed using the `git clone` command
 ```
 git clone https://github.com/DorothyTamYiLing/genome_rearrangement.git
 ```
+
 # Usage
 
-## For detecting genome rearrangement in genomes
+## For identify candidate repeat loci categories and estimating size of repeat sequence clusters in selected reference genome
 ```
-example:
+#example:
+bash scripts/homo_main.sh -gff ./example_data/ref.gff -fna ./example_data/ref.fasta 
+
+```
+Arguments:
+
+**gff** : gff file for selected reference genome
+
+**fna** : complete assembly for selected reference genome
+
+**thread_blast** : number of threads for BLAST (default: 8)
+
+**freq** : number of occurrence/BLAST hit of a sequence in the .gff file to be defined as repeat sequence (default: 2)
+
+**idcov** : values for -perc_identity and -qcov_hsp_perc in BLAST (default: 80_80)
+
+**dist** : define repeat sequences to belong to the same repeat sequence cluster when they are less than this number of base pairs apart (default: 1000)
+
+
+## For detecting and visualising genome rearrangement in genomes
+```
+#example:
 bash scripts/GWarrange.sh -gen genomes.fna.gz -pheno /full/path/to/pheno.txt \
 -gen_size 4300 -startgene startgene.fasta -replist replist.fasta \
 -thread 8 \
@@ -33,7 +55,7 @@ bash scripts/GWarrange.sh -gen genomes.fna.gz -pheno /full/path/to/pheno.txt \
 
 Arguments:
 
-**gen** : gzipped/gunzipped multifasta file of genomes set (original sequence without IS replacement). Must be in *.fna/.fna.gz suffix.
+**gen** : gzipped/gunzipped multifasta file of genomes set (original sequence without IS replacement). Must be in *.fna.gz suffix.
 
 **pheno** : phenotype file (file format: sample names in 1st column, binary phenotype in 2nd column; no header, tab-delimited) (must be in full directory path)
 
@@ -56,6 +78,9 @@ Arguments:
 **unitigcaller_arg** : additional arguments for running unitigcaller, apart from --call, --pyseer, --refs, --out and --threads. (default: "")
 
 **string_type** : "kmer" or "kmers_and_unitigs" ("kmer" for performing k-mer-based GWAS only; "kmers_and_unitigs" for performing both k-mers and unitigs based GWAS, then instead of significant k-mers without placeholder sequences, significant unitigs will be analysed together with significant k-mer containing placeholder sequences for the purpose of efficient run time (default: "kmer")
+
+**thread** : number of thread for BLAST, unitig-caller and pyseer (default: "8")
+
 
 _Split k-mer plots parameters:_
 
@@ -82,6 +107,7 @@ _Intact k-mer plots parameters:_
 **intact_w** : height of the device in png function in R, in intact kmers' plots (default: 180)
 
 **intact_res** : Resolution for intact kmers' plots (default: 150)
+
 
 
  
