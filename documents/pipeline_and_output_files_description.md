@@ -8,6 +8,18 @@
 
 Each script has its "script functions" and "output file" section
 
+`homo_main.sh`
+
+script functions:
+
+1. Identify candidate repeat loci categories in selected reference genome
+
+2. Estimating size of repeat sequence clusters in selected reference genome
+
+output file:
+
+1.
+
 `fix_genome.py`
 
 script functions:
@@ -18,7 +30,7 @@ output file:
 
 ###################################################
 
-`merge_IS.R` (called by merge_replace_IS.sh)
+`merge_IS.R` (called by extmerge2pyseer.sh)
 
 script functions:
 
@@ -33,7 +45,7 @@ output files:
 
 ###################################################
 
-`iSreplace_2col.py` (called by merge_replace_IS.sh)
+`iSreplace_2col.py` (called by extmerge2pyseer.sh)
 
 script functions:
 
@@ -44,7 +56,7 @@ output files:
 
 ###################################################
 
-`class_k.py` (called by `main.sh`)
+`class_k.py` (called by extmerge2pyseer.sh)
 
 script functions:
 1. separate significant k-mers from GWAS into those contain N and those do not, and output them into separate fasta files for further processing. 
