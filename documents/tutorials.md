@@ -360,9 +360,11 @@ blastn -query example_data/IS_NZ_CP025371.1.fasta \
 -outfmt 6 -out blastrep_out.txt
 ```
 
-Generating repeat seqeunce-replaced genomes using specified extension and merging parameters, i.e. 7000bp in this example.
+Generating repeat sequence-replaced genomes using specified extension and merging parameters, i.e. 7000bp in this example.
 ```
 Rscript scripts/merge_IS.R --input blastrep_out.txt --extend 7000 --merge 3
+
+python3 scripts/iSreplace_2col.py --input fixed_genomes.fasta --coor ext7000_merge3_mergedIS.txt --out ext7000_merge3_ISreplaced_genomes
 ```
 
 Generating k-mers/unitigs using based on this set of repeat seqeunce-replaced genomes using your favourite k-mer/unitig-generation tool.
@@ -377,10 +379,6 @@ makeblastdb -in clus1clus2_47.fna -dbtype nucl -out genome_db
 
 Significant k-mers/unitis are then used for detecting genome rearrangement associated with phenotype
 ```
-bash scripts/main.sh -k ext100_merge3_ISreplaced_genomes/sigk_seq.fasta \
--g example_data/clus1clus2_47.fna \
--p example_data/clus1clus2_pheno.txt -d 119360 -f 30 \
--o clus1clus2_47_ext100_merge3_outdir -s 4300 -x 2 -y 1000
 
 bash scripts/main.sh -sigk final_sig.fasta \
 -gen genome_db \
