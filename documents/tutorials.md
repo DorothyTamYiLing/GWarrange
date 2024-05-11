@@ -271,7 +271,7 @@ cd /path/to/genome_rearrangement
 First, selected reference genome sim1.fasta is used for identifying repeat loci candidates and for estimating size of repeat loci clusters in the genome.
 ```
 #using default parameters
-bash script/homo_main.sh -gff example_data/PROKKA_sim1.gff -fna example_data/sim1.fasta 
+bash scripts/homo_main.sh -gff example_data/PROKKA_sim1.gff -fna example_data/sim1.fasta 
 ```
 By looking at /output_homo/homo_occurence.txt, IS200/IS605 family transposase, 16S ribosomal RNA, 23S ribosomal RNA and 5S ribosomal RNA  are identified as most ubiqitous repeat loci categories in the reference genome. Size of largest repeat loci cluster is 5494bp (printed as standard output).
 
