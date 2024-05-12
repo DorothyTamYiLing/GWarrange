@@ -283,14 +283,16 @@ cat example_data/example_genomes/sim_twotranslocation_40genomes/*fasta.gz > exam
 
 #Running GWarrange.sh. Full path should be provided to phenotype file
 
-bash scripts/GWarrange.sh \
+ash scripts/GWarrange.sh \
 -gen example_data/sim_40genomes.fna.gz \
--pheno example_data/sim_trans_pheno.txt \
+-pheno /Users/tyl205/Documents/genome_rearrangement_dir/genome_rearrangement_simtrans_kmer_7000_3/example_data/sim_trans_pheno.txt \
 -gen_size 2532 -startgene example_data/sim_startgene.fasta \
 -replist example_data/sim_replist.fasta \
 -thread 8 -string_type "kmer" \
 -fsmlite_arg "-v -t tmp -s 2 -S 38 -m 200 -M 200" \
+-pyseer_arg "--min-af 0.05 --max-af 0.95 --no-distances" \
 -unitigcaller_arg "" -ext_mrg_min "100_3" -ext_mrg_max "7000_3"
+
 ```
 
 **Visualising genome rearrangements that are captured by kmer**
