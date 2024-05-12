@@ -28,7 +28,7 @@ bash scripts/homo_main.sh -gff ./example_data/ref.gff -fna ./example_data/ref.fa
 ```
 Arguments:
 
-**gff** : gff file for selected reference genome
+**gff** : gff file for selected reference genome, with fasta sequences lines removed
 
 **fna** : complete assembly for selected reference genome
 
