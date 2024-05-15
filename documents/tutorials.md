@@ -213,7 +213,7 @@ cd /path/to/genome_rearrangement
 Same as tutorial 1,IS481 family transposase, IS481-like element IS481 family transposase and IS110-like element IS1663 family transposase are identified as most ubiqitous repeat loci categories in the reference genome C505 (accession: NZ_CP011687.1) . Size of largest repeat loci cluster is 5735bp (printed as standard output). 
 ```
 #using default parameters
-bash scripts/homo_main.sh -gff example_data/C505_NZ_CP011687.1.gff -fna example_data/C505_NZ_CP011687.1.fna 
+bash scripts/homo_main.sh -gff ./example_data/NZ_CP011687.1_C505.gff -fna ./example_data/C505.fasta 
 ```
 
 Population structure is controlled using phylogeny similarity matrix. Minor allele frequency of 0.05 is applied in generating k-mers and pyseer GWAS.
