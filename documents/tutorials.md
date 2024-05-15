@@ -259,10 +259,10 @@ Ref: Lefrancq, N., Bouchez, V., Fernandes, N., Barkoff, A.M., Bosch, T., Dalby, 
 
 # Tutorial 4
 
-This tutorial is based on 40 simulated genomes for demonstrating flanking seqeunce behabviours during translocation. Each chromosome structure was represented by 20 genomes, and the difference in chromosome structures can be explained by two translocation events. Simulated genome sequences were taken from Bordetella pertussis genomes, and ribosomal operons that consist of mainly 16S ribosomal RNA, 23S ribosomal RNA , 5S ribosomal RNA and tRNAs were taken from Salmonella enterica genomes and inserted in each of the rearrangement boundaries produced by translocation. 
+This tutorial is based on 39 simulated genomes for demonstrating flanking seqeunce behabviours during translocation. 19 genomes display structure “0” and 20 genomes display structure “1”, and the difference in chromosome structures can be explained by two translocation events. Simulated genome sequences were taken from _Bordetella pertussis_ genomes, and ribosomal operons that consist of mainly 16S ribosomal RNA, 23S ribosomal RNA , 5S ribosomal RNA and tRNAs were taken from _Salmonella enterica_ genomes and inserted in each of the rearrangement boundaries produced by translocation. 
 
-![sim_MAUVE](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/cbea1606-4af4-4390-a853-797c9e874cb4)
-Fig : Schematic diagram of the two different genome structures explained by two translocation events, present in 40 simulated genomes (20 genomes with structure “0” and 20 genomes with structure “1”) 
+![sim_MAUVE](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/b5ac52ed-fc55-4f48-9c64-164ffcab736c)
+Fig : Schematic diagram of the two different genome structures explained by two translocation events, present in 39 simulated genomes (19 genomes with structure “0” and 20 genomes with structure “1”) 
 
 Go to the top level of /genome_rearrangement directory
 ```
