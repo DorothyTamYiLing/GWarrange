@@ -279,12 +279,12 @@ To detect genome rearrangement associated with phenotype (-pheno), a short list 
 
 ```
 #Concatenate genome files for use
-cat example_data/example_genomes/SIM_39genomes/*fasta.gz > example_data/sim_40genomes.fna.gz
+cat example_data/example_genomes/SIM_39genomes/*fasta.gz > example_data/sim_39genomes.fna.gz
 
 #Running GWarrange.sh. Full path should be provided to phenotype file
 
 bash scripts/GWarrange.sh \
--gen example_data/sim_40genomes.fna.gz \
+-gen example_data/sim_39genomes.fna.gz \
 -pheno /Users/tyl205/Documents/genome_rearrangement_dir/genome_rearrangement_simtrans_kmer_7000_3/example_data/sim_trans_pheno.txt \
 -gen_size 2532 -startgene example_data/sim_startgene.fasta \
 -replist example_data/sim_replist.fasta \
