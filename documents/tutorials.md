@@ -221,7 +221,7 @@ Population structure is controlled using phylogeny similarity matrix. Minor alle
 #concatenating genome fasta files for use
 cat ./example_data/example_genomes/PRN_468/*fasta.gz > ./example_data/PRN_468.fna.gz
 
-#Running GWarrange.sh. Full path should be provided to phenotype file
+#Running GWarrange.sh. Full path should be provided to phenotype file. In this example, full path should also be provided for ClfML_kappa4.964_phylogeny_similarity.tsv
 
 bash scripts/GWarrange.sh -gen ./example_data/PRN_468.fna.gz -pheno /full/path/to/example_data/prn_status_pheno.txt \
 -gen_size 4300 -startgene ./example_data/gidA.fasta -replist ./example_data/IS_NZ_CP025371.1.fasta \
