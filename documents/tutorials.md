@@ -383,7 +383,7 @@ makeblastdb -in example_data/clus1clus2_47.fna -dbtype nucl -out genome_db
 
 Significant k-mers/unitis are placed in a fasta file (e.g. final_sig.fasta) and used for detecting genome rearrangement associated with phenotype
 ```
-bash scripts/main.sh -sigk final_sig.fasta \
+bash scripts/main.sh -sigk /path/to/final_sig.fasta \
 -gen genome_db \
 -pheno clus1clus2_pheno.txt -flk_dist 119360 -flk_len 30 \
 -outdir clus1clus2_47_ext7000_merge3_outdir \
