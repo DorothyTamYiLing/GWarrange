@@ -378,7 +378,7 @@ Performing GWAS for finding phenotype associated k-mers/unitigs using your favou
 
 Build database for genome set for efficient blasting
 ```
-makeblastdb -in clus1clus2_47.fna -dbtype nucl -out genome_db
+makeblastdb -in example_data/clus1clus2_47.fna -dbtype nucl -out genome_db
 ```
 
 Significant k-mers/unitis are placed in a fasta file (e.g. final_sig.fasta) and used for detecting genome rearrangement associated with phenotype
