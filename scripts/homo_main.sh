@@ -63,7 +63,7 @@ echo "maximum distance to be defined as sam cluster: $dist";
 grep -v "#" ${gff} > tmpfile && mv tmpfile ${gff}
 
 #slice out each seqeunce in gff from the genome, output file: homo_gffseq_frgenome.fasta
-python script/homo_cutgffseq_frgenome.py --gff ${gff} --genome ${fna}
+python scripts/homo_cutgffseq_frgenome.py --gff ${gff} --genome ${fna}
 
 #cut out blast id identity and query coverage
 homo_id=$(echo ${idcov} | cut -d "_" -f1)
@@ -75,10 +75,10 @@ blastn -query homo_gffseq_frgenome.fasta -subject ${fna} -perc_identity ${homo_i
 
 
 #keep the gff seq with set blast hit freq , outout : homo_freq_list.txt
-Rscript script/homo_freqliist.R --freq ${freq}
+Rscript scripts/homo_freqliist.R --freq ${freq}
 
 #extract seq in homo_freq_list.txt from homo_gffseq_frgenome.fasta
-python3 script/getfastafrlist.py --list homo_freq_list.txt --input homo_gffseq_frgenome.fasta --out homo_freq.fna
+python3 scripts/getfastafrlist.py --list homo_freq_list.txt --input homo_gffseq_frgenome.fasta --out homo_freq.fna
 
 
 #blast homo_freq.fna with itself
@@ -86,10 +86,10 @@ blastn -perc_identity ${homo_id} -qcov_hsp_perc ${homo_cov} -query homo_freq.fna
 
 #deduplicate homo_freq.fna based on blast output, output file : homo_deduplist.txt
 #echo "deduplicate homo_freq"
-Rscript script/homo_dedup.R
+Rscript scripts/homo_dedup.R
 
 #extract seq in homo_deduplist.txt from gffseq_frgenome.fasta
-python3 script/getfastafrlist.py --list homo_deduplist.txt --input homo_gffseq_frgenome.fasta --out homodedup.fna
+python3 scripts/getfastafrlist.py --list homo_deduplist.txt --input homo_gffseq_frgenome.fasta --out homodedup.fna
 
 
 #blast homodedup.fna with genome
@@ -98,7 +98,7 @@ blastn -query homodedup.fna -perc_identity ${homo_id} -qcov_hsp_perc ${homo_cov}
 
 #determine unique hoiomo cluters in genome
 #echo "determine unique hoiomo cluters in genome"
-Rscript script/homo_cluster_size.R --dist ${dist}
+Rscript scripts/homo_cluster_size.R --dist ${dist}
 
 #make occurrence file
 grep ">" homodedup.fna | sed 's/>//g;s/ ID=/delimiterID=/g;s/ /_/g;s/delimiter/\t/g' > header.txt
@@ -114,7 +114,16 @@ rm homo_freq.fna
 rm homo_gffseq_frgenome.fasta
 rm homo_homo_blastout.txt
 
-mkdir output_homo
+
+#create output directory, replace old one if exists
+if [[ -d output_homo ]]; then
+        echo "homo directory exists, replacing with the new one"
+        rm -r output_homo
+        mkdir output_homo
+else
+        mkdir output_homo
+fi
+
 
 mv homo* output_homo
 

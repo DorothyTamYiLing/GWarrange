@@ -101,7 +101,7 @@ eval "fsm-lite -l input.list ${fsmlite_arg} | gzip - > fsm_output.txt.gz"
 
 #run pyseer on fsm-lite output
 echo "run pyseer on fsm-lite output"
-eval "pyseer --phenotypes ${pheno/.txt}_4pyseer.txt \
+eval "pyseer --phenotypes ${pheno} \
 --kmers fsm_output.txt.gz \
 --output-patterns kmer_patterns.txt \
 ${pyseer_arg} --cpu ${thread} > kmer_pyseer"

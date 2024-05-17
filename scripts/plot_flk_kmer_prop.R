@@ -149,93 +149,93 @@ for(i in 1:2){
     
     #make a table storing the coordinate for each arrow and the size
     if(nrow(myktab)!=0){
-    #print(myktab)    
-    myktab<-myktab[order(myktab[[mystart]],decreasing=F),]
-    breakpt<-which(diff(myktab[[mystart]])>mymerge)
-    #print(breakpt)
-    
-    if(length(breakpt)>0){ #if at least one break point found
-      mymed<-matrix(0,length(breakpt)+1,3)
-      colnames(mymed)<-c("startmed","endmed","count")
-      mybreak<-c(1,breakpt,nrow(myktab))
-      for(j in 1:(length(mybreak)-1)){
-        #print(j)
-        if(j==1){
-          mySbreak<-1
-          myEbreak<-mybreak[j+1]
-        }else { #if the break value is not the first nor the last
-          mySbreak<-mybreak[j]+1
-          myEbreak<-mybreak[j+1]
+      #print(myktab)    
+      myktab<-myktab[order(myktab[[mystart]],decreasing=F),]
+      breakpt<-which(diff(myktab[[mystart]])>mymerge)
+      #print(breakpt)
+      
+      if(length(breakpt)>0){ #if at least one break point found
+        mymed<-matrix(0,length(breakpt)+1,3)
+        colnames(mymed)<-c("startmed","endmed","count")
+        mybreak<-c(1,breakpt,nrow(myktab))
+        for(j in 1:(length(mybreak)-1)){
+          #print(j)
+          if(j==1){
+            mySbreak<-1
+            myEbreak<-mybreak[j+1]
+          }else { #if the break value is not the first nor the last
+            mySbreak<-mybreak[j]+1
+            myEbreak<-mybreak[j+1]
+          }
+          mystart_med<-median(myktab[[mystart]][mySbreak:myEbreak])
+          myend_med<-median(myktab[[myend]][mySbreak:myEbreak])
+          mymed[j,"startmed"]<-mystart_med
+          mymed[j,"endmed"]<-myend_med
+          mymed[j,"count"]<-length(mySbreak:myEbreak)
         }
+      }
+      
+      if(length(breakpt)==0){    #if no break point found
+        #print("break=0")     
+        mymed<-matrix(0,1,3)
+        colnames(mymed)<-c("startmed","endmed","count")
+        mySbreak<-1
+        myEbreak<-nrow(myktab)
         mystart_med<-median(myktab[[mystart]][mySbreak:myEbreak])
         myend_med<-median(myktab[[myend]][mySbreak:myEbreak])
-        mymed[j,"startmed"]<-mystart_med
-        mymed[j,"endmed"]<-myend_med
-        mymed[j,"count"]<-length(mySbreak:myEbreak)
+        mymed[1,"startmed"]<-mystart_med
+        mymed[1,"endmed"]<-myend_med
+        mymed[1,"count"]<-length(mySbreak:myEbreak)
       }
-    }
-    
-    if(length(breakpt)==0){    #if no break point found
-      #print("break=0")     
-      mymed<-matrix(0,1,3)
-      colnames(mymed)<-c("startmed","endmed","count")
-      mySbreak<-1
-      myEbreak<-nrow(myktab)
-      mystart_med<-median(myktab[[mystart]][mySbreak:myEbreak])
-      myend_med<-median(myktab[[myend]][mySbreak:myEbreak])
-      mymed[1,"startmed"]<-mystart_med
-      mymed[1,"endmed"]<-myend_med
-      mymed[1,"count"]<-length(mySbreak:myEbreak)
-    }
-    mymed<-as.data.frame(mymed)
-    #convert to proportion of case or control genomes
-    mymed$prop<-round((mymed$count/(length(which(mypheno_file[,2]==x)))*100))
-    #print(mymed)
-    
-    #plot
-    for(k in 1:nrow(mymed)){
-      if(mymed$endmed[k]<mymed$startmed[k]){   #check if this flank has flipped (in the context of fwd_k)
-        plot_start<-mymed$startmed[k]/1000+exp_fac
-        plot_end<-mymed$endmed[k]/1000-exp_fac
-      }else{
-        plot_start<-mymed$startmed[k]/1000-exp_fac
-        plot_end<-mymed$endmed[k]/1000+exp_fac
+      mymed<-as.data.frame(mymed)
+      #convert to proportion of case or control genomes
+      mymed$prop<-round((mymed$count/(length(which(mypheno_file[,2]==x)))*100))
+      #print(mymed)
+      
+      #plot
+      for(k in 1:nrow(mymed)){
+        if(mymed$endmed[k]<mymed$startmed[k]){   #check if this flank has flipped (in the context of fwd_k)
+          plot_start<-mymed$startmed[k]/1000+exp_fac
+          plot_end<-mymed$endmed[k]/1000-exp_fac
+        }else{
+          plot_start<-mymed$startmed[k]/1000-exp_fac
+          plot_end<-mymed$endmed[k]/1000+exp_fac
+        }
+        sizefactor<-mymed$prop[k]*1.5
+        
+        if(mypheno=="ctrl"){
+          plotx <- c(plot_start, plot_start, plot_end)  
+          #y format (top point, bottom point, central point)
+          ploty <- c((startlevel-sizefactor), startlevel,(startlevel-(sizefactor/2))) 
+          polygon(plotx, ploty,border = mycol,col=mycol)
+        }
+        
+        if(mypheno=="case"){
+          plotx <- c(plot_start, plot_start, plot_end)  
+          #y format (top point, bottom point, central point)
+          ploty <- c((startlevel+sizefactor), startlevel,(startlevel+(sizefactor/2))) 
+          polygon(plotx, ploty,border = mycol,col=mycol)
+        }
       }
-      sizefactor<-mymed$prop[k]*1.5
       
       if(mypheno=="ctrl"){
-        plotx <- c(plot_start, plot_start, plot_end)  
-        #y format (top point, bottom point, central point)
-        ploty <- c((startlevel-sizefactor), startlevel,(startlevel-(sizefactor/2))) 
-        polygon(plotx, ploty,border = mycol,col=mycol)
+        startlevel<-(startlevel)-max(mymed$prop)-arr_dist #set again the starting y axis level
       }
-      
       if(mypheno=="case"){
-        plotx <- c(plot_start, plot_start, plot_end)  
-        #y format (top point, bottom point, central point)
-        ploty <- c((startlevel+sizefactor), startlevel,(startlevel+(sizefactor/2))) 
-        polygon(plotx, ploty,border = mycol,col=mycol)
+        startlevel<-(startlevel)+max(mymed$prop)+arr_dist #set again the starting y axis level
       }
+      if(myflk=="L"){
+        myflk_name="leftflk"
+      }
+      if(myflk=="R"){
+        myflk_name="rightflk"
+      }
+      if(myflk=="in"){
+        myflk_name="intactk"
+      }
+      write.table(mymed,file=paste(opt$outdir,"/",mypheno,"_",myflk_name,".txt",sep=""),quote=F,col.names=T,row.names=F,sep="\t")
     }
-    
-    if(mypheno=="ctrl"){
-      startlevel<-(startlevel)-max(mymed$prop)-arr_dist #set again the starting y axis level
-    }
-    if(mypheno=="case"){
-      startlevel<-(startlevel)+max(mymed$prop)+arr_dist #set again the starting y axis level
-    }
-if(myflk=="L"){
-myflk_name="leftflk"
-}
-if(myflk=="R"){
-myflk_name="rightflk"
-}
-if(myflk=="in"){
-myflk_name="intactk"
-}
-    write.table(mymed,file=paste(opt$outdir,"/",mypheno,"_",myflk_name,".txt",sep=""),quote=F,col.names=T,row.names=F,sep="\t")
   }
-    }
 }
 
 #add legend

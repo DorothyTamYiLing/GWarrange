@@ -128,4 +128,3 @@ labs(caption = "Height of arrows corresponds to proportion of case/control genom
 
 p
 dev.off()
-

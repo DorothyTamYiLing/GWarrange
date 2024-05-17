@@ -66,7 +66,7 @@ while test $# -gt 0; do
                     ext_mrg_min=$1
                     shift
                     ;;
-		-ext_mrg_max)
+        -ext_mrg_max)
                     shift
                     ext_mrg_max=$1
                     shift
@@ -76,12 +76,12 @@ while test $# -gt 0; do
                     pyseer_arg=$1
                     shift
                     ;;
-		-fsmlite_arg)
+        -fsmlite_arg)
                     shift
                     fsmlite_arg=$1
                     shift
                     ;; 
-		-unitigcaller_arg)
+        -unitigcaller_arg)
                     shift
                     uniticaller_arg=$1
                     shift
