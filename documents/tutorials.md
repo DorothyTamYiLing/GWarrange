@@ -279,7 +279,7 @@ To detect genome rearrangement associated with phenotype (-pheno), a short list 
 
 ```
 #Concatenate genome files for use
-cat example_data/example_genomes/sim_twotranslocation_40genomes/*fasta.gz > example_data/sim_40genomes.fna.gz
+cat example_data/example_genomes/SIM_39genomes/*fasta.gz > example_data/sim_40genomes.fna.gz
 
 #Running GWarrange.sh. Full path should be provided to phenotype file
 
