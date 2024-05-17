@@ -285,7 +285,7 @@ cat example_data/example_genomes/SIM_39genomes/*fasta.gz > example_data/sim_39ge
 
 bash scripts/GWarrange.sh \
 -gen example_data/sim_39genomes.fna.gz \
--pheno /Users/tyl205/Documents/genome_rearrangement_dir/genome_rearrangement_simtrans_kmer_7000_3/example_data/sim_trans_pheno.txt \
+-pheno /full/path/to/example_data/sim_trans_pheno.txt \
 -gen_size 2532 -startgene example_data/sim_startgene.fasta \
 -replist example_data/sim_replist.fasta \
 -thread 8 -string_type "kmer" \
