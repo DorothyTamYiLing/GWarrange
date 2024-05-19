@@ -28,6 +28,8 @@ output files:
 
 4. homodedup.fna (sequences of repeat seqeunces in selected reference genome in FASTA format)
 
+###################################################
+
 `fix_genome.py`
 
 script functions:
