@@ -345,12 +345,12 @@ if(length(mygoodk)==0){
   
   #test flank sequence move away from each other, forward kmer
   mymv_away_fwd_row<-which((mymerge$StartL < mymerge$EndL) & (mymerge$EndL < mymerge$StartR) & (mymerge$StartR < mymerge$EndR) & ((mymerge$StartR-mymerge$EndL) > myflkdist))
-  mymerge[mymv_away_fwd_row,"mybehave"]<-"mv_away"
+  mymerge[mymv_away_fwd_row,"mybehave"]<-"mv_aprt"
   mymerge[mymv_away_fwd_row,"flk_dist"]<-mymerge[mymv_away_fwd_row,"StartR"]-mymerge[mymv_away_fwd_row,"EndL"]
   
   #test flank sequence move away from each other, reverse kmer
   mymv_away_rev_row<-which((mymerge$StartL > mymerge$EndL) & (mymerge$EndL > mymerge$StartR) & (mymerge$StartR > mymerge$EndR) & ((mymerge$EndL-mymerge$StartR) > myflkdist))
-  mymerge[mymv_away_rev_row,"mybehave"]<-"mv_away"
+  mymerge[mymv_away_rev_row,"mybehave"]<-"mv_aprt"
   mymerge[mymv_away_rev_row,"flk_dist"]<-mymerge[mymv_away_rev_row,"EndL"]-mymerge[mymv_away_rev_row,"StartR"]
   
   #test Left flank and right flank swap position, forward kmer
@@ -564,7 +564,7 @@ if(length(mygoodk)==0){
       
       myout$flk_behaviour<-mysum_str   #fill in the table with the behaviour summary
       
-      if(myout$otherk%in%c("mv_away","swp_flk")){
+      if(myout$otherk%in%c("mv_aprt","swp_flk")){
         myout$event<-"translocation"}
       if(myout$otherk%in%c("mv&flp","swp&flp")){
         myout$event<-"inversion"}
