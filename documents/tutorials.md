@@ -8,7 +8,8 @@ Tip 1: To avoid files confusion, before running a new tutorial, it is advisable 
 Tip 2: gff file of selected reference genome for generating candidate repeat loci categories stimating crepeat sequence clusters can be converted from genebank file (.gbk, downloaded from NCBI) using online tools such as http://genome2d.molgenrug.nl/g2d_tools_conversions.html
 
 
-![diagrams_flowchart](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/413abac4-e692-4547-bc3b-845023cfc787)
+
+![Figure1_flowchart](https://github.com/DorothyTamYiLing/genome_rearrangement/assets/34043893/61677019-58dd-4ce2-aab6-d987cd342be0)
 
 
 Fig: Genome rearrangement pipeline summary chart
