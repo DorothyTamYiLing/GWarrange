@@ -20,7 +20,7 @@ git clone https://github.com/DorothyTamYiLing/genome_rearrangement.git
 
 # Usage
 
-## For identify candidate repeat loci categories and estimating size of repeat sequence clusters in selected reference genome
+## For identifing candidate repeat sequence categories and estimating size of repeat sequence clusters in selected reference genome
 ```
 #example:
 bash scripts/homo_main.sh -gff ./example_data/ref.gff -fna ./example_data/ref.fasta 
@@ -38,7 +38,7 @@ Arguments:
 
 **idcov** : values for -perc_identity and -qcov_hsp_perc in BLAST, in string format (default: "80_80")
 
-**dist** : define repeat sequences to belong to the same repeat sequence cluster when they are less than this number of base pairs apart (default: 1000)
+**dist** : defines repeat sequences to belong to the same repeat sequence cluster when they are less than this number of base pairs apart (default: 1000)
 
 
 ## For detecting and visualising genome rearrangement in genomes
