@@ -41,7 +41,7 @@ Arguments:
 **dist** : defines repeat sequences to belong to the same repeat sequence cluster when they are less than this number of base pairs apart (default: 1000)
 
 
-## For detecting and visualising genome rearrangement in genomes
+## For detecting and visualising genome rearrangement in input genome set
 ```
 #example:
 bash scripts/GWarrange.sh -gen genomes.fna.gz -pheno /full/path/to/pheno.txt \
