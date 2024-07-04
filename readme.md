@@ -15,7 +15,7 @@ R modules: optparse, plyr, ggplot2, ggforce, ggpubr
 # Installation
 genome_rearrangement can be installed using the `git clone` command
 ```
-git clone https://github.com/DorothyTamYiLing/genome_rearrangement.git
+git clone https://github.com/DorothyTamYiLing/GWarrange.git
 ```
 
 # Usage
