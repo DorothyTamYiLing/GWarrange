@@ -3,6 +3,8 @@ This pipeline detects and visualises phenotype-associated genome rearrangement e
 
 Currently, this package only supports binary phenotypes.
 
+## Please cite:
+Tam, Y.L., Cameron, S., Preston, A. and Cowley, L., 2024. GWarrange: a pre-and post-genome-wide association studies pipeline for detecting phenotype-associated genome rearrangement events. Microbial Genomics, 10(7), p.001268.
 
 # Requirements
 
@@ -120,7 +122,6 @@ For pipeline and output files description, go to [here](https://github.com/Dorot
 ## IS elements databaes 
 Range of IS elements can be found in https://github.com/thanhleviet/ISfinder-sequences for multiple bacterial species.
 
-## Please cite:
-Tam, Y.L., Cameron, S., Preston, A. and Cowley, L., 2024. GWarrange: a pre-and post-genome-wide association studies pipeline for detecting phenotype-associated genome rearrangement events. Microbial Genomics, 10(7), p.001268.
+
 
 
