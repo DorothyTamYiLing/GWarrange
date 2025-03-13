@@ -3,7 +3,7 @@ This pipeline detects and visualises phenotype-associated genome rearrangement e
 
 Currently, this package only supports binary phenotypes.
 
-## Please cite:
+# Publication:
 Tam, Y.L., Cameron, S., Preston, A. and Cowley, L., 2024. GWarrange: a pre-and post-genome-wide association studies pipeline for detecting phenotype-associated genome rearrangement events. Microbial Genomics, 10(7), p.001268.
 
 # Requirements
