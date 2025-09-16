@@ -12,7 +12,7 @@ blastn: 2.2.31+, R 4.2.2, Python 3.9.16
 
 python modules: argparse, SeqIO, csv, pandas, gzip, os, Bio.Seq
 
-R modules: optparse, plyr, ggplot2, ggforce, ggpubr
+R modules: optparse, plyr, ggplot2, ggforce, ggpubr, tidyr
 
 # Installation
 genome_rearrangement can be installed using the `git clone` command
