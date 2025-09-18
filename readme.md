@@ -6,13 +6,15 @@ Currently, this package only supports binary phenotypes.
 # Publication:
 Tam, Y.L., Cameron, S., Preston, A. and Cowley, L., 2024. GWarrange: a pre-and post-genome-wide association studies pipeline for detecting phenotype-associated genome rearrangement events. Microbial Genomics, 10(7), p.001268.
 
-# Requirements
+# Requirements (please see Docker image below)
 
 blastn: 2.2.31+, R 4.2.2, Python 3.9.16
 
 python modules: argparse, SeqIO, csv, pandas, gzip, os, Bio.Seq
 
-R modules: optparse, plyr, ggplot2, ggforce, ggpubr, tidyr
+R modules: optparse, plyr, ggplot2, ggforce, tidyr
+
+pyseer, fsm-lite, unitig-caller
 
 # Installation
 genome_rearrangement can be installed using the `git clone` command
@@ -117,7 +119,29 @@ For tutorials, please go to [here](https://github.com/DorothyTamYiLing/genome_re
 
 For pipeline and output files description, go to [here](https://github.com/DorothyTamYiLing/genome_rearrangement/blob/master/documents/pipeline_and_output_files_description.md)
  
+# Docker image available for dependencies containerisation
+##Pull the image
+For Intel (AMD64) Macs / Linux / Windows x86:
+```
+docker pull dorothydocker1234/gwarrange_arm64:v1
+```
+For Apple Silicon (M1/M2 / ARM64) Macs:
+```
+docker pull --platform=linux/amd64 dorothydocker1234/gwarrange_arm64:v1
+```
 
+##Run the container
+For Intel (AMD64) Macs / Linux / Windows x86:
+```
+docker run -it dorothydocker1234/gwarrange_arm64:v1 /bin/bash
+```
+For Apple Silicon (M1/M2 / ARM64) Macs:
+The current image is amd64 only, so M1/M2 Macs need --platform=linux/amd64 to run it under emulation.
+```
+docker run --platform=linux/amd64 -it dorothydocker1234/gwarrange_arm64:v1 /bin/bash
+```
+
+The current image is amd64 only, so M1/M2 Macs need --platform=linux/amd64 to run it under emulation.
 
 ## IS elements databaes 
 Range of IS elements can be found in https://github.com/thanhleviet/ISfinder-sequences for multiple bacterial species.
