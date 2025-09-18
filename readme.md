@@ -6,7 +6,7 @@ Currently, this package only supports binary phenotypes.
 # Publication:
 Tam, Y.L., Cameron, S., Preston, A. and Cowley, L., 2024. GWarrange: a pre-and post-genome-wide association studies pipeline for detecting phenotype-associated genome rearrangement events. Microbial Genomics, 10(7), p.001268.
 
-# Requirements (please see Docker image below)
+# Requirements (see Docker image below)
 
 blastn: 2.2.31+, R 4.2.2, Python 3.9.16
 
