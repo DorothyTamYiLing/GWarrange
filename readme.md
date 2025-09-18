@@ -24,7 +24,7 @@ git clone https://github.com/DorothyTamYiLing/GWarrange.git
 
 # Usage
 
-## For identifing candidate repeat sequence categories and estimating size of repeat sequence clusters in selected reference genome
+## Step1: For identifing candidate repeat sequence categories and estimating size of repeat sequence clusters in selected reference genome
 ```
 #example:
 bash scripts/homo_main.sh -gff ./example_data/ref.gff -fna ./example_data/ref.fasta 
@@ -45,7 +45,7 @@ Arguments:
 **dist** : defines repeat sequences to belong to the same repeat sequence cluster when they are less than this number of base pairs apart (default: 1000)
 
 
-## For detecting and visualising genome rearrangement in input genome set
+## Step2: For detecting and visualising genome rearrangement in input genome set
 ```
 #example:
 bash scripts/GWarrange.sh -gen genomes.fna.gz -pheno /full/path/to/pheno.txt \
