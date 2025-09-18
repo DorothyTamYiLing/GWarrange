@@ -144,7 +144,7 @@ The current image is amd64 only, so M1/M2 Macs need --platform=linux/amd64 to ru
 docker run --platform=linux/amd64 -it dorothydocker1234/gwarrange_arm64:v1 /bin/bash
 ```
 
-The current image is amd64 only, so M1/M2 Macs need --platform=linux/amd64 to run it under emulation.
+Note: The current image is amd64 only, so M1/M2 Macs need --platform=linux/amd64 to run it under emulation.
 
 ## IS elements databaes 
 Range of IS elements can be found in https://github.com/thanhleviet/ISfinder-sequences for multiple bacterial species.
