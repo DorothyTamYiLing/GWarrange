@@ -120,7 +120,8 @@ For tutorials, please go to [here](https://github.com/DorothyTamYiLing/genome_re
 For pipeline and output files description, go to [here](https://github.com/DorothyTamYiLing/genome_rearrangement/blob/master/documents/pipeline_and_output_files_description.md)
  
 # Docker image available for dependencies containerisation
-##Pull the image
+## Pull the image
+
 For Intel (AMD64) Macs / Linux / Windows x86:
 ```
 docker pull dorothydocker1234/gwarrange_arm64:v1
@@ -130,12 +131,14 @@ For Apple Silicon (M1/M2 / ARM64) Macs:
 docker pull --platform=linux/amd64 dorothydocker1234/gwarrange_arm64:v1
 ```
 
-##Run the container
+## Run the container
+
 For Intel (AMD64) Macs / Linux / Windows x86:
 ```
 docker run -it dorothydocker1234/gwarrange_arm64:v1 /bin/bash
 ```
 For Apple Silicon (M1/M2 / ARM64) Macs:
+
 The current image is amd64 only, so M1/M2 Macs need --platform=linux/amd64 to run it under emulation.
 ```
 docker run --platform=linux/amd64 -it dorothydocker1234/gwarrange_arm64:v1 /bin/bash
