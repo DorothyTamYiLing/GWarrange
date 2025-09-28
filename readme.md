@@ -120,6 +120,7 @@ _Intact k-mer plots parameters:_
 For pipeline and output files description, go to [here](https://github.com/DorothyTamYiLing/genome_rearrangement/blob/master/documents/pipeline_and_output_files_description.md)
  
 # Docker image available for dependencies containerisation
+Note: The current image is amd64 only, so M1/M2 Macs need --platform=linux/amd64 to run it under emulation.
 ## Pull the image
 
 For Intel (AMD64) Macs / Linux / Windows x86:
@@ -143,8 +144,6 @@ The current image is amd64 only, so M1/M2 Macs need --platform=linux/amd64 to ru
 ```
 docker run --platform=linux/amd64 -it dorothydocker1234/gwarrange_arm64:v1 /bin/bash
 ```
-
-Note: The current image is amd64 only, so M1/M2 Macs need --platform=linux/amd64 to run it under emulation.
 
 ## IS elements databaes 
 Range of IS elements can be found in https://github.com/thanhleviet/ISfinder-sequences for multiple bacterial species.
