@@ -16,6 +16,9 @@ R modules: optparse, plyr, ggplot2, ggforce, tidyr
 
 pyseer, fsm-lite, unitig-caller
 
+# Tutorials
+For tutorials, please go to [here](https://github.com/DorothyTamYiLing/genome_rearrangement/blob/master/documents/tutorials.md) 
+
 # Installation
 genome_rearrangement can be installed using the `git clone` command
 ```
@@ -112,10 +115,7 @@ _Intact k-mer plots parameters:_
 
 **intact_res** : Resolution for intact kmers' plots (default: 150)
 
-
-
- 
-For tutorials, please go to [here](https://github.com/DorothyTamYiLing/genome_rearrangement/blob/master/documents/tutorials.md) 
+# pipeline and output files description
 
 For pipeline and output files description, go to [here](https://github.com/DorothyTamYiLing/genome_rearrangement/blob/master/documents/pipeline_and_output_files_description.md)
  
