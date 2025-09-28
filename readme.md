@@ -140,7 +140,6 @@ docker run -it dorothydocker1234/gwarrange_arm64:v1 /bin/bash
 ```
 For Apple Silicon (M1/M2 / ARM64) Macs:
 
-The current image is amd64 only, so M1/M2 Macs need --platform=linux/amd64 to run it under emulation.
 ```
 docker run --platform=linux/amd64 -it dorothydocker1234/gwarrange_arm64:v1 /bin/bash
 ```
